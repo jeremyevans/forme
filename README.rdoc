@@ -1,0 +1,20 @@
+= Forme
+
+Forme is a HTML forms library for ruby with the following goals:
+
+1) Have no external dependencies
+2) Have a simple API
+3) Support forms both with and without related objects
+4) Support both raw helpers and form builders
+5) Allow compiling down to different types of output, by using
+   an intermediate abstract syntax tree, similar to Sequel
+
+= Other similar projects
+
+1) Rails built-in helpers: requires Rails, violates goal 1
+2) Formtastic: requires Rails, violates goal 1
+3) padrino-helpers: requires ActiveSupport, violates goal 1
+
+= Author
+
+Jeremy Evans <code@jeremyevans.net>
