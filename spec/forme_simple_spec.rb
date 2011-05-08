@@ -3,8 +3,32 @@ require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
 describe "Forme" do
   include Forme
 
-  specify "#text should create a text input field " do
+  specify "should create a simple input tags" do
     text.should == '<input type="text"/>'
+    radio.should == '<input type="radio"/>'
+  end
+
+  specify "should create other tags" do
+    textarea.should == '<textarea></textarea>'
+    fieldset.should == '<fieldset></fieldset>'
+  end
+
+  specify "should allow easy specifying of text as separate option for common tags containing text" do
+    textarea('foo').should == '<textarea>foo</textarea>'
+    p('bar').should == '<p>bar</p>'
+  end
+
+  specify "should use html attributes specified in options" do
+    text(:value=>'foo').should == '<input type="text" value="foo"/>'
+    div(:class=>'bar').should == '<div class="bar"></div>'
+  end
+
+  specify "should support html attributes and text for text tags" do
+    textarea('foo', :name=>'bar').should == '<textarea name="bar">foo</textarea>'
+  end
+
+  specify "should support just html attributes options for common tags containing text" do
+    textarea(:name=>'bar').should == '<textarea name="bar"></textarea>'
   end
 
   specify "#form should create an empty form" do

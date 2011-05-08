@@ -3,16 +3,16 @@ module Forme
   end
 
   module Base
-    WIDGETS = [:text, :password, :hidden, :checkbox, :radio, :submit, :textarea, :fieldset, :legend, :p, :div, :ol, :ul, :label, :select, :optgroup, :legend, :li, :label, :option]
+    WIDGETS = [:text, :password, :hidden, :checkbox, :radio, :submit, :textarea, :fieldset, :p, :div, :ol, :ul, :select, :optgroup, :legend, :li, :label, :option]
 
     [:text, :password, :hidden, :checkbox, :radio, :submit].each do |x|
       class_eval("def #{x}(opts={}) Tag.new(:input, {:type=>:#{x}}.merge!(opts)) end", __FILE__, __LINE__)
     end
-    [:textarea, :fieldset, :legend, :div, :ol, :ul, :label, :select, :optgroup].each do |x|
+    [:fieldset, :div, :ol, :ul, :select, :optgroup].each do |x|
       class_eval("def #{x}(opts={}, &block) Tag.new(:#{x}, opts, &block) end", __FILE__, __LINE__)
     end
-    [:legend, :p, :li, :label].each do |x|
-      class_eval("def #{x}(text=nil, opts={}, &block) Tag.new(:#{x}, opts.merge(:text=>text), &block) end", __FILE__, __LINE__)
+    [:textarea, :legend, :p, :li, :label, :option].each do |x|
+      class_eval("def #{x}(text=nil, opts={}, &block) Tag.text_tag(:#{x}, text, opts, &block) end", __FILE__, __LINE__)
     end
 
     def option(text, value=nil, attr={}, opts={})
@@ -29,6 +29,10 @@ module Forme
     attr_reader :children
 
     include Base
+
+    def self.text_tag(type, text, opts={}, &block)
+      new(type, text.is_a?(Hash) ? text.merge(opts) : opts.merge(:text=>text), &block)
+    end
 
     def initialize(type, opts={}, &block)
       @type = type
