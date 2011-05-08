@@ -3,16 +3,16 @@ module Forme
   end
 
   module Base
-    WIDGETS = [:text, :password, :hidden, :checkbox, :radio, :submit, :textarea, :fieldset, :legend, :p, :div, :ol, :ul, :label, :select, :optgroup, :legend, :p, :li, :label, :option]
+    WIDGETS = [:text, :password, :hidden, :checkbox, :radio, :submit, :textarea, :fieldset, :legend, :p, :div, :ol, :ul, :label, :select, :optgroup, :legend, :li, :label, :option]
 
     [:text, :password, :hidden, :checkbox, :radio, :submit].each do |x|
-      class_eval("def #{x}(attr={}, opts={}) Tag.new(:input, attr.merge(:type=>:#{x}), opts.merge(:self_close=>true)) end", __FILE__, __LINE__)
+      class_eval("def #{x}(opts={}) Tag.new(:input, {:type=>:#{x}}.merge!(opts)) end", __FILE__, __LINE__)
     end
-    [:textarea, :fieldset, :legend, :p, :div, :ol, :ul, :label, :select, :optgroup].each do |x|
-      class_eval("def #{x}(attr={}, opts={}, &block) Tag.new(:#{x}, attr, opts, &block) end", __FILE__, __LINE__)
+    [:textarea, :fieldset, :legend, :div, :ol, :ul, :label, :select, :optgroup].each do |x|
+      class_eval("def #{x}(opts={}, &block) Tag.new(:#{x}, opts, &block) end", __FILE__, __LINE__)
     end
     [:legend, :p, :li, :label].each do |x|
-      class_eval("def #{x}(text=nil, attr={}, opts={}) Tag.new(:#{x}, attr, opts.merge(:text=>text)) end", __FILE__, __LINE__)
+      class_eval("def #{x}(text=nil, opts={}, &block) Tag.new(:#{x}, opts.merge(:text=>text), &block) end", __FILE__, __LINE__)
     end
 
     def option(text, value=nil, attr={}, opts={})
@@ -30,18 +30,20 @@ module Forme
 
     include Base
 
-    def initialize(type, attr={}, opts={})
+    def initialize(type, opts={}, &block)
       @type = type
-      @attr = attr
+      @attr = opts[:attr] || {}
       @opts = opts
+      [:type, :method, :class, :id, :cols, :rows, :action, :name, :value].each do |x|
+        @attr[x] = opts[x] if opts[x]
+      end
       @children = []
       self << opts[:text] if opts[:text]
-      yield self if block_given?
+      (block.arity == 1 ? yield(self) : instance_eval(&block)) if block
     end
 
     def html(formatter=nil)
-      formatter ||= opts.fetch(:formatter, :html)
-      raise Error, "self closing tags can't have children" if sc = opts[:self_close] and !children.empty?
+      formatter ||= opts.fetch(:formatter, :default)
       if formatter.is_a?(Symbol)
         klass = Formatter::MAP[formatter]
         raise Error, "invalid formatter: #{formatter} (valid formatters: #{Formatter::MAP.keys.join(', ')})" unless klass
@@ -53,9 +55,25 @@ module Forme
     WIDGETS.each do |x|
       class_eval("def #{x}(*) add_tag(super) end", __FILE__, __LINE__)
     end
-
+    
     def <<(s)
+      raise Error, "self closing tags can't have children" if self_close?
       children << s
+    end
+
+    def clone(opts={})
+      t = super()
+      t.instance_variable_set(:@opts,  self.opts.merge(opts))
+      t
+    end
+
+    def input(fields, opts={})
+      raise Error, "can only use #input if an :obj has been set" unless obj = self.opts[:obj]
+      Array(fields).each{|f| add_tag(obj.send(:forme_tag, f, opts))}
+    end
+
+    def self_close?
+      [:input, :img].include?(type)
     end
 
     private
@@ -74,10 +92,14 @@ module Forme
     end
   end
 
-  class Tag::Formatter::HTML < Tag::Formatter
+  class Tag::Formatter::Default < Tag::Formatter
     def format(tag)
-      sc = tag.opts[:self_close]
-      "<#{tag.type}#{attr_html(tag)}#{sc ? '/>' : ">"}#{children_html(tag)}#{"</#{tag.type}>" unless sc}"
+      sc = tag.self_close?
+      if label = tag.opts[:label]
+        format(Tag.new(:label, :text=>"#{label}: "){self << tag.clone(:label=>false)})
+      else
+        "<#{tag.type}#{attr_html(tag)}#{sc ? '/>' : ">"}#{children_html(tag)}#{"</#{tag.type}>" unless sc}"
+      end
     end
 
     private
@@ -101,16 +123,23 @@ module Forme
     end
 
     def children_html(tag)
-      tag.children.map{|x| x.respond_to?(:html) ? x.html(self) : x.to_s}.join
+      tag.children.map{|x| x.respond_to?(:html) ? x.html(self) : (h x.to_s)}.join
     end
   end
 
-  def form(action=nil, attr={}, opts={}, &block)
-    if action
-      attr = attr.merge(:action=>action)
-      attr[:method] ||= :post
+  class Tag::Formatter::Labels < Tag::Formatter
+  end
+
+  def form(action_or_obj=nil, opts={}, &block)
+    case action_or_obj
+    when nil
+      # nothing
+    when String
+      opts = {:action=>action_or_obj, :method=>:post}.merge!(opts)
+    else
+      opts = {:obj => action_or_obj}.merge!(opts)
     end
-    Tag.new(:form, attr, opts, &block).html
+    Tag.new(:form, opts, &block).html
   end
 
   WIDGETS.each do |x|
