@@ -107,23 +107,34 @@ module Forme
 
   class Formatter::Default < Formatter
     def format(form, input)
-      attr = input.opts.dup
-      tag = case t = input.type
-      when :textarea, :fieldset, :div
-        if val = attr.delete(:value)
-          Tag.new(t, attr, [val])
-        else
-          Tag.new(t, input.opts)
-        end
+      opts = input.opts.dup
+      l = opts.delete(:label)
+      t = input.type
+      meth = :"format_#{t}"
+
+      tag = if respond_to?(meth, true)
+        send(meth, form, t, opts)
       else
-        Tag.new(:input, attr.merge!(:type=>t))
+        format_input(form, t, opts)
       end
 
-      if l = attr.delete(:label)
-        tag = Tag.new(:label, {}, ["#{l}: ", tag])
-      end
+      tag = Tag.new(:label, {}, ["#{l}: ", tag]) if l
 
       tag
+    end
+
+    private
+
+    def format_input(form, type, opts)
+      Tag.new(:input, opts.merge!(:type=>type))
+    end
+
+    def format_textarea(form, type, opts)
+      if val = opts.delete(:value)
+        Tag.new(type, opts, [val])
+      else
+        Tag.new(type, opts)
+      end
     end
   end
 

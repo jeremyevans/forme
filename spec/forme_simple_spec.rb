@@ -8,11 +8,13 @@ describe "Forme plain forms" do
   specify "should create a simple input tags" do
     @f.input(:text).should == '<input type="text"/>'
     @f.input(:radio).should == '<input type="radio"/>'
+    @f.input(:password).should == '<input type="password"/>'
+    @f.input(:checkbox).should == '<input type="checkbox"/>'
+    @f.input(:submit).should == '<input type="submit"/>'
   end
 
-  specify "should create other tags" do
+  specify "should create textarea tag" do
     @f.input(:textarea).should == '<textarea></textarea>'
-    @f.input(:fieldset).should == '<fieldset></fieldset>'
   end
 
   specify "should use html attributes specified in options" do
