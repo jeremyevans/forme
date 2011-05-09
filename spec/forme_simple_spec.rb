@@ -60,4 +60,12 @@ describe "Forme object forms" do
     f.input(:x).should == '<label>X: <textarea id="foo_x" name="foo[x]">&amp;foo</textarea></label>'
     f.input(:y, :brain=>'no').should == '<label>Y: <input brain="no" id="foo_y" name="foo[y]" type="text" value="3"/></label>'
   end
+
+  specify "should handle case where obj doesn't respond to forme_input" do
+    Forme::Form.new([:foo]).input(:first).should ==  '<input id="first" name="first" type="text" value="foo"/>'
+    obj = Class.new{attr_accessor :foo}.new
+    obj.foo = 'bar'
+    Forme::Form.new(obj).input(:foo).should ==  '<input id="foo" name="foo" type="text" value="bar"/>'
+  end
+
 end

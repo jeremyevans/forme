@@ -18,7 +18,11 @@ module Forme
 
     def input(field, opts={})
       if obj
-        obj.forme_input(self, field, opts)
+        if obj.respond_to?(:forme_input)
+          obj.forme_input(self, field, opts)
+        else
+          Input.new(self, :text, :name=>field, :id=>field, :value=>obj.send(field))
+        end
       else
         Input.new(self, field, opts)
       end.serialize

@@ -26,6 +26,13 @@ should return a <tt>Forme::Input</tt> instance.
   # => Forme::Input.new(f, :text, :name=>'obj[field]', :id=>'obj_field', :value=>'foo')
   f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo"/>'
 
+If the object doesn't respond to +forme_input+, it falls back to creating text fields
+with the name and id set to the field name and the value set by calling the given method
+on the object.
+
+  f = Forme::Form.new([:foo])
+  f.input(:first) # '<input id="first" name="first" type="text" value="foo"/>'
+
 = Main Classes
 
 <tt>Forme::Form</tt> :: main object
