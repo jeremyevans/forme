@@ -5,15 +5,42 @@ Forme is a HTML forms library for ruby with the following goals:
 1) Have no external dependencies
 2) Have a simple API
 3) Support forms both with and without related objects
-4) Support both raw helpers and form builders
-5) Allow compiling down to different types of output, by using
+4) Allow compiling down to different types of output, by using
    an intermediate abstract syntax tree, similar to Sequel
 
-= Other similar projects
+= Basic Usage
 
-1) Rails built-in helpers: requires Rails, violates goal 1
-2) Formtastic: requires Rails, violates goal 1
-3) padrino-helpers: requires ActiveSupport, violates goal 1
+Without an object, is a simple form builder:
+
+  f = Forme::Form.new
+  f.open(:action=>'/foo', :method=>:post) # '<form action="/foo" method="post">
+  f.input(:textarea, :value=>'foo', :name=>'bar') # '<textarea name="bar">foo</textarea>'
+  f.input(:text, :value=>'foo', :name=>'bar') # '<input name="bar" type="text" value="foo"/>'
+  f.close # '</form>'
+
+With an object, calls +forme_input+ on the obj with the form, field, and options, which
+should return a <tt>Forme::Input</tt> instance.
+
+  f = Forme::Form.new(obj)
+  # obj.forme_input(f, :field, opts)
+  # => Forme::Input.new(f, :text, :name=>'obj[field]', :id=>'obj_field', :value=>'foo')
+  f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo"/>'
+
+= Main Classes
+
+<tt>Forme::Form</tt> :: main object
+<tt>Forme::Input</tt> :: high level abstract tag
+<tt>Forme::Tag</tt> :: low level abstract tag 
+<tt>Forme::Formatter</tt> :: takes input, returns tag
+<tt>Forme::Serializer</tt> :: tags tag, returns string
+
+= Other Similar Projects
+
+All of these have external dependencies:
+
+1) Rails built-in helpers
+2) Formtastic
+3) padrino-helpers
 
 = Author
 

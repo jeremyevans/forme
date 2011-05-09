@@ -2,108 +2,161 @@ module Forme
   class Error < StandardError
   end
 
-  module Base
-    WIDGETS = [:text, :password, :hidden, :checkbox, :radio, :submit, :textarea, :fieldset, :p, :div, :ol, :ul, :select, :optgroup, :legend, :li, :label, :option]
-
-    [:text, :password, :hidden, :checkbox, :radio, :submit].each do |x|
-      class_eval("def #{x}(opts={}) Tag.new(:input, {:type=>:#{x}}.merge!(opts)) end", __FILE__, __LINE__)
-    end
-    [:fieldset, :div, :ol, :ul, :select, :optgroup].each do |x|
-      class_eval("def #{x}(opts={}, &block) Tag.new(:#{x}, opts, &block) end", __FILE__, __LINE__)
-    end
-    [:textarea, :legend, :p, :li, :label, :option].each do |x|
-      class_eval("def #{x}(text=nil, opts={}, &block) Tag.text_tag(:#{x}, text, opts, &block) end", __FILE__, __LINE__)
-    end
-
-    def option(text, value=nil, attr={}, opts={})
-      attr = attr.merge(:value=>value) if value
-      Tag.new(:option, attr, opts.merge(:text=>text))
-    end
-  end
-  include Base
-
-  class Tag
-    attr_reader :type
+  class Form
+    attr_reader :obj
     attr_reader :opts
-    attr_reader :attr
-    attr_reader :children
-
-    include Base
-
-    def self.text_tag(type, text, opts={}, &block)
-      new(type, text.is_a?(Hash) ? text.merge(opts) : opts.merge(:text=>text), &block)
-    end
-
-    def initialize(type, opts={}, &block)
-      @type = type
-      @attr = opts[:attr] || {}
+    attr_reader :formatter
+    attr_reader :serializer
+    def initialize(obj=nil, opts={})
+      @obj = obj
       @opts = opts
-      [:type, :method, :class, :id, :cols, :rows, :action, :name, :value].each do |x|
-        @attr[x] = opts[x] if opts[x]
-      end
-      @children = []
-      self << opts[:text] if opts[:text]
-      (block.arity == 1 ? yield(self) : instance_eval(&block)) if block
+      @formatter = find_transformer(Formatter)
+      @serializer = find_transformer(Serializer)
     end
 
-    def html(formatter=nil)
-      formatter ||= opts.fetch(:formatter, :default)
-      if formatter.is_a?(Symbol)
-        klass = Formatter::MAP[formatter]
-        raise Error, "invalid formatter: #{formatter} (valid formatters: #{Formatter::MAP.keys.join(', ')})" unless klass
-        formatter = klass.new
-      end
-      formatter.format(self)
+    def input(field, opts={})
+      if obj
+        obj.forme_input(self, field, opts)
+      else
+        Input.new(self, field, opts)
+      end.serialize
     end
 
-    WIDGETS.each do |x|
-      class_eval("def #{x}(*) add_tag(super) end", __FILE__, __LINE__)
-    end
-    
-    def <<(s)
-      raise Error, "self closing tags can't have children" if self_close?
-      children << s
+    def open(attr)
+      serializer.serialize_open(Tag.new(self, :form, attr))
     end
 
-    def clone(opts={})
-      t = super()
-      t.instance_variable_set(:@opts,  self.opts.merge(opts))
-      t
+    def close
+      serializer.serialize_close(Tag.new(self, :form))
     end
 
-    def input(fields, opts={})
-      raise Error, "can only use #input if an :obj has been set" unless obj = self.opts[:obj]
-      Array(fields).each{|f| add_tag(obj.send(:forme_tag, f, opts))}
-    end
-
-    def self_close?
-      [:input, :img].include?(type)
+    def tag(type, attr={})
+      Tag.new(self, type, attr).serialize
     end
 
     private
 
-    def add_tag(tag)
-      children << tag
-      tag
+    def find_transformer(klass)
+      sym = klass.name.to_s.downcase.to_sym
+      transformer ||= opts.fetch(sym, :default)
+      transformer = klass.get_subclass_instance(transformer) if transformer.is_a?(Symbol)
+      transformer
     end
   end
 
-  class Tag::Formatter
-    MAP = {}
-    def self.inherited(subclass)
-      MAP[subclass.name.split('::').last.downcase.to_sym] = subclass
+  class Input
+    attr_reader :form
+    attr_reader :type
+    attr_reader :opts
+    def initialize(form, type, opts={})
+      @form = form
+      @type = type
+      @opts = opts
+    end
+    def obj
+      form.obj
+    end
+    def format
+      form.formatter.format(self)
+    end
+    def serialize
+      form.serializer.serialize(format)
+    end
+  end
+
+  class Tag
+    attr_reader :form
+    attr_reader :type
+    attr_reader :attr
+    attr_reader :children
+
+    def initialize(form, type, attr={}, &block)
+      @form = form
+      @type = type
+      @attr = attr
+      @children = []
+    end
+
+    def <<(child)
+      children << child
+    end
+
+    def serialize
+      form.serializer.serialize(self)
+    end
+  end
+
+  module SubclassMap
+    def self.extended(klass)
+      klass.const_set(:MAP, {})
+    end
+
+    def get_subclass_instance(type)
+      subclass = self::MAP[type] || self::MAP[:default]
+      raise Error, "invalid #{name.to_s.downcase}: #{type} (valid #{name.to_s.downcase}s: #{klass::MAP.keys.join(', ')})" unless subclass 
+      subclass.new
+    end
+
+    def inherited(subclass)
+      self::MAP[subclass.name.split('::').last.downcase.to_sym] = subclass
       super
     end
   end
 
-  class Tag::Formatter::Default < Tag::Formatter
-    def format(tag)
-      sc = tag.self_close?
-      if label = tag.opts[:label]
-        format(Tag.new(:label, :text=>"#{label}: "){self << tag.clone(:label=>false)})
+  class Formatter
+    extend SubclassMap
+  end
+
+  class Formatter::Default < Formatter
+    def format(input)
+      form = input.form
+      attr = input.opts.dup
+      tag = case t = input.type
+      when :textarea, :fieldset, :div
+        if val = attr.delete(:value)
+          tg = Tag.new(form, t, attr)
+          tg << val
+          tg
+        else
+          tg = Tag.new(form, t, input.opts)
+        end
       else
-        "<#{tag.type}#{attr_html(tag)}#{sc ? '/>' : ">"}#{children_html(tag)}#{"</#{tag.type}>" unless sc}"
+        Tag.new(form, :input, attr.merge!(:type=>t))
       end
+
+      if l = attr.delete(:label)
+        label = Tag.new(form, :label)
+        label << "#{l}: "
+        label << tag
+        tag = label
+      end
+
+      tag
+    end
+  end
+
+  class Serializer
+    extend SubclassMap
+  end
+
+  class Serializer::Default < Serializer
+    SELF_CLOSING = [:img, :input]
+    def serialize(tag)
+      if tag.is_a?(String)
+        h tag
+      elsif SELF_CLOSING.include?(tag.type)
+        "<#{tag.type}#{attr_html(tag)}/>"
+      else
+        "#{serialize_open(tag)}#{children_html(tag)}#{serialize_close(tag)}"
+      end
+    end
+
+    def serialize_open(tag)
+      "<#{tag.type}#{attr_html(tag)}>"
+    end
+
+    def serialize_close(tag)
+      "</#{tag.type}>"
     end
 
     private
@@ -127,26 +180,7 @@ module Forme
     end
 
     def children_html(tag)
-      tag.children.map{|x| x.respond_to?(:html) ? x.html(self) : (h x.to_s)}.join
+      tag.children.map{|x| serialize(x)}.join
     end
-  end
-
-  class Tag::Formatter::Labels < Tag::Formatter
-  end
-
-  def form(action_or_obj=nil, opts={}, &block)
-    case action_or_obj
-    when nil
-      # nothing
-    when String
-      opts = {:action=>action_or_obj, :method=>:post}.merge!(opts)
-    else
-      opts = {:obj => action_or_obj}.merge!(opts)
-    end
-    Tag.new(:form, opts, &block).html
-  end
-
-  WIDGETS.each do |x|
-    class_eval("def #{x}(*) super.html end", __FILE__, __LINE__)
   end
 end
