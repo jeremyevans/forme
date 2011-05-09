@@ -131,9 +131,20 @@ module Forme
 
     def format_select(form, type, opts)
       if os = opts.delete(:options)
-        os = os.map{|x| Tag.new(:option, {}, [x])}
+        vm = opts.delete(:value_method)
+        tm = opts.delete(:text_method)
+        os = os.map do |x|
+          if tm
+            attr = {:value => x.send(vm)} if vm
+            Tag.new(:option, attr||{}, [x.send(tm)])
+          elsif x.is_a?(Array)
+            Tag.new(:option, {:value=>x.last}, [x.first])
+          else
+            Tag.new(:option, {}, [x])
+          end
+        end
       end
-      Tag.new(type, {}, os || [])
+      Tag.new(type, opts, os || [])
     end
 
     def format_textarea(form, type, opts)

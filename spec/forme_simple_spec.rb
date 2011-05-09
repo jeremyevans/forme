@@ -25,9 +25,19 @@ describe "Forme plain forms" do
     @f.input(:select, :options=>[1, 2, 3]).should == '<select><option>1</option><option>2</option><option>3</option></select>'
   end
 
+  specify "should create select tag with options and values" do
+    @f.input(:select, :options=>[[:a, 1], [:b, 2], [:c, 3]]).should == '<select><option value="1">a</option><option value="2">b</option><option value="3">c</option></select>'
+  end
+
+  specify "should create select tag with options and values using given method" do
+    @f.input(:select, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last).should == '<select><option>1</option><option>2</option><option>3</option></select>'
+    @f.input(:select, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first).should == '<select><option value="a">1</option><option value="b">2</option><option value="c">3</option></select>'
+  end
+
   specify "should use html attributes specified in options" do
-    @f.input(:textarea, :value=>'foo', :name=>'bar').should == '<textarea name="bar">foo</textarea>'
     @f.input(:text, :value=>'foo', :name=>'bar').should == '<input name="bar" type="text" value="foo"/>'
+    @f.input(:textarea, :value=>'foo', :name=>'bar').should == '<textarea name="bar">foo</textarea>'
+    @f.input(:select, :name=>'bar', :options=>[1, 2, 3]).should == '<select name="bar"><option>1</option><option>2</option><option>3</option></select>'
   end
 
   specify "should automatically create a label if a :label option is used" do
