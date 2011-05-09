@@ -13,6 +13,22 @@ describe "Forme plain forms" do
     @f.input(:submit).should == '<input type="submit"/>'
   end
 
+  specify "should create hidden input with value 0 for each checkbox with a name" do
+    @f.input(:checkbox, :name=>"foo").should == '<input name="foo" type="hidden" value="0"/><input name="foo" type="checkbox"/>'
+  end
+
+  specify "should create hidden input with _hidden appened to id for each checkbox with a name and id" do
+    @f.input(:checkbox, :name=>"foo", :id=>"bar").should == '<input id="bar_hidden" name="foo" type="hidden" value="0"/><input id="bar" name="foo" type="checkbox"/>'
+  end
+
+  specify "should create hidden input with value f for each checkbox with a name and value t" do
+    @f.input(:checkbox, :name=>"foo", :value=>"t").should == '<input name="foo" type="hidden" value="f"/><input name="foo" type="checkbox" value="t"/>'
+  end
+
+  specify "should use :hidden_value option for value of hidden input for checkbox" do
+    @f.input(:checkbox, :name=>"foo", :hidden_value=>"no").should == '<input name="foo" type="hidden" value="no"/><input name="foo" type="checkbox"/>'
+  end
+
   specify "should create textarea tag" do
     @f.input(:textarea).should == '<textarea></textarea>'
   end

@@ -126,6 +126,22 @@ module Forme
 
     private
 
+    CHECKBOX_MAP = Hash.new(0)
+    CHECKBOX_MAP['t'] = 'f'
+    def format_checkbox(form, type, opts)
+      if opts[:name]
+        attr = {:type=>:hidden}
+        unless attr[:value] = opts.delete(:hidden_value)
+          attr[:value] = CHECKBOX_MAP[opts[:value]]
+        end
+        attr[:id] = "#{opts[:id]}_hidden" if opts[:id]
+        attr[:name] = opts[:name]
+        [Tag.new(:input, attr), Tag.new(:input, opts.merge!(:type=>type))]
+      else
+        Tag.new(:input, opts.merge!(:type=>type))
+      end
+    end
+
     def format_input(form, type, opts)
       Tag.new(:input, opts.merge!(:type=>type))
     end
