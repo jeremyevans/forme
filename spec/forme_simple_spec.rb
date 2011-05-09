@@ -17,6 +17,14 @@ describe "Forme plain forms" do
     @f.input(:textarea).should == '<textarea></textarea>'
   end
 
+  specify "should create select tag" do
+    @f.input(:select).should == '<select></select>'
+  end
+
+  specify "should create select tag with options" do
+    @f.input(:select, :options=>[1, 2, 3]).should == '<select><option>1</option><option>2</option><option>3</option></select>'
+  end
+
   specify "should use html attributes specified in options" do
     @f.input(:textarea, :value=>'foo', :name=>'bar').should == '<textarea name="bar">foo</textarea>'
     @f.input(:text, :value=>'foo', :name=>'bar').should == '<input name="bar" type="text" value="foo"/>'

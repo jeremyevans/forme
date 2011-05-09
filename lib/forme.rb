@@ -129,6 +129,13 @@ module Forme
       Tag.new(:input, opts.merge!(:type=>type))
     end
 
+    def format_select(form, type, opts)
+      if os = opts.delete(:options)
+        os = os.map{|x| Tag.new(:option, {}, [x])}
+      end
+      Tag.new(type, {}, os || [])
+    end
+
     def format_textarea(form, type, opts)
       if val = opts.delete(:value)
         Tag.new(type, opts, [val])
@@ -145,12 +152,14 @@ module Forme
   class Serializer::Default < Serializer
     SELF_CLOSING = [:img, :input]
     def serialize(tag)
-      if tag.is_a?(String)
-        h tag
-      elsif SELF_CLOSING.include?(tag.type)
-        "<#{tag.type}#{attr_html(tag)}/>"
+      if tag.is_a?(Tag)
+        if SELF_CLOSING.include?(tag.type)
+          "<#{tag.type}#{attr_html(tag)}/>"
+        else
+          "#{serialize_open(tag)}#{children_html(tag)}#{serialize_close(tag)}"
+        end
       else
-        "#{serialize_open(tag)}#{children_html(tag)}#{serialize_close(tag)}"
+        h tag
       end
     end
 
