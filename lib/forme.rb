@@ -73,10 +73,10 @@ module Forme
     attr_reader :attr
     attr_reader :children
 
-    def initialize(type, attr={}, &block)
+    def initialize(type, attr={}, children=[])
       @type = type
       @attr = attr
-      @children = []
+      @children = children
     end
 
     def <<(child)
@@ -111,21 +111,16 @@ module Forme
       tag = case t = input.type
       when :textarea, :fieldset, :div
         if val = attr.delete(:value)
-          tg = Tag.new(t, attr)
-          tg << val
-          tg
+          Tag.new(t, attr, [val])
         else
-          tg = Tag.new(t, input.opts)
+          Tag.new(t, input.opts)
         end
       else
         Tag.new(:input, attr.merge!(:type=>t))
       end
 
       if l = attr.delete(:label)
-        label = Tag.new(:label)
-        label << "#{l}: "
-        label << tag
-        tag = label
+        tag = Tag.new(:label, {}, ["#{l}: ", tag])
       end
 
       tag
