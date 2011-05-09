@@ -8,11 +8,13 @@ module Forme
     attr_reader :obj
     attr_reader :opts
     attr_reader :formatter
+    attr_reader :labeler
     attr_reader :serializer
     def initialize(obj=nil, opts={})
       @obj = obj
       @opts = opts
       @formatter = find_transformer(Formatter, :formatter)
+      @labeler = find_transformer(Labeler, :labeler)
       @serializer = find_transformer(Serializer, :serializer)
     end
 
@@ -117,7 +119,7 @@ module Forme
         format_input(form, t, opts)
       end
 
-      tag = Tag.new(:label, {}, ["#{l}: ", tag]) if l
+      tag = form.labeler.call(l, tag) if l
 
       tag
     end
@@ -154,6 +156,17 @@ module Forme
         Tag.new(type, opts)
       end
     end
+  end
+
+  class Labeler
+    extend SubclassMap
+  end
+
+  class Labeler::Default < Labeler
+    def label(label, tag)
+      Tag.new(:label, {}, ["#{label}: ", tag])
+    end
+    alias call label
   end
 
   class Serializer

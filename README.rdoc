@@ -39,6 +39,7 @@ on the object.
 <tt>Forme::Input</tt> :: high level abstract tag
 <tt>Forme::Tag</tt> :: low level abstract tag 
 <tt>Forme::Formatter</tt> :: takes input, returns tag
+<tt>Forme::Labeler</tt> :: takes tag, returns labeled version
 <tt>Forme::Serializer</tt> :: tags tag, returns string
 
 = Other Similar Projects

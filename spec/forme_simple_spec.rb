@@ -61,6 +61,10 @@ describe "Forme custom" do
   specify "serializers can be specified as a proc" do
     Forme::Form.new(nil, :serializer=>proc{|t| "#{t.type} = #{t.attr.inspect}"}).input(:textarea, :NAME=>'foo').should == 'textarea = {:NAME=>"foo"}'
   end
+
+  specify "labelers can be specified as a proc" do
+    Forme::Form.new(nil, :labeler=>proc{|l, t| ["#{l}: ", t]}).input(:textarea, :NAME=>'foo', :label=>'bar').should == 'bar: <textarea NAME="foo"></textarea>'
+  end
 end
 
 describe "Forme object forms" do
