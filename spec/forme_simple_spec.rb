@@ -67,6 +67,13 @@ describe "Forme custom" do
   end
 end
 
+describe "Forme built-in labelers" do
+
+  specify "explicit uses an explicit label with for attribute" do
+    Forme::Form.new(nil, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
+  end
+end
+
 describe "Forme object forms" do
 
   specify "should handle a simple case" do

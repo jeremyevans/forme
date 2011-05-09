@@ -146,7 +146,7 @@ module Forme
           end
         end
       end
-      Tag.new(type, opts, os || [])
+      Tag.new(type, opts, os)
     end
 
     def format_textarea(form, type, opts)
@@ -165,6 +165,14 @@ module Forme
   class Labeler::Default < Labeler
     def label(label, tag)
       Tag.new(:label, {}, ["#{label}: ", tag])
+    end
+    alias call label
+  end
+
+  class Labeler::Explicit < Labeler
+    def label(label, tag)
+      raise Error, "Explicit labels require an id field" unless id = tag.attr[:id]
+      [Tag.new(:label, {:for=>id}, label), tag]
     end
     alias call label
   end
