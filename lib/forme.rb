@@ -1,3 +1,5 @@
+require 'forme/version'
+
 module Forme
   class Error < StandardError
   end
