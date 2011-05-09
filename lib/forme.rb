@@ -107,7 +107,7 @@ module Forme
   end
 
   class Formatter::Default < Formatter
-    def format(form, input)
+    def call(form, input)
       opts = input.opts.dup
       l = opts.delete(:label)
       t = input.type
@@ -123,7 +123,6 @@ module Forme
 
       tag
     end
-    alias call format
 
     private
 
@@ -163,18 +162,16 @@ module Forme
   end
 
   class Labeler::Default < Labeler
-    def label(label, tag)
+    def call(label, tag)
       Tag.new(:label, {}, ["#{label}: ", tag])
     end
-    alias call label
   end
 
   class Labeler::Explicit < Labeler
-    def label(label, tag)
+    def call(label, tag)
       raise Error, "Explicit labels require an id field" unless id = tag.attr[:id]
       [Tag.new(:label, {:for=>id}, label), tag]
     end
-    alias call label
   end
 
   class Serializer
@@ -183,20 +180,19 @@ module Forme
 
   class Serializer::Default < Serializer
     SELF_CLOSING = [:img, :input]
-    def serialize(tag)
+    def call(tag)
       if tag.is_a?(Tag)
         if SELF_CLOSING.include?(tag.type)
           "<#{tag.type}#{attr_html(tag)}/>"
         else
-          "#{serialize_open(tag)}#{serialize(tag.children)}#{serialize_close(tag)}"
+          "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
         end
       elsif tag.is_a?(Array)
-        tag.map{|x| serialize(x)}.join
+        tag.map{|x| call(x)}.join
       else
         h tag
       end
     end
-    alias call serialize
 
     def serialize_open(tag)
       "<#{tag.type}#{attr_html(tag)}>"
