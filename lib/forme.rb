@@ -167,8 +167,10 @@ module Forme
         if SELF_CLOSING.include?(tag.type)
           "<#{tag.type}#{attr_html(tag)}/>"
         else
-          "#{serialize_open(tag)}#{children_html(tag)}#{serialize_close(tag)}"
+          "#{serialize_open(tag)}#{serialize(tag.children)}#{serialize_close(tag)}"
         end
+      elsif tag.is_a?(Array)
+        tag.map{|x| serialize(x)}.join
       else
         h tag
       end
@@ -200,10 +202,6 @@ module Forme
 
     def attr_html(tag)
       " #{tag.attr.sort_by{|k,v| k.to_s}.map{|k, v| "#{k}=\"#{h v}\""}.join(' ')}" unless tag.attr.empty?
-    end
-
-    def children_html(tag)
-      tag.children.map{|x| serialize(x)}.join
     end
   end
 end
