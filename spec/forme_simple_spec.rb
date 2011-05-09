@@ -53,6 +53,16 @@ describe "Forme plain forms" do
   end
 end
 
+describe "Forme custom" do
+  specify "formatters can be specified as a proc" do
+    Forme::Form.new(nil, :formatter=>proc{|f, i| Forme::Tag.new(:textarea, i.opts.map{|k,v| [v.upcase, k.to_s.downcase]})}).input(:text, :NAME=>'foo').should == '<textarea FOO="name"></textarea>'
+  end
+
+  specify "serializers can be specified as a proc" do
+    Forme::Form.new(nil, :serializer=>proc{|t| "#{t.type} = #{t.attr.inspect}"}).input(:textarea, :NAME=>'foo').should == 'textarea = {:NAME=>"foo"}'
+  end
+end
+
 describe "Forme object forms" do
 
   specify "should handle a simple case" do

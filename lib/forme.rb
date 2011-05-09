@@ -12,8 +12,8 @@ module Forme
     def initialize(obj=nil, opts={})
       @obj = obj
       @opts = opts
-      @formatter = find_transformer(Formatter)
-      @serializer = find_transformer(Serializer)
+      @formatter = find_transformer(Formatter, :formatter)
+      @serializer = find_transformer(Serializer, :serializer)
     end
 
     def input(field, opts={})
@@ -43,19 +43,18 @@ module Forme
 
     private
 
-    def find_transformer(klass)
-      sym = klass.name.to_s.downcase.to_sym
+    def find_transformer(klass, sym)
       transformer ||= opts.fetch(sym, :default)
       transformer = klass.get_subclass_instance(transformer) if transformer.is_a?(Symbol)
       transformer
     end
 
     def format(input)
-      formatter.format(self, input)
+      formatter.call(self, input)
     end
 
     def serialize(tag)
-      serializer.serialize(tag)
+      serializer.call(tag)
     end
   end
 
@@ -122,6 +121,7 @@ module Forme
 
       tag
     end
+    alias call format
 
     private
 
@@ -175,6 +175,7 @@ module Forme
         h tag
       end
     end
+    alias call serialize
 
     def serialize_open(tag)
       "<#{tag.type}#{attr_html(tag)}>"
