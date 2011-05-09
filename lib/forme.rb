@@ -21,7 +21,7 @@ module Forme
     def input(field, opts={})
       input = if obj
         if obj.respond_to?(:forme_input)
-          obj.forme_input(field, opts)
+          obj.forme_input(field, opts.dup)
         else
           Input.new(:text, :name=>field, :id=>field, :value=>obj.send(field))
         end
@@ -134,14 +134,27 @@ module Forme
       if os = opts.delete(:options)
         vm = opts.delete(:value_method)
         tm = opts.delete(:text_method)
+        sel = opts.delete(:selected)
         os = os.map do |x|
+          attr = {}
           if tm
-            attr = {:value => x.send(vm)} if vm
-            Tag.new(:option, attr||{}, [x.send(tm)])
+            text = x.send(tm)
+            if vm
+              val = x.send(vm)
+              attr[:value] = val
+              attr[:selected] = :selected if val == sel
+            else
+              attr[:selected] = :selected if text == sel
+            end
+            Tag.new(:option, attr, [text])
           elsif x.is_a?(Array)
-            Tag.new(:option, {:value=>x.last}, [x.first])
+            val = x.last
+            attr[:value] = val
+            attr[:selected] = :selected if val == sel
+            Tag.new(:option, attr, [x.first])
           else
-            Tag.new(:option, {}, [x])
+            attr[:selected] = :selected if x == sel
+            Tag.new(:option, attr, [x])
           end
         end
       end
