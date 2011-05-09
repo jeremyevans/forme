@@ -1,5 +1,5 @@
 module Forme
-  VERSION = '1.0.0'.freeze
+  VERSION = '0.1.0'.freeze
 
   def self.version
     VERSION
