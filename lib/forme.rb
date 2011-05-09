@@ -129,6 +129,7 @@ module Forme
     CHECKBOX_MAP = Hash.new(0)
     CHECKBOX_MAP['t'] = 'f'
     def format_checkbox(form, type, opts)
+      opts[:checked] = :checked if opts.delete(:checked)
       if opts[:name]
         attr = {:type=>:hidden}
         unless attr[:value] = opts.delete(:hidden_value)
@@ -150,7 +151,7 @@ module Forme
       if os = opts.delete(:options)
         vm = opts.delete(:value_method)
         tm = opts.delete(:text_method)
-        sel = opts.delete(:selected)
+        sel = opts.delete(:selected) || opts.delete(:value)
         os = os.map do |x|
           attr = {}
           if tm

@@ -29,6 +29,11 @@ describe "Forme plain forms" do
     @f.input(:checkbox, :name=>"foo", :hidden_value=>"no").should == '<input name="foo" type="hidden" value="no"/><input name="foo" type="checkbox"/>'
   end
 
+  specify "should handle :checked option" do
+    @f.input(:checkbox, :checked=>true).should == '<input checked="checked" type="checkbox"/>'
+    @f.input(:checkbox, :checked=>false).should == '<input type="checkbox"/>'
+  end
+
   specify "should create textarea tag" do
     @f.input(:textarea).should == '<textarea></textarea>'
   end
@@ -39,6 +44,7 @@ describe "Forme plain forms" do
 
   specify "should create select tag with options" do
     @f.input(:select, :options=>[1, 2, 3], :selected=>2).should == '<select><option>1</option><option selected="selected">2</option><option>3</option></select>'
+    @f.input(:select, :options=>[1, 2, 3], :value=>2).should == '<select><option>1</option><option selected="selected">2</option><option>3</option></select>'
   end
 
   specify "should create select tag with options and values" do
