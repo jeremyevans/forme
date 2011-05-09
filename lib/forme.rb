@@ -17,27 +17,28 @@ module Forme
     end
 
     def input(field, opts={})
-      if obj
+      input = if obj
         if obj.respond_to?(:forme_input)
-          obj.forme_input(self, field, opts)
+          obj.forme_input(field, opts)
         else
-          Input.new(self, :text, :name=>field, :id=>field, :value=>obj.send(field))
+          Input.new(:text, :name=>field, :id=>field, :value=>obj.send(field))
         end
       else
-        Input.new(self, field, opts)
-      end.serialize
+        Input.new(field, opts)
+      end
+      serialize(format(input))
     end
 
     def open(attr)
-      serializer.serialize_open(Tag.new(self, :form, attr))
+      serializer.serialize_open(Tag.new(:form, attr))
     end
 
     def close
-      serializer.serialize_close(Tag.new(self, :form))
+      serializer.serialize_close(Tag.new(:form))
     end
 
     def tag(type, attr={})
-      Tag.new(self, type, attr).serialize
+      serialize(Tag.new(type, attr))
     end
 
     private
@@ -48,36 +49,31 @@ module Forme
       transformer = klass.get_subclass_instance(transformer) if transformer.is_a?(Symbol)
       transformer
     end
+
+    def format(input)
+      formatter.format(self, input)
+    end
+
+    def serialize(tag)
+      serializer.serialize(tag)
+    end
   end
 
   class Input
-    attr_reader :form
     attr_reader :type
     attr_reader :opts
-    def initialize(form, type, opts={})
-      @form = form
+    def initialize(type, opts={})
       @type = type
       @opts = opts
-    end
-    def obj
-      form.obj
-    end
-    def format
-      form.formatter.format(self)
-    end
-    def serialize
-      form.serializer.serialize(format)
     end
   end
 
   class Tag
-    attr_reader :form
     attr_reader :type
     attr_reader :attr
     attr_reader :children
 
-    def initialize(form, type, attr={}, &block)
-      @form = form
+    def initialize(type, attr={}, &block)
       @type = type
       @attr = attr
       @children = []
@@ -85,10 +81,6 @@ module Forme
 
     def <<(child)
       children << child
-    end
-
-    def serialize
-      form.serializer.serialize(self)
     end
   end
 
@@ -114,24 +106,23 @@ module Forme
   end
 
   class Formatter::Default < Formatter
-    def format(input)
-      form = input.form
+    def format(form, input)
       attr = input.opts.dup
       tag = case t = input.type
       when :textarea, :fieldset, :div
         if val = attr.delete(:value)
-          tg = Tag.new(form, t, attr)
+          tg = Tag.new(t, attr)
           tg << val
           tg
         else
-          tg = Tag.new(form, t, input.opts)
+          tg = Tag.new(t, input.opts)
         end
       else
-        Tag.new(form, :input, attr.merge!(:type=>t))
+        Tag.new(:input, attr.merge!(:type=>t))
       end
 
       if l = attr.delete(:label)
-        label = Tag.new(form, :label)
+        label = Tag.new(:label)
         label << "#{l}: "
         label << tag
         tag = label

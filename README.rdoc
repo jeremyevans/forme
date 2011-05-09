@@ -22,8 +22,8 @@ With an object, calls +forme_input+ on the obj with the form, field, and options
 should return a <tt>Forme::Input</tt> instance.
 
   f = Forme::Form.new(obj)
-  # obj.forme_input(f, :field, opts)
-  # => Forme::Input.new(f, :text, :name=>'obj[field]', :id=>'obj_field', :value=>'foo')
+  # obj.forme_input(:field, opts)
+  # => Forme::Input.new(:text, :name=>'obj[field]', :id=>'obj_field', :value=>'foo')
   f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo"/>'
 
 If the object doesn't respond to +forme_input+, it falls back to creating text fields
