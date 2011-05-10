@@ -73,6 +73,10 @@ describe "Forme plain forms" do
   specify "#close should return a closing tag" do
     @f.close.should == '</form>'
   end
+
+  specify "#button should return a submit tag" do
+    @f.button.should == '<input type="submit"/>'
+  end
 end
 
 describe "Forme custom" do

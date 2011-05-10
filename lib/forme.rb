@@ -45,6 +45,10 @@ module Forme
       serialize(Tag.new(type, attr))
     end
 
+    def button(attr={})
+      serialize(format(Input.new(:submit, attr)))
+    end
+
     private
 
     def find_transformer(klass, sym)
