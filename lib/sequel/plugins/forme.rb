@@ -4,6 +4,8 @@ module Sequel
   module Plugins
     # This Sequel plugin allows easy use of Forme with Sequel.
     module Forme
+      class Error < ::Forme::Error
+      end
       class SequelInput
         include ::Forme
 
@@ -35,6 +37,8 @@ module Sequel
             else
               raise Error, "Only many_to_one associations currently handled"
             end
+          else
+            raise Error, "Unrecognized field used: #{field}"
           end
         end
 

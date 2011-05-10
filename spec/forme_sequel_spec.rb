@@ -77,4 +77,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
   
+  specify "should raise an error for unhandled associations" do
+    proc{@b.input(:tracks)}.should raise_error(Forme::Error)
+  end
+  
+  specify "should raise an error for unhandled fields" do
+    proc{@b.input(:foo)}.should raise_error(Forme::Error)
+  end
 end
