@@ -135,6 +135,7 @@ module Forme
     CHECKBOX_MAP = Hash.new(0)
     CHECKBOX_MAP['t'] = 'f'
     def format_checkbox(form, type, opts)
+      opts[:type] = type
       opts[:checked] = :checked if opts.delete(:checked)
       if opts[:name]
         attr = {:type=>:hidden}
@@ -143,14 +144,21 @@ module Forme
         end
         attr[:id] = "#{opts[:id]}_hidden" if opts[:id]
         attr[:name] = opts[:name]
-        [Tag.new(:input, attr), Tag.new(:input, opts.merge!(:type=>type))]
+        [Tag.new(:input, attr), Tag.new(:input, opts)]
       else
-        Tag.new(:input, opts.merge!(:type=>type))
+        Tag.new(:input, opts)
       end
     end
 
+    def format_radio(form, type, opts)
+      opts[:checked] = :checked if opts.delete(:checked)
+      opts[:type] = type
+      Tag.new(:input, opts)
+    end
+
     def format_input(form, type, opts)
-      Tag.new(:input, opts.merge!(:type=>type))
+      opts[:type] = type
+      Tag.new(:input, opts)
     end
 
     def format_select(form, type, opts)

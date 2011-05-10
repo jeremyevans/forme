@@ -62,6 +62,13 @@ describe "Forme plain forms" do
     @f.input(:select, :name=>'bar', :options=>[1, 2, 3]).should == '<select name="bar"><option>1</option><option>2</option><option>3</option></select>'
   end
 
+  specify "radio and checkbox inputs should handle :checked option" do
+    @f.input(:radio, :checked=>true).should == '<input checked="checked" type="radio"/>'
+    @f.input(:radio, :checked=>false).should == '<input type="radio"/>'
+    @f.input(:checkbox, :checked=>true).should == '<input checked="checked" type="checkbox"/>'
+    @f.input(:checkbox, :checked=>false).should == '<input type="checkbox"/>'
+  end
+
   specify "should automatically create a label if a :label option is used" do
     @f.input(:text, :label=>'Foo', :value=>'foo').should == '<label>Foo: <input type="text" value="foo"/></label>'
   end
