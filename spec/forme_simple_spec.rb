@@ -87,12 +87,19 @@ describe "Forme custom" do
   specify "labelers can be specified as a proc" do
     Forme::Form.new(nil, :labeler=>proc{|l, t| ["#{l}: ", t]}).input(:textarea, :NAME=>'foo', :label=>'bar').should == 'bar: <textarea NAME="foo"></textarea>'
   end
+
+  specify "wrappers can be specified as a proc" do
+    Forme::Form.new(nil, :wrapper=>proc{|t| Forme::Tag.new(:div, {}, t)}).input(:textarea, :NAME=>'foo').should == '<div><textarea NAME="foo"></textarea></div>'
+  end
 end
 
-describe "Forme built-in labelers" do
-
-  specify "explicit uses an explicit label with for attribute" do
+describe "Forme built-in custom" do
+  specify "labeler: explicit uses an explicit label with for attribute" do
     Forme::Form.new(nil, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
+  end
+
+  specify "wrapper: li wraps tag in an li" do
+    Forme::Form.new(nil, :wrapper=>:li).input(:textarea, :id=>'foo').should == '<li><textarea id="foo"></textarea></li>'
   end
 end
 

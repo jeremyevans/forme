@@ -10,12 +10,14 @@ module Forme
     attr_reader :formatter
     attr_reader :labeler
     attr_reader :serializer
+    attr_reader :wrapper
     def initialize(obj=nil, opts={})
       @obj = obj
       @opts = opts
       @formatter = find_transformer(Formatter, :formatter)
       @labeler = find_transformer(Labeler, :labeler)
       @serializer = find_transformer(Serializer, :serializer)
+      @wrapper = find_transformer(Wrapper, :wrapper)
     end
 
     def input(field, opts={})
@@ -121,7 +123,7 @@ module Forme
 
       tag = form.labeler.call(l, tag) if l
 
-      tag
+      form.wrapper.call(tag)
     end
 
     private
@@ -201,6 +203,23 @@ module Forme
     def call(label, tag)
       raise Error, "Explicit labels require an id field" unless id = tag.attr[:id]
       [Tag.new(:label, {:for=>id}, label), tag]
+    end
+  end
+
+  class Wrapper
+    extend SubclassMap
+  end
+
+  class Wrapper::Default < Wrapper
+    # Default wrapper doesn't wrap
+    def call(tag)
+      tag
+    end
+  end
+
+  class Wrapper::LI < Wrapper
+    def call(tag)
+      Tag.new(:li, {}, tag)
     end
   end
 
