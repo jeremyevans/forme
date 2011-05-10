@@ -34,10 +34,10 @@ end
 
 describe "Forme Sinatra ERB integration" do
   specify "#form should add start and end tags and yield Forme::Form instance" do
-    FormeSinatraTest.new.call({'rack.input'=>'', 'REQUEST_METHOD'=>'GET', 'PATH_INFO'=>'/'})[2].join.gsub(/\s+/, ' ').should == '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </form>'
+    FormeSinatraTest.new.call({'rack.input'=>'', 'REQUEST_METHOD'=>'GET', 'PATH_INFO'=>'/'})[2].join.gsub(/\s+/, ' ').strip.should == '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </form>'
   end
 
   specify "#form should add start and end tags and yield Forme::Form instance" do
-    FormeSinatraTest.new.call({'rack.input'=>'', 'REQUEST_METHOD'=>'GET', 'PATH_INFO'=>'/nest'})[2].join.gsub(/\s+/, ' ').should == '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
+    FormeSinatraTest.new.call({'rack.input'=>'', 'REQUEST_METHOD'=>'GET', 'PATH_INFO'=>'/nest'})[2].join.gsub(/\s+/, ' ').strip.should == '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
   end
 end
