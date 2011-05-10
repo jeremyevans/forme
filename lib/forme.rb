@@ -265,7 +265,7 @@ module Forme
       "'" => "&#39;",
       '"' => "&quot;",
     }
-    ESCAPE_HTML_PATTERN = Regexp.union(ESCAPE_HTML.keys)
+    ESCAPE_HTML_PATTERN = Regexp.union(*ESCAPE_HTML.keys)
     # Escape ampersands, brackets and quotes to their HTML/XML entities.
     def h(string)
       string.to_s.gsub(ESCAPE_HTML_PATTERN){|c| ESCAPE_HTML[c] }
