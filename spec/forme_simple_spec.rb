@@ -84,6 +84,12 @@ describe "Forme plain forms" do
   specify "#button should return a submit tag" do
     @f.button.should == '<input type="submit"/>'
   end
+
+  specify "#tag should return a serialized_tag" do
+    @f.tag(:textarea).should == '<textarea></textarea>'
+    @f.tag(:textarea, :name=>:foo).should == '<textarea name="foo"></textarea>'
+    @f.tag(:textarea, {:name=>:foo}, :bar).should == '<textarea name="foo">bar</textarea>'
+  end
 end
 
 describe "Forme custom" do

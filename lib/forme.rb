@@ -41,8 +41,8 @@ module Forme
       serializer.serialize_close(Tag.new(:form))
     end
 
-    def tag(type, attr={})
-      serialize(Tag.new(type, attr))
+    def tag(*a)
+      serialize(Tag.new(*a))
     end
 
     def button(attr={})

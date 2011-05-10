@@ -22,7 +22,7 @@ END
   get '/nest' do
     erb <<END
 <% form([:foo, :bar], :action=>'/baz') do |f| %>
-  <p>FBB</p>
+  <%= f.tag(:p, {}, 'FBB') %>
   <% f.tag(:div) do %>
     <%= f.input(:first) %>
     <%= f.input(:last) %>
