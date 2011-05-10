@@ -37,6 +37,10 @@ module Sequel
             else
               raise Error, "Only many_to_one associations currently handled"
             end
+          elsif obj.respond_to?(field)
+            opts[:id] ||= "#{namespace}_#{field}"
+            opts[:name] ||= "#{namespace}[#{field}]"
+            input_other({})
           else
             raise Error, "Unrecognized field used: #{field}"
           end

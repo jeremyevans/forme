@@ -46,6 +46,10 @@ class Album < Sequel::Model
   many_to_one :artist, :order=>:name
   one_to_many :tracks
   many_to_many :tags
+
+  def artist_name
+    artist.name if artist
+  end
 end
 class Artist < Sequel::Model; end
 class Track < Sequel::Model; end
@@ -77,6 +81,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
   
+  specify "should use a text field methods not backed by columns" do
+    @b.input(:artist_name).should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="a"/></label>'
+    @c.input(:artist_name).should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="d"/></label>'
+  end
+
   specify "should raise an error for unhandled associations" do
     proc{@b.input(:tracks)}.should raise_error(Forme::Error)
   end
