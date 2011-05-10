@@ -5,8 +5,7 @@ Forme is a HTML forms library for ruby with the following goals:
 1) Have no external dependencies
 2) Have a simple API
 3) Support forms both with and without related objects
-4) Allow compiling down to different types of output, by using
-   an intermediate abstract syntax tree, similar to Sequel
+4) Allow compiling down to different types of output
 
 = Basic Usage
 
