@@ -1,3 +1,5 @@
+require 'forme'
+
 module Forme
   module Sinatra
     class Form < ::Forme::Form
