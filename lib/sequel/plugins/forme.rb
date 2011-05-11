@@ -76,15 +76,17 @@ module Sequel
 
         def association_one_to_many(ref)
           key = ref[:key]
-          pk = ref.associated_class.primary_key
-          opts[:id] ||= "#{namespace}_#{ref[:name]}_pks"
-          opts[:name] ||= "#{namespace}[#{ref[:name]}_pks][]"
+          klass = ref.associated_class
+          pk = klass.primary_key
+          opts[:id] ||= "#{namespace}_#{klass.send(:singularize, ref[:name])}_pks"
+          opts[:name] ||= "#{namespace}[#{klass.send(:singularize, ref[:name])}_pks][]"
           opts[:value] ||= obj.send(ref[:name]).map{|x| x.send(pk)}
           opts[:multiple] = true
           name_method = forme_name_method(ref)
           opts[:options] = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
           Input.new(:select, opts)
         end
+        alias association_many_to_many association_one_to_many
 
         def humanize(s)
           s = s.to_s
