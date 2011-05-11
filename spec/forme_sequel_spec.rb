@@ -134,7 +134,9 @@ describe "Forme Sequel::Model forms" do
   end
 
   specify "should raise an error for unhandled associations" do
-    proc{@b.input(:tags)}.should raise_error(Forme::Error)
+    al = Class.new(Album)
+    al.association_reflection(:tags)[:type] = :foo
+    proc{Forme::Form.new(al.new).input(:tags)}.should raise_error(Forme::Error)
   end
   
   specify "should raise an error for unhandled fields" do
