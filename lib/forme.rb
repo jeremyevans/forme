@@ -12,8 +12,13 @@ module Forme
     attr_reader :serializer
     attr_reader :wrapper
     def initialize(obj=nil, opts={})
-      @obj = obj
-      @opts = opts
+      if obj.is_a?(Hash)
+        @opts = obj.merge(opts)
+        @obj = @opts.delete(:obj)
+      else
+        @obj = obj
+        @opts = opts
+      end
       @formatter = find_transformer(Formatter, :formatter)
       @labeler = find_transformer(Labeler, :labeler)
       @serializer = find_transformer(Serializer, :serializer)
@@ -21,6 +26,12 @@ module Forme
     end
 
     def input(field, opts={})
+      if opts.has_key?(:obj)
+        opts = opts.dup
+        obj = opts.delete(:obj)
+      else
+        obj = self.obj
+      end
       input = if obj
         if obj.respond_to?(:forme_input)
           obj.forme_input(field, opts.dup)
@@ -42,7 +53,11 @@ module Forme
     end
 
     def tag(*a)
-      serialize(Tag.new(*a))
+      serialize(tag!(*a))
+    end
+
+    def tag!(*a)
+      Tag.new(*a)
     end
 
     def button(attr={})

@@ -90,33 +90,40 @@ describe "Forme plain forms" do
     @f.tag(:textarea, :name=>:foo).should == '<textarea name="foo"></textarea>'
     @f.tag(:textarea, {:name=>:foo}, :bar).should == '<textarea name="foo">bar</textarea>'
   end
+
+  specify "#tag! should return a Forme::Tag object" do
+    t = @f.tag!(:textarea)
+    t.should be_a_kind_of(Forme::Tag)
+    t.type.should == :textarea
+    t.attr.should == {}
+  end
 end
 
 describe "Forme custom" do
   specify "formatters can be specified as a proc" do
-    Forme::Form.new(nil, :formatter=>proc{|f, i| Forme::Tag.new(:textarea, i.opts.map{|k,v| [v.upcase, k.to_s.downcase]})}).input(:text, :NAME=>'foo').should == '<textarea FOO="name"></textarea>'
+    Forme::Form.new(:formatter=>proc{|f, i| Forme::Tag.new(:textarea, i.opts.map{|k,v| [v.upcase, k.to_s.downcase]})}).input(:text, :NAME=>'foo').should == '<textarea FOO="name"></textarea>'
   end
 
   specify "serializers can be specified as a proc" do
-    Forme::Form.new(nil, :serializer=>proc{|t| "#{t.type} = #{t.attr.inspect}"}).input(:textarea, :NAME=>'foo').should == 'textarea = {:NAME=>"foo"}'
+    Forme::Form.new(:serializer=>proc{|t| "#{t.type} = #{t.attr.inspect}"}).input(:textarea, :NAME=>'foo').should == 'textarea = {:NAME=>"foo"}'
   end
 
   specify "labelers can be specified as a proc" do
-    Forme::Form.new(nil, :labeler=>proc{|l, t| ["#{l}: ", t]}).input(:textarea, :NAME=>'foo', :label=>'bar').should == 'bar: <textarea NAME="foo"></textarea>'
+    Forme::Form.new(:labeler=>proc{|l, t| ["#{l}: ", t]}).input(:textarea, :NAME=>'foo', :label=>'bar').should == 'bar: <textarea NAME="foo"></textarea>'
   end
 
   specify "wrappers can be specified as a proc" do
-    Forme::Form.new(nil, :wrapper=>proc{|t| Forme::Tag.new(:div, {}, t)}).input(:textarea, :NAME=>'foo').should == '<div><textarea NAME="foo"></textarea></div>'
+    Forme::Form.new(:wrapper=>proc{|t| Forme::Tag.new(:div, {}, t)}).input(:textarea, :NAME=>'foo').should == '<div><textarea NAME="foo"></textarea></div>'
   end
 end
 
 describe "Forme built-in custom" do
   specify "labeler: explicit uses an explicit label with for attribute" do
-    Forme::Form.new(nil, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
+    Forme::Form.new(:labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
   end
 
   specify "wrapper: li wraps tag in an li" do
-    Forme::Form.new(nil, :wrapper=>:li).input(:textarea, :id=>'foo').should == '<li><textarea id="foo"></textarea></li>'
+    Forme::Form.new(:wrapper=>:li).input(:textarea, :id=>'foo').should == '<li><textarea id="foo"></textarea></li>'
   end
 end
 
@@ -153,6 +160,14 @@ describe "Forme object forms" do
     obj = Class.new{attr_accessor :foo}.new
     obj.foo = 'bar'
     Forme::Form.new(obj).input(:foo).should ==  '<input id="foo" name="foo" type="text" value="bar"/>'
+  end
+
+  specify "should handle obj passed in via :obj hash key" do
+    Forme::Form.new(:obj=>[:foo]).input(:first).should ==  '<input id="first" name="first" type="text" value="foo"/>'
+  end
+
+  specify "should be able to turn off obj handling per input using :obj=>nil option" do
+    Forme::Form.new([:foo]).input(:checkbox, :name=>"foo", :hidden_value=>"no", :obj=>nil).should == '<input name="foo" type="hidden" value="no"/><input name="foo" type="checkbox"/>'
   end
 
 end
