@@ -48,12 +48,27 @@ module Sequel
 
         private
 
+        FORME_NAME_METHODS = [:forme_name, :name, :title, :number]
+        def forme_name_method(ref)
+          if meth = opts.delete(:name_method)
+            meth
+          else
+            meths = FORME_NAME_METHODS & ref.associated_class.instance_methods.map{|s| s.to_sym}
+            if meths.empty?
+              raise Error, "No suitable name method found for association #{ref[:name]}"
+            else
+              meths.first
+            end
+          end
+        end
+
         def association_many_to_one(ref)
           key = ref[:key]
           opts[:id] ||= "#{namespace}_#{key}"
           opts[:name] ||= "#{namespace}[#{key}]"
           opts[:value] ||= obj.send(key)
-          os = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.name, a.id]}
+          name_method = forme_name_method(ref)
+          os = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
           os.unshift '' if (sch = obj.model.db_schema[key])  && sch[:allow_null]
           opts[:options] = os
           Input.new(:select, opts)
@@ -66,7 +81,8 @@ module Sequel
           opts[:name] ||= "#{namespace}[#{ref[:name]}_ids][]"
           opts[:value] ||= obj.send(ref[:name]).map{|x| x.send(pk)}
           opts[:multiple] = true
-          opts[:options] = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.name, a.id]}
+          name_method = forme_name_method(ref)
+          opts[:options] = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
           Input.new(:select, opts)
         end
 

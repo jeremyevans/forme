@@ -51,14 +51,18 @@ class Album < Sequel::Model
     artist.name if artist
   end
 end
-class Artist < Sequel::Model; end
+class Artist < Sequel::Model
+  def idname() "#{id}#{name}" end
+end
 class Track < Sequel::Model; end
 class Tag < Sequel::Model; end
 
 describe "Forme Sequel::Model forms" do
   before do
-    @b = Forme::Form.new(Album[b])
-    @c = Forme::Form.new(Album[c])
+    @ab = Album[b]
+    @b = Forme::Form.new(@ab)
+    @ac = Album[c]
+    @c = Forme::Form.new(@ac)
   end
   
   specify "should use a text field for strings" do
@@ -86,6 +90,39 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
   
+  specify "should support :name_method option for choosing name method" do
+    @b.input(:artist, :name_method=>:idname).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option selected="selected" value="1">1a</option><option value="2">2d</option></select></label>'
+    @c.input(:artist, :name_method=>:idname).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">1a</option><option selected="selected" value="2">2d</option></select></label>'
+  end
+  
+  specify "should try a list of methods to get a suitable one for select box naming" do
+    al = Class.new(Album){def self.name() 'Album' end}
+    ar = Class.new(Artist)
+    al.many_to_one :artist, :class=>ar
+    ar.class_eval{undef_method(:name)}
+    f = Forme::Form.new(al.new)
+
+    ar.class_eval{def number() "#{self[:name]}1" end}
+    f.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">a1</option><option value="2">d1</option></select></label>'
+
+    ar.class_eval{def title() "#{self[:name]}2" end}
+    f.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">a2</option><option value="2">d2</option></select></label>'
+
+    ar.class_eval{def name() "#{self[:name]}3" end}
+    f.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">a3</option><option value="2">d3</option></select></label>'
+
+    ar.class_eval{def forme_name() "#{self[:name]}4" end}
+    f.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">a4</option><option value="2">d4</option></select></label>'
+  end
+  
+  specify "should raise an error when using an association without a usable name method" do
+    al = Class.new(Album)
+    ar = Class.new(Artist)
+    al.many_to_one :artist, :class=>ar
+    ar.class_eval{undef_method(:name)}
+    proc{Forme::Form.new(al.new).input(:artist)}.should raise_error(Forme::Error)
+  end
+    
   specify "should use a multiple select box for one_to_many associations" do
     @b.input(:tracks).should == '<label>Tracks: <select id="album_tracks_ids" multiple="multiple" name="album[tracks_ids][]"><option selected="selected" value="1">m</option><option selected="selected" value="2">n</option><option value="3">o</option></select></label>'
     @c.input(:tracks).should == '<label>Tracks: <select id="album_tracks_ids" multiple="multiple" name="album[tracks_ids][]"><option value="1">m</option><option value="2">n</option><option selected="selected" value="3">o</option></select></label>'
