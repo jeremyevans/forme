@@ -90,7 +90,8 @@ module Sequel
 
         def input_other(sch)
           opts[:value] ||= obj.send(field)
-          Input.new(:text, opts)
+          type = opts.delete(:type) || :text
+          Input.new(type, opts)
         end
       end
 

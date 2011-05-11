@@ -66,6 +66,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:name).should == '<label>Name: <input id="album_name" name="album[name]" type="text" value="c"/></label>'
   end
   
+  specify "should allow :type=>:textarea to use a textarea" do
+    @b.input(:name, :type=>:textarea).should == '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
+    @c.input(:name, :type=>:textarea).should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
+  end
+  
   specify "should use a select box for tri-valued boolean fields" do
     @b.input(:gold).should == '<label>Gold: <select id="album_gold" name="album[gold]"><option></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
     @c.input(:gold).should == '<label>Gold: <select id="album_gold" name="album[gold]"><option></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
