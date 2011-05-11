@@ -82,8 +82,8 @@ describe "Forme Sequel::Model forms" do
   end
   
   specify "should use a multiple select box for one_to_many associations" do
-    @b.input(:tracks).should == '<label>Tracks: <select id="album_tracks_ids" multiple="multiple" name="album[tracks_ids]"><option selected="selected" value="1">m</option><option selected="selected" value="2">n</option><option value="3">o</option></select></label>'
-    @c.input(:tracks).should == '<label>Tracks: <select id="album_tracks_ids" multiple="multiple" name="album[tracks_ids]"><option value="1">m</option><option value="2">n</option><option selected="selected" value="3">o</option></select></label>'
+    @b.input(:tracks).should == '<label>Tracks: <select id="album_tracks_ids" multiple="multiple" name="album[tracks_ids][]"><option selected="selected" value="1">m</option><option selected="selected" value="2">n</option><option value="3">o</option></select></label>'
+    @c.input(:tracks).should == '<label>Tracks: <select id="album_tracks_ids" multiple="multiple" name="album[tracks_ids][]"><option value="1">m</option><option value="2">n</option><option selected="selected" value="3">o</option></select></label>'
   end
   
   specify "should use a text field methods not backed by columns" do

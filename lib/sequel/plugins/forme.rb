@@ -63,7 +63,7 @@ module Sequel
           key = ref[:key]
           pk = ref.associated_class.primary_key
           opts[:id] ||= "#{namespace}_#{ref[:name]}_ids"
-          opts[:name] ||= "#{namespace}[#{ref[:name]}_ids]"
+          opts[:name] ||= "#{namespace}[#{ref[:name]}_ids][]"
           opts[:value] ||= obj.send(ref[:name]).map{|x| x.send(pk)}
           opts[:multiple] = true
           opts[:options] = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.name, a.id]}
