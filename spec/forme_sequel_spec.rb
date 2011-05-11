@@ -81,13 +81,18 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
   
+  specify "should use a multiple select box for one_to_many associations" do
+    @b.input(:tracks).should == '<label>Tracks: <select id="album_tracks_ids" multiple="multiple" name="album[tracks_ids]"><option selected="selected" value="1">m</option><option selected="selected" value="2">n</option><option value="3">o</option></select></label>'
+    @c.input(:tracks).should == '<label>Tracks: <select id="album_tracks_ids" multiple="multiple" name="album[tracks_ids]"><option value="1">m</option><option value="2">n</option><option selected="selected" value="3">o</option></select></label>'
+  end
+  
   specify "should use a text field methods not backed by columns" do
     @b.input(:artist_name).should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="a"/></label>'
     @c.input(:artist_name).should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="d"/></label>'
   end
 
   specify "should raise an error for unhandled associations" do
-    proc{@b.input(:tracks)}.should raise_error(Forme::Error)
+    proc{@b.input(:tags)}.should raise_error(Forme::Error)
   end
   
   specify "should raise an error for unhandled fields" do

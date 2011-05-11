@@ -31,11 +31,11 @@ module Sequel
               input_other(sch)
             end
           elsif ref = obj.model.association_reflection(field)
-            case ref[:type]
-            when :many_to_one
-              association_many_to_one(ref)
+            meth = :"association_#{ref[:type]}"
+            if respond_to?(meth, true)
+              send(meth, ref)
             else
-              raise Error, "Only many_to_one associations currently handled"
+              raise Error, "Association type #{ref[:type]} not currently handled for association #{ref[:name]}"
             end
           elsif obj.respond_to?(field)
             opts[:id] ||= "#{namespace}_#{field}"
@@ -56,6 +56,17 @@ module Sequel
           os = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.name, a.id]}
           os.unshift '' if (sch = obj.model.db_schema[key])  && sch[:allow_null]
           opts[:options] = os
+          Input.new(:select, opts)
+        end
+
+        def association_one_to_many(ref)
+          key = ref[:key]
+          pk = ref.associated_class.primary_key
+          opts[:id] ||= "#{namespace}_#{ref[:name]}_ids"
+          opts[:name] ||= "#{namespace}[#{ref[:name]}_ids]"
+          opts[:value] ||= obj.send(ref[:name]).map{|x| x.send(pk)}
+          opts[:multiple] = true
+          opts[:options] = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.name, a.id]}
           Input.new(:select, opts)
         end
 

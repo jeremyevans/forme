@@ -166,6 +166,13 @@ module Forme
         vm = opts.delete(:value_method)
         tm = opts.delete(:text_method)
         sel = opts.delete(:selected) || opts.delete(:value)
+        if opts.delete(:multiple)
+          opts[:multiple] = :multiple
+          sel = Array(sel)
+          cmp = lambda{|v| sel.include?(v)}
+        else
+          cmp = lambda{|v| v == sel}
+        end
         os = os.map do |x|
           attr = {}
           if tm
@@ -173,18 +180,18 @@ module Forme
             if vm
               val = x.send(vm)
               attr[:value] = val
-              attr[:selected] = :selected if val == sel
+              attr[:selected] = :selected if cmp.call(val)
             else
-              attr[:selected] = :selected if text == sel
+              attr[:selected] = :selected if cmp.call(text)
             end
             Tag.new(:option, attr, [text])
           elsif x.is_a?(Array)
             val = x.last
             attr[:value] = val
-            attr[:selected] = :selected if val == sel
+            attr[:selected] = :selected if cmp.call(val)
             Tag.new(:option, attr, [x.first])
           else
-            attr[:selected] = :selected if x == sel
+            attr[:selected] = :selected if cmp.call(x)
             Tag.new(:option, attr, [x])
           end
         end
