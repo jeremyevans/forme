@@ -77,8 +77,8 @@ module Sequel
         def association_one_to_many(ref)
           key = ref[:key]
           pk = ref.associated_class.primary_key
-          opts[:id] ||= "#{namespace}_#{ref[:name]}_ids"
-          opts[:name] ||= "#{namespace}[#{ref[:name]}_ids][]"
+          opts[:id] ||= "#{namespace}_#{ref[:name]}_pks"
+          opts[:name] ||= "#{namespace}[#{ref[:name]}_pks][]"
           opts[:value] ||= obj.send(ref[:name]).map{|x| x.send(pk)}
           opts[:multiple] = true
           name_method = forme_name_method(ref)
