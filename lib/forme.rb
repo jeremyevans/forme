@@ -357,8 +357,13 @@ module Forme
             Tag.new(:option, attr, [text])
           elsif x.is_a?(Array)
             val = x.last
-            attr[:value] = val
-            attr[:selected] = :selected if cmp.call(val)
+            if val.is_a?(Hash)
+              attr.merge!(val)
+              val = attr[:value]
+            else
+              attr[:value] = val
+            end
+            attr[:selected] = :selected if attr.has_key?(:value) && cmp.call(val)
             Tag.new(:option, attr, [x.first])
           else
             attr[:selected] = :selected if cmp.call(x)

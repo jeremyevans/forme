@@ -55,6 +55,10 @@ describe "Forme plain forms" do
     @f.input(:select, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).should == '<select><option value="1">a</option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
   end
 
+  specify "should create select tag with options and values with hashes" do
+    @f.input(:select, :options=>[[:a, {:foo=>1}], [:b, {:bar=>4, :value=>2}], [:c, {:baz=>3}]], :selected=>2).should == '<select><option foo="1">a</option><option bar="4" selected="selected" value="2">b</option><option baz="3">c</option></select>'
+  end
+
   specify "should create select tag with options and values using given method" do
     @f.input(:select, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).should == '<select><option>1</option><option selected="selected">2</option><option>3</option></select>'
     @f.input(:select, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).should == '<select><option value="a">1</option><option selected="selected" value="b">2</option><option value="c">3</option></select>'
