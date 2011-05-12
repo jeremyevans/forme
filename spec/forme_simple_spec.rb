@@ -5,6 +5,10 @@ describe "Forme plain forms" do
     @f = Forme::Form.new
   end
 
+  specify "Forme.version should return version string" do
+    Forme.version.should =~ /\A\d+\.\d+\.\d+\z/
+  end
+
   specify "should create a simple input tags" do
     @f.input(:text).should == '<input type="text"/>'
     @f.input(:radio).should == '<input type="radio"/>'
@@ -96,6 +100,12 @@ describe "Forme plain forms" do
     t.should be_a_kind_of(Forme::Tag)
     t.type.should == :textarea
     t.attr.should == {}
+  end
+
+  specify "Forme::Tag#<< should add children to the tag" do
+    t  = @f.tag!(:textarea)
+    t << "foo"
+    @f.tag(:div, {}, t).should == "<div><textarea>foo</textarea></div>"
   end
 end
 
