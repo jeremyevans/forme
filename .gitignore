@@ -1,1 +1,4 @@
+/coverage
+/rdoc
 /forme-*.gem
+*.rbc
