@@ -370,6 +370,7 @@ module Forme
             Tag.new(:option, attr, [x])
           end
         end
+        os.unshift(Tag.new(:option)) if opts.delete(:add_blank)
       end
       Tag.new(type, opts, os)
     end

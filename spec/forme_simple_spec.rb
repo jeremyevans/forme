@@ -70,6 +70,10 @@ describe "Forme plain forms" do
     @f.input(:select, :name=>'bar', :options=>[1, 2, 3]).should == '<select name="bar"><option>1</option><option>2</option><option>3</option></select>'
   end
 
+  specify "should support :add_blank option for select inputs" do
+    @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).should == '<select><option></option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
+  end
+
   specify "radio and checkbox inputs should handle :checked option" do
     @f.input(:radio, :checked=>true).should == '<input checked="checked" type="radio"/>'
     @f.input(:radio, :checked=>false).should == '<input type="radio"/>'
