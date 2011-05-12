@@ -1,25 +1,54 @@
 require 'forme'
 
-module Sequel
-  module Plugins
+module Sequel # :nodoc:
+  module Plugins # :nodoc:
     # This Sequel plugin allows easy use of Forme with Sequel.
     module Forme
+      # Exception class raised by the plugin.  It's important to
+      # note this descends from <tt>Forme::Error</tt> and not
+      # <tt>Sequel::Error</tt>, though in practice it's unlikely
+      # you will want to rescue these errors.
       class Error < ::Forme::Error
       end
+
+      # Helper class for dealing with Forme/Sequel integration.
+      # One instance is created for each call to <tt>Forme::Form#input</tt>
+      # for forms associated with <tt>Sequel::Model</tt> objects.
       class SequelInput
         include ::Forme
 
+        # The name methods that will be tried, in order, to get the
+        # text to use for the options in the select input created
+        # for associations.
+        FORME_NAME_METHODS = [:forme_name, :name, :title, :number]
+
+        # The <tt>Sequel::Model</tt> object related to this input.
         attr_reader :obj
+
+        # The field/column name related to this input.  The type of
+        # input created usually depends upon this field.
         attr_reader :field
+
+        # The options hash related to this input.
         attr_reader :opts
+
+        # The namespace used for the input, generally the underscored
+        # name of +obj+'s class.  
         attr_reader :namespace
 
+        # Set the +obj+, +field+, and +opts+ attributes.
         def initialize(obj, field, opts)
           @obj, @field, @opts = obj, field, opts
-          @namespace ||= obj.model.name.downcase
+          @namespace ||= obj.model.send(:underscore, obj.model.name)
           opts[:label] ||= humanize(field)
         end
 
+        # Determine which type of input to used based on the given field.
+        # If the field is a column, use the column's type to determine
+        # an appropriate field type. If the field is an association,
+        # use either a regular or multiple select input.  If it's not a
+        # column or association, but the object responds to the method,
+        # create a text input.  Otherwise, raise an +Error+.
         def input
           if sch = obj.model.db_schema[field] 
             meth = :"input_#{sch[:type]}"
@@ -48,7 +77,10 @@ module Sequel
 
         private
 
-        FORME_NAME_METHODS = [:forme_name, :name, :title, :number]
+        # If the :name_method option is provided, use that as the method.
+        # Otherwise, pick the first method in +FORME_NAME_METHODS+ that
+        # the associated class implements and use it.  If none of the
+        # methods are implemented by the associated class, raise an +Error+.
         def forme_name_method(ref)
           if meth = opts.delete(:name_method)
             meth
@@ -62,6 +94,8 @@ module Sequel
           end
         end
 
+        # Create a regular select input made up of options for all entries the object
+        # could be associated to, with the one currently associated to being selected.
         def association_many_to_one(ref)
           key = ref[:key]
           opts[:id] ||= "#{namespace}_#{key}"
@@ -72,6 +106,8 @@ module Sequel
           Input.new(:select, opts)
         end
 
+        # Create a multiple select input made up of options for all entries the object
+        # could be associated to, with all of the ones currently associated to being selected.
         def association_one_to_many(ref)
           key = ref[:key]
           klass = ref.associated_class
@@ -85,16 +121,23 @@ module Sequel
         end
         alias association_many_to_many association_one_to_many
 
+        # Return an array of two element arrays represeneting the
+        # select options that should be created.
         def association_select_options(ref)
           name_method = forme_name_method(ref)
           obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
         end
 
+        # Call humanize on a string version of the argument if
+        # String#humanize exists. Otherwise, do some monkeying
+        # with the string manually.
         def humanize(s)
           s = s.to_s
           s.respond_to?(:humanize) ? s.humanize : s.gsub(/_id$/, "").gsub(/_/, " ").capitalize
         end
 
+        # If the column allows NULL values, use a three-valued select
+        # input.  If not, use a simple checkbox.
         def input_boolean(sch)
           if sch[:allow_null]
             v = opts[:value] || obj.send(field)
@@ -108,6 +151,7 @@ module Sequel
           end
         end
 
+        # Fallback to using the text type for all other types of input.
         def input_other(sch)
           opts[:value] ||= obj.send(field)
           type = opts.delete(:type) || :text
@@ -116,7 +160,7 @@ module Sequel
       end
 
       module InstanceMethods
-        # Return Forme::Input instance for field and opts
+        # Return <tt>Forme::Input</tt> instance for field and opts.
         def forme_input(field, opts)
           SequelInput.new(self, field, opts).input
         end
