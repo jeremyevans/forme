@@ -67,10 +67,8 @@ module Sequel
           opts[:id] ||= "#{namespace}_#{key}"
           opts[:name] ||= "#{namespace}[#{key}]"
           opts[:value] ||= obj.send(key)
-          name_method = forme_name_method(ref)
-          os = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
-          os.unshift '' if (sch = obj.model.db_schema[key])  && sch[:allow_null]
-          opts[:options] = os
+          opts[:add_blank] = true if !opts.has_key?(:add_blank) && (sch = obj.model.db_schema[key])  && sch[:allow_null]
+          opts[:options] ||= association_select_options(ref)
           Input.new(:select, opts)
         end
 
@@ -82,11 +80,15 @@ module Sequel
           opts[:name] ||= "#{namespace}[#{klass.send(:singularize, ref[:name])}_pks][]"
           opts[:value] ||= obj.send(ref[:name]).map{|x| x.send(pk)}
           opts[:multiple] = true
-          name_method = forme_name_method(ref)
-          opts[:options] = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
+          opts[:options] ||= association_select_options(ref)
           Input.new(:select, opts)
         end
         alias association_many_to_many association_one_to_many
+
+        def association_select_options(ref)
+          name_method = forme_name_method(ref)
+          obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
+        end
 
         def humanize(s)
           s = s.to_s

@@ -90,6 +90,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
   
+  specify "should respect an :options entry" do
+    @b.input(:artist, :options=>Artist.order(:name).map{|a| [a.name, a.id+1]}).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="2">a</option><option value="3">d</option></select></label>'
+    @c.input(:artist, :options=>Artist.order(:name).map{|a| [a.name, a.id+1]}).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option selected="selected" value="2">a</option><option value="3">d</option></select></label>'
+  end
+  
   specify "should support :name_method option for choosing name method" do
     @b.input(:artist, :name_method=>:idname).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option selected="selected" value="1">1a</option><option value="2">2d</option></select></label>'
     @c.input(:artist, :name_method=>:idname).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option></option><option value="1">1a</option><option selected="selected" value="2">2d</option></select></label>'
