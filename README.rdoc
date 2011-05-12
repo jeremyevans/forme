@@ -39,7 +39,32 @@ on the object.
 <tt>Forme::Tag</tt> :: low level abstract tag 
 <tt>Forme::Formatter</tt> :: takes input, returns tag
 <tt>Forme::Labeler</tt> :: takes tag, returns labeled version
+<tt>Forme::Wrapper</tt> :: takes (potentially labeled) tag, returns (potentially wrapped) version of tag
 <tt>Forme::Serializer</tt> :: tags tag, returns string
+
+See +Forme+ module RDoc documentation for a technical description of how the library
+uses the +Formatter+, +Labeler+, +Wrapper+, and +Serializer+ classes for converting
++Input+ instances to +Tag+ instances and finally to html strings.
+
+= Sequel Support
+
+Forme ships with a Sequel plugin (use <tt>Sequel::Model.plugin :forme</tt> to enable), that makes
+Sequel::Model instances support the +forme_input+ method and return customized inputs, such as
+checkboxes for 2-valued boolean columns, 3 valued select boxes for boolean columns that can be
+NULL, select boxes for many_to_one associations, and multi-select boxes for *_to_many associations.
+
+= Sinatra ERB Support
+
+Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
+<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra application.  It allows you to use the following
+API in your Sinatra ERB forms:
+
+  <% form(@obj, :action=>'/foo') do |f| %>
+    <%= f.input(:field) %>
+    <% f.tag(:fieldset) do %>
+      <%= f.input(:field_two) %>
+    <% end%>
+  <% end%>
 
 = Other Similar Projects
 
