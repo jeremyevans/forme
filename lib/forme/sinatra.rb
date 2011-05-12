@@ -16,8 +16,15 @@ module Forme
       end
     end
     module ERB
-      def form(obj, attr={}, opts={}, &block)
-        Form.new(obj, opts).tag(:form, attr, &block)
+      def form(obj=nil, attr={}, opts={}, &block)
+        if obj.is_a?(Hash)
+          raise Error, "Can't provide 3 hash arguments to form" unless opts.empty?
+          opts = attr
+          attr = obj
+          Form.new(opts).tag(:form, attr, &block)
+        else
+          Form.new(obj, opts).tag(:form, attr, &block)
+        end
       end
     end 
     Erubis = ERB

@@ -8,6 +8,7 @@ require 'erb'
 class FormeSinatraTest < Sinatra::Base
   helpers Forme::Sinatra::ERB
   disable :show_exceptions
+  enable :raise_errors
 
   get '/' do
     erb <<END
@@ -30,14 +31,30 @@ END
 <% end %>
 END
   end
+
+  get '/hash' do
+    erb "<% form({:action=>'/baz'}, :obj=>[:foo]) do |f| %> <%= f.input(:first) %> <% end %>"
+  end
 end
 
 describe "Forme Sinatra ERB integration" do
+  def sin_get(path)
+    FormeSinatraTest.new.call(@rack.merge('PATH_INFO'=>path))[2].join.gsub(/\s+/, ' ').strip
+  end
+  before do
+    o = Object.new
+    def o.puts(*) end
+    @rack = {'rack.input'=>'', 'REQUEST_METHOD'=>'GET', 'rack.errors'=>o}
+  end
   specify "#form should add start and end tags and yield Forme::Form instance" do
-    FormeSinatraTest.new.call({'rack.input'=>'', 'REQUEST_METHOD'=>'GET', 'PATH_INFO'=>'/'})[2].join.gsub(/\s+/, ' ').strip.should == '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </form>'
+    sin_get('/').should == '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </form>'
   end
 
   specify "#form should add start and end tags and yield Forme::Form instance" do
-    FormeSinatraTest.new.call({'rack.input'=>'', 'REQUEST_METHOD'=>'GET', 'PATH_INFO'=>'/nest'})[2].join.gsub(/\s+/, ' ').strip.should == '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
+    sin_get('/nest').strip.should == '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
+  end
+
+  specify "#form should accept two hashes instead of requiring obj as first argument" do
+    sin_get('/hash').strip.should == '<form action="/baz"> <input id="first" name="first" type="text" value="foo"/> </form>'
   end
 end
