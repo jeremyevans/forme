@@ -32,6 +32,23 @@ on the object.
   f = Forme::Form.new([:foo])
   f.input(:first) # '<input id="first" name="first" type="text" value="foo"/>'
 
+= DSL
+
+Forme comes with DSL:
+
+  Forme.form(:action=>'/foo') do |f|
+    f.input(:text, :name=>'bar')
+    f.tag(:fieldset) do
+      f.input(:textarea, :name=>'baz')
+    end
+  end
+  # <form action="/foo">
+  #   <input name="bar" type="text"/>
+  #   <fieldset>
+  #     <textarea name="baz"></textarea>
+  #   </fieldset>
+  # </form>
+
 = Main Classes
 
 <tt>Forme::Form</tt> :: main object
@@ -50,14 +67,14 @@ uses the +Formatter+, +Labeler+, +Wrapper+, and +Serializer+ classes for convert
 
 Forme ships with a Sequel plugin (use <tt>Sequel::Model.plugin :forme</tt> to enable), that makes
 Sequel::Model instances support the +forme_input+ method and return customized inputs, such as
-checkboxes for 2-valued boolean columns, 3 valued select boxes for boolean columns that can be
+checkboxes for boolean columns cannot be NULL, 3-valued select boxes for boolean columns that can be
 NULL, select boxes for many_to_one associations, and multi-select boxes for *_to_many associations.
 
 = Sinatra ERB Support
 
 Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
-<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra application.  It allows you to use the following
-API in your Sinatra ERB forms:
+<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra::Application class.  It allows you to use the
+following API in your Sinatra ERB forms:
 
   <% form(@obj, :action=>'/foo') do |f| %>
     <%= f.input(:field) %>
@@ -72,6 +89,7 @@ All of these have external dependencies:
 
 1. Rails built-in helpers
 2. Formtastic
+4. simple_form
 3. padrino-helpers
 
 = Author
