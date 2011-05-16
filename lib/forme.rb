@@ -165,7 +165,7 @@ module Forme
     # Looks up the transformer if it is a registered symbol.
     def find_transformer(klass, sym)
       transformer ||= opts.fetch(sym, :default)
-      transformer = klass.get_subclass_instance(transformer) if transformer.is_a?(Symbol)
+      transformer = klass.get_transformer(transformer) if transformer.is_a?(Symbol)
       transformer
     end
 
@@ -222,35 +222,37 @@ module Forme
 
   # Helper module for extending classes where subclasses automatically register themselves
   # in a map under a symbol, allowing lookup by symbol name when creating a +Form+.
-  module SubclassMap
+  module TransformerMap
     # Create the +MAP+ constant hash under the +klass+.
     def self.extended(klass)
       klass.const_set(:MAP, {})
     end
 
-    # Given a +type+ symbol, looks up the symbol in the MAP constant and returns a new
-    # instance of it.
-    def get_subclass_instance(type)
-      subclass = self::MAP[type] || self::MAP[:default]
-      raise Error, "invalid #{name.to_s.downcase}: #{type} (valid #{name.to_s.downcase}s: #{klass::MAP.keys.join(', ')})" unless subclass 
-      subclass.new
+    # Given a +type+ symbol, looks up the symbol in the MAP constant and returns 
+    # the matching entry or a new instance of it if it is a class.
+    def get_transformer(type)
+      transformer = self::MAP[type] || self::MAP[:default]
+      raise Error, "invalid #{name.to_s.downcase}: #{type} (valid #{name.to_s.downcase}s: #{klass::MAP.keys.join(', ')})" unless transformer
+      transformer.is_a?(Class) ? transformer.new : transformer
     end
 
-    # Automatically register the subclass in the parent class's MAP.
-    def inherited(subclass)
-      self::MAP[subclass.name.split('::').last.downcase.to_sym] = subclass
-      super
+    # Register the object in the transformer's MAP object.
+    def register_transformer(type, transformer=nil, &block)
+      raise Error, "can provide transformer either as an argument or a block, not both" if transformer && block
+      self::MAP[type] = transformer || block
     end
   end
 
   # Base (empty) class for formatters supported by the library.
   class Formatter
-    extend SubclassMap
+    extend TransformerMap
   end
 
   # The default formatter used by the library.  Any custom formatters should
   # probably inherit from this formatter unless they have very special needs.
   class Formatter::Default < Formatter
+    register_transformer(:default, new)
+
     # Used to specify the value of the hidden input created for checkboxes.
     # Since the default for an unspecified checkbox value is 1, the default is
     # 0. If the checkbox value is 't', the hidden value is 'f', since that is
@@ -388,12 +390,14 @@ module Forme
 
   # Base (empty) class for labelers supported by the library. 
   class Labeler
-    extend SubclassMap
+    extend TransformerMap
   end
 
   # Default labeler used by the library, using implicit labels (where the
   # label tag encloses the other tag).
   class Labeler::Default < Labeler
+    register_transformer(:default, new)
+
     # Return a label tag wrapping the given tag.
     def call(label, tag)
       Tag.new(:label, {}, ["#{label}: ", tag])
@@ -404,6 +408,8 @@ module Forme
   # the given tag's id using a +for+ attribute.  Requires that all tags
   # with labels have +id+ fields.
   class Labeler::Explicit < Labeler
+    register_transformer(:explicit, new)
+
     # Return an array with a label tag as the first entry and the given
     # tag as the second.
     def call(label, tag)
@@ -414,11 +420,13 @@ module Forme
 
   # Base (empty) class for wrappers supported by the library.
   class Wrapper
-    extend SubclassMap
+    extend TransformerMap
   end
 
   # Default wrapper class used by the library, which doesn't actually wrap.
   class Wrapper::Default < Wrapper
+    register_transformer(:default, new)
+
     # Default wrapper doesn't wrap, it just returns the tag as is.
     def call(tag)
       tag
@@ -427,6 +435,9 @@ module Forme
 
   # Wrapper class which wraps the class in an li tag. 
   class Wrapper::LI < Wrapper
+    register_transformer(:li, new)
+
+    # Wrap the tag in an li tag
     def call(tag)
       Tag.new(:li, {}, Array(tag))
     end
@@ -434,12 +445,14 @@ module Forme
 
   # Base (empty) class for serializers supported by the library.
   class Serializer
-    extend SubclassMap
+    extend TransformerMap
   end
 
   # Default serializer class used by the library.  Any other serializer
   # classes that want to produce html should probably subclass this class.
   class Serializer::Default < Serializer
+    register_transformer(:default, new)
+
     # Borrowed from Rack::Utils, map of single character strings to html escaped versions.
     ESCAPE_HTML = {
       "&" => "&amp;",

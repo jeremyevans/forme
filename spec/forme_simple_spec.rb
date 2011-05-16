@@ -145,6 +145,29 @@ describe "Forme built-in custom" do
   end
 end
 
+describe "Forme registering custom transformers" do
+  specify "should have #register_transformer register a transformer object for later use" do
+    Forme::Wrapper.register_transformer(:div, proc{|t| Forme::Tag.new(:div, {}, [t])})
+    Forme::Form.new(:wrapper=>:div).input(:textarea).should == '<div><textarea></textarea></div>'
+  end
+
+  specify "should have #register_transformer register a transformer block for later use" do
+    Forme::Wrapper.register_transformer(:div1){|t| Forme::Tag.new(:div1, {}, [t])}
+    Forme::Form.new(:wrapper=>:div1).input(:textarea).should == '<div1><textarea></textarea></div1>'
+  end
+
+  specify "should have #register_transformer register a transformer class for later use" do
+    Forme::Wrapper.register_transformer(:div2, Class.new{def call(t) Forme::Tag.new(:div2, {}, [t]) end})
+    Forme::Form.new(:wrapper=>:div2).input(:textarea).should == '<div2><textarea></textarea></div2>'
+  end
+
+  specify "should have #register_transformer raise an error if given a block and an object" do
+    proc do
+      Forme::Wrapper.register_transformer(:div1, proc{|t| t}){|t| Forme::Tag.new(:div1, {}, [t])}
+    end.should raise_error(Forme::Error)
+  end
+end
+
 describe "Forme object forms" do
 
   specify "should handle a simple case" do
