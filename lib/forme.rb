@@ -47,6 +47,11 @@ module Forme
   class Error < StandardError
   end
 
+  # Call <tt>Forme::Form.form</tt> with the given arguments and block.
+  def self.form(*a, &block)
+    Form.form(*a, &block)
+  end
+
   # The +Form+ class is the main entry point to the library.  
   # Using the +input+ and +tag+ methods, one can easily create
   # html tag strings.
@@ -81,6 +86,33 @@ module Forme
     # Must respond to +call+ or be a registered symbol.
     attr_reader :serializer
 
+    # Create a +Form+ object and yield it to the block,
+    # injecting the opening form tag before yielding and
+    # the closing form tag after yielding.
+    #
+    # Argument Handling:
+    # No args :: Creates a +Form+ object with no options and not associated
+    #            to an +obj+, and with no attributes in the opening tag.
+    # 1 hash arg :: Treated as opening form tag attributes, creating a
+    #               +Form+ object with no options.
+    # 1 non-hash arg :: Treated as the +Form+'s +obj+, with empty options
+    #                   and no attributes in the opening tag.
+    # 2 hash args :: First hash is opening attributes, second hash is +Form+
+    #                options.
+    # 1 non-hash arg, 1-2 hash args :: First argument is +Form+'s obj, second is
+    #                                  opening attributes, third if provided is
+    #                                  +Form+'s options.
+    def self.form(obj=nil, attr={}, opts={}, &block)
+      t = if obj.is_a?(Hash)
+        raise Error, "Can't provide 3 hash arguments to form" unless opts.empty?
+        opts = attr
+        attr = obj
+        new(opts).form(attr, &block)
+      else
+        new(obj, opts).form(attr, &block)
+      end
+    end
+
     # Creates a +Form+ object. Arguments:
     # obj :: Sets the obj for the form.  If a hash, is merged with the +opts+ argument
     #        to set the opts.
@@ -98,6 +130,12 @@ module Forme
       @labeler = find_transformer(Labeler, :labeler)
       @serializer = find_transformer(Serializer, :serializer)
       @wrapper = find_transformer(Wrapper, :wrapper)
+      @nesting = []
+    end
+
+    # Create a form tag with the given attributes.
+    def form(attr={}, &block)
+      tag(:form, attr, &block)
     end
 
     # Creates an +Input+ with the given +field+ and +opts+, and returns
@@ -128,7 +166,9 @@ module Forme
       else
         Input.new(field, opts)
       end
-      serialize(format(input))
+      tag = format(input)
+      self << tag
+      serialize(tag)
     end
 
     # Returns a string representing the opening of the form tag.
@@ -145,23 +185,41 @@ module Forme
 
     # Creates a +Tag+ instance with the given arguments, and returns
     # a serialized version of it.
-    def tag(*a)
-      serialize(tag!(*a))
-    end
-
-    # Creates a +Tag+ instance with the given arguments, and returns it.
-    def tag!(*a)
-      Tag.new(*a)
+    def tag(*a, &block)
+      tag = Tag.new(*a)
+      self << tag
+      nest(tag, &block) if block
+      serialize(tag)
     end
 
     # Creates a :submit +Input+ with the given opts, and returns a serialized
     # version of the formatted input.
     def button(opts={})
-      serialize(format(Input.new(:submit, opts)))
+      input = Input.new(:submit, opts)
+      tag = format(input)
+      self << tag
+      serialize(tag)
+    end
+
+    # Add the input/tag to the innermost nesting tag.
+    def <<(tag)
+      if n = @nesting.last
+        n << tag
+      end
     end
 
     private
 
+    # Add a new nesting level by entering the tag.  Yield
+    # while inside the tag, and ensure when the block
+    # returns to remove the nesting level.
+    def nest(tag)
+      @nesting << tag
+      yield self
+    ensure
+      @nesting.pop
+    end
+    
     # Looks up the transformer if it is a registered symbol.
     def find_transformer(klass, sym)
       transformer ||= opts.fetch(sym, :default)

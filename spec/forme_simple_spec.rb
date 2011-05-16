@@ -102,19 +102,6 @@ describe "Forme plain forms" do
     @f.tag(:textarea, :name=>:foo).should == '<textarea name="foo"></textarea>'
     @f.tag(:textarea, {:name=>:foo}, :bar).should == '<textarea name="foo">bar</textarea>'
   end
-
-  specify "#tag! should return a Forme::Tag object" do
-    t = @f.tag!(:textarea)
-    t.should be_a_kind_of(Forme::Tag)
-    t.type.should == :textarea
-    t.attr.should == {}
-  end
-
-  specify "Forme::Tag#<< should add children to the tag" do
-    t  = @f.tag!(:textarea)
-    t << "foo"
-    @f.tag(:div, {}, t).should == "<div><textarea>foo</textarea></div>"
-  end
 end
 
 describe "Forme custom" do
@@ -169,7 +156,6 @@ describe "Forme registering custom transformers" do
 end
 
 describe "Forme object forms" do
-
   specify "should handle a simple case" do
     obj = Class.new{def forme_input(field, opts) Forme::Input.new(:text, :name=>"obj[#{field}]", :id=>"obj_#{field}", :value=>"#{field}_foo") end}.new 
     Forme::Form.new(obj).input(:field).should ==  '<input id="obj_field" name="obj[field]" type="text" value="field_foo"/>'
@@ -210,5 +196,27 @@ describe "Forme object forms" do
   specify "should be able to turn off obj handling per input using :obj=>nil option" do
     Forme::Form.new([:foo]).input(:checkbox, :name=>"foo", :hidden_value=>"no", :obj=>nil).should == '<input name="foo" type="hidden" value="no"/><input name="foo" type="checkbox"/>'
   end
-
 end
+
+describe "Forme.form DSL" do
+  specify "should return a form tag" do
+    Forme.form.should ==  '<form></form>'
+  end
+
+  specify "should yield a Form object to the block" do
+    Forme.form{|f| f.should be_a_kind_of(Forme::Form)}
+  end
+
+  specify "should have inputs called instead the block be added to the existing form" do
+    Forme.form{|f| f.input(:text)}.should ==  '<form><input type="text"/></form>'
+  end
+
+  specify "should be able to nest inputs inside tags" do
+    Forme.form{|f| f.tag(:div){f.input(:text)}}.should ==  '<form><div><input type="text"/></div></form>'
+    Forme.form{|f| f.tag(:div){f.tag(:fieldset){f.input(:text)}}}.should ==  '<form><div><fieldset><input type="text"/></fieldset></div></form>'
+    Forme.form{|f| f.tag(:div){f.tag(:fieldset){f.tag(:span){f.input(:text)}}}}.should ==  '<form><div><fieldset><span><input type="text"/></span></fieldset></div></form>'
+    Forme.form{|f| f.tag(:div){f.input(:text)}; f.input(:radio)}.should ==  '<form><div><input type="text"/></div><input type="radio"/></form>'
+    Forme.form{|f| f.tag(:div){f.tag(:fieldset){f.input(:text);  f.input(:radio)};  f.input(:checkbox)}}.should ==  '<form><div><fieldset><input type="text"/><input type="radio"/></fieldset><input type="checkbox"/></div></form>'
+  end
+end
+

@@ -44,15 +44,8 @@ module Forme
       # 1 non-hash arg, 1-2 hash args :: First argument is +Form+'s obj, second is
       #                                  opening attributes, third if provided is
       #                                  +Form+'s options.
-      def form(obj=nil, attr={}, opts={}, &block)
-        if obj.is_a?(Hash)
-          raise Error, "Can't provide 3 hash arguments to form" unless opts.empty?
-          opts = attr
-          attr = obj
-          Form.new(opts).tag(:form, attr, &block)
-        else
-          Form.new(obj, opts).tag(:form, attr, &block)
-        end
+      def form(*a, &block)
+        Form.form(*a, &block)
       end
     end 
     Erubis = ERB
