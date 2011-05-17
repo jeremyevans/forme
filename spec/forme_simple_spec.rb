@@ -143,6 +143,10 @@ describe "Forme custom" do
 end
 
 describe "Forme built-in custom" do
+  specify "transformers should raise if the there is no matching transformer" do
+    proc{Forme::Form.new(:formatter=>:foo)}.should raise_error(Forme::Error)
+  end
+
   specify "labeler: explicit uses an explicit label with for attribute" do
     Forme::Form.new(:labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
   end
@@ -153,6 +157,16 @@ describe "Forme built-in custom" do
 
   specify "inputs_wrapper: ol wraps tag in an ol" do
     Forme::Form.new(:inputs_wrapper=>:ol, :wrapper=>:li).inputs(:textarea).should == '<ol><li><textarea></textarea></li></ol>'
+  end
+
+  specify "serializer: text uses plain text output instead of html" do
+    Forme::Form.new(:serializer=>:text).input(:textarea, :label=>"Foo", :value=>"Bar").should == "Foo: Bar\n\n"
+    Forme::Form.new(:serializer=>:text).input(:text, :label=>"Foo", :value=>"Bar").should == "Foo: Bar\n\n"
+    Forme::Form.new(:serializer=>:text).input(:radio, :label=>"Foo", :value=>"Bar").should == "___ Foo\n"
+    Forme::Form.new(:serializer=>:text).input(:radio, :label=>"Foo", :value=>"Bar", :checked=>true).should == "_X_ Foo\n"
+    Forme::Form.new(:serializer=>:text).input(:checkbox, :label=>"Foo", :value=>"Bar").should == "___ Foo\n"
+    Forme::Form.new(:serializer=>:text).input(:radio, :label=>"Foo", :value=>"Bar", :checked=>true).should == "_X_ Foo\n"
+    Forme::Form.new(:serializer=>:text).input(:select, :label=>"Foo", :options=>[1, 2, 3], :value=>2).should == "Foo: \n___ 1\n_X_ 2\n___ 3\n\n"
   end
 end
 

@@ -310,8 +310,8 @@ module Forme
     # Given a +type+ symbol, looks up the symbol in the MAP constant and returns 
     # the matching entry or a new instance of it if it is a class.
     def get_transformer(type)
-      transformer = self::MAP[type] || self::MAP[:default]
-      raise Error, "invalid #{name.to_s.downcase}: #{type} (valid #{name.to_s.downcase}s: #{klass::MAP.keys.join(', ')})" unless transformer
+      transformer = self::MAP[type]
+      raise Error, "invalid #{name}: #{type} (valid #{name}s: #{self::MAP.keys.join(', ')})" unless transformer
       transformer.is_a?(Class) ? transformer.new : transformer
     end
 
@@ -479,7 +479,12 @@ module Forme
 
     # Return a label tag wrapping the given tag.
     def call(label, tag)
-      Tag.new(:label, {}, ["#{label}: ", tag])
+      t = if tag.is_a?(Tag) && tag.type == :input && [:radio, :checkbox].include?(tag.attr[:type])
+        [tag, " #{label}"]
+      else
+        ["#{label}: ", tag]
+      end
+      Tag.new(:label, {}, t)
     end
   end
 
@@ -610,6 +615,42 @@ module Forme
     # and quoting and html escaping the values.
     def attr_html(tag)
       " #{tag.attr.sort_by{|k,v| k.to_s}.map{|k, v| "#{k}=\"#{h v}\""}.join(' ')}" unless tag.attr.empty?
+    end
+  end
+
+
+  # Serializer class that converts tags to plain text strings.
+  class Serializer::PlaintText < Serializer
+    register_transformer(:text, new)
+
+    # Serialize the tag to plain text string.
+    def call(tag)
+      if tag.is_a?(Tag)
+        case tag.type.to_sym
+        when :input
+          case tag.attr[:type].to_sym
+          when :radio, :checkbox
+            tag.attr[:checked] ? '_X_' : '___'
+          when :submit, :reset
+            ''
+          when :password
+            '********' << "\n"
+          else
+            tag.attr[:value] << "\n"
+          end
+        when :select
+          "\n#{call(tag.children)}"
+        when :option
+          call([tag.attr[:selected] ? '_X_ ' : '___ ', tag.children]) << "\n"
+        when :textarea, :label
+          call(tag.children) << "\n"
+        else
+        end
+      elsif tag.is_a?(Array)
+        tag.map{|x| call(x)}.join
+      else
+        tag
+      end
     end
   end
 end
