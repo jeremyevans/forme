@@ -102,6 +102,22 @@ describe "Forme plain forms" do
     @f.tag(:textarea, :name=>:foo).should == '<textarea name="foo"></textarea>'
     @f.tag(:textarea, {:name=>:foo}, :bar).should == '<textarea name="foo">bar</textarea>'
   end
+
+  specify "should have an #inputs method for multiple inputs wrapped in a fieldset" do
+    @f.inputs(:textarea, :text).should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
+  end
+
+  specify "should have an #inputs method take a block and yield to it" do
+    @f.inputs{@f.input(:textarea); @f.input(:text)}.should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
+  end
+
+  specify "should have an #inputs method work with both args and block" do
+    @f.inputs(:textarea){@f.input(:text)}.should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
+  end
+
+  specify "should have an #inputs method support array arguments and creating inputs with the array as argument list" do
+    @f.inputs([:textarea, {:name=>'foo'}], [:text, {:id=>'bar'}]).should == '<fieldset><textarea name="foo"></textarea><input id="bar" type="text"/></fieldset>'
+  end
 end
 
 describe "Forme custom" do
@@ -120,6 +136,10 @@ describe "Forme custom" do
   specify "wrappers can be specified as a proc" do
     Forme::Form.new(:wrapper=>proc{|t| Forme::Tag.new(:div, {}, t)}).input(:textarea, :NAME=>'foo').should == '<div><textarea NAME="foo"></textarea></div>'
   end
+
+  specify "inputs_wrappers can be specified as a proc" do
+    Forme::Form.new(:inputs_wrapper=>proc{|f, &block| f.tag(:div, &block)}).inputs(:textarea).should == '<div><textarea></textarea></div>'
+  end
 end
 
 describe "Forme built-in custom" do
@@ -129,6 +149,10 @@ describe "Forme built-in custom" do
 
   specify "wrapper: li wraps tag in an li" do
     Forme::Form.new(:wrapper=>:li).input(:textarea, :id=>'foo').should == '<li><textarea id="foo"></textarea></li>'
+  end
+
+  specify "inputs_wrapper: ol wraps tag in an ol" do
+    Forme::Form.new(:inputs_wrapper=>:ol, :wrapper=>:li).inputs(:textarea).should == '<ol><li><textarea></textarea></li></ol>'
   end
 end
 

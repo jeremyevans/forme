@@ -57,10 +57,11 @@ Forme comes with DSL:
 <tt>Forme::Formatter</tt> :: takes input, returns tag
 <tt>Forme::Labeler</tt> :: takes tag, returns labeled version
 <tt>Forme::Wrapper</tt> :: takes (potentially labeled) tag, returns (potentially wrapped) version of tag
+<tt>Forme::InputsWrapper</tt> :: takes form and block, returns tag using block
 <tt>Forme::Serializer</tt> :: tags tag, returns string
 
 See +Forme+ module RDoc documentation for a technical description of how the library
-uses the +Formatter+, +Labeler+, +Wrapper+, and +Serializer+ classes for converting
+uses the +Formatter+, +Labeler+, +Wrapper+, +InputsWrapper+, and +Serializer+ classes for converting
 +Input+ instances to +Tag+ instances and finally to html strings.
 
 = Sequel Support

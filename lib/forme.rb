@@ -82,6 +82,10 @@ module Forme
     # respond to +call+ or be a registered symbol.
     attr_reader :wrapper
 
+    # The inputs_wrapper determines how calls to +inputs+ are wrapped.  Must
+    # respond to +call+ or be a registered symbol.
+    attr_reader :inputs_wrapper
+
     # The serializer determines how +Tag+ objects are transformed into strings.
     # Must respond to +call+ or be a registered symbol.
     attr_reader :serializer
@@ -130,6 +134,7 @@ module Forme
       @labeler = find_transformer(Labeler, :labeler)
       @serializer = find_transformer(Serializer, :serializer)
       @wrapper = find_transformer(Wrapper, :wrapper)
+      @inputs_wrapper = find_transformer(InputsWrapper, :inputs_wrapper)
       @nesting = []
     end
 
@@ -169,6 +174,22 @@ module Forme
       tag = format(input)
       self << tag
       serialize(tag)
+    end
+
+    # Creates a tag using the +inputs_wrapper+ (a fieldset by default), calls
+    # input on each given argument, and yields to the block if it is given.
+    # You can use array arguments if you want inputs to be created with specific
+    # options:
+    #
+    #   inputs(:field1, :field2)
+    #   inputs([:field1, {:name=>'foo'}], :field2)
+    def inputs(*ins)
+      inputs_wrapper.call(self) do
+        ins.each do |i|
+          input(*i)
+        end
+        yield self if block_given?
+      end
     end
 
     # Returns a string representing the opening of the form tag.
@@ -498,6 +519,31 @@ module Forme
     # Wrap the tag in an li tag
     def call(tag)
       Tag.new(:li, {}, Array(tag))
+    end
+  end
+
+  # Base (empty) class for inputs wrappers supported by the library.
+  class InputsWrapper
+    extend TransformerMap
+  end
+
+  # Default inputs_wrapper class used by the library, uses a fieldset.
+  class InputsWrapper::Default < InputsWrapper
+    register_transformer(:default, new)
+
+    # Wrap the inputs in a fieldset
+    def call(form, &block)
+      form.tag(:fieldset, &block)
+    end
+  end
+
+  # Default inputs_wrapper class used by the library, uses a fieldset.
+  class InputsWrapper::OL < InputsWrapper
+    register_transformer(:ol, new)
+
+    # Wrap the inputs in a fieldset
+    def call(form, &block)
+      form.tag(:ol, &block)
     end
   end
 
