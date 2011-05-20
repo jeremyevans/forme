@@ -85,6 +85,14 @@ describe "Forme plain forms" do
     @f.input(:text, :label=>'Foo', :value=>'foo').should == '<label>Foo: <input type="text" value="foo"/></label>'
   end
 
+  specify "should automatically note the input has errors if :error option is used" do
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').should == '<input class="error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
+  end
+
+  specify "should add to existing :class option if :error option is used" do
+    @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo').should == '<input class="bar error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
+  end
+
   specify "#open should return an opening tag" do
     @f.open(:action=>'foo', :method=>'post').should == '<form action="foo" method="post">'
   end

@@ -40,7 +40,6 @@ module Sequel # :nodoc:
         def initialize(obj, field, opts)
           @obj, @field, @opts = obj, field, opts
           @namespace ||= obj.model.send(:underscore, obj.model.name)
-          opts[:label] ||= humanize(field)
         end
 
         # Determine which type of input to used based on the given field.
@@ -50,6 +49,8 @@ module Sequel # :nodoc:
         # column or association, but the object responds to the method,
         # create a text input.  Otherwise, raise an +Error+.
         def input
+          handle_errors
+          opts[:label] ||= humanize(field)
           if sch = obj.model.db_schema[field] 
             meth = :"input_#{sch[:type]}"
             opts[:id] ||= "#{namespace}_#{field}"
@@ -76,6 +77,13 @@ module Sequel # :nodoc:
         end
 
         private
+
+        # Set the error option correctly if the field contains errors
+        def handle_errors
+          if e = obj.errors.on(field)
+            opts[:error] = e.join(', ')
+          end
+        end
 
         # If the :name_method option is provided, use that as the method.
         # Otherwise, pick the first method in +FORME_NAME_METHODS+ that
@@ -154,6 +162,16 @@ module Sequel # :nodoc:
         # Fallback to using the text type for all other types of input.
         def input_other(sch)
           opts[:value] ||= obj.send(field)
+          type = opts.delete(:type) || :text
+          Input.new(type, opts)
+        end
+
+        # 
+        def input_date(sch)
+          opts[:value] ||= begin
+            v = obj.send(field)
+            v.strftime('%m/%d/%Y') if v
+          end
           type = opts.delete(:type) || :text
           Input.new(type, opts)
         end

@@ -23,21 +23,27 @@ require 'forme/version'
 #   Forme::Tag.new(:select, {}, [Forme.Tag.new(:option, {:value=>1}, ['foo'])])
 #
 # The processing of high level <tt>Forme::Input</tt>s into raw html
-# data is broken down to the following steps:
+# data is broken down to the following steps (called transformers):
 #
-# 1. Formatter: converts a <tt>Forme::Input</tt> instance into a
+# 1. +Formatter+: converts a <tt>Forme::Input</tt> instance into a
 #    <tt>Forme::Tag</tt> instance (or array of them).
-# 2. Labeler: If the <tt>Forme::Input</tt> instance has a label,
+# 2. +ErrorHandler+: If the <tt>Forme::Input</tt> instance has a error,
+#    takes the formatted tag and marks it as having the error.
+# 2. +Labeler+: If the <tt>Forme::Input</tt> instance has a label,
 #    takes the formatted output and labels it.
-# 3. Wrapper: Takes the output of the labeler (or formatter if
+# 3. +Wrapper+: Takes the output of the labeler (or formatter if
 #    no label), and wraps it in another tag (or just returns it
 #    directly).
-# 4. Serializer: converts a <tt>Forme::Tag</tt> instance into a
+# 4. +Serializer+: converts a <tt>Forme::Tag</tt> instance into a
 #    string.
 #
 # Technically, only the +Formatter+ and +Serializer+ are necessary,
-# as it is up to the +Formatter+ to call the +Labeler+ (if necessary) and
+# as it is up to the +Formatter+ to call the +Labeler+ and/or +ErrorHandler+ (if necessary) and
 # the +Wrapper+.
+# 
+# There is also an +InputsWrapper+ transformer, that is called by
+# <tt>Forme::Form#inputs</tt>.  It's used to wrap up a group of
+# related options (in a fieldset by default).
 #
 # The <tt>Forme::Form</tt> object takes the 4 processors as options (:formatter,
 # :labeler, :wrapper, and :serializer), all of which should be objects responding
@@ -64,29 +70,35 @@ module Forme
     # A hash of options for the +Form+. Currently, the following are recognized by
     # default (but a customized +formatter+ could use more options):
     # :obj :: Sets the +obj+ attribute
+    # :error_handler :: Sets the +error_handler+ for the form
     # :formatter :: Sets the +formatter+ for the form
+    # :inputs_wrapper :: Sets the +inputs_wrapper+ for the form
     # :labeler :: Sets the +labeler+ for the form
     # :wrapper :: Sets the +wrapper+ for the form
     # :serializer :: Sets the +serializer+ for the form
     attr_reader :opts
 
-    # The formatter determines how the +Input+ created are transformed into
+    # The +formatter+ determines how the +Input+s created are transformed into
     # +Tag+ objects. Must respond to +call+ or be a registered symbol.
     attr_reader :formatter
 
-    # The labeler determines how to label tags.  Must respond to +call+ or be
+    # The +error_handler+ determines how to to mark tags as containing errors.
+    # Must respond to +call+ or be a registered symbol.
+    attr_reader :error_handler
+
+    # The +labeler+ determines how to label tags.  Must respond to +call+ or be
     # a registered symbol.
     attr_reader :labeler
 
-    # The wrapper determines how (potentially labeled) tags are wrapped.  Must
+    # The +wrapper+ determines how (potentially labeled) tags are wrapped.  Must
     # respond to +call+ or be a registered symbol.
     attr_reader :wrapper
 
-    # The inputs_wrapper determines how calls to +inputs+ are wrapped.  Must
+    # The +inputs_wrapper+ determines how calls to +inputs+ are wrapped.  Must
     # respond to +call+ or be a registered symbol.
     attr_reader :inputs_wrapper
 
-    # The serializer determines how +Tag+ objects are transformed into strings.
+    # The +serializer+ determines how +Tag+ objects are transformed into strings.
     # Must respond to +call+ or be a registered symbol.
     attr_reader :serializer
 
@@ -131,6 +143,7 @@ module Forme
         @opts = opts
       end
       @formatter = find_transformer(Formatter, :formatter)
+      @error_handler = find_transformer(ErrorHandler, :error_handler)
       @labeler = find_transformer(Labeler, :labeler)
       @serializer = find_transformer(Serializer, :serializer)
       @wrapper = find_transformer(Wrapper, :wrapper)
@@ -343,6 +356,7 @@ module Forme
     def call(form, input)
       opts = input.opts.dup
       l = opts.delete(:label)
+      err = opts.delete(:error)
       t = input.type
       meth = :"format_#{t}"
 
@@ -352,6 +366,7 @@ module Forme
         format_input(form, t, opts)
       end
 
+      tag = form.error_handler.call(err, tag) if err
       tag = form.labeler.call(l, tag) if l
 
       form.wrapper.call(tag)
@@ -464,6 +479,32 @@ module Forme
       else
         Tag.new(type, opts)
       end
+    end
+  end
+
+  # Base (empty) class for error handlers supported by the library. 
+  class ErrorHandler
+    extend TransformerMap
+  end
+
+  # Default error handler used by the library, using an "error" class
+  # for the input field and a span tag with an "error_message" class
+  # for the error message.
+  class ErrorHandler::Default < ErrorHandler
+    register_transformer(:default, new)
+
+    # Return a label tag wrapping the given tag.
+    def call(err_msg, tag)
+      msg_tag = Tag.new(:span, {:class=>'error_message'}, err_msg)
+      if tag.is_a?(Tag)
+        attr = tag.attr
+        if attr[:class]
+          attr[:class] += ' error'
+        else
+          attr[:class] = 'error'
+        end
+      end
+      [tag, msg_tag]
     end
   end
 
