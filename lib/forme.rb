@@ -538,7 +538,12 @@ module Forme
     # Return an array with a label tag as the first entry and the given
     # tag as the second.
     def call(label, tag)
-      raise Error, "Explicit labels require an id field" unless id = tag.attr[:id]
+      id = if tag.is_a?(Tag)
+        tag.attr[:id]
+      elsif tag.is_a?(Array)
+        tag.find{|t| t.attr[:id] if t.is_a?(Tag)}.attr[:id]
+      end
+      raise Error, "Explicit labels require an id field" unless id
       [Tag.new(:label, {:for=>id}, [label]), tag]
     end
   end

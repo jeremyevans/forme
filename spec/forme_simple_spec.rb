@@ -159,6 +159,10 @@ describe "Forme built-in custom" do
     Forme::Form.new(:labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
   end
 
+  specify "labeler: explicit should handle tags with errors" do
+    Forme::Form.new(:labeler=>:explicit).input(:text, :error=>'Bad Stuff!', :value=>'f', :id=>'foo', :label=>'bar').should == '<label for="foo">bar</label><input class="error" id="foo" type="text" value="f"/><span class="error_message">Bad Stuff!</span>'
+  end
+
   specify "wrapper: li wraps tag in an li" do
     Forme::Form.new(:wrapper=>:li).input(:textarea, :id=>'foo').should == '<li><textarea id="foo"></textarea></li>'
   end
