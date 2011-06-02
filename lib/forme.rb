@@ -466,7 +466,9 @@ module Forme
             Tag.new(:option, attr, [x])
           end
         end
-        os.unshift(Tag.new(:option)) if opts.delete(:add_blank)
+        if prompt = opts.delete(:add_blank)
+          os.unshift(Tag.new(:option, {:value=>''}, prompt.is_a?(String) ? [prompt] : []))
+        end
       end
       Tag.new(type, opts, os)
     end

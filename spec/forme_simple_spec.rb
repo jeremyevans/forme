@@ -71,7 +71,11 @@ describe "Forme plain forms" do
   end
 
   specify "should support :add_blank option for select inputs" do
-    @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).should == '<select><option></option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
+    @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).should == '<select><option value=""></option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
+  end
+
+  specify "should use :add_blank option value as prompt if it is a String" do
+    @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).should == '<select><option value="">Prompt Here</option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
   end
 
   specify "radio and checkbox inputs should handle :checked option" do
