@@ -116,7 +116,11 @@ describe "Forme plain forms" do
   end
 
   specify "should have an #inputs method for multiple inputs wrapped in a fieldset" do
-    @f.inputs(:textarea, :text).should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
+    @f.inputs([:textarea, :text]).should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
+  end
+
+  specify "should have default #inputs method accept a :legend option" do
+    @f.inputs([:textarea, :text], :legend=>'Inputs').should == '<fieldset><legend>Inputs</legend><textarea></textarea><input type="text"/></fieldset>'
   end
 
   specify "should have an #inputs method take a block and yield to it" do
@@ -124,11 +128,11 @@ describe "Forme plain forms" do
   end
 
   specify "should have an #inputs method work with both args and block" do
-    @f.inputs(:textarea){@f.input(:text)}.should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
+    @f.inputs([:textarea]){@f.input(:text)}.should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
   end
 
   specify "should have an #inputs method support array arguments and creating inputs with the array as argument list" do
-    @f.inputs([:textarea, {:name=>'foo'}], [:text, {:id=>'bar'}]).should == '<fieldset><textarea name="foo"></textarea><input id="bar" type="text"/></fieldset>'
+    @f.inputs([[:textarea, {:name=>'foo'}], [:text, {:id=>'bar'}]]).should == '<fieldset><textarea name="foo"></textarea><input id="bar" type="text"/></fieldset>'
   end
 end
 
@@ -150,7 +154,7 @@ describe "Forme custom" do
   end
 
   specify "inputs_wrappers can be specified as a proc" do
-    Forme::Form.new(:inputs_wrapper=>proc{|f, &block| f.tag(:div, &block)}).inputs(:textarea).should == '<div><textarea></textarea></div>'
+    Forme::Form.new(:inputs_wrapper=>proc{|f, opts, &block| f.tag(:div, &block)}).inputs([:textarea]).should == '<div><textarea></textarea></div>'
   end
 end
 
@@ -180,11 +184,11 @@ describe "Forme built-in custom" do
   end
 
   specify "inputs_wrapper: ol wraps tags in an ol" do
-    Forme::Form.new(:inputs_wrapper=>:ol, :wrapper=>:li).inputs(:textarea).should == '<ol><li><textarea></textarea></li></ol>'
+    Forme::Form.new(:inputs_wrapper=>:ol, :wrapper=>:li).inputs([:textarea]).should == '<ol><li><textarea></textarea></li></ol>'
   end
 
   specify "inputs_wrapper: table wraps tags in an table" do
-    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs(:textarea).should == '<table><tr><td><textarea></textarea></td></tr></table>'
+    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea]).should == '<table><tr><td><textarea></textarea></td></tr></table>'
   end
 
   specify "serializer: text uses plain text output instead of html" do

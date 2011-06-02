@@ -196,8 +196,8 @@ module Forme
     #
     #   inputs(:field1, :field2)
     #   inputs([:field1, {:name=>'foo'}], :field2)
-    def inputs(*ins)
-      inputs_wrapper.call(self) do
+    def inputs(ins=[], opts={})
+      inputs_wrapper.call(self, opts) do
         ins.each do |i|
           input(*i)
         end
@@ -595,8 +595,15 @@ module Forme
     register_transformer(:default, new)
 
     # Wrap the inputs in a fieldset
-    def call(form, &block)
-      form.tag(:fieldset, &block)
+    def call(form, opts)
+      if legend = opts.delete(:legend)
+        form.tag(:fieldset) do
+          form.tag(:legend, {}, legend)
+          yield
+        end
+      else
+        form.tag(:fieldset, &Proc.new)
+      end
     end
   end
 
@@ -605,7 +612,7 @@ module Forme
     register_transformer(:ol, new)
 
     # Wrap the inputs in an ol tag
-    def call(form, &block)
+    def call(form, opts, &block)
       form.tag(:ol, &block)
     end
   end
@@ -615,7 +622,7 @@ module Forme
     register_transformer(:table, new)
 
     # Wrap the inputs in a table tag
-    def call(form, &block)
+    def call(form, opts, &block)
       form.tag(:table, &block)
     end
   end
