@@ -85,6 +85,16 @@ describe "Forme plain forms" do
     @f.input(:checkbox, :checked=>false).should == '<input type="checkbox"/>'
   end
 
+  specify "inputs should handle :required option" do
+    @f.input(:text, :required=>true).should == '<input required="required" type="text"/>'
+    @f.input(:text, :required=>false).should == '<input type="text"/>'
+  end
+
+  specify "inputs should handle :disabled option" do
+    @f.input(:text, :disabled=>true).should == '<input disabled="disabled" type="text"/>'
+    @f.input(:text, :disabled=>false).should == '<input type="text"/>'
+  end
+
   specify "should automatically create a label if a :label option is used" do
     @f.input(:text, :label=>'Foo', :value=>'foo').should == '<label>Foo: <input type="text" value="foo"/></label>'
   end

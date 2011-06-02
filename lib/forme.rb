@@ -361,6 +361,8 @@ module Forme
     def call(form, input)
       opts = input.opts.dup
       l = opts.delete(:label)
+      opts[:required] = :required if opts.delete(:required)
+      opts[:disabled] = :disabled if opts.delete(:disabled)
       err = opts.delete(:error)
       t = input.type
       meth = :"format_#{t}"
