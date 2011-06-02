@@ -167,8 +167,20 @@ describe "Forme built-in custom" do
     Forme::Form.new(:wrapper=>:li).input(:textarea, :id=>'foo').should == '<li><textarea id="foo"></textarea></li>'
   end
 
-  specify "inputs_wrapper: ol wraps tag in an ol" do
+  specify "wrapper: trtd wraps tag in an tr/td" do
+    Forme::Form.new(:wrapper=>:trtd).input(:textarea, :id=>'foo').should == '<tr><td><textarea id="foo"></textarea></td></tr>'
+  end
+
+  specify "wrapper: trtd supports multiple tags in separate tds" do
+    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo').should == '<tr><td><label for="foo">Foo</label></td><td><textarea id="foo"></textarea></td></tr>'
+  end
+
+  specify "inputs_wrapper: ol wraps tags in an ol" do
     Forme::Form.new(:inputs_wrapper=>:ol, :wrapper=>:li).inputs(:textarea).should == '<ol><li><textarea></textarea></li></ol>'
+  end
+
+  specify "inputs_wrapper: table wraps tags in an table" do
+    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs(:textarea).should == '<table><tr><td><textarea></textarea></td></tr></table>'
   end
 
   specify "serializer: text uses plain text output instead of html" do

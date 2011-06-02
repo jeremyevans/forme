@@ -563,13 +563,23 @@ module Forme
     end
   end
 
-  # Wrapper class which wraps the class in an li tag. 
+  # Wrapper class which wraps the input in an li tag. 
   class Wrapper::LI < Wrapper
     register_transformer(:li, new)
 
     # Wrap the tag in an li tag
     def call(tag)
       Tag.new(:li, {}, Array(tag))
+    end
+  end
+
+  # Wrapper class which wraps the input in an tr tag, with each element in a td tag. 
+  class Wrapper::TRTD < Wrapper
+    register_transformer(:trtd, new)
+
+    # Wrap the input in an tr tag, with each tag in its own td tag.
+    def call(tag)
+      Tag.new(:tr, {}, Array(tag).map{|t| Tag.new(:td, {}, [t])})
     end
   end
 
@@ -588,13 +598,23 @@ module Forme
     end
   end
 
-  # Default inputs_wrapper class used by the library, uses a fieldset.
+  # Use an ol tag to wrap the inputs
   class InputsWrapper::OL < InputsWrapper
     register_transformer(:ol, new)
 
-    # Wrap the inputs in a fieldset
+    # Wrap the inputs in an ol tag
     def call(form, &block)
       form.tag(:ol, &block)
+    end
+  end
+
+  # Use a table tag to wrap the inputs
+  class InputsWrapper::Table < InputsWrapper
+    register_transformer(:table, new)
+
+    # Wrap the inputs in a table tag
+    def call(form, &block)
+      form.tag(:table, &block)
     end
   end
 
