@@ -279,7 +279,7 @@ module Forme
 
     # The options for this +Input+.
     attr_reader :opts
-    
+
     # Set the +type+ and +opts+.
     def initialize(type, opts={})
       @type = type
@@ -310,6 +310,11 @@ module Forme
     def <<(child)
       children << child
     end
+  end
+
+  # Empty module for marking objects as "raw", where they will no longer
+  # html escaped by the default serializer.
+  module Raw
   end
 
   # Helper module for extending classes where subclasses automatically register themselves
@@ -656,14 +661,17 @@ module Forme
     # arrays (recurses into +call+ for each entry and joins the result), and
     # strings (html escapes them).
     def call(tag)
-      if tag.is_a?(Tag)
+      case tag
+      when Tag
         if SELF_CLOSING.include?(tag.type)
           "<#{tag.type}#{attr_html(tag)}/>"
         else
           "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
         end
-      elsif tag.is_a?(Array)
+      when Array
         tag.map{|x| call(x)}.join
+      when Raw
+        tag.to_s
       else
         h tag
       end

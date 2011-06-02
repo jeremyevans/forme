@@ -134,6 +134,14 @@ describe "Forme plain forms" do
   specify "should have an #inputs method support array arguments and creating inputs with the array as argument list" do
     @f.inputs([[:textarea, {:name=>'foo'}], [:text, {:id=>'bar'}]]).should == '<fieldset><textarea name="foo"></textarea><input id="bar" type="text"/></fieldset>'
   end
+
+  specify "should escape tag content" do
+    @f.tag(:div, {}, ['<p></p>']).should == '<div>&lt;p&gt;&lt;/p&gt;</div>'
+  end
+
+  specify "should not escape raw tag content" do
+    @f.tag(:div, {}, ['<p></p>'.extend(Forme::Raw)]).should == '<div><p></p></div>'
+  end
 end
 
 describe "Forme custom" do
