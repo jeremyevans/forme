@@ -157,4 +157,10 @@ describe "Forme Sequel::Model forms" do
   specify "should raise an error for unhandled fields" do
     proc{@b.input(:foo)}.should raise_error(Forme::Error)
   end
+
+  specify "should add required attribute if the column doesn't support nil values" do
+    def @ab.db_schema; h = super.dup; h[:name] = h[:name].merge(:allow_null=>false); h end
+    @b.input(:name).should == '<label>Name: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
+  end
+  
 end

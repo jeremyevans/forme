@@ -51,10 +51,11 @@ module Sequel # :nodoc:
         def input
           handle_errors
           opts[:label] ||= humanize(field)
-          if sch = obj.model.db_schema[field] 
+          if sch = obj.db_schema[field] 
             meth = :"input_#{sch[:type]}"
             opts[:id] ||= "#{namespace}_#{field}"
             opts[:name] ||= "#{namespace}[#{field}]"
+            opts[:required] = true if !opts.has_key?(:required) && sch[:allow_null] == false
             if respond_to?(meth, true)
               send(meth, sch)
             else
@@ -147,7 +148,7 @@ module Sequel # :nodoc:
         # If the column allows NULL values, use a three-valued select
         # input.  If not, use a simple checkbox.
         def input_boolean(sch)
-          if sch[:allow_null]
+          if !opts.delete(:required)
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?
             opts[:options] = ['', ['True', 't'], ['False', 'f']]
