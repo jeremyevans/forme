@@ -156,6 +156,11 @@ module Forme
       tag(:form, attr, &block)
     end
 
+    # Formats the +input+ using the +formatter+.
+    def format(input)
+      formatter.call(self, input)
+    end
+
     # Creates an +Input+ with the given +field+ and +opts+, and returns
     # a serialized version of the formatted input.
     #
@@ -184,9 +189,8 @@ module Forme
       else
         Input.new(field, opts)
       end
-      tag = format(input)
-      self << tag
-      serialize(tag)
+      self << input
+      serialize(input)
     end
 
     # Creates a tag using the +inputs_wrapper+ (a fieldset by default), calls
@@ -230,9 +234,8 @@ module Forme
     # version of the formatted input.
     def button(opts={})
       input = Input.new(:submit, opts)
-      tag = format(input)
-      self << tag
-      serialize(tag)
+      self << input
+      serialize(input)
     end
 
     # Add the input/tag to the innermost nesting tag.
@@ -261,14 +264,9 @@ module Forme
       transformer
     end
 
-    # Formats the +input+ using the +formatter+.
-    def format(input)
-      formatter.call(self, input)
-    end
-
     # Serializes the +tag+ using the +serializer+.
     def serialize(tag)
-      serializer.call(tag)
+      serializer.call(self, tag)
     end
   end
 
@@ -684,16 +682,18 @@ module Forme
     # Serialize the tag object to an html string.  Supports +Tag+ instances,
     # arrays (recurses into +call+ for each entry and joins the result), and
     # strings (html escapes them).
-    def call(tag)
+    def call(form, tag)
       case tag
       when Tag
         if SELF_CLOSING.include?(tag.type)
           "<#{tag.type}#{attr_html(tag)}/>"
         else
-          "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
+          "#{serialize_open(tag)}#{call(form, tag.children)}#{serialize_close(tag)}"
         end
+      when Input
+        call(form, form.format(tag))
       when Array
-        tag.map{|x| call(x)}.join
+        tag.map{|x| call(form, x)}.join
       when Raw
         tag.to_s
       else
@@ -731,8 +731,9 @@ module Forme
     register_transformer(:text, new)
 
     # Serialize the tag to plain text string.
-    def call(tag)
-      if tag.is_a?(Tag)
+    def call(form, tag)
+      case tag
+      when Tag
         case tag.type.to_sym
         when :input
           case tag.attr[:type].to_sym
@@ -746,15 +747,17 @@ module Forme
             tag.attr[:value] << "\n"
           end
         when :select
-          "\n#{call(tag.children)}"
+          "\n#{call(form, tag.children)}"
         when :option
-          call([tag.attr[:selected] ? '_X_ ' : '___ ', tag.children]) << "\n"
+          call(form, [tag.attr[:selected] ? '_X_ ' : '___ ', tag.children]) << "\n"
         when :textarea, :label
-          call(tag.children) << "\n"
+          call(form, tag.children) << "\n"
         else
         end
-      elsif tag.is_a?(Array)
-        tag.map{|x| call(x)}.join
+      when Input
+        call(form, form.format(tag))
+      when Array
+        tag.map{|x| call(form, x)}.join
       else
         tag
       end
