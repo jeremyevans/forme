@@ -151,7 +151,8 @@ module Sequel # :nodoc:
           if !opts.delete(:required)
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?
-            opts[:options] = ['', ['True', 't'], ['False', 'f']]
+            opts[:add_blank] = true
+            opts[:options] = [['True', 't'], ['False', 'f']]
             Input.new(:select, opts)
           else
             opts[:checked] = obj.send(field)

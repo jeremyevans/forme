@@ -76,8 +76,8 @@ describe "Forme Sequel::Model forms" do
   end
   
   specify "should use a select box for tri-valued boolean fields" do
-    @b.input(:gold).should == '<label>Gold: <select id="album_gold" name="album[gold]"><option></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
-    @c.input(:gold).should == '<label>Gold: <select id="album_gold" name="album[gold]"><option></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
+    @b.input(:gold).should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
+    @c.input(:gold).should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
   end
   
   specify "should use a checkbox for dual-valued boolean fields" do
