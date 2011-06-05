@@ -357,29 +357,36 @@ module Forme
     CHECKBOX_MAP = Hash.new(0)
     CHECKBOX_MAP['t'] = 'f'
 
-    # Transform the +input+ into a +Tag+ instance.
+    # Transform the +input+ into a +Tag+ instance, wrapping it with the +form+'s
+    # wrapper, and the form's +error_handler+ and +labeler+ if the input has an
+    # error or a label.
     def call(form, input)
       opts = input.opts.dup
       l = opts.delete(:label)
+      err = opts.delete(:error)
       opts[:required] = :required if opts.delete(:required)
       opts[:disabled] = :disabled if opts.delete(:disabled)
-      err = opts.delete(:error)
+
+      tag = convert_to_tag(form, input, opts)
+      tag = wrap_tag_with_error(form, err, tag) if err
+      tag = wrap_tag_with_label(form, l, tag) if l
+
+      wrap_tag(form, tag)
+    end
+
+    private
+
+    # Convert the +Input+ to a +Tag+.
+    def convert_to_tag(form, input, opts)
       t = input.type
       meth = :"format_#{t}"
 
-      tag = if respond_to?(meth, true)
+      if respond_to?(meth, true)
         send(meth, form, t, opts)
       else
         format_input(form, t, opts)
       end
-
-      tag = form.error_handler.call(err, tag) if err
-      tag = form.labeler.call(l, tag) if l
-
-      form.wrapper.call(tag)
     end
-
-    private
 
     # If the checkbox has a name, will create a hidden input tag with the
     # same name that comes before this checkbox.  That way, if the checkbox
@@ -488,6 +495,21 @@ module Forme
       else
         Tag.new(type, opts)
       end
+    end
+
+    # Wrap the tag with the form's +wrapper+.
+    def wrap_tag(form, tag)
+      form.wrapper.call(tag)
+    end
+
+    # Wrap the tag with the form's +error_handler+.
+    def wrap_tag_with_error(form, err, tag)
+      form.error_handler.call(err, tag)
+    end
+
+    # Wrap the tag with the form's +labeler+.
+    def wrap_tag_with_label(form, label, tag)
+      form.labeler.call(label, tag)
     end
   end
 
