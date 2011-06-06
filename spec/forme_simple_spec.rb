@@ -21,6 +21,10 @@ describe "Forme plain forms" do
     @f.input(:checkbox, :name=>"foo").should == '<input name="foo" type="hidden" value="0"/><input name="foo" type="checkbox"/>'
   end
 
+  specify "should not create hidden input with value 0 for each checkbox with a name if :no_hidden option is used" do
+    @f.input(:checkbox, :name=>"foo", :no_hidden=>true).should == '<input name="foo" type="checkbox"/>'
+  end
+
   specify "should create hidden input with _hidden appened to id for each checkbox with a name and id" do
     @f.input(:checkbox, :name=>"foo", :id=>"bar").should == '<input id="bar_hidden" name="foo" type="hidden" value="0"/><input id="bar" name="foo" type="checkbox"/>'
   end
