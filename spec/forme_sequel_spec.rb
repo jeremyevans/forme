@@ -163,6 +163,11 @@ describe "Forme Sequel::Model forms" do
     @b.input(:name).should == '<label>Name: <input class="error" id="album_name" name="album[name]" type="text" value="b"/><span class="error_message">tis not valid</span></label>'
   end
   
+  specify "should correctly show an error message for many_to_one associations if there is one" do
+    @ab.errors.add(:artist_id, 'tis not valid')
+    @b.input(:artist).should == '<label>Artist: <select class="error" id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select><span class="error_message">tis not valid</span></label>'
+  end
+  
   specify "should raise an error for unhandled associations" do
     al = Class.new(Album)
     al.association_reflection(:tags)[:type] = :foo

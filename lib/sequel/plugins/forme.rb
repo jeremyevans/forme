@@ -49,9 +49,9 @@ module Sequel # :nodoc:
         # column or association, but the object responds to the method,
         # create a text input.  Otherwise, raise an +Error+.
         def input
-          handle_errors
           opts[:label] ||= humanize(field)
           if sch = obj.db_schema[field] 
+            handle_errors(field)
             meth = :"input_#{sch[:type]}"
             opts[:id] ||= "#{namespace}_#{field}"
             opts[:name] ||= "#{namespace}[#{field}]"
@@ -80,8 +80,8 @@ module Sequel # :nodoc:
         private
 
         # Set the error option correctly if the field contains errors
-        def handle_errors
-          if e = obj.errors.on(field)
+        def handle_errors(f)
+          if e = obj.errors.on(f)
             opts[:error] = e.join(', ')
           end
         end
@@ -107,6 +107,7 @@ module Sequel # :nodoc:
         # could be associated to, with the one currently associated to being selected.
         def association_many_to_one(ref)
           key = ref[:key]
+          handle_errors(key)
           opts[:name] ||= "#{namespace}[#{key}]"
           opts[:value] ||= obj.send(key)
           opts[:options] ||= association_select_options(ref)
