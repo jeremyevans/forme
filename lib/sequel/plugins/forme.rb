@@ -107,12 +107,21 @@ module Sequel # :nodoc:
         # could be associated to, with the one currently associated to being selected.
         def association_many_to_one(ref)
           key = ref[:key]
-          opts[:id] ||= "#{namespace}_#{key}"
-          opts[:name] ||= "#{namespace}[#{key}]"
-          opts[:value] ||= obj.send(key)
-          opts[:add_blank] = true if !opts.has_key?(:add_blank) && (sch = obj.model.db_schema[key])  && sch[:allow_null]
-          opts[:options] ||= association_select_options(ref)
-          Input.new(:select, opts)
+          if opts[:type] == :radio
+            label = opts.delete(:label)
+            opts[:name] ||= "#{namespace}[#{key}]"
+            val = opts[:value] || obj.send(key)
+            radios = association_select_options(ref).map{|l, pk| Input.new(:radio, opts.merge(:value=>pk, :label=>l, :checked=>(pk == val)))}
+            radios.unshift("#{label}: ")
+            radios
+          else
+            opts[:id] ||= "#{namespace}_#{key}"
+            opts[:name] ||= "#{namespace}[#{key}]"
+            opts[:value] ||= obj.send(key)
+            opts[:add_blank] = true if !opts.has_key?(:add_blank) && (sch = obj.model.db_schema[key])  && sch[:allow_null]
+            opts[:options] ||= association_select_options(ref)
+            Input.new(:select, opts)
+          end
         end
 
         # Create a multiple select input made up of options for all entries the object
