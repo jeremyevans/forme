@@ -185,6 +185,11 @@ describe "Forme built-in custom" do
     proc{Forme::Form.new(:formatter=>:foo)}.should raise_error(Forme::Error)
   end
 
+  specify "formatter: disabled disables all inputs unless :disabled=>false option" do
+    Forme::Form.new(:formatter=>:disabled).input(:textarea).should == '<textarea disabled="disabled"></textarea>'
+    Forme::Form.new(:formatter=>:disabled).input(:textarea, :disabled=>false).should == '<textarea></textarea>'
+  end
+
   specify "labeler: explicit uses an explicit label with for attribute" do
     Forme::Form.new(:labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
   end

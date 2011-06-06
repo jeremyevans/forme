@@ -362,10 +362,9 @@ module Forme
       opts = input.opts.dup
       l = opts.delete(:label)
       err = opts.delete(:error)
-      opts[:required] = :required if opts.delete(:required)
-      opts[:disabled] = :disabled if opts.delete(:disabled)
+      normalize_options(opts)
 
-      tag = convert_to_tag(form, input, opts)
+      tag = convert_to_tag(form, input.type, opts)
       tag = wrap_tag_with_error(form, err, tag) if err
       tag = wrap_tag_with_label(form, l, tag) if l
 
@@ -375,14 +374,12 @@ module Forme
     private
 
     # Convert the +Input+ to a +Tag+.
-    def convert_to_tag(form, input, opts)
-      t = input.type
-      meth = :"format_#{t}"
-
+    def convert_to_tag(form, type, opts)
+      meth = :"format_#{type}"
       if respond_to?(meth, true)
-        send(meth, form, t, opts)
+        send(meth, form, type, opts)
       else
-        format_input(form, t, opts)
+        format_input(form, type, opts)
       end
     end
 
@@ -495,6 +492,12 @@ module Forme
       end
     end
 
+    # Normalize the options used for all input types.
+    def normalize_options(opts)
+      opts[:required] = :required if opts.delete(:required)
+      opts[:disabled] = :disabled if opts.delete(:disabled)
+    end
+
     # Wrap the tag with the form's +wrapper+.
     def wrap_tag(form, tag)
       form.wrapper.call(tag)
@@ -508,6 +511,21 @@ module Forme
     # Wrap the tag with the form's +labeler+.
     def wrap_tag_with_label(form, label, tag)
       form.labeler.call(label, tag)
+    end
+  end
+
+  class Formatter::Disabled < Formatter::Default
+    register_transformer(:disabled, new)
+
+    private
+
+    def normalize_options(opts)
+      if opts.delete(:disabled) == false
+        super
+      else
+        super
+        opts[:disabled] = :disabled
+      end
     end
   end
 
