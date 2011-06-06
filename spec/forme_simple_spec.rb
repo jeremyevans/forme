@@ -190,6 +190,16 @@ describe "Forme built-in custom" do
     Forme::Form.new(:formatter=>:disabled).input(:textarea, :disabled=>false).should == '<textarea></textarea>'
   end
 
+  specify "formatter: readonly uses spans for most input fields and disables radio/checkbox fields" do
+    Forme::Form.new(:formatter=>:readonly).input(:textarea, :label=>"Foo", :value=>"Bar").should == "<label>Foo: <span>Bar</span></label>"
+    Forme::Form.new(:formatter=>:readonly).input(:text, :label=>"Foo", :value=>"Bar").should == "<label>Foo: <span>Bar</span></label>"
+    Forme::Form.new(:formatter=>:readonly).input(:radio, :label=>"Foo", :value=>"Bar").should == "<label><input disabled=\"disabled\" type=\"radio\" value=\"Bar\"/> Foo</label>"
+    Forme::Form.new(:formatter=>:readonly).input(:radio, :label=>"Foo", :value=>"Bar", :checked=>true).should == "<label><input checked=\"checked\" disabled=\"disabled\" type=\"radio\" value=\"Bar\"/> Foo</label>"
+    Forme::Form.new(:formatter=>:readonly).input(:checkbox, :label=>"Foo", :value=>"Bar").should == "<label><input disabled=\"disabled\" type=\"checkbox\" value=\"Bar\"/> Foo</label>"
+    Forme::Form.new(:formatter=>:readonly).input(:checkbox, :label=>"Foo", :value=>"Bar", :checked=>true).should == "<label><input checked=\"checked\" disabled=\"disabled\" type=\"checkbox\" value=\"Bar\"/> Foo</label>"
+    Forme::Form.new(:formatter=>:readonly).input(:select, :label=>"Foo", :options=>[1, 2, 3], :value=>2).should == "<label>Foo: <span>2</span></label>"
+  end
+
   specify "labeler: explicit uses an explicit label with for attribute" do
     Forme::Form.new(:labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
   end
@@ -224,7 +234,7 @@ describe "Forme built-in custom" do
     Forme::Form.new(:serializer=>:text).input(:radio, :label=>"Foo", :value=>"Bar").should == "___ Foo\n"
     Forme::Form.new(:serializer=>:text).input(:radio, :label=>"Foo", :value=>"Bar", :checked=>true).should == "_X_ Foo\n"
     Forme::Form.new(:serializer=>:text).input(:checkbox, :label=>"Foo", :value=>"Bar").should == "___ Foo\n"
-    Forme::Form.new(:serializer=>:text).input(:radio, :label=>"Foo", :value=>"Bar", :checked=>true).should == "_X_ Foo\n"
+    Forme::Form.new(:serializer=>:text).input(:checkbox, :label=>"Foo", :value=>"Bar", :checked=>true).should == "_X_ Foo\n"
     Forme::Form.new(:serializer=>:text).input(:select, :label=>"Foo", :options=>[1, 2, 3], :value=>2).should == "Foo: \n___ 1\n_X_ 2\n___ 3\n\n"
   end
 end

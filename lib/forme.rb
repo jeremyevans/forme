@@ -514,6 +514,7 @@ module Forme
     end
   end
 
+  # Formatter that disables all input fields
   class Formatter::Disabled < Formatter::Default
     register_transformer(:disabled, new)
 
@@ -526,6 +527,37 @@ module Forme
         super
         opts[:disabled] = :disabled
       end
+    end
+  end
+
+  # Formatter that uses text spans for most input types,
+  # and disables radio/checkbox inputs.
+  class Formatter::ReadOnly < Formatter::Default
+    register_transformer(:readonly, new)
+
+    private
+
+    # Disabled checkbox inputs.
+    def format_checkbox(form, type, opts)
+      opts[:disabled] = :disabled
+      super
+    end
+
+    # Use a span with plain text instead of an input field.
+    def format_input(form, type, opts)
+      Tag.new(:span, {}, opts[:value])
+    end
+    alias format_textarea format_input
+
+    # Disabled radio button inputs.
+    def format_radio(form, type, opts)
+      opts[:disabled] = :disabled
+      super
+    end
+
+    # Use a span with plain text of the selected value instead of a select box.
+    def format_select(form, type, opts)
+      Tag.new(:span, {}, [super.children.select{|o| o.attr[:selected]}.map{|o| o.children}.join(', ')])
     end
   end
 
