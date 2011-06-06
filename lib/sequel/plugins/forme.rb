@@ -107,19 +107,18 @@ module Sequel # :nodoc:
         # could be associated to, with the one currently associated to being selected.
         def association_many_to_one(ref)
           key = ref[:key]
-          if opts[:type] == :radio
+          opts[:name] ||= "#{namespace}[#{key}]"
+          opts[:value] ||= obj.send(key)
+          opts[:options] ||= association_select_options(ref)
+          if opts.delete(:type) == :radio
             label = opts.delete(:label)
-            opts[:name] ||= "#{namespace}[#{key}]"
-            val = opts[:value] || obj.send(key)
-            radios = association_select_options(ref).map{|l, pk| Input.new(:radio, opts.merge(:value=>pk, :label=>l, :checked=>(pk == val)))}
+            val = opts.delete(:value)
+            radios = opts.delete(:options).map{|l, pk| Input.new(:radio, opts.merge(:value=>pk, :label=>l, :checked=>(pk == val)))}
             radios.unshift("#{label}: ")
             radios
           else
             opts[:id] ||= "#{namespace}_#{key}"
-            opts[:name] ||= "#{namespace}[#{key}]"
-            opts[:value] ||= obj.send(key)
             opts[:add_blank] = true if !opts.has_key?(:add_blank) && (sch = obj.model.db_schema[key])  && sch[:allow_null]
-            opts[:options] ||= association_select_options(ref)
             Input.new(:select, opts)
           end
         end
@@ -130,12 +129,20 @@ module Sequel # :nodoc:
           key = ref[:key]
           klass = ref.associated_class
           pk = klass.primary_key
-          opts[:id] ||= "#{namespace}_#{klass.send(:singularize, ref[:name])}_pks"
           opts[:name] ||= "#{namespace}[#{klass.send(:singularize, ref[:name])}_pks][]"
           opts[:value] ||= obj.send(ref[:name]).map{|x| x.send(pk)}
-          opts[:multiple] = true
           opts[:options] ||= association_select_options(ref)
-          Input.new(:select, opts)
+          if opts.delete(:type) == :checkbox
+            label = opts.delete(:label)
+            val = opts.delete(:value)
+            cbs = opts.delete(:options).map{|l, pk| Input.new(:checkbox, opts.merge(:value=>pk, :label=>l, :checked=>val.include?(pk), :no_hidden=>true))}
+            cbs.unshift("#{label}: ")
+            cbs
+          else
+            opts[:id] ||= "#{namespace}_#{klass.send(:singularize, ref[:name])}_pks"
+            opts[:multiple] = true
+            Input.new(:select, opts)
+          end
         end
         alias association_many_to_many association_one_to_many
 
