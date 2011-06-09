@@ -161,7 +161,7 @@ module Forme
 
     # Formats the +input+ using the +formatter+.
     def format(input)
-      formatter.call(self, input)
+      formatter.call(input)
     end
 
     # Creates an +Input+ with the given +field+ and +opts+, and returns
@@ -187,13 +187,17 @@ module Forme
         if obj.respond_to?(:forme_input)
           obj.forme_input(self, field, opts.dup)
         else
-          Input.new(:text, :name=>field, :id=>field, :value=>obj.send(field))
+          _input(:text, :name=>field, :id=>field, :value=>obj.send(field))
         end
       else
-        Input.new(field, opts)
+        _input(field, opts)
       end
       self << input
-      serialize(input)
+      input
+    end
+
+    def _input(*a)
+      input = Input.new(self, *a)
     end
 
     # Creates a tag using the +inputs_wrapper+ (a fieldset by default), calls
@@ -215,30 +219,34 @@ module Forme
     # Returns a string representing the opening of the form tag.
     # Requires the serializer implements +serialize_open+.
     def open(attr)
-      serializer.serialize_open(Tag.new(:form, attr))
+      serializer.serialize_open(_tag(:form, attr))
     end
 
     # Returns a string representing the closing of the form tag.
     # Requires the serializer implements +serialize_close+.
     def close
-      serializer.serialize_close(Tag.new(:form))
+      serializer.serialize_close(_tag(:form))
+    end
+
+    def _tag(*a, &block)
+      tag = Tag.new(self, *a, &block)
     end
 
     # Creates a +Tag+ instance with the given arguments, and returns
     # a serialized version of it.
     def tag(*a, &block)
-      tag = Tag.new(*a)
+      tag = _tag(*a)
       self << tag
       nest(tag, &block) if block
-      serialize(tag)
+      tag
     end
 
     # Creates a :submit +Input+ with the given opts, and returns a serialized
     # version of the formatted input.
     def button(opts={})
-      input = Input.new(:submit, opts)
+      input = _input(:submit, opts)
       self << input
-      serialize(input)
+      input
     end
 
     # Add the input/tag to the innermost nesting tag.
@@ -246,6 +254,11 @@ module Forme
       if n = @nesting.last
         n << tag
       end
+    end
+
+    # Serializes the +tag+ using the +serializer+.
+    def serialize(tag)
+      serializer.call(tag)
     end
 
     private
@@ -266,50 +279,64 @@ module Forme
       transformer = klass.get_transformer(transformer) if transformer.is_a?(Symbol)
       transformer
     end
-
-    # Serializes the +tag+ using the +serializer+.
-    def serialize(tag)
-      serializer.call(self, tag)
-    end
   end
 
   # High level abstract tag form.  Doesn't contain any logic.
   class Input
-    # The type of input (e.g. :submit, :text, :select).
+    # The +Form+ object related to this +Input+.
+    attr_reader :form
+
+    # The type of input, should be a symbol (e.g. :submit, :text, :select).
     attr_reader :type
 
-    # The options for this +Input+.
+    # The options hash for this +Input+.
     attr_reader :opts
 
-    # Set the +type+ and +opts+.
-    def initialize(type, opts={})
-      @type = type
-      @opts = opts
+    # Set the +form+, +type+, and +opts+.
+    def initialize(form, type, opts={})
+      @form, @type, @opts = form, type, opts
+    end
+
+    def to_s
+      form.serialize(self)
+    end
+
+    def format
+      form.format(self)
     end
   end
 
   # Low level abstract tag form.  Doesn't contain any logic.
   class Tag
+    # The +Form+ object related to this +Tag+.
+    attr_reader :form
+
     # The type of tag, should be a symbol (e.g. :input, :select).
     attr_reader :type
     
-    # The attributes of the tag, such be a hash.
+    # The attributes hash of this +Tag+.
     attr_reader :attr
 
-    # Any children of the tag, should be an array of +Tag+ objects
+    # Any children of this +Tag+, should be an array of +Tag+ objects
     # or strings (representing text nodes).
     attr_reader :children
 
-    # Set the +type+, +attr+, and +children+.
-    def initialize(type, attr={}, children=[])
-      @type = type
-      @attr = attr
-      @children = children
+    # Set the +form+, +type+, +attr+, and +children+.
+    def initialize(form, type, attr={}, children=[])
+      @form, @type, @attr, @children = form, type, attr, children
     end
 
-    # Adds a child to the list of children for the object.
+    # Adds a child to the list of receiver's children.
     def <<(child)
       children << child
+    end
+
+    def tag(*a, &block)
+      form._tag(*a, &block)
+    end
+
+    def to_s
+      form.serialize(self)
     end
   end
 
@@ -361,7 +388,8 @@ module Forme
     # Transform the +input+ into a +Tag+ instance, wrapping it with the +form+'s
     # wrapper, and the form's +error_handler+ and +labeler+ if the input has an
     # error or a label.
-    def call(form, input)
+    def call(input)
+      form = input.form
       opts = input.opts.dup
       l = opts.delete(:label)
       err = opts.delete(:error)
@@ -403,9 +431,9 @@ module Forme
         end
         attr[:id] = "#{opts[:id]}_hidden" if opts[:id]
         attr[:name] = opts[:name]
-        [Tag.new(:input, attr), Tag.new(:input, opts)]
+        [form._tag(:input, attr), form._tag(:input, opts)]
       else
-        Tag.new(:input, opts)
+        form._tag(:input, opts)
       end
     end
 
@@ -414,14 +442,14 @@ module Forme
     def format_radio(form, type, opts)
       opts[:checked] = :checked if opts.delete(:checked)
       opts[:type] = type
-      Tag.new(:input, opts)
+      form._tag(:input, opts)
     end
 
     # The default fallback method for handling inputs.  Assumes an input tag
     # with the type attribute set the the type of the input.
     def format_input(form, type, opts)
       opts[:type] = type
-      Tag.new(:input, opts)
+      form._tag(:input, opts)
     end
 
     # Takes a select input and turns it into a select tag with (possibly) option
@@ -462,7 +490,7 @@ module Forme
             else
               attr[:selected] = :selected if cmp.call(text)
             end
-            Tag.new(:option, attr, [text])
+            form._tag(:option, attr, [text])
           elsif x.is_a?(Array)
             val = x.last
             if val.is_a?(Hash)
@@ -472,26 +500,26 @@ module Forme
               attr[:value] = val
             end
             attr[:selected] = :selected if attr.has_key?(:value) && cmp.call(val)
-            Tag.new(:option, attr, [x.first])
+            form._tag(:option, attr, [x.first])
           else
             attr[:selected] = :selected if cmp.call(x)
-            Tag.new(:option, attr, [x])
+            form._tag(:option, attr, [x])
           end
         end
         if prompt = opts.delete(:add_blank)
-          os.unshift(Tag.new(:option, {:value=>''}, prompt.is_a?(String) ? [prompt] : []))
+          os.unshift(form._tag(:option, {:value=>''}, prompt.is_a?(String) ? [prompt] : []))
         end
       end
-      Tag.new(type, opts, os)
+      form._tag(type, opts, os)
     end
 
     # Formats a textarea.  Respects the following options:
     # :value :: Sets value as the child of the textarea.
     def format_textarea(form, type, opts)
       if val = opts.delete(:value)
-        Tag.new(type, opts, [val])
+        form._tag(type, opts, [val])
       else
-        Tag.new(type, opts)
+        form._tag(type, opts)
       end
     end
 
@@ -548,7 +576,7 @@ module Forme
 
     # Use a span with plain text instead of an input field.
     def format_input(form, type, opts)
-      Tag.new(:span, {}, opts[:value])
+      form._tag(:span, {}, opts[:value])
     end
     alias format_textarea format_input
 
@@ -560,7 +588,7 @@ module Forme
 
     # Use a span with plain text of the selected value instead of a select box.
     def format_select(form, type, opts)
-      Tag.new(:span, {}, [super.children.select{|o| o.attr[:selected]}.map{|o| o.children}.join(', ')])
+      form._tag(:span, {}, [super.children.select{|o| o.attr[:selected]}.map{|o| o.children}.join(', ')])
     end
   end
 
@@ -577,7 +605,7 @@ module Forme
 
     # Return a label tag wrapping the given tag.
     def call(err_msg, tag)
-      msg_tag = Tag.new(:span, {:class=>'error_message'}, err_msg)
+      msg_tag = tag.tag(:span, {:class=>'error_message'}, err_msg)
       if tag.is_a?(Tag)
         attr = tag.attr
         if attr[:class]
@@ -593,6 +621,16 @@ module Forme
   # Base (empty) class for labelers supported by the library. 
   class Labeler
     extend TransformerMap
+
+    private
+
+    def extract_tag(tag)
+      _tag = if tag.is_a?(Tag)
+        tag
+      elsif tag.is_a?(Array)
+        tag.find{|t| t.attr[:id] if t.is_a?(Tag)}
+      end
+    end
   end
 
   # Default labeler used by the library, using implicit labels (where the
@@ -602,12 +640,13 @@ module Forme
 
     # Return a label tag wrapping the given tag.
     def call(label, tag)
+      _tag = extract_tag(tag)
       t = if tag.is_a?(Tag) && tag.type == :input && [:radio, :checkbox].include?(tag.attr[:type])
         [tag, " #{label}"]
       else
         ["#{label}: ", tag]
       end
-      Tag.new(:label, {}, t)
+      _tag.tag(:label, {}, t)
     end
   end
 
@@ -620,13 +659,10 @@ module Forme
     # Return an array with a label tag as the first entry and the given
     # tag as the second.
     def call(label, tag)
-      id = if tag.is_a?(Tag)
-        tag.attr[:id]
-      elsif tag.is_a?(Array)
-        tag.find{|t| t.attr[:id] if t.is_a?(Tag)}.attr[:id]
-      end
+      _tag = extract_tag(tag)
+      id = _tag.attr[:id]
       raise Error, "Explicit labels require an id field" unless id
-      [Tag.new(:label, {:for=>id}, [label]), tag]
+      [_tag.tag(:label, {:for=>id}, [label]), tag]
     end
   end
 
@@ -651,7 +687,7 @@ module Forme
 
     # Wrap the tag in an li tag
     def call(tag)
-      Tag.new(:li, {}, Array(tag))
+      tag.tag(:li, {}, Array(tag))
     end
   end
 
@@ -661,7 +697,8 @@ module Forme
 
     # Wrap the input in an tr tag, with each tag in its own td tag.
     def call(tag)
-      Tag.new(:tr, {}, Array(tag).map{|t| Tag.new(:td, {}, [t])})
+      form = (tag.is_a?(Array) ? tag.find{|t| t.is_a?(Tag)} : tag).form
+      form._tag(:tr, {}, Array(tag).map{|t| form._tag(:td, {}, [t])})
     end
   end
 
@@ -735,18 +772,18 @@ module Forme
     # Serialize the tag object to an html string.  Supports +Tag+ instances,
     # arrays (recurses into +call+ for each entry and joins the result), and
     # strings (html escapes them).
-    def call(form, tag)
+    def call(tag)
       case tag
       when Tag
         if SELF_CLOSING.include?(tag.type)
           "<#{tag.type}#{attr_html(tag)}/>"
         else
-          "#{serialize_open(tag)}#{call(form, tag.children)}#{serialize_close(tag)}"
+          "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
         end
       when Input
-        call(form, form.format(tag))
+        call(tag.format)
       when Array
-        tag.map{|x| call(form, x)}.join
+        tag.map{|x| call(x)}.join
       when Raw
         tag.to_s
       else
@@ -784,7 +821,7 @@ module Forme
     register_transformer(:text, new)
 
     # Serialize the tag to plain text string.
-    def call(form, tag)
+    def call(tag)
       case tag
       when Tag
         case tag.type.to_sym
@@ -800,17 +837,17 @@ module Forme
             tag.attr[:value] << "\n"
           end
         when :select
-          "\n#{call(form, tag.children)}"
+          "\n#{call(tag.children)}"
         when :option
-          call(form, [tag.attr[:selected] ? '_X_ ' : '___ ', tag.children]) << "\n"
+          call([tag.attr[:selected] ? '_X_ ' : '___ ', tag.children]) << "\n"
         when :textarea, :label
-          call(form, tag.children) << "\n"
+          call(tag.children) << "\n"
         else
         end
       when Input
-        call(form, form.format(tag))
+        call(tag.format)
       when Array
-        tag.map{|x| call(form, x)}.join
+        tag.map{|x| call(x)}.join
       else
         tag
       end

@@ -67,43 +67,43 @@ describe "Forme Sequel::Model forms" do
   end
   
   specify "should use a text field for strings" do
-    @b.input(:name).should == '<label>Name: <input id="album_name" name="album[name]" type="text" value="b"/></label>'
-    @c.input(:name).should == '<label>Name: <input id="album_name" name="album[name]" type="text" value="c"/></label>'
+    @b.input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" type="text" value="b"/></label>'
+    @c.input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" type="text" value="c"/></label>'
   end
   
   specify "should allow :type=>:textarea to use a textarea" do
-    @b.input(:name, :type=>:textarea).should == '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
-    @c.input(:name, :type=>:textarea).should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
+    @b.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
+    @c.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
   end
   
   specify "should use a select box for tri-valued boolean fields" do
-    @b.input(:gold).should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
-    @c.input(:gold).should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
+    @b.input(:gold).to_s.should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
+    @c.input(:gold).to_s.should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
   end
   
   specify "should use a checkbox for dual-valued boolean fields" do
-    @b.input(:platinum).should == '<label>Platinum: <input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input id="album_platinum" name="album[platinum]" type="checkbox" value="t"/></label>'
-    @c.input(:platinum).should == '<label>Platinum: <input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/></label>'
+    @b.input(:platinum).to_s.should == '<label>Platinum: <input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input id="album_platinum" name="album[platinum]" type="checkbox" value="t"/></label>'
+    @c.input(:platinum).to_s.should == '<label>Platinum: <input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/></label>'
   end
   
   specify "should use a select box for many_to_one associations" do
-    @b.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
-    @c.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
+    @b.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
+    @c.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
 
   specify "should use a set of radio buttons for many_to_one associations with :type=>:radio option" do
-    @b.input(:artist, :type=>:radio).should == 'Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label>'
-    @c.input(:artist, :type=>:radio).should == 'Artist: <label><input name="album[artist_id]" type="radio" value="1"/> a</label><label><input checked="checked" name="album[artist_id]" type="radio" value="2"/> d</label>'
+    @b.input(:artist, :type=>:radio).to_s.should == 'Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label>'
+    @c.input(:artist, :type=>:radio).to_s.should == 'Artist: <label><input name="album[artist_id]" type="radio" value="1"/> a</label><label><input checked="checked" name="album[artist_id]" type="radio" value="2"/> d</label>'
   end
   
   specify "should respect an :options entry" do
-    @b.input(:artist, :options=>Artist.order(:name).map{|a| [a.name, a.id+1]}).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="2">a</option><option value="3">d</option></select></label>'
-    @c.input(:artist, :options=>Artist.order(:name).map{|a| [a.name, a.id+1]}).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="2">a</option><option value="3">d</option></select></label>'
+    @b.input(:artist, :options=>Artist.order(:name).map{|a| [a.name, a.id+1]}).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="2">a</option><option value="3">d</option></select></label>'
+    @c.input(:artist, :options=>Artist.order(:name).map{|a| [a.name, a.id+1]}).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="2">a</option><option value="3">d</option></select></label>'
   end
   
   specify "should support :name_method option for choosing name method" do
-    @b.input(:artist, :name_method=>:idname).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">1a</option><option value="2">2d</option></select></label>'
-    @c.input(:artist, :name_method=>:idname).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">1a</option><option selected="selected" value="2">2d</option></select></label>'
+    @b.input(:artist, :name_method=>:idname).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">1a</option><option value="2">2d</option></select></label>'
+    @c.input(:artist, :name_method=>:idname).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">1a</option><option selected="selected" value="2">2d</option></select></label>'
   end
   
   specify "should try a list of methods to get a suitable one for select box naming" do
@@ -114,16 +114,16 @@ describe "Forme Sequel::Model forms" do
     f = Forme::Form.new(al.new)
 
     ar.class_eval{def number() "#{self[:name]}1" end}
-    f.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a1</option><option value="2">d1</option></select></label>'
+    f.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a1</option><option value="2">d1</option></select></label>'
 
     ar.class_eval{def title() "#{self[:name]}2" end}
-    f.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a2</option><option value="2">d2</option></select></label>'
+    f.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a2</option><option value="2">d2</option></select></label>'
 
     ar.class_eval{def name() "#{self[:name]}3" end}
-    f.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a3</option><option value="2">d3</option></select></label>'
+    f.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a3</option><option value="2">d3</option></select></label>'
 
     ar.class_eval{def forme_name() "#{self[:name]}4" end}
-    f.input(:artist).should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a4</option><option value="2">d4</option></select></label>'
+    f.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a4</option><option value="2">d4</option></select></label>'
   end
   
   specify "should raise an error when using an association without a usable name method" do
@@ -135,38 +135,38 @@ describe "Forme Sequel::Model forms" do
   end
     
   specify "should use a multiple select box for one_to_many associations" do
-    @b.input(:tracks).should == '<label>Tracks: <select id="album_track_pks" multiple="multiple" name="album[track_pks][]"><option selected="selected" value="1">m</option><option selected="selected" value="2">n</option><option value="3">o</option></select></label>'
-    @c.input(:tracks).should == '<label>Tracks: <select id="album_track_pks" multiple="multiple" name="album[track_pks][]"><option value="1">m</option><option value="2">n</option><option selected="selected" value="3">o</option></select></label>'
+    @b.input(:tracks).to_s.should == '<label>Tracks: <select id="album_track_pks" multiple="multiple" name="album[track_pks][]"><option selected="selected" value="1">m</option><option selected="selected" value="2">n</option><option value="3">o</option></select></label>'
+    @c.input(:tracks).to_s.should == '<label>Tracks: <select id="album_track_pks" multiple="multiple" name="album[track_pks][]"><option value="1">m</option><option value="2">n</option><option selected="selected" value="3">o</option></select></label>'
   end
   
   specify "should use a multiple select box for many_to_many associations" do
-    @b.input(:tags).should == '<label>Tags: <select id="album_tag_pks" multiple="multiple" name="album[tag_pks][]"><option selected="selected" value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label>'
-    @c.input(:tags).should == '<label>Tags: <select id="album_tag_pks" multiple="multiple" name="album[tag_pks][]"><option value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label>'
+    @b.input(:tags).to_s.should == '<label>Tags: <select id="album_tag_pks" multiple="multiple" name="album[tag_pks][]"><option selected="selected" value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label>'
+    @c.input(:tags).to_s.should == '<label>Tags: <select id="album_tag_pks" multiple="multiple" name="album[tag_pks][]"><option value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label>'
   end
 
   specify "should use multiple checkboxes for one_to_many associations if :type=>:checkbox" do
-    @b.input(:tracks, :type=>:checkbox).should == 'Tracks: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
-    @c.input(:tracks, :type=>:checkbox).should == 'Tracks: <label><input name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
+    @b.input(:tracks, :type=>:checkbox).to_s.should == 'Tracks: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
+    @c.input(:tracks, :type=>:checkbox).to_s.should == 'Tracks: <label><input name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
   end
   
   specify "should use multiple checkboxes for many_to_many associations if :type=>:checkbox" do
-    @b.input(:tags, :type=>:checkbox).should == 'Tags: <label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="1"/> s</label><label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="2"/> t</label><label><input name="album[tag_pks][]" type="checkbox" value="3"/> u</label>'
-    @c.input(:tags, :type=>:checkbox).should == 'Tags: <label><input name="album[tag_pks][]" type="checkbox" value="1"/> s</label><label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="2"/> t</label><label><input name="album[tag_pks][]" type="checkbox" value="3"/> u</label>'
+    @b.input(:tags, :type=>:checkbox).to_s.should == 'Tags: <label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="1"/> s</label><label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="2"/> t</label><label><input name="album[tag_pks][]" type="checkbox" value="3"/> u</label>'
+    @c.input(:tags, :type=>:checkbox).to_s.should == 'Tags: <label><input name="album[tag_pks][]" type="checkbox" value="1"/> s</label><label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="2"/> t</label><label><input name="album[tag_pks][]" type="checkbox" value="3"/> u</label>'
   end
 
   specify "should use a text field methods not backed by columns" do
-    @b.input(:artist_name).should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="a"/></label>'
-    @c.input(:artist_name).should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="d"/></label>'
+    @b.input(:artist_name).to_s.should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="a"/></label>'
+    @c.input(:artist_name).to_s.should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="d"/></label>'
   end
 
   specify "should correctly show an error message if there is one" do
     @ab.errors.add(:name, 'tis not valid')
-    @b.input(:name).should == '<label>Name: <input class="error" id="album_name" name="album[name]" type="text" value="b"/><span class="error_message">tis not valid</span></label>'
+    @b.input(:name).to_s.should == '<label>Name: <input class="error" id="album_name" name="album[name]" type="text" value="b"/><span class="error_message">tis not valid</span></label>'
   end
   
   specify "should correctly show an error message for many_to_one associations if there is one" do
     @ab.errors.add(:artist_id, 'tis not valid')
-    @b.input(:artist).should == '<label>Artist: <select class="error" id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select><span class="error_message">tis not valid</span></label>'
+    @b.input(:artist).to_s.should == '<label>Artist: <select class="error" id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select><span class="error_message">tis not valid</span></label>'
   end
   
   specify "should raise an error for unhandled associations" do
@@ -181,37 +181,37 @@ describe "Forme Sequel::Model forms" do
 
   specify "should add required attribute if the column doesn't support nil values" do
     def @ab.db_schema; h = super.dup; h[:name] = h[:name].merge(:allow_null=>false); h end
-    @b.input(:name).should == '<label>Name: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
+    @b.input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
   end
   
   specify "should use allow nested forms with many_to_one associations" do
-    Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.should == '<form><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.to_s.should == '<form><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></form>'
   end
   
   specify "should not add hidden primary key field for new many_to_one associated objects" do
     @ab.associations[:artist] = Artist.new(:name=>'a')
-    Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.should == '<form><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.to_s.should == '<form><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></form>'
   end
   
   specify "should use allow nested forms with one_to_many associations" do
-    Forme.form(@ab){|f| f.subform(:tracks){f.input(:name)}}.should == '<form><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:tracks){f.input(:name)}}.to_s.should == '<form><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></form>'
   end
   
   specify "should not add hidden primary key field for nested forms with one_to_many associations" do
     @ab.associations[:tracks] = [Track.new(:name=>'m'), Track.new(:name=>'n')]
-    Forme.form(@ab){|f| f.subform(:tracks){f.input(:name)}}.should == '<form><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:tracks){f.input(:name)}}.to_s.should == '<form><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></form>'
   end
   
   specify "should use allow nested forms with many_to_many associations" do
-    Forme.form(@ab){|f| f.subform(:tags){f.input(:name)}}.should == '<form><input id="album_tags_attributes_0_id" name="album[tags_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></label><input id="album_tags_attributes_1_id" name="album[tags_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:tags){f.input(:name)}}.to_s.should == '<form><input id="album_tags_attributes_0_id" name="album[tags_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></label><input id="album_tags_attributes_1_id" name="album[tags_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></label></form>'
   end
   
   specify "should not add hidden primary key field for nested forms with many_to_many associations" do
     @ab.associations[:tags] = [Tag.new(:name=>'s'), Tag.new(:name=>'t')]
-    Forme.form(@ab){|f| f.subform(:tags){f.input(:name)}}.should == '<form><label>Name: <input id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></label><label>Name: <input id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:tags){f.input(:name)}}.to_s.should == '<form><label>Name: <input id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></label><label>Name: <input id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></label></form>'
   end
 
   specify "should handle multiple nested levels" do
-    Forme.form(Artist[1]){|f| f.subform(:albums){f.input(:name); f.subform(:tracks){f.input(:name)}}}.should == '<form><input id="artist_albums_attributes_0_id" name="artist[albums_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="artist_albums_attributes_0_name" name="artist[albums_attributes][0][name]" type="text" value="b"/></label><input id="artist_albums_attributes_0_tracks_attributes_0_id" name="artist[albums_attributes][0][tracks_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_0_name" name="artist[albums_attributes][0][tracks_attributes][0][name]" type="text" value="m"/></label><input id="artist_albums_attributes_0_tracks_attributes_1_id" name="artist[albums_attributes][0][tracks_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_1_name" name="artist[albums_attributes][0][tracks_attributes][1][name]" type="text" value="n"/></label></form>'
+    Forme.form(Artist[1]){|f| f.subform(:albums){f.input(:name); f.subform(:tracks){f.input(:name)}}}.to_s.to_s.should == '<form><input id="artist_albums_attributes_0_id" name="artist[albums_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="artist_albums_attributes_0_name" name="artist[albums_attributes][0][name]" type="text" value="b"/></label><input id="artist_albums_attributes_0_tracks_attributes_0_id" name="artist[albums_attributes][0][tracks_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_0_name" name="artist[albums_attributes][0][tracks_attributes][0][name]" type="text" value="m"/></label><input id="artist_albums_attributes_0_tracks_attributes_1_id" name="artist[albums_attributes][0][tracks_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_1_name" name="artist[albums_attributes][0][tracks_attributes][1][name]" type="text" value="n"/></label></form>'
   end
 end

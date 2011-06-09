@@ -79,6 +79,10 @@ module Sequel # :nodoc:
           @obj, @form, @field, @opts = obj, form, field, opts
         end
 
+        def _input(*a)
+          form._input(*a)
+        end
+
         # Determine which type of input to used based on the given field.
         # If the field is a column, use the column's type to determine
         # an appropriate field type. If the field is an association,
@@ -151,13 +155,13 @@ module Sequel # :nodoc:
           if opts.delete(:type) == :radio
             label = opts.delete(:label)
             val = opts.delete(:value)
-            radios = opts.delete(:options).map{|l, pk| Input.new(:radio, opts.merge(:value=>pk, :label=>l, :checked=>(pk == val)))}
+            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :label=>l, :checked=>(pk == val)))}
             radios.unshift("#{label}: ")
             radios
           else
             opts[:id] ||= form.namespaced_id(key)
             opts[:add_blank] = true if !opts.has_key?(:add_blank) && (sch = obj.model.db_schema[key])  && sch[:allow_null]
-            Input.new(:select, opts)
+            _input(:select, opts)
           end
         end
 
@@ -174,13 +178,13 @@ module Sequel # :nodoc:
           if opts.delete(:type) == :checkbox
             label = opts.delete(:label)
             val = opts.delete(:value)
-            cbs = opts.delete(:options).map{|l, pk| Input.new(:checkbox, opts.merge(:value=>pk, :label=>l, :checked=>val.include?(pk), :no_hidden=>true))}
+            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :label=>l, :checked=>val.include?(pk), :no_hidden=>true))}
             cbs.unshift("#{label}: ")
             cbs
           else
             opts[:id] ||= form.namespaced_id(field)
             opts[:multiple] = true
-            Input.new(:select, opts)
+            _input(:select, opts)
           end
         end
         alias association_many_to_many association_one_to_many
@@ -208,11 +212,11 @@ module Sequel # :nodoc:
             opts[:value] = (v ? 't' : 'f') unless v.nil?
             opts[:add_blank] = true
             opts[:options] = [['True', 't'], ['False', 'f']]
-            Input.new(:select, opts)
+            _input(:select, opts)
           else
             opts[:checked] = obj.send(field)
             opts[:value] = 't'
-            Input.new(:checkbox, opts)
+            _input(:checkbox, opts)
           end
         end
 
@@ -220,7 +224,7 @@ module Sequel # :nodoc:
         def input_other(sch)
           opts[:value] ||= obj.send(field)
           type = opts.delete(:type) || :text
-          Input.new(type, opts)
+          _input(type, opts)
         end
 
         # 
@@ -230,7 +234,7 @@ module Sequel # :nodoc:
             v.strftime('%m/%d/%Y') if v
           end
           type = opts.delete(:type) || :text
-          Input.new(type, opts)
+          _input(type, opts)
         end
       end
 
