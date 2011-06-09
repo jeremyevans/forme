@@ -6,16 +6,32 @@ module Forme
     # Handles integrating into the view template so that
     # methods with blocks can inject strings into the output.
     class Form < ::Forme::Form
+      attr_reader :output
+
+      def emit(tag)
+        output << tag.to_s
+      end
+
+      def inputs(*a)
+        super
+        nil
+      end
+
+      def form(*a, &block)
+        @output = eval('@_out_buf', block.binding)
+        super
+      end
+
       # If a block is provided and no children are present,
       # inject an opening tag into the output, yield to the
       # block, and then inject a closing tag into the output.
-      def tag(type, attr={}, children=[], &block)
+      def tag(type, attr={}, children=[])
         tag = _tag(type, attr, children)
-        if block && children.empty?
-          output = eval('@_out_buf', block.binding)
-          output << serializer.serialize_open(tag)
+        if block_given?
+          emit serializer.serialize_open(tag)
+          children.each{|c| emit(c)}
           yield self
-          output << serializer.serialize_close(tag)
+          emit serializer.serialize_close(tag)
         else
           serialize(tag)
         end

@@ -164,6 +164,9 @@ module Forme
       formatter.call(input)
     end
 
+    def emit(tag)
+    end
+
     # Creates an +Input+ with the given +field+ and +opts+, and returns
     # a serialized version of the formatted input.
     #
@@ -210,9 +213,9 @@ module Forme
     def inputs(ins=[], opts={})
       inputs_wrapper.call(self, opts) do
         ins.each do |i|
-          input(*i)
+          emit(input(*i))
         end
-        yield self if block_given?
+        yield if block_given?
       end
     end
 
@@ -715,7 +718,7 @@ module Forme
     def call(form, opts)
       if legend = opts.delete(:legend)
         form.tag(:fieldset) do
-          form.tag(:legend, {}, legend)
+          form.emit(form.tag(:legend, {}, legend))
           yield
         end
       else

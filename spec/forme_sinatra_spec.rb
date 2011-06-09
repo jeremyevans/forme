@@ -35,6 +35,17 @@ END
   get '/hash' do
     erb "<% form({:action=>'/baz'}, :obj=>[:foo]) do |f| %> <%= f.input(:first) %> <% end %>"
   end
+
+  get '/legend' do
+    erb <<END
+<% form([:foo, :bar], :action=>'/baz') do |f| %>
+  <p>FBB</p>
+  <%= f.inputs([:first, :last], :legend=>'Foo') %>
+  <p>FBB2</p>
+<% end %>
+END
+  end
+
 end
 
 describe "Forme Sinatra ERB integration" do
@@ -51,10 +62,14 @@ describe "Forme Sinatra ERB integration" do
   end
 
   specify "#form should add start and end tags and yield Forme::Form instance" do
-    sin_get('/nest').strip.should == '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
+    sin_get('/nest').should == '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
   end
 
   specify "#form should accept two hashes instead of requiring obj as first argument" do
-    sin_get('/hash').strip.should == '<form action="/baz"> <input id="first" name="first" type="text" value="foo"/> </form>'
+    sin_get('/hash').should == '<form action="/baz"> <input id="first" name="first" type="text" value="foo"/> </form>'
+  end
+
+  specify "#form should deal with emitted code" do
+    sin_get('/legend').should == '<form action="/baz"> <p>FBB</p> <fieldset><legend>Foo</legend><input id="first" name="first" type="text" value="foo"/><input id="last" name="last" type="text" value="bar"/></fieldset> <p>FBB2</p> </form>'
   end
 end

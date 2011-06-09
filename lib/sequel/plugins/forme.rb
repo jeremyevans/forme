@@ -26,7 +26,7 @@ module Sequel # :nodoc:
               namespaces << "#{association}_attributes"
               namespaces << (i+=1) if multiple
               @obj = no
-              input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil) unless no.new?
+              emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil)) unless no.new?
               yield
             ensure
               @obj = nested_associations.pop
