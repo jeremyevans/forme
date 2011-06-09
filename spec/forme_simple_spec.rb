@@ -264,7 +264,7 @@ end
 
 describe "Forme object forms" do
   specify "should handle a simple case" do
-    obj = Class.new{def forme_input(field, opts) Forme::Input.new(:text, :name=>"obj[#{field}]", :id=>"obj_#{field}", :value=>"#{field}_foo") end}.new 
+    obj = Class.new{def forme_input(form, field, opts) Forme::Input.new(:text, :name=>"obj[#{field}]", :id=>"obj_#{field}", :value=>"#{field}_foo") end}.new 
     Forme::Form.new(obj).input(:field).should ==  '<input id="obj_field" name="obj[field]" type="text" value="field_foo"/>'
   end
 
@@ -277,7 +277,7 @@ describe "Forme object forms" do
       def initialize(x, y)
         @x, @y = x, y
       end
-      def forme_input(field, opts={})
+      def forme_input(form, field, opts={})
         t = opts[:type]
         t ||= (field == :x ? :textarea : :text)
         s = field.to_s

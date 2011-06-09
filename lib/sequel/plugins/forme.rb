@@ -11,6 +11,41 @@ module Sequel # :nodoc:
       class Error < ::Forme::Error
       end
 
+      module SequelForm
+        attr_accessor :nested_associations
+        attr_accessor :namespaces
+
+        def subform(association)
+          nested_obj = obj.send(association)
+          ref = obj.class.association_reflection(association)
+          multiple = ref.returns_array?
+          i = -1
+          Array(nested_obj).each do |no|
+            begin
+              nested_associations << obj
+              namespaces << "#{association}_attributes"
+              namespaces << (i+=1) if multiple
+              @obj = no
+              input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil) unless no.new?
+              yield
+            ensure
+              @obj = nested_associations.pop
+              namespaces.pop if multiple
+              namespaces.pop
+            end
+          end
+        end
+
+        def namespaced_id(field)
+          "#{namespaces.join('_')}_#{field}"
+        end
+
+        def namespaced_name(field, multiple=false)
+          root, *nsps = namespaces
+          "#{root}#{nsps.map{|n| "[#{n}]"}.join}[#{field}]#{'[]' if multiple}"
+        end
+      end
+
       # Helper class for dealing with Forme/Sequel integration.
       # One instance is created for each call to <tt>Forme::Form#input</tt>
       # for forms associated with <tt>Sequel::Model</tt> objects.
@@ -25,6 +60,9 @@ module Sequel # :nodoc:
         # The <tt>Sequel::Model</tt> object related to this input.
         attr_reader :obj
 
+        # The form related to this input field.
+        attr_reader :form
+
         # The field/column name related to this input.  The type of
         # input created usually depends upon this field.
         attr_reader :field
@@ -37,9 +75,8 @@ module Sequel # :nodoc:
         attr_reader :namespace
 
         # Set the +obj+, +field+, and +opts+ attributes.
-        def initialize(obj, field, opts)
-          @obj, @field, @opts = obj, field, opts
-          @namespace ||= obj.model.send(:underscore, obj.model.name)
+        def initialize(obj, form, field, opts)
+          @obj, @form, @field, @opts = obj, form, field, opts
         end
 
         # Determine which type of input to used based on the given field.
@@ -49,12 +86,12 @@ module Sequel # :nodoc:
         # column or association, but the object responds to the method,
         # create a text input.  Otherwise, raise an +Error+.
         def input
-          opts[:label] ||= humanize(field)
+          opts[:label] = humanize(field) unless opts.has_key?(:label)
           if sch = obj.db_schema[field] 
             handle_errors(field)
             meth = :"input_#{sch[:type]}"
-            opts[:id] ||= "#{namespace}_#{field}"
-            opts[:name] ||= "#{namespace}[#{field}]"
+            opts[:id] ||= form.namespaced_id(field)
+            opts[:name] ||= form.namespaced_name(field)
             opts[:required] = true if !opts.has_key?(:required) && sch[:allow_null] == false
             if respond_to?(meth, true)
               send(meth, sch)
@@ -69,8 +106,8 @@ module Sequel # :nodoc:
               raise Error, "Association type #{ref[:type]} not currently handled for association #{ref[:name]}"
             end
           elsif obj.respond_to?(field)
-            opts[:id] ||= "#{namespace}_#{field}"
-            opts[:name] ||= "#{namespace}[#{field}]"
+            opts[:id] ||= form.namespaced_id(field)
+            opts[:name] ||= form.namespaced_name(field)
             input_other({})
           else
             raise Error, "Unrecognized field used: #{field}"
@@ -108,7 +145,7 @@ module Sequel # :nodoc:
         def association_many_to_one(ref)
           key = ref[:key]
           handle_errors(key)
-          opts[:name] ||= "#{namespace}[#{key}]"
+          opts[:name] ||= form.namespaced_name(key)
           opts[:value] ||= obj.send(key)
           opts[:options] ||= association_select_options(ref)
           if opts.delete(:type) == :radio
@@ -118,7 +155,7 @@ module Sequel # :nodoc:
             radios.unshift("#{label}: ")
             radios
           else
-            opts[:id] ||= "#{namespace}_#{key}"
+            opts[:id] ||= form.namespaced_id(key)
             opts[:add_blank] = true if !opts.has_key?(:add_blank) && (sch = obj.model.db_schema[key])  && sch[:allow_null]
             Input.new(:select, opts)
           end
@@ -130,7 +167,8 @@ module Sequel # :nodoc:
           key = ref[:key]
           klass = ref.associated_class
           pk = klass.primary_key
-          opts[:name] ||= "#{namespace}[#{klass.send(:singularize, ref[:name])}_pks][]"
+          field = "#{klass.send(:singularize, ref[:name])}_pks"
+          opts[:name] ||= form.namespaced_name(field, :multiple)
           opts[:value] ||= obj.send(ref[:name]).map{|x| x.send(pk)}
           opts[:options] ||= association_select_options(ref)
           if opts.delete(:type) == :checkbox
@@ -140,7 +178,7 @@ module Sequel # :nodoc:
             cbs.unshift("#{label}: ")
             cbs
           else
-            opts[:id] ||= "#{namespace}_#{klass.send(:singularize, ref[:name])}_pks"
+            opts[:id] ||= form.namespaced_id(field)
             opts[:multiple] = true
             Input.new(:select, opts)
           end
@@ -197,9 +235,15 @@ module Sequel # :nodoc:
       end
 
       module InstanceMethods
+        def forme_config(form)
+          form.extend(SequelForm)
+          form.nested_associations = []
+          form.namespaces = [model.send(:underscore, model.name)]
+        end
+
         # Return <tt>Forme::Input</tt> instance for field and opts.
-        def forme_input(field, opts)
-          SequelInput.new(self, field, opts).input
+        def forme_input(form, field, opts)
+          SequelInput.new(self, form, field, opts).input
         end
       end
     end

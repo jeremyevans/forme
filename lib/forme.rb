@@ -142,6 +142,9 @@ module Forme
         @obj = obj
         @opts = opts
       end
+      if @obj && @obj.respond_to?(:forme_config)
+        @obj.forme_config(self)
+      end
       @formatter = find_transformer(Formatter, :formatter)
       @error_handler = find_transformer(ErrorHandler, :error_handler)
       @labeler = find_transformer(Labeler, :labeler)
@@ -182,7 +185,7 @@ module Forme
       end
       input = if obj
         if obj.respond_to?(:forme_input)
-          obj.forme_input(field, opts.dup)
+          obj.forme_input(self, field, opts.dup)
         else
           Input.new(:text, :name=>field, :id=>field, :value=>obj.send(field))
         end
