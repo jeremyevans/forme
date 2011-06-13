@@ -750,6 +750,12 @@ module Forme
   # Base (empty) class for serializers supported by the library.
   class Serializer
     extend TransformerMap
+
+    def serialize_open(tag)
+    end
+
+    def serialize_close(tag)
+    end
   end
 
   # Default serializer class used by the library.  Any other serializer
