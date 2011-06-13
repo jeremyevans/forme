@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="/css/normalize.css" />
+<link rel="stylesheet" type="text/css" href="/css/forme_demo.css" />
+<title>Forme Demo - <%= @page_title %></title>
+</head>
+
+<body>
+<h1 id="banner">
+  <% unless request.path_info == '/' %>
+    <a href="/">Home</a>
+  <% end %> 
+  <%= @page_title %>
+</h1>
+<%= yield %>
+
+<br />
+<% if @form_opts_str %>
+  <h2>Form Options</h2>
+  <pre><%= @form_opts_str %></pre>
+<% end %>
+
+<% if @css %>
+  <style type="text/css"><%= @css %></style>
+  <h2>Custom CSS</h2>
+  <pre><%= @css %></pre>
+<% end %>
+
+<% if @templ %>
+  <h2>Template Code</h2>
+ <pre><%= File.read("views/#{@templ}.erb") %></pre>
+<% end %>
+
+</body>
+</html>
+

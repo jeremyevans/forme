@@ -1,0 +1,43 @@
+html {
+  overflow-y: auto;
+}
+
+body {
+  padding: 0;
+  margin: 5px;
+  border-width: 0;
+}
+
+h1#banner {
+    font-family: tahoma, helvetica, sans-serif;
+    font-variant: small-caps;
+    font-weight: bolder;
+    border-width: 0;
+    border-style: none;
+    background-color: #a7d0ff;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #55A;
+    padding: 0;
+    margin: -5px 0;
+    margin-bottom: 5px;
+    display: block;
+    width: 100%;
+}
+h1#banner a {
+  display: block;
+  float: left;
+  font-size: 16px;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+h1.error {
+  color: red;
+  text-align: center;
+}
+
+label[for]:after {
+  content: ": "
+}
