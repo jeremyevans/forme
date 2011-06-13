@@ -326,6 +326,7 @@ module Forme
 
     # Set the +form+, +type+, +attr+, and +children+.
     def initialize(form, type, attr={}, children=[])
+      children = TagArray.new(form, children) if children.is_a?(Array)
       @form, @type, @attr, @children = form, type, attr, children
     end
 
@@ -340,6 +341,24 @@ module Forme
 
     def to_s
       form.serialize(self)
+    end
+  end
+
+  class TagArray < Array
+    attr_accessor :form
+
+    def self.new(form, contents)
+      a = super(contents)
+      a.form = form
+      a
+    end
+
+    def attr
+      @attr ||= {}
+    end
+
+    def tag(*a, &block)
+      form._tag(*a, &block)
     end
   end
 
@@ -410,11 +429,12 @@ module Forme
     # Convert the +Input+ to a +Tag+.
     def convert_to_tag(form, type, opts)
       meth = :"format_#{type}"
-      if respond_to?(meth, true)
+      tag = if respond_to?(meth, true)
         send(meth, form, type, opts)
       else
         format_input(form, type, opts)
       end
+      handle_array(form, tag)
     end
 
     # If the checkbox has a name, will create a hidden input tag with the
@@ -526,6 +546,10 @@ module Forme
       end
     end
 
+    def handle_array(form, tag)
+      (tag.is_a?(Array) && !tag.is_a?(TagArray)) ? TagArray.new(form, tag) : tag
+    end
+
     # Normalize the options used for all input types.
     def normalize_options(opts)
       opts[:required] = :required if opts.delete(:required)
@@ -534,17 +558,17 @@ module Forme
 
     # Wrap the tag with the form's +wrapper+.
     def wrap_tag(form, tag)
-      form.wrapper.call(tag)
+      handle_array(form, form.wrapper.call(tag))
     end
 
     # Wrap the tag with the form's +error_handler+.
     def wrap_tag_with_error(form, err, tag)
-      form.error_handler.call(err, tag)
+      handle_array(form, form.error_handler.call(err, tag))
     end
 
     # Wrap the tag with the form's +labeler+.
     def wrap_tag_with_label(form, label, tag)
-      form.labeler.call(label, tag)
+      handle_array(form, form.labeler.call(label, tag))
     end
   end
 
@@ -624,16 +648,6 @@ module Forme
   # Base (empty) class for labelers supported by the library. 
   class Labeler
     extend TransformerMap
-
-    private
-
-    def extract_tag(tag)
-      _tag = if tag.is_a?(Tag)
-        tag
-      elsif tag.is_a?(Array)
-        tag.find{|t| t.attr[:id] if t.is_a?(Tag)}
-      end
-    end
   end
 
   # Default labeler used by the library, using implicit labels (where the
@@ -643,13 +657,12 @@ module Forme
 
     # Return a label tag wrapping the given tag.
     def call(label, tag)
-      _tag = extract_tag(tag)
       t = if tag.is_a?(Tag) && tag.type == :input && [:radio, :checkbox].include?(tag.attr[:type])
         [tag, " #{label}"]
       else
         ["#{label}: ", tag]
       end
-      _tag.tag(:label, {}, t)
+      tag.tag(:label, {}, t)
     end
   end
 
@@ -662,10 +675,10 @@ module Forme
     # Return an array with a label tag as the first entry and the given
     # tag as the second.
     def call(label, tag)
-      _tag = extract_tag(tag)
-      id = _tag.attr[:id]
+      t = tag.is_a?(Tag) ? tag : tag.find{|tg| tg.is_a?(Tag) && tg.attr[:type] != :hidden}
+      id = t.attr[:id]
       raise Error, "Explicit labels require an id field" unless id
-      [_tag.tag(:label, {:for=>id}, [label]), tag]
+      [tag.tag(:label, {:for=>id}, [label]), tag]
     end
   end
 
@@ -700,8 +713,7 @@ module Forme
 
     # Wrap the input in an tr tag, with each tag in its own td tag.
     def call(tag)
-      form = (tag.is_a?(Array) ? tag.find{|t| t.is_a?(Tag)} : tag).form
-      form._tag(:tr, {}, Array(tag).map{|t| form._tag(:td, {}, [t])})
+      tag.tag(:tr, {}, Array(tag).map{|t| tag.tag(:td, {}, [t])})
     end
   end
 
@@ -791,7 +803,7 @@ module Forme
         end
       when Input
         call(tag.format)
-      when Array
+      when Array, TagArray
         tag.map{|x| call(x)}.join
       when Raw
         tag.to_s
@@ -838,12 +850,12 @@ module Forme
           case tag.attr[:type].to_sym
           when :radio, :checkbox
             tag.attr[:checked] ? '_X_' : '___'
-          when :submit, :reset
+          when :submit, :reset, :hidden
             ''
           when :password
             '********' << "\n"
           else
-            tag.attr[:value] << "\n"
+            tag.attr[:value].to_s << "\n"
           end
         when :select
           "\n#{call(tag.children)}"
@@ -855,7 +867,7 @@ module Forme
         end
       when Input
         call(tag.format)
-      when Array
+      when Array, TagArray
         tag.map{|x| call(x)}.join
       else
         tag
