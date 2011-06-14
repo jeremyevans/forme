@@ -274,23 +274,23 @@ end
 
 describe "Forme registering custom transformers" do
   specify "should have #register_transformer register a transformer object for later use" do
-    Forme::Wrapper.register_transformer(:div, proc{|t| t.tag(:div, {}, [t])})
+    Forme.register_transformer(:wrapper, :div, proc{|t| t.tag(:div, {}, [t])})
     Forme::Form.new(:wrapper=>:div).input(:textarea).to_s.should == '<div><textarea></textarea></div>'
   end
 
   specify "should have #register_transformer register a transformer block for later use" do
-    Forme::Wrapper.register_transformer(:div1){|t| t.tag(:div1, {}, [t])}
+    Forme.register_transformer(:wrapper, :div1){|t| t.tag(:div1, {}, [t])}
     Forme::Form.new(:wrapper=>:div1).input(:textarea).to_s.should == '<div1><textarea></textarea></div1>'
   end
 
   specify "should have #register_transformer register a transformer class for later use" do
-    Forme::Wrapper.register_transformer(:div2, Class.new{def call(t) t.tag(:div2, {}, [t]) end})
+    Forme.register_transformer(:wrapper, :div2, Class.new{def call(t) t.tag(:div2, {}, [t]) end})
     Forme::Form.new(:wrapper=>:div2).input(:textarea).to_s.should == '<div2><textarea></textarea></div2>'
   end
 
   specify "should have #register_transformer raise an error if given a block and an object" do
     proc do
-      Forme::Wrapper.register_transformer(:div1, proc{|t| t}){|t| t.tag(:div1, {}, [t])}
+      Forme.register_transformer(:wrapper, :div1, proc{|t| t}){|t| t.tag(:div1, {}, [t])}
     end.should raise_error(Forme::Error)
   end
 end

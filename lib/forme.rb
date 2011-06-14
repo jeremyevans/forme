@@ -53,6 +53,13 @@ module Forme
   class Error < StandardError
   end
 
+  TRANSFORMERS = {:formatter=>{}, :serializer=>{}, :wrapper=>{}, :error_handler=>{}, :labeler=>{}, :inputs_wrapper=>{}}
+
+  def self.register_transformer(type, sym, obj=nil, &block)
+    raise Error, "Must provide either block or obj, not both" if obj && block
+    TRANSFORMERS[type][sym] = obj||block
+  end
+
   # Call <tt>Forme::Form.form</tt> with the given arguments and block.
   def self.form(*a, &block)
     Form.form(*a, &block)
@@ -145,20 +152,42 @@ module Forme
       if @obj && @obj.respond_to?(:forme_config)
         @obj.forme_config(self)
       end
-      @formatter = find_transformer(Formatter, @opts[:formatter])
-      @error_handler = find_transformer(ErrorHandler, @opts[:error_handler])
-      @labeler = find_transformer(Labeler, @opts[:labeler])
-      @serializer = find_transformer(Serializer, @opts[:serializer])
-      @wrapper = find_transformer(Wrapper, @opts[:wrapper])
-      @inputs_wrapper = find_transformer(InputsWrapper, @opts[:inputs_wrapper])
+      TRANSFORMERS.keys.each do |k|
+        instance_variable_set(:"@#{k}", transformer(k, @opts.fetch(k, :default)))
+      end
       @nesting = []
     end
 
-    # Looks up the transformer if it is a registered symbol.
-    def find_transformer(klass, transformer)
-      transformer ||= :default
-      transformer = klass.get_transformer(transformer) if transformer.is_a?(Symbol)
-      transformer
+    def transform(type, trans, *args, &block)
+      if trans = transformer(type, trans)
+        trans.call(*args, &block)
+      else
+        obj
+      end
+    end
+
+    def transformer(type, trans)
+      case trans
+      when Symbol
+        t = TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.join(', ')})")
+        t.is_a?(Class) ? t.new : t
+      when Hash
+        if trans.has_key?(type)
+          if v = trans[type]
+            transformer(type, v)
+          end
+        else
+          transformer(type, nil)
+        end
+      when nil
+        send(type)
+      else
+        if trans.respond_to?(:call)
+          trans
+        else
+          raise Error, "#{type} #{trans.inspect} must respond to #call"
+        end
+      end
     end
 
     # Create a form tag with the given attributes.
@@ -168,8 +197,7 @@ module Forme
 
     # Formats the +input+ using the +formatter+.
     def format(input)
-      transformer = input.opts[:formatter] ? find_transformer(Formatter, input.opts[:formatter]) : formatter
-      transformer.call(input)
+      transform(:formatter, input.opts, input)
     end
 
     def emit(tag)
@@ -219,8 +247,7 @@ module Forme
     #   inputs(:field1, :field2)
     #   inputs([:field1, {:name=>'foo'}], :field2)
     def inputs(ins=[], opts={})
-      transformer = opts[:inputs_wrapper] ? find_transformer(InputsWrapper, opts[:inputs_wrapper]) : inputs_wrapper
-      transformer.call(self, opts) do
+      transform(:inputs_wrapper, opts, self, opts) do
         ins.each do |i|
           emit(input(*i))
         end
@@ -365,38 +392,14 @@ module Forme
   module Raw
   end
 
-  # Helper module for extending classes where subclasses automatically register themselves
-  # in a map under a symbol, allowing lookup by symbol name when creating a +Form+.
-  module TransformerMap
-    # Create the +MAP+ constant hash under the +klass+.
-    def self.extended(klass)
-      klass.const_set(:MAP, {})
-    end
-
-    # Given a +type+ symbol, looks up the symbol in the MAP constant and returns 
-    # the matching entry or a new instance of it if it is a class.
-    def get_transformer(type)
-      transformer = self::MAP[type]
-      raise Error, "invalid #{name}: #{type} (valid #{name}s: #{self::MAP.keys.join(', ')})" unless transformer
-      transformer.is_a?(Class) ? transformer.new : transformer
-    end
-
-    # Register the object in the transformer's MAP object.
-    def register_transformer(type, transformer=nil, &block)
-      raise Error, "can provide transformer either as an argument or a block, not both" if transformer && block
-      self::MAP[type] = transformer || block
-    end
-  end
-
   # Base (empty) class for formatters supported by the library.
   class Formatter
-    extend TransformerMap
   end
 
   # The default formatter used by the library.  Any custom formatters should
   # probably inherit from this formatter unless they have very special needs.
   class Formatter::Default < Formatter
-    register_transformer(:default, self)
+    Forme.register_transformer(:formatter, :default, self)
 
     attr_reader :input
     attr_reader :form
@@ -563,9 +566,9 @@ module Forme
       @attr[:disabled] = :disabled if @attr.delete(:disabled)
       @opts[:label] = @attr.delete(:label)
       @opts[:error] = @attr.delete(:error)
-      @opts[:wrapper] = @attr.delete(:wrapper)
-      @opts[:error_handler] = @attr.delete(:error_handler)
-      @opts[:labeler] = @attr.delete(:labeler)
+      @opts[:wrapper] = @attr.delete(:wrapper) if @attr.has_key?(:wrapper)
+      @opts[:error_handler] = @attr.delete(:error_handler) if @attr.has_key?(:error_handler)
+      @opts[:labeler] = @attr.delete(:labeler) if @attr.has_key?(:labeler)
       @attr.delete(:formatter)
     end
 
@@ -575,26 +578,23 @@ module Forme
     
     # Wrap the tag with the form's +wrapper+.
     def wrap_tag(tag)
-      transformer = @opts[:wrapper] ? form.find_transformer(Wrapper, @opts[:wrapper]) : form.wrapper
-      transformer.call(tag)
+      form.transform(:wrapper, @opts, tag)
     end
 
     # Wrap the tag with the form's +error_handler+.
-    def wrap_tag_with_error(err, tag)
-      transformer = @opts[:error_handler] ? form.find_transformer(ErrorHandler, @opts[:error_handler]) : form.error_handler
-      transformer.call(err, tag)
+    def wrap_tag_with_error(error, tag)
+      form.transform(:error_handler, @opts, error, tag)
     end
 
     # Wrap the tag with the form's +labeler+.
     def wrap_tag_with_label(label, tag)
-      transformer = @opts[:labeler] ? form.find_transformer(Labeler, @opts[:labeler]) : form.labeler
-      transformer.call(label, tag)
+      form.transform(:labeler, @opts, label, tag)
     end
   end
 
   # Formatter that disables all input fields
   class Formatter::Disabled < Formatter::Default
-    register_transformer(:disabled, self)
+    Forme.register_transformer(:formatter, :disabled, self)
 
     private
 
@@ -611,7 +611,7 @@ module Forme
   # Formatter that uses text spans for most input types,
   # and disables radio/checkbox inputs.
   class Formatter::ReadOnly < Formatter::Default
-    register_transformer(:readonly, self)
+    Forme.register_transformer(:formatter, :readonly, self)
 
     private
 
@@ -644,14 +644,13 @@ module Forme
 
   # Base (empty) class for error handlers supported by the library. 
   class ErrorHandler
-    extend TransformerMap
   end
 
   # Default error handler used by the library, using an "error" class
   # for the input field and a span tag with an "error_message" class
   # for the error message.
   class ErrorHandler::Default < ErrorHandler
-    register_transformer(:default, new)
+    Forme.register_transformer(:error_handler, :default, new)
 
     # Return a label tag wrapping the given tag.
     def call(err_msg, tag)
@@ -670,13 +669,12 @@ module Forme
 
   # Base (empty) class for labelers supported by the library. 
   class Labeler
-    extend TransformerMap
   end
 
   # Default labeler used by the library, using implicit labels (where the
   # label tag encloses the other tag).
   class Labeler::Default < Labeler
-    register_transformer(:default, new)
+    Forme.register_transformer(:labeler, :default, new)
 
     # Return a label tag wrapping the given tag.
     def call(label, tag)
@@ -693,7 +691,7 @@ module Forme
   # the given tag's id using a +for+ attribute.  Requires that all tags
   # with labels have +id+ fields.
   class Labeler::Explicit < Labeler
-    register_transformer(:explicit, new)
+    Forme.register_transformer(:labeler, :explicit, new)
 
     # Return an array with a label tag as the first entry and the given
     # tag as the second.
@@ -705,49 +703,17 @@ module Forme
     end
   end
 
-  # Base (empty) class for wrappers supported by the library.
-  class Wrapper
-    extend TransformerMap
-  end
-
-  # Default wrapper class used by the library, which doesn't actually wrap.
-  class Wrapper::Default < Wrapper
-    register_transformer(:default, new)
-
-    # Default wrapper doesn't wrap, it just returns the tag as is.
-    def call(tag)
-      tag
-    end
-  end
-
-  # Wrapper class which wraps the input in an li tag. 
-  class Wrapper::LI < Wrapper
-    register_transformer(:li, new)
-
-    # Wrap the tag in an li tag
-    def call(tag)
-      tag.tag(:li, {}, Array(tag))
-    end
-  end
-
-  # Wrapper class which wraps the input in an tr tag, with each element in a td tag. 
-  class Wrapper::TRTD < Wrapper
-    register_transformer(:trtd, new)
-
-    # Wrap the input in an tr tag, with each tag in its own td tag.
-    def call(tag)
-      tag.tag(:tr, {}, Array(tag).map{|t| tag.tag(:td, {}, [t])})
-    end
-  end
+  Forme.register_transformer(:wrapper, :default){|tag| tag}
+  Forme.register_transformer(:wrapper, :li){|tag| tag.tag(:li, {}, Array(tag))}
+  Forme.register_transformer(:wrapper, :trtd){|tag| tag.tag(:tr, {}, Array(tag).map{|t| tag.tag(:td, {}, [t])})}
 
   # Base (empty) class for inputs wrappers supported by the library.
   class InputsWrapper
-    extend TransformerMap
   end
 
   # Default inputs_wrapper class used by the library, uses a fieldset.
   class InputsWrapper::Default < InputsWrapper
-    register_transformer(:default, new)
+    Forme.register_transformer(:inputs_wrapper, :default, new)
 
     # Wrap the inputs in a fieldset
     def call(form, opts)
@@ -764,7 +730,7 @@ module Forme
 
   # Use an ol tag to wrap the inputs
   class InputsWrapper::OL < InputsWrapper
-    register_transformer(:ol, new)
+    Forme.register_transformer(:inputs_wrapper, :ol, new)
 
     # Wrap the inputs in an ol tag
     def call(form, opts, &block)
@@ -774,7 +740,7 @@ module Forme
 
   # Use a table tag to wrap the inputs
   class InputsWrapper::Table < InputsWrapper
-    register_transformer(:table, new)
+    Forme.register_transformer(:inputs_wrapper, :table, new)
 
     # Wrap the inputs in a table tag
     def call(form, opts, &block)
@@ -784,8 +750,6 @@ module Forme
 
   # Base (empty) class for serializers supported by the library.
   class Serializer
-    extend TransformerMap
-
     def serialize_open(tag)
     end
 
@@ -796,7 +760,7 @@ module Forme
   # Default serializer class used by the library.  Any other serializer
   # classes that want to produce html should probably subclass this class.
   class Serializer::Default < Serializer
-    register_transformer(:default, new)
+    Forme.register_transformer(:serializer, :default, new)
 
     # Borrowed from Rack::Utils, map of single character strings to html escaped versions.
     ESCAPE_HTML = {
@@ -862,7 +826,7 @@ module Forme
 
   # Serializer class that converts tags to plain text strings.
   class Serializer::PlainText < Serializer
-    register_transformer(:text, new)
+    Forme.register_transformer(:serializer, :text, new)
 
     # Serialize the tag to plain text string.
     def call(tag)

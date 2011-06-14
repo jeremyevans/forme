@@ -156,11 +156,8 @@ module Sequel # :nodoc:
             label = opts.delete(:label)
             val = opts.delete(:value)
             tag_wrapper = opts.delete(:tag_wrapper) || :default
-            wrapper = if wrapper = opts.delete(:wrapper)
-              form.find_transformer(Wrapper, wrapper)
-            else
-              form.wrapper
-            end
+            wrapper = form.transformer(:wrapper, opts)
+            opts.delete(:wrapper)
             radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>(pk == val)))}
             radios.unshift("#{label}: ")
             wrapper ? wrapper.call(TagArray.new(form, radios)) : radios
