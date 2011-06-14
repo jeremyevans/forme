@@ -178,6 +178,10 @@ describe "Forme plain forms" do
     @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo).to_s.should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
   end
 
+  specify "inputs should accept a :error_handler option to use a custom error_handler" do
+    @f.input(:textarea, :error_handler=>proc{|e, t| [t, "!!! #{e}"]}, :error=>'bar', :id=>:foo).to_s.should == '<textarea id="foo"></textarea>!!! bar'
+  end
+
   specify "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do
     @f.inputs([:textarea], :inputs_wrapper=>:ol).to_s.should == '<ol><textarea></textarea></ol>'
   end
@@ -194,6 +198,10 @@ describe "Forme custom" do
 
   specify "labelers can be specified as a proc" do
     Forme::Form.new(:labeler=>proc{|l, t| ["#{l}: ", t]}).input(:textarea, :NAME=>'foo', :label=>'bar').to_s.should == 'bar: <textarea NAME="foo"></textarea>'
+  end
+
+  specify "error_handlers can be specified as a proc" do
+    Forme::Form.new(:error_handler=>proc{|e, t| [t, "!!! #{e}"]}).input(:textarea, :NAME=>'foo', :error=>'bar').to_s.should == '<textarea NAME="foo"></textarea>!!! bar'
   end
 
   specify "wrappers can be specified as a proc" do
