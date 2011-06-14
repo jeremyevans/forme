@@ -7,9 +7,17 @@ Forme is a HTML forms library for ruby with the following goals:
 3. Support forms both with and without related objects
 4. Allow compiling down to different types of output
 
+= Demo Site
+
+A demo site is available at http://forme.heroku.com.
+
+= Source Code
+
+Source code is available on GitHub at https://github.com/jeremyevans/forme.
+
 = Basic Usage
 
-Without an object, is a simple form builder:
+Without an object, Forme is a simple form builder:
 
   f = Forme::Form.new
   f.open(:action=>'/foo', :method=>:post) # '<form action="/foo" method="post">
@@ -18,11 +26,9 @@ Without an object, is a simple form builder:
   f.close # '</form>'
 
 With an object, calls +forme_input+ on the obj with the form, field, and options, which
-should return a <tt>Forme::Input</tt> instance.
+should return a <tt>Forme::Input</tt> or <tt>Forme::Tag</tt> instance.
 
   f = Forme::Form.new(obj)
-  # obj.forme_input(:field, opts)
-  # => Forme::Input.new(:text, :name=>'obj[field]', :id=>'obj_field', :value=>'foo')
   f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo"/>'
 
 If the object doesn't respond to +forme_input+, it falls back to creating text fields
@@ -34,7 +40,7 @@ on the object.
 
 = DSL
 
-Forme comes with DSL:
+Forme comes with a DSL:
 
   Forme.form(:action=>'/foo') do |f|
     f.input(:text, :name=>'bar')
@@ -45,6 +51,18 @@ Forme comes with DSL:
   # <form action="/foo">
   #   <input name="bar" type="text"/>
   #   <fieldset>
+  #     <textarea name="baz"></textarea>
+  #   </fieldset>
+  # </form>
+
+You can wrap up multiple inputs with the <tt>:inputs</tt> method:
+
+  Forme.form(:action=>'/foo') do |f|
+    f.inputs([[:text, :name=>'bar'], [:textarea, :name=>'baz']])
+  end
+  # <form action="/foo">
+  #   <fieldset>
+  #     <input name="bar" type="text"/>
   #     <textarea name="baz"></textarea>
   #   </fieldset>
   # </form>
@@ -68,9 +86,17 @@ uses the +Formatter+, +ErrorHandler+, +Labeler+, +Wrapper+, +InputsWrapper+, and
 = Sequel Support
 
 Forme ships with a Sequel plugin (use <tt>Sequel::Model.plugin :forme</tt> to enable), that makes
-Sequel::Model instances support the +forme_input+ method and return customized inputs, such as
-checkboxes for boolean columns cannot be NULL, 3-valued select boxes for boolean columns that can be
-NULL, select boxes for many_to_one associations, and multi-select boxes for *_to_many associations.
+Sequel::Model instances support the +forme_input+ method and return customized inputs.
+
+It deals with inputs based on database columns, virtual columns, and associations.  It also handles
+nested associations using the +subform+ method:
+
+  Forme.form(Album[1], :action=>'/foo') do |f|
+    f.inputs([:name, :copies_sold, :tags]) do
+      f.subform(:artist, :inputs=>[:name])
+      f.subform(:tracks, :inputs=>[:number, :name])
+    end
+  end
 
 = Sinatra ERB Support
 
@@ -91,8 +117,10 @@ All of these have external dependencies:
 
 1. Rails built-in helpers
 2. Formtastic
-4. simple_form
-3. padrino-helpers
+3. simple_form
+4. padrino-helpers
+
+Forme's API draws a lot of inspiration from both Formtastic and simple_form.
 
 = Author
 
