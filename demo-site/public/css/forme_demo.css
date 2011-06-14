@@ -41,3 +41,7 @@ h1.error {
 label[for]:after {
   content: ": "
 }
+
+li label input[type="checkbox"], li label input[type="radio"] {
+  margin-left: 0.7em;
+}
