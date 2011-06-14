@@ -99,6 +99,14 @@ describe "Forme plain forms" do
     @f.input(:text, :disabled=>false).to_s.should == '<input type="text"/>'
   end
 
+  specify "inputs should not include options with nil values" do
+    @f.input(:text, :name=>nil).to_s.should == '<input type="text"/>'
+  end
+
+  specify "inputs should include options with false values" do
+    @f.input(:text, :name=>false).to_s.should == '<input name="false" type="text"/>'
+  end
+
   specify "should automatically create a label if a :label option is used" do
     @f.input(:text, :label=>'Foo', :value=>'foo').to_s.should == '<label>Foo: <input type="text" value="foo"/></label>'
   end
