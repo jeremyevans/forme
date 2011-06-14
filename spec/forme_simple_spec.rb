@@ -164,6 +164,23 @@ describe "Forme plain forms" do
   specify "should not escape raw tag content" do
     @f.tag(:div, {}, ['<p></p>'.extend(Forme::Raw)]).to_s.should == '<div><p></p></div>'
   end
+
+  specify "inputs should accept a :wrapper option to use a custom wrapper" do
+    @f.input(:text, :wrapper=>:li).to_s.should == '<li><input type="text"/></li>'
+  end
+
+  specify "inputs should accept a :formatter option to use a custom formatter" do
+    @f.input(:text, :formatter=>:readonly, :value=>'1', :label=>'Foo').to_s.should == '<label>Foo: <span>1</span></label>'
+    @f.input(:text, :formatter=>:default, :value=>'1', :label=>'Foo').to_s.should == '<label>Foo: <input type="text" value="1"/></label>'
+  end
+
+  specify "inputs should accept a :labeler option to use a custom labeler" do
+    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo).to_s.should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
+  end
+
+  specify "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do
+    @f.inputs([:textarea], :inputs_wrapper=>:ol).to_s.should == '<ol><textarea></textarea></ol>'
+  end
 end
 
 describe "Forme custom" do

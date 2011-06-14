@@ -145,13 +145,20 @@ module Forme
       if @obj && @obj.respond_to?(:forme_config)
         @obj.forme_config(self)
       end
-      @formatter = find_transformer(Formatter, :formatter)
-      @error_handler = find_transformer(ErrorHandler, :error_handler)
-      @labeler = find_transformer(Labeler, :labeler)
-      @serializer = find_transformer(Serializer, :serializer)
-      @wrapper = find_transformer(Wrapper, :wrapper)
-      @inputs_wrapper = find_transformer(InputsWrapper, :inputs_wrapper)
+      @formatter = find_transformer(Formatter, @opts[:formatter])
+      @error_handler = find_transformer(ErrorHandler, @opts[:error_handler])
+      @labeler = find_transformer(Labeler, @opts[:labeler])
+      @serializer = find_transformer(Serializer, @opts[:serializer])
+      @wrapper = find_transformer(Wrapper, @opts[:wrapper])
+      @inputs_wrapper = find_transformer(InputsWrapper, @opts[:inputs_wrapper])
       @nesting = []
+    end
+
+    # Looks up the transformer if it is a registered symbol.
+    def find_transformer(klass, transformer)
+      transformer ||= :default
+      transformer = klass.get_transformer(transformer) if transformer.is_a?(Symbol)
+      transformer
     end
 
     # Create a form tag with the given attributes.
@@ -161,7 +168,8 @@ module Forme
 
     # Formats the +input+ using the +formatter+.
     def format(input)
-      formatter.call(input)
+      transformer = input.opts[:formatter] ? find_transformer(Formatter, input.opts[:formatter]) : formatter
+      transformer.call(input)
     end
 
     def emit(tag)
@@ -211,7 +219,8 @@ module Forme
     #   inputs(:field1, :field2)
     #   inputs([:field1, {:name=>'foo'}], :field2)
     def inputs(ins=[], opts={})
-      inputs_wrapper.call(self, opts) do
+      transformer = opts[:inputs_wrapper] ? find_transformer(InputsWrapper, opts[:inputs_wrapper]) : inputs_wrapper
+      transformer.call(self, opts) do
         ins.each do |i|
           emit(input(*i))
         end
@@ -274,13 +283,6 @@ module Forme
       yield self
     ensure
       @nesting.pop
-    end
-    
-    # Looks up the transformer if it is a registered symbol.
-    def find_transformer(klass, sym)
-      transformer = opts.fetch(sym, :default)
-      transformer = klass.get_transformer(transformer) if transformer.is_a?(Symbol)
-      transformer
     end
   end
 
@@ -418,16 +420,16 @@ module Forme
       @opts = {}
       normalize_options
 
-      tag = convert_to_tag(input.type)
+      tag = handle_array(convert_to_tag(input.type))
 
       if error = @opts[:error]
-        tag = wrap_tag_with_error(error, tag)
+        tag = handle_array(wrap_tag_with_error(error, tag))
       end
       if label = @opts[:label]
-        tag = wrap_tag_with_label(label, tag)
+        tag = handle_array(wrap_tag_with_label(label, tag))
       end
 
-      wrap_tag(tag)
+      handle_array(wrap_tag(tag))
     end
 
     private
@@ -435,12 +437,11 @@ module Forme
     # Convert the +Input+ to a +Tag+.
     def convert_to_tag(type)
       meth = :"format_#{type}"
-      tag = if respond_to?(meth, true)
+      if respond_to?(meth, true)
         send(meth)
       else
         format_input(type)
       end
-      handle_array(tag)
     end
 
     # If the checkbox has a name, will create a hidden input tag with the
@@ -562,25 +563,32 @@ module Forme
       @attr[:disabled] = :disabled if @attr.delete(:disabled)
       @opts[:label] = @attr.delete(:label)
       @opts[:error] = @attr.delete(:error)
+      @opts[:wrapper] = @attr.delete(:wrapper)
+      @opts[:error_handler] = @attr.delete(:error_handler)
+      @opts[:labeler] = @attr.delete(:labeler)
+      @attr.delete(:formatter)
     end
 
     def tag(type, attr=@attr, children=[])
       form._tag(type, attr, children)
     end
-
+    
     # Wrap the tag with the form's +wrapper+.
     def wrap_tag(tag)
-      handle_array(form.wrapper.call(tag))
+      transformer = @opts[:wrapper] ? form.find_transformer(Wrapper, @opts[:wrapper]) : form.wrapper
+      transformer.call(tag)
     end
 
     # Wrap the tag with the form's +error_handler+.
     def wrap_tag_with_error(err, tag)
-      handle_array(form.error_handler.call(err, tag))
+      transformer = @opts[:error_handler] ? form.find_transformer(ErrorHandler, @opts[:error_handler]) : form.error_handler
+      transformer.call(err, tag)
     end
 
     # Wrap the tag with the form's +labeler+.
     def wrap_tag_with_label(label, tag)
-      handle_array(form.labeler.call(label, tag))
+      transformer = @opts[:labeler] ? form.find_transformer(Labeler, @opts[:labeler]) : form.labeler
+      transformer.call(label, tag)
     end
   end
 
