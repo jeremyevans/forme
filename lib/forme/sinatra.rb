@@ -28,10 +28,10 @@ module Forme
       def tag(type, attr={}, children=[])
         tag = _tag(type, attr, children)
         if block_given?
-          emit serializer.serialize_open(tag)
+          emit serializer.serialize_open(tag) if serializer.respond_to?(:serialize_open)
           children.each{|c| emit(c)}
           yield self
-          emit serializer.serialize_close(tag)
+          emit serializer.serialize_close(tag) if serializer.respond_to?(:serialize_close)
         else
           serialize(tag)
         end

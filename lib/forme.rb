@@ -265,13 +265,13 @@ module Forme
     # Returns a string representing the opening of the form tag.
     # Requires the serializer implements +serialize_open+.
     def open(attr)
-      serializer.serialize_open(_tag(:form, attr))
+      serializer.serialize_open(_tag(:form, attr)) if serializer.respond_to?(:serialize_open)
     end
 
     # Returns a string representing the closing of the form tag.
     # Requires the serializer implements +serialize_close+.
     def close
-      serializer.serialize_close(_tag(:form))
+      serializer.serialize_close(_tag(:form)) if serializer.respond_to?(:serialize_close)
     end
 
     def _tag(*a, &block)
@@ -757,11 +757,6 @@ module Forme
 
   # Base (empty) class for serializers supported by the library.
   class Serializer
-    def serialize_open(tag)
-    end
-
-    def serialize_close(tag)
-    end
   end
 
   # Default serializer class used by the library.  Any other serializer
