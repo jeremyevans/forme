@@ -96,6 +96,16 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist, :type=>:radio).to_s.should == 'Artist: <label><input name="album[artist_id]" type="radio" value="1"/> a</label><label><input checked="checked" name="album[artist_id]" type="radio" value="2"/> d</label>'
   end
   
+  specify "should correctly use the forms wrapper for wrapping radio buttons for many_to_one associations with :type=>:radio option" do
+    @b = Forme::Form.new(@ab, :wrapper=>:li)
+    @b.input(:artist, :type=>:radio).to_s.should == '<li>Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label></li>'
+  end
+  
+  specify "should support custom wrappers for many_to_one associations with :type=>:radio via :tag_wrapper option" do
+    @b = Forme::Form.new(@ab, :wrapper=>:li)
+    @b.input(:artist, :type=>:radio, :wrapper=>proc{|t| t.tag(:div, {}, [t])}, :tag_wrapper=>proc{|t| t.tag(:span, {}, [t])}).to_s.should == '<div>Artist: <span><label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label></span><span><label><input name="album[artist_id]" type="radio" value="2"/> d</label></span></div>'
+  end
+  
   specify "should respect an :options entry" do
     @b.input(:artist, :options=>Artist.order(:name).map{|a| [a.name, a.id+1]}).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="2">a</option><option value="3">d</option></select></label>'
     @c.input(:artist, :options=>Artist.order(:name).map{|a| [a.name, a.id+1]}).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="2">a</option><option value="3">d</option></select></label>'

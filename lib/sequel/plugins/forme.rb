@@ -155,9 +155,15 @@ module Sequel # :nodoc:
           if opts.delete(:type) == :radio
             label = opts.delete(:label)
             val = opts.delete(:value)
-            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :label=>l, :checked=>(pk == val)))}
+            tag_wrapper = opts.delete(:tag_wrapper) || :default
+            wrapper = if wrapper = opts.delete(:wrapper)
+              form.find_transformer(Wrapper, wrapper)
+            else
+              form.wrapper
+            end
+            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>(pk == val)))}
             radios.unshift("#{label}: ")
-            radios
+            wrapper ? wrapper.call(TagArray.new(form, radios)) : radios
           else
             opts[:id] = form.namespaced_id(key) unless opts.has_key?(:id)
             opts[:add_blank] = true if !opts.has_key?(:add_blank) && (sch = obj.model.db_schema[key])  && sch[:allow_null]
