@@ -181,9 +181,12 @@ module Sequel # :nodoc:
           if opts.delete(:type) == :checkbox
             label = opts.delete(:label)
             val = opts.delete(:value)
-            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :label=>l, :checked=>val.include?(pk), :no_hidden=>true))}
+            tag_wrapper = opts.delete(:tag_wrapper) || :default
+            wrapper = form.transformer(:wrapper, opts)
+            opts.delete(:wrapper)
+            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>val.include?(pk), :no_hidden=>true))}
             cbs.unshift("#{label}: ")
-            cbs
+            wrapper ? wrapper.call(TagArray.new(form, cbs)) : cbs
           else
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:multiple] = true
