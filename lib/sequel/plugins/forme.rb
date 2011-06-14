@@ -15,11 +15,20 @@ module Sequel # :nodoc:
         attr_accessor :nested_associations
         attr_accessor :namespaces
 
-        def subform(association)
+        # Call humanize on a string version of the argument if
+        # String#humanize exists. Otherwise, do some monkeying
+        # with the string manually.
+        def humanize(s)
+          s = s.to_s
+          s.respond_to?(:humanize) ? s.humanize : s.gsub(/_id$/, "").gsub(/_/, " ").capitalize
+        end
+
+        def subform(association, opts={}, &block)
           nested_obj = obj.send(association)
           ref = obj.class.association_reflection(association)
           multiple = ref.returns_array?
           i = -1
+          ins = opts[:inputs]
           Array(nested_obj).each do |no|
             begin
               nested_associations << obj
@@ -27,7 +36,23 @@ module Sequel # :nodoc:
               namespaces << (i+=1) if multiple
               @obj = no
               emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil)) unless no.new?
-              yield
+              if ins
+                options = opts.dup
+                if options.has_key?(:legend)
+                  if options[:legend].respond_to?(:call)
+                    options[:legend] = options[:legend].call(no, i)
+                  end
+                else
+                  if multiple
+                    options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
+                  else
+                    options[:legend] = humanize(association)
+                  end
+                end
+                inputs(ins, options, &block)  
+              else
+                yield
+              end
             ensure
               @obj = nested_associations.pop
               namespaces.pop if multiple
@@ -202,12 +227,9 @@ module Sequel # :nodoc:
           obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
         end
 
-        # Call humanize on a string version of the argument if
-        # String#humanize exists. Otherwise, do some monkeying
-        # with the string manually.
+        # Delegate to the form.
         def humanize(s)
-          s = s.to_s
-          s.respond_to?(:humanize) ? s.humanize : s.gsub(/_id$/, "").gsub(/_/, " ").capitalize
+          form.humanize(s)
         end
 
         # If the column allows NULL values, use a three-valued select
