@@ -185,6 +185,22 @@ describe "Forme plain forms" do
   specify "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do
     @f.inputs([:textarea], :inputs_wrapper=>:ol).to_s.should == '<ol><textarea></textarea></ol>'
   end
+
+  specify "inputs should accept a :wrapper=>nil option to not use a wrapper" do
+    Forme::Form.new(:wrapper=>:li).input(:text, :wrapper=>nil).to_s.should == '<input type="text"/>'
+  end
+
+  specify "inputs should accept a :labeler=>nil option to not use a labeler" do
+    @f.input(:textarea, :labeler=>nil, :label=>'bar', :id=>:foo).to_s.should == '<textarea id="foo"></textarea>'
+  end
+
+  specify "inputs should accept a :error_handler=>nil option to not use an error_handler" do
+    @f.input(:textarea, :error_handler=>nil, :error=>'bar', :id=>:foo).to_s.should == '<textarea id="foo"></textarea>'
+  end
+
+  specify "#inputs should accept a :inputs_wrapper=>nil option to not use an inputs_wrapper" do
+    @f.form{|f| f.inputs([:textarea], :inputs_wrapper=>nil)}.to_s.should == '<form><textarea></textarea></form>'
+  end
 end
 
 describe "Forme custom" do

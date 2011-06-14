@@ -162,7 +162,14 @@ module Forme
       if trans = transformer(type, trans)
         trans.call(*args, &block)
       else
-        obj
+        case type
+        when :inputs_wrapper
+          yield
+        when :labeler, :error_handler
+          args[1]
+        else
+          args[0]
+        end
       end
     end
 
@@ -244,8 +251,8 @@ module Forme
     # You can use array arguments if you want inputs to be created with specific
     # options:
     #
-    #   inputs(:field1, :field2)
-    #   inputs([:field1, {:name=>'foo'}], :field2)
+    #   inputs([:field1, :field2])
+    #   inputs([[:field1, {:name=>'foo'}], :field2])
     def inputs(ins=[], opts={})
       transform(:inputs_wrapper, opts, self, opts) do
         ins.each do |i|
