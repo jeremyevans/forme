@@ -834,7 +834,7 @@ module Forme
 
 
   # Serializer class that converts tags to plain text strings.
-  class Serializer::PlaintText < Serializer
+  class Serializer::PlainText < Serializer
     register_transformer(:text, new)
 
     # Serialize the tag to plain text string.
@@ -849,16 +849,16 @@ module Forme
           when :submit, :reset, :hidden
             ''
           when :password
-            '********' << "\n"
+            "********\n"
           else
-            tag.attr[:value].to_s << "\n"
+            "#{tag.attr[:value].to_s}\n"
           end
         when :select
           "\n#{call(tag.children)}"
         when :option
-          call([tag.attr[:selected] ? '_X_ ' : '___ ', tag.children]) << "\n"
+          "#{call([tag.attr[:selected] ? '_X_ ' : '___ ', tag.children])}\n"
         when :textarea, :label
-          call(tag.children) << "\n"
+          "#{call(tag.children)}\n"
         else
         end
       when Input
