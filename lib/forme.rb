@@ -278,7 +278,7 @@ module Forme
     
     # Looks up the transformer if it is a registered symbol.
     def find_transformer(klass, sym)
-      transformer ||= opts.fetch(sym, :default)
+      transformer = opts.fetch(sym, :default)
       transformer = klass.get_transformer(transformer) if transformer.is_a?(Symbol)
       transformer
     end

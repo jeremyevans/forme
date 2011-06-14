@@ -94,8 +94,8 @@ module Sequel # :nodoc:
           if sch = obj.db_schema[field] 
             handle_errors(field)
             meth = :"input_#{sch[:type]}"
-            opts[:id] ||= form.namespaced_id(field)
-            opts[:name] ||= form.namespaced_name(field)
+            opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
+            opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
             opts[:required] = true if !opts.has_key?(:required) && sch[:allow_null] == false
             if respond_to?(meth, true)
               send(meth, sch)
@@ -110,8 +110,8 @@ module Sequel # :nodoc:
               raise Error, "Association type #{ref[:type]} not currently handled for association #{ref[:name]}"
             end
           elsif obj.respond_to?(field)
-            opts[:id] ||= form.namespaced_id(field)
-            opts[:name] ||= form.namespaced_name(field)
+            opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
+            opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
             input_other({})
           else
             raise Error, "Unrecognized field used: #{field}"
@@ -149,9 +149,9 @@ module Sequel # :nodoc:
         def association_many_to_one(ref)
           key = ref[:key]
           handle_errors(key)
-          opts[:name] ||= form.namespaced_name(key)
-          opts[:value] ||= obj.send(key)
-          opts[:options] ||= association_select_options(ref)
+          opts[:name] = form.namespaced_name(key) unless opts.has_key?(:name)
+          opts[:value] = obj.send(key) unless opts.has_key?(:value)
+          opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
           if opts.delete(:type) == :radio
             label = opts.delete(:label)
             val = opts.delete(:value)
@@ -159,7 +159,7 @@ module Sequel # :nodoc:
             radios.unshift("#{label}: ")
             radios
           else
-            opts[:id] ||= form.namespaced_id(key)
+            opts[:id] = form.namespaced_id(key) unless opts.has_key?(:id)
             opts[:add_blank] = true if !opts.has_key?(:add_blank) && (sch = obj.model.db_schema[key])  && sch[:allow_null]
             _input(:select, opts)
           end
@@ -172,9 +172,9 @@ module Sequel # :nodoc:
           klass = ref.associated_class
           pk = klass.primary_key
           field = "#{klass.send(:singularize, ref[:name])}_pks"
-          opts[:name] ||= form.namespaced_name(field, :multiple)
-          opts[:value] ||= obj.send(ref[:name]).map{|x| x.send(pk)}
-          opts[:options] ||= association_select_options(ref)
+          opts[:name] = form.namespaced_name(field, :multiple) unless opts.has_key?(:name)
+          opts[:value] = obj.send(ref[:name]).map{|x| x.send(pk)} unless opts.has_key?(:value)
+          opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
           if opts.delete(:type) == :checkbox
             label = opts.delete(:label)
             val = opts.delete(:value)
@@ -182,7 +182,7 @@ module Sequel # :nodoc:
             cbs.unshift("#{label}: ")
             cbs
           else
-            opts[:id] ||= form.namespaced_id(field)
+            opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:multiple] = true
             _input(:select, opts)
           end
@@ -222,16 +222,15 @@ module Sequel # :nodoc:
 
         # Fallback to using the text type for all other types of input.
         def input_other(sch)
-          opts[:value] ||= obj.send(field)
+          opts[:value] = obj.send(field) unless opts.has_key?(:value)
           type = opts.delete(:type) || :text
           _input(type, opts)
         end
 
         # 
         def input_date(sch)
-          opts[:value] ||= begin
-            v = obj.send(field)
-            v.strftime('%m/%d/%Y') if v
+          if !opts.has_key?(:value) && (v = obj.send(field))
+            opts[:value] = v.strftime('%m/%d/%Y')
           end
           type = opts.delete(:type) || :text
           _input(type, opts)
