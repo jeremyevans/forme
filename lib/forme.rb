@@ -353,10 +353,6 @@ module Forme
       a
     end
 
-    def attr
-      @attr ||= {}
-    end
-
     def tag(*a, &block)
       form._tag(*a, &block)
     end
