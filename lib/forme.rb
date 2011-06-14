@@ -394,7 +394,12 @@ module Forme
   # The default formatter used by the library.  Any custom formatters should
   # probably inherit from this formatter unless they have very special needs.
   class Formatter::Default < Formatter
-    register_transformer(:default, new)
+    register_transformer(:default, self)
+
+    attr_reader :input
+    attr_reader :form
+    attr_reader :attr
+    attr_reader :opts
 
     # Used to specify the value of the hidden input created for checkboxes.
     # Since the default for an unspecified checkbox value is 1, the default is
@@ -407,30 +412,35 @@ module Forme
     # wrapper, and the form's +error_handler+ and +labeler+ if the input has an
     # error or a label.
     def call(input)
-      form = input.form
-      opts = input.opts.dup
-      l = opts.delete(:label)
-      err = opts.delete(:error)
-      normalize_options(opts)
+      @input = input
+      @form = input.form
+      @attr = input.opts.dup
+      @opts = {}
+      normalize_options
 
-      tag = convert_to_tag(form, input.type, opts)
-      tag = wrap_tag_with_error(form, err, tag) if err
-      tag = wrap_tag_with_label(form, l, tag) if l
+      tag = convert_to_tag(input.type)
 
-      wrap_tag(form, tag)
+      if error = @opts[:error]
+        tag = wrap_tag_with_error(error, tag)
+      end
+      if label = @opts[:label]
+        tag = wrap_tag_with_label(label, tag)
+      end
+
+      wrap_tag(tag)
     end
 
     private
 
     # Convert the +Input+ to a +Tag+.
-    def convert_to_tag(form, type, opts)
+    def convert_to_tag(type)
       meth = :"format_#{type}"
       tag = if respond_to?(meth, true)
-        send(meth, form, type, opts)
+        send(meth)
       else
-        format_input(form, type, opts)
+        format_input(type)
       end
-      handle_array(form, tag)
+      handle_array(tag)
     end
 
     # If the checkbox has a name, will create a hidden input tag with the
@@ -440,35 +450,35 @@ module Forme
     # input tag.  Recognizes the following options:
     # :checked :: checkbox is set to checked if so.
     # :hidden_value :: sets the value of the hidden input tag.
-    def format_checkbox(form, type, opts)
-      opts[:type] = type
-      opts[:checked] = :checked if opts.delete(:checked)
-      if opts[:name] && !opts.delete(:no_hidden)
+    def format_checkbox
+      @attr[:type] = :checkbox
+      @attr[:checked] = :checked if @attr.delete(:checked)
+      if @attr[:name] && !@attr.delete(:no_hidden)
         attr = {:type=>:hidden}
-        unless attr[:value] = opts.delete(:hidden_value)
-          attr[:value] = CHECKBOX_MAP[opts[:value]]
+        unless attr[:value] = @attr.delete(:hidden_value)
+          attr[:value] = CHECKBOX_MAP[@attr[:value]]
         end
-        attr[:id] = "#{opts[:id]}_hidden" if opts[:id]
-        attr[:name] = opts[:name]
-        [form._tag(:input, attr), form._tag(:input, opts)]
+        attr[:id] = "#{@attr[:id]}_hidden" if @attr[:id]
+        attr[:name] = @attr[:name]
+        [tag(:input, attr), tag(:input)]
       else
-        form._tag(:input, opts)
+        tag(:input)
       end
     end
 
     # For radio buttons, recognizes the :checked option and sets the :checked
     # attribute in the tag appropriately.
-    def format_radio(form, type, opts)
-      opts[:checked] = :checked if opts.delete(:checked)
-      opts[:type] = type
-      form._tag(:input, opts)
+    def format_radio
+      @attr[:checked] = :checked if @attr.delete(:checked)
+      @attr[:type] = :radio
+      tag(:input)
     end
 
     # The default fallback method for handling inputs.  Assumes an input tag
     # with the type attribute set the the type of the input.
-    def format_input(form, type, opts)
-      opts[:type] = type
-      form._tag(:input, opts)
+    def format_input(type)
+      @attr[:type] = type
+      tag(:input)
     end
 
     # Takes a select input and turns it into a select tag with (possibly) option
@@ -486,13 +496,13 @@ module Forme
     #              are set to selected.
     # :multiple :: Creates a multiple select box.
     # :value :: Same as :selected, but has lower priority.
-    def format_select(form, type, opts)
-      if os = opts.delete(:options)
-        vm = opts.delete(:value_method)
-        tm = opts.delete(:text_method)
-        sel = opts.delete(:selected) || opts.delete(:value)
-        if opts.delete(:multiple)
-          opts[:multiple] = :multiple
+    def format_select
+      if os = @attr.delete(:options)
+        vm = @attr.delete(:value_method)
+        tm = @attr.delete(:text_method)
+        sel = @attr.delete(:selected) || @attr.delete(:value)
+        if @attr.delete(:multiple)
+          @attr[:multiple] = :multiple
           sel = Array(sel)
           cmp = lambda{|v| sel.include?(v)}
         else
@@ -519,67 +529,73 @@ module Forme
               attr[:value] = val
             end
             attr[:selected] = :selected if attr.has_key?(:value) && cmp.call(val)
-            form._tag(:option, attr, [x.first])
+            tag(:option, attr, [x.first])
           else
             attr[:selected] = :selected if cmp.call(x)
-            form._tag(:option, attr, [x])
+            tag(:option, attr, [x])
           end
         end
-        if prompt = opts.delete(:add_blank)
-          os.unshift(form._tag(:option, {:value=>''}, prompt.is_a?(String) ? [prompt] : []))
+        if prompt = @attr.delete(:add_blank)
+          os.unshift(tag(:option, {:value=>''}, prompt.is_a?(String) ? [prompt] : []))
         end
       end
-      form._tag(type, opts, os)
+      tag(:select, @attr, os)
     end
 
     # Formats a textarea.  Respects the following options:
     # :value :: Sets value as the child of the textarea.
-    def format_textarea(form, type, opts)
-      if val = opts.delete(:value)
-        form._tag(type, opts, [val])
+    def format_textarea
+      if val = @attr.delete(:value)
+        tag(:textarea, @attr, [val])
       else
-        form._tag(type, opts)
+        tag(:textarea)
       end
     end
 
-    def handle_array(form, tag)
+    def handle_array(tag)
       (tag.is_a?(Array) && !tag.is_a?(TagArray)) ? TagArray.new(form, tag) : tag
     end
 
     # Normalize the options used for all input types.
-    def normalize_options(opts)
-      opts[:required] = :required if opts.delete(:required)
-      opts[:disabled] = :disabled if opts.delete(:disabled)
+    def normalize_options
+      @attr[:required] = :required if @attr.delete(:required)
+      @attr[:disabled] = :disabled if @attr.delete(:disabled)
+      @opts[:label] = @attr.delete(:label)
+      @opts[:error] = @attr.delete(:error)
+    end
+
+    def tag(type, attr=@attr, children=[])
+      form._tag(type, attr, children)
     end
 
     # Wrap the tag with the form's +wrapper+.
-    def wrap_tag(form, tag)
-      handle_array(form, form.wrapper.call(tag))
+    def wrap_tag(tag)
+      handle_array(form.wrapper.call(tag))
     end
 
     # Wrap the tag with the form's +error_handler+.
-    def wrap_tag_with_error(form, err, tag)
-      handle_array(form, form.error_handler.call(err, tag))
+    def wrap_tag_with_error(err, tag)
+      handle_array(form.error_handler.call(err, tag))
     end
 
     # Wrap the tag with the form's +labeler+.
-    def wrap_tag_with_label(form, label, tag)
-      handle_array(form, form.labeler.call(label, tag))
+    def wrap_tag_with_label(label, tag)
+      handle_array(form.labeler.call(label, tag))
     end
   end
 
   # Formatter that disables all input fields
   class Formatter::Disabled < Formatter::Default
-    register_transformer(:disabled, new)
+    register_transformer(:disabled, self)
 
     private
 
-    def normalize_options(opts)
-      if opts.delete(:disabled) == false
+    def normalize_options
+      if @attr.delete(:disabled) == false
         super
       else
         super
-        opts[:disabled] = :disabled
+        @attr[:disabled] = :disabled
       end
     end
   end
@@ -587,31 +603,34 @@ module Forme
   # Formatter that uses text spans for most input types,
   # and disables radio/checkbox inputs.
   class Formatter::ReadOnly < Formatter::Default
-    register_transformer(:readonly, new)
+    register_transformer(:readonly, self)
 
     private
 
     # Disabled checkbox inputs.
-    def format_checkbox(form, type, opts)
-      opts[:disabled] = :disabled
+    def format_checkbox
+      @attr[:disabled] = :disabled
       super
     end
 
     # Use a span with plain text instead of an input field.
-    def format_input(form, type, opts)
-      form._tag(:span, {}, opts[:value])
+    def format_input(type)
+      tag(:span, {}, @attr[:value])
     end
-    alias format_textarea format_input
 
     # Disabled radio button inputs.
-    def format_radio(form, type, opts)
-      opts[:disabled] = :disabled
+    def format_radio
+      @attr[:disabled] = :disabled
       super
     end
 
     # Use a span with plain text of the selected value instead of a select box.
-    def format_select(form, type, opts)
-      form._tag(:span, {}, [super.children.select{|o| o.attr[:selected]}.map{|o| o.children}.join(', ')])
+    def format_select
+      tag(:span, {}, [super.children.select{|o| o.attr[:selected]}.map{|o| o.children}.join(', ')])
+    end
+
+    def format_textarea
+      tag(:span, {}, @attr[:value])
     end
   end
 
