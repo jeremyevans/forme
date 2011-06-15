@@ -201,6 +201,11 @@ describe "Forme plain forms" do
   specify "#inputs should accept a :inputs_wrapper=>nil option to not use an inputs_wrapper" do
     @f.form{|f| f.inputs([:textarea], :inputs_wrapper=>nil)}.to_s.should == '<form><textarea></textarea></form>'
   end
+
+  specify "invalid custom transformers should raise an Error" do
+    proc{Forme::Form.new(:wrapper=>Object.new)}.should raise_error(Forme::Error)
+    proc{@f.input(:textarea, :wrapper=>Object.new).to_s}.should raise_error(Forme::Error)
+  end
 end
 
 describe "Forme custom" do
@@ -285,6 +290,10 @@ describe "Forme built-in custom" do
     Forme::Form.new(:serializer=>:text).input(:checkbox, :label=>"Foo", :value=>"Bar").to_s.should == "___ Foo\n"
     Forme::Form.new(:serializer=>:text).input(:checkbox, :label=>"Foo", :value=>"Bar", :checked=>true).to_s.should == "_X_ Foo\n"
     Forme::Form.new(:serializer=>:text).input(:select, :label=>"Foo", :options=>[1, 2, 3], :value=>2).to_s.should == "Foo: \n___ 1\n_X_ 2\n___ 3\n\n"
+    Forme::Form.new(:serializer=>:text).input(:password, :label=>"Pass").to_s.should == "Pass: ********\n\n"
+    Forme::Form.new(:serializer=>:text).button().to_s.should == ""
+    Forme::Form.new(:serializer=>:text).inputs([[:textarea, {:label=>"Foo", :value=>"Bar"}]], :legend=>'Baz').to_s.should == "Baz\n---\nFoo: Bar\n\n"
+    Forme::Form.new(:serializer=>:text).tag(:p){|f| f.input(:textarea, :label=>"Foo", :value=>"Bar")}.to_s.should == "Foo: Bar\n\n"
   end
 end
 

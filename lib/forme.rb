@@ -976,7 +976,7 @@ module Forme
           v = call(tag.children)
           "#{v}\n#{'-' * v.length}\n"
         else
-          ''
+          call(tag.children)
         end
       when Input
         call(tag.format)
