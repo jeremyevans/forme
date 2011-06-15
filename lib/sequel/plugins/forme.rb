@@ -11,6 +11,9 @@ module Sequel # :nodoc:
       class Error < ::Forme::Error
       end
 
+      # This module extends all <tt>Forme::Form</tt> instances
+      # that use a <tt>Sequel::Model</tt> instance as the form's
+      # +obj+.
       module SequelForm
         attr_accessor :nested_associations
         attr_accessor :namespaces
@@ -23,6 +26,21 @@ module Sequel # :nodoc:
           s.respond_to?(:humanize) ? s.humanize : s.gsub(/_id$/, "").gsub(/_/, " ").capitalize
         end
 
+        # Handle nested association usage.  The +association+ should be a name
+        # of the association for the form's +obj+. Inside the block, calls to
+        # the +input+ and +inputs+ methods for the receiver treat the associated
+        # object as the recevier's +obj+, using name and id attributes that work
+        # with the Sequel +nested_attributes+ plugin.
+        #
+        # The following options are currently supported:
+        # :inputs :: Automatically call +inputs+ with the given values.  Using
+        #            this, it is not required to pass a block to the method,
+        #            though it will still work if you do.
+        # :legend :: If :inputs is also used, this is passed to it to override
+        #            the default :legend used.  You can also use a proc as the value,
+        #            which will called with each associated object (and the position
+        #            in the associated object already for *_to_many associations),
+        #            and should return the legend string to use for that object.
         def subform(association, opts={}, &block)
           nested_obj = obj.send(association)
           ref = obj.class.association_reflection(association)
@@ -59,12 +77,18 @@ module Sequel # :nodoc:
               namespaces.pop
             end
           end
+          nil
         end
 
+        # Return a unique id attribute for the +field+, handling
+        # nested attributes use.
         def namespaced_id(field)
           "#{namespaces.join('_')}_#{field}"
         end
 
+        # Return a unique name attribute for the +field+, handling nested
+        # attribute use.  If +multiple+ is true, end the name
+        # with [] so that param parsing will treat the name as part of an array.
         def namespaced_name(field, multiple=false)
           root, *nsps = namespaces
           "#{root}#{nsps.map{|n| "[#{n}]"}.join}[#{field}]#{'[]' if multiple}"
@@ -82,37 +106,30 @@ module Sequel # :nodoc:
         # for associations.
         FORME_NAME_METHODS = [:forme_name, :name, :title, :number]
 
-        # The <tt>Sequel::Model</tt> object related to this input.
+        # The <tt>Sequel::Model</tt> object related to the receiver.
         attr_reader :obj
 
-        # The form related to this input field.
+        # The form related to the receiver.
         attr_reader :form
 
-        # The field/column name related to this input.  The type of
+        # The field/column name related to the receiver.  The type of
         # input created usually depends upon this field.
         attr_reader :field
 
-        # The options hash related to this input.
+        # The options hash related to the receiver.
         attr_reader :opts
 
-        # The namespace used for the input, generally the underscored
-        # name of +obj+'s class.  
-        attr_reader :namespace
-
-        # Set the +obj+, +field+, and +opts+ attributes.
+        # Set the +obj+, +form+, +field+, and +opts+ attributes.
         def initialize(obj, form, field, opts)
           @obj, @form, @field, @opts = obj, form, field, opts
         end
 
-        def _input(*a)
-          form._input(*a)
-        end
-
-        # Determine which type of input to used based on the given field.
+        # Determine which type of input to used based on the +field+.
         # If the field is a column, use the column's type to determine
         # an appropriate field type. If the field is an association,
-        # use either a regular or multiple select input.  If it's not a
-        # column or association, but the object responds to the method,
+        # use either a regular or multiple select input (or multiple radios or
+        # checkboxes if the related :type option is used).  If it's not a
+        # column or association, but the object responds to +field+,
         # create a text input.  Otherwise, raise an +Error+.
         def input
           opts[:label] = humanize(field) unless opts.has_key?(:label)
@@ -145,6 +162,12 @@ module Sequel # :nodoc:
 
         private
 
+        # Create an +Input+ instance associated to the receiver's +form+
+        # with the given arguments.
+        def _input(*a)
+          form._input(*a)
+        end
+
         # Set the error option correctly if the field contains errors
         def handle_errors(f)
           if e = obj.errors.on(f)
@@ -169,8 +192,11 @@ module Sequel # :nodoc:
           end
         end
 
-        # Create a regular select input made up of options for all entries the object
+        # Create a select input made up of options for all entries the object
         # could be associated to, with the one currently associated to being selected.
+        # If the :type=>:radio option is used, use multiple radio buttons instead of
+        # a select box.  For :type=>:radio, you can also provide a :tag_wrapper option
+        # used to wrap the individual radio buttons.
         def association_many_to_one(ref)
           key = ref[:key]
           handle_errors(key)
@@ -195,6 +221,9 @@ module Sequel # :nodoc:
 
         # Create a multiple select input made up of options for all entries the object
         # could be associated to, with all of the ones currently associated to being selected.
+        # If the :type=>:checkbox option is used, use multiple checkboxes instead of
+        # a multiple select box.  For :type=>:checkbox, you can also provide a :tag_wrapper option
+        # used to wrap the individual checkboxes.
         def association_one_to_many(ref)
           key = ref[:key]
           klass = ref.associated_class
@@ -220,19 +249,19 @@ module Sequel # :nodoc:
         end
         alias association_many_to_many association_one_to_many
 
-        # Return an array of two element arrays represeneting the
+        # Return an array of two element arrays representing the
         # select options that should be created.
         def association_select_options(ref)
           name_method = forme_name_method(ref)
           obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
         end
 
-        # Delegate to the form.
+        # Delegate to the +form+.
         def humanize(s)
           form.humanize(s)
         end
 
-        # If the column allows NULL values, use a three-valued select
+        # If the column allows +NULL+ values, use a three-valued select
         # input.  If not, use a simple checkbox.
         def input_boolean(sch)
           if !opts.delete(:required)
@@ -255,7 +284,8 @@ module Sequel # :nodoc:
           _input(type, opts)
         end
 
-        # 
+        # Format date values using US-style MM/DD/YYYY, though this will
+        # change in the future.
         def input_date(sch)
           if !opts.has_key?(:value) && (v = obj.send(field))
             opts[:value] = v.strftime('%m/%d/%Y')
@@ -266,13 +296,15 @@ module Sequel # :nodoc:
       end
 
       module InstanceMethods
+        # Configure the +form+ with support for <tt>Sequel::Model</tt>
+        # specific code, such as support for nested attributes.
         def forme_config(form)
           form.extend(SequelForm)
           form.nested_associations = []
           form.namespaces = [model.send(:underscore, model.name)]
         end
 
-        # Return <tt>Forme::Input</tt> instance for field and opts.
+        # Return <tt>Forme::Input</tt> instance based on the given arguments.
         def forme_input(form, field, opts)
           SequelInput.new(self, form, field, opts).input
         end
