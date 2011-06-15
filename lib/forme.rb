@@ -463,10 +463,6 @@ module Forme
   module Raw
   end
 
-  # Base (empty) class for formatters supported by the library.
-  class Formatter
-  end
-
   # The default formatter used by the library.  Any custom formatters should
   # probably inherit from this formatter unless they have very special needs.
   #
@@ -475,7 +471,7 @@ module Forme
   # amount of state it uses.
   #
   # Registered as :default.
-  class Formatter::Default < Formatter
+  class Formatter
     Forme.register_transformer(:formatter, :default, self)
 
     # The +Form+ instance for the receiver, taken from the +input+.
@@ -700,7 +696,7 @@ module Forme
   # Formatter that disables all input fields, 
   #
   # Registered as :disabled.
-  class Formatter::Disabled < Formatter::Default
+  class Formatter::Disabled < Formatter
     Forme.register_transformer(:formatter, :disabled, self)
 
     private
@@ -722,7 +718,7 @@ module Forme
   # and disables radio/checkbox inputs.
   #
   # Registered as :readonly.
-  class Formatter::ReadOnly < Formatter::Default
+  class Formatter::ReadOnly < Formatter
     Forme.register_transformer(:formatter, :readonly, self)
 
     private
@@ -755,16 +751,12 @@ module Forme
     end
   end
 
-  # Base (empty) class for error handlers supported by the library. 
-  class ErrorHandler
-  end
-
   # Default error handler used by the library, using an "error" class
   # for the input field and a span tag with an "error_message" class
   # for the error message.
   #
   # Registered as :default.
-  class ErrorHandler::Default < ErrorHandler
+  class ErrorHandler
     Forme.register_transformer(:error_handler, :default, new)
 
     # Return a label tag wrapping the given tag.
@@ -782,15 +774,11 @@ module Forme
     end
   end
 
-  # Base (empty) class for labelers supported by the library. 
-  class Labeler
-  end
-
   # Default labeler used by the library, using implicit labels (where the
   # label tag encloses the other tag).
   #
   # Registered as :default.
-  class Labeler::Default < Labeler
+  class Labeler
     Forme.register_transformer(:labeler, :default, new)
 
     # Return a label tag wrapping the given tag.  For radio and checkbox
@@ -811,7 +799,7 @@ module Forme
   # with labels have +id+ fields.
   #
   # Registered as :explicit.
-  class Labeler::Explicit < Labeler
+  class Labeler::Explicit
     Forme.register_transformer(:labeler, :explicit, new)
 
     # Return an array with a label tag as the first entry and +tag+ as
@@ -830,14 +818,10 @@ module Forme
   Forme.register_transformer(:wrapper, :li){|tag| tag.tag(:li, {}, Array(tag))}
   Forme.register_transformer(:wrapper, :trtd){|tag| tag.tag(:tr, {}, Array(tag).map{|t| tag.tag(:td, {}, [t])})}
 
-  # Base (empty) class for inputs wrappers supported by the library.
-  class InputsWrapper
-  end
-
   # Default inputs_wrapper used by the library, uses a fieldset.
   #
   # Registered as :default.
-  class InputsWrapper::Default < InputsWrapper
+  class InputsWrapper
     Forme.register_transformer(:inputs_wrapper, :default, new)
 
     # Wrap the inputs in a fieldset.  If the :legend
@@ -858,7 +842,7 @@ module Forme
   # Use an ol tag to wrap the inputs.
   #
   # Registered as :ol.
-  class InputsWrapper::OL < InputsWrapper
+  class InputsWrapper::OL
     Forme.register_transformer(:inputs_wrapper, :ol, new)
 
     # Wrap the inputs in an ol tag
@@ -870,7 +854,7 @@ module Forme
   # Use a table tag to wrap the inputs.
   #
   # Registered as :table.
-  class InputsWrapper::Table < InputsWrapper
+  class InputsWrapper::Table
     Forme.register_transformer(:inputs_wrapper, :table, new)
 
     # Wrap the inputs in a table tag.
@@ -879,15 +863,11 @@ module Forme
     end
   end
 
-  # Base (empty) class for serializers supported by the library.
-  class Serializer
-  end
-
   # Default serializer class used by the library.  Any other serializer
   # classes that want to produce html should probably subclass this class.
   #
   # Registered as :default.
-  class Serializer::Default < Serializer
+  class Serializer
     Forme.register_transformer(:serializer, :default, new)
 
     # Borrowed from Rack::Utils, map of single character strings to html escaped versions.
@@ -951,7 +931,7 @@ module Forme
   # Serializer class that converts tags to plain text strings.
   #
   # Registered at :text.
-  class Serializer::PlainText < Serializer
+  class Serializer::PlainText
     Forme.register_transformer(:serializer, :text, new)
 
     # Serialize the tag to plain text string.
