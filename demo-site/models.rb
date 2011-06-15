@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'sequel'
+require 'logger'
 $: << '../lib'
 
 DB = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite:/')
+DB.loggers << Logger.new($stdout) unless ENV['DATABASE_URL']
 
 DB.create_table!(:artists) do
   primary_key :id

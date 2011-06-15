@@ -93,6 +93,16 @@ END
     demo :artist_nested
   end
 
+  post '/album' do
+    Album[1].update(params[:album])
+    redirect back
+  end
+
+  post '/artist' do
+    Artist[1].update(params[:artist])
+    redirect back
+  end
+
 end
 
 class FileServer
