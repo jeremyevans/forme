@@ -412,18 +412,32 @@ module Forme
     # The attributes hash of this receiver.
     attr_reader :attr
 
-    # A +TagArray+ instance representing the children of the receiver.
+    # A +TagArray+ instance representing the children of the receiver,
+    # or possibly +nil+ if the receiver has no children.
     attr_reader :children
 
     # Set the +form+, +type+, +attr+, and +children+.
-    def initialize(form, type, attr={}, children=[])
-      children = TagArray.new(form, children) if children.is_a?(Array)
-      @form, @type, @attr, @children = form, type, attr, children
+    def initialize(form, type, attr={}, children=nil)
+      case children
+      when TagArray
+        @children = children
+      when Array
+        @children = TagArray.new(form, children)
+      when nil
+        @children = nil
+      else
+        @children = TagArray.new(form, [children])
+      end
+      @form, @type, @attr = form, type, attr
     end
 
     # Adds a child to the array of receiver's children.
     def <<(child)
-      children << child
+      if children
+        children << child
+      else
+        @children = TagArray.new(form, [child])
+      end
     end
 
     # Create a new +Tag+ instance with the given arguments and block
@@ -673,7 +687,7 @@ module Forme
 
     # Create a +Tag+ instance related to the receiver's +form+ with the given
     # arguments.
-    def tag(type, attr=@attr, children=[])
+    def tag(type, attr=@attr, children=nil)
       form._tag(type, attr, children)
     end
     
@@ -742,7 +756,9 @@ module Forme
 
     # Use a span with text of the selected values instead of a select box.
     def format_select
-      tag(:span, {}, [super.children.select{|o| o.attr[:selected]}.map{|o| o.children}.join(', ')])
+      t = super
+      children = [t.children.select{|o| o.attr[:selected]}.map{|o| o.children}.join(', ')] if t.children
+      tag(:span, {}, children)
     end
 
     # Use a span with text instead of a text area.
