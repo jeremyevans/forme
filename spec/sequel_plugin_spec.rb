@@ -224,6 +224,10 @@ describe "Forme Sequel::Model forms" do
     Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :legend=>'Foo')}.to_s.should == '<form method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset><legend>Foo</legend><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></fieldset></form>'
   end
   
+  specify "should have #subform respect a callable :legend option if :inputs is used" do
+    Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :legend=>proc{|o| "Foo - #{o.name}"})}.to_s.should == '<form method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset><legend>Foo - a</legend><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></fieldset></form>'
+  end
+  
   specify "should not add hidden primary key field for new many_to_one associated objects" do
     @ab.associations[:artist] = Artist.new(:name=>'a')
     Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.to_s.should == '<form method="post"><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></form>'

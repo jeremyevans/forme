@@ -73,7 +73,7 @@ module Sequel # :nodoc:
                 options = opts.dup
                 if options.has_key?(:legend)
                   if options[:legend].respond_to?(:call)
-                    options[:legend] = options[:legend].call(no, i)
+                    options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
                   end
                 else
                   if multiple
