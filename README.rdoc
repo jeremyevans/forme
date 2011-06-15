@@ -25,8 +25,10 @@ Without an object, Forme is a simple form builder:
   f.input(:text, :value=>'foo', :name=>'bar') # '<input name="bar" type="text" value="foo"/>'
   f.close # '</form>'
 
-With an object, calls +forme_input+ on the obj with the form, field, and options, which
-should return a <tt>Forme::Input</tt> or <tt>Forme::Tag</tt> instance.
+With an object, <tt>Form#input</tt> calls +forme_input+ on the obj with the form, field, and options, which
+should return a <tt>Forme::Input</tt> or <tt>Forme::Tag</tt> instance.  Also, in <tt>Form#initialize</tt>,
++forme_config+ is called on object with the form if the object responds to it, allowing customization of
+the entire form based on the object.
 
   f = Forme::Form.new(obj)
   f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo"/>'

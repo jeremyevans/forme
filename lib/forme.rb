@@ -1,13 +1,13 @@
 require 'forme/version'
 
-# Forme is designed to make creating forms easier.  Flexibility and
+# Forme is designed to make creating HTML forms easier.  Flexibility and
 # simplicity are primary objectives.  The basic usage involves creating
 # a <tt>Forme::Form</tt> instance, and calling +input+ and +tag+ methods
 # to return html strings for widgets, but it could also be used for
 # serializing to other formats, or even as a DSL for a GUI application.
 #
 # In order to be flexible, Forme stores tags in abstract form until
-# output is requested.  There are two separate abstract forms that Forme
+# output is requested.  There are two separate abstract <i>forms</i> that Forme
 # uses.  One is <tt>Forme::Input</tt>, and the other is <tt>Forme::Tag</tt>.
 # <tt>Forme::Input</tt> is a high level abstract form, while <tt>Forme::Tag</tt>
 # is a low level abstract form.
@@ -18,9 +18,9 @@ require 'forme/version'
 # <tt>Forme::Input</tt> is more abstract and attempts to be user friendly.
 # For example, these both compile by default to the same select tag:
 # 
-#   Forme::Input.new(:select, :options=>[['foo', 1]])
+#   f.input(:select, :options=>[['foo', 1]])
 #   # or
-#   Forme::Tag.new(:select, {}, [Forme.Tag.new(:option, {:value=>1}, ['foo'])])
+#   f.tag(:select, {}, [f.tag(:option, {:value=>1}, ['foo'])])
 #
 # The processing of high level <tt>Forme::Input</tt>s into raw html
 # data is broken down to the following steps (called transformers):
@@ -37,25 +37,51 @@ require 'forme/version'
 # 4. +Serializer+: converts a <tt>Forme::Tag</tt> instance into a
 #    string.
 #
-# Technically, only the +Formatter+ and +Serializer+ are necessary,
-# as it is up to the +Formatter+ to call the +Labeler+ and/or +ErrorHandler+ (if necessary) and
-# the +Wrapper+.
+# Technically, only the +Serializer+ is necessary.  The +input+
+# and +tag+ methods return +Input+ and +Tag+ objects.  These objects
+# both have +to_s+ defined to call the appropriate +Serializer+ with
+# themselves.  The +Serializer+ calls the appropriate +Formatter+ if
+# it encounters an +Input+ instance, and attempts to serialize the
+# output of that (which is usually a +Tag+ instance).  It is up to
+# the +Formatter+ to call the +Labeler+ and/or +ErrorHandler+ (if
+# necessary) and the +Wrapper+.
 # 
 # There is also an +InputsWrapper+ transformer, that is called by
 # <tt>Forme::Form#inputs</tt>.  It's used to wrap up a group of
 # related options (in a fieldset by default).
 #
-# The <tt>Forme::Form</tt> object takes the 4 processors as options (:formatter,
-# :labeler, :wrapper, and :serializer), all of which should be objects responding
-# to +call+ (so you can use procs) or be symbols registered with the library.
+# The <tt>Forme::Form</tt> object takes the 6 transformers as options (:formatter,
+# :labeler, :error_handler, :wrapper, :inputs_wrapper, and :serializer), all of which
+# should be objects responding to +call+ (so you can use +Proc+s) or be symbols
+# registered with the library using <tt>Forme.register_transformer</tt>:
+#
+#   Forme.register_transformer(:wrapper, :p){|t| t.tag(:p, {}, t)}
+#
+# Most of the transformers can be overridden on a per instance basis by
+# passing the appopriate option to +input+ or +inputs+:
+#
+#   f.input(:name, :wrapper=>:p)
 module Forme
   # Exception class for exceptions raised by Forme.
   class Error < StandardError
   end
 
+  # Main hash storing the registered transformers.  Maps transformer type symbols to subhashes
+  # containing the registered transformers for that type.  Those subhashes should have symbol
+  # keys and values that are either classes or objects that respond to +call+.
   TRANSFORMERS = {:formatter=>{}, :serializer=>{}, :wrapper=>{}, :error_handler=>{}, :labeler=>{}, :inputs_wrapper=>{}}
 
+  # Register a new transformer with this library. Arguments:
+  # +type+ :: Transformer type symbol
+  # +sym+ :: Transformer name symbol
+  # <tt>obj/block</tt> :: Transformer to associate with this symbol.  Should provide either
+  #                       +obj+ or +block+, but not both.  If +obj+ is given, should be
+  #                       either a +Class+ instance or it should respond to +call+.  If a
+  #                       +Class+ instance is given, instances of that class should respond
+  #                       to +call+, and the a new instance of that class should be used
+  #                       for each transformation.
   def self.register_transformer(type, sym, obj=nil, &block)
+    raise Error, "Not a valid transformer type" unless TRANSFORMERS.has_key?(type)
     raise Error, "Must provide either block or obj, not both" if obj && block
     TRANSFORMERS[type][sym] = obj||block
   end
@@ -66,16 +92,17 @@ module Forme
   end
 
   # The +Form+ class is the main entry point to the library.  
-  # Using the +input+ and +tag+ methods, one can easily create
-  # html tag strings.
+  # Using the +form+, +input+, +tag+, and +inputs+ methods, one can easily build 
+  # an abstract syntax tree of +Tag+ and +Input+ instances, which can be serialized
+  # to a string using +to_s+.
   class Form
-    # The object related to this form, if any.  If the +Form+ has an associated
+    # The object related to the receiver, if any.  If the +Form+ has an associated
     # obj, then calls to +input+ are assumed to be accessing fields of the object
     # instead to directly representing input types.
     attr_reader :obj
 
-    # A hash of options for the +Form+. Currently, the following are recognized by
-    # default (but a customized +formatter+ could use more options):
+    # A hash of options for the receiver. Currently, the following are recognized by
+    # default:
     # :obj :: Sets the +obj+ attribute
     # :error_handler :: Sets the +error_handler+ for the form
     # :formatter :: Sets the +formatter+ for the form
@@ -109,7 +136,7 @@ module Forme
     # Must respond to +call+ or be a registered symbol.
     attr_reader :serializer
 
-    # Create a +Form+ object and yield it to the block,
+    # Create a +Form+ instance and yield it to the block,
     # injecting the opening form tag before yielding and
     # the closing form tag after yielding.
     #
@@ -158,6 +185,8 @@ module Forme
       @nesting = []
     end
 
+    # If there is a related transformer, call it with the given +args+ and +block+.
+    # Otherwise, attempt to return the initial input without modifying it.
     def transform(type, trans, *args, &block)
       if trans = transformer(type, trans)
         trans.call(*args, &block)
@@ -173,6 +202,14 @@ module Forme
       end
     end
 
+    # Get the related transformer for the given transformer type.  Output depends on the type
+    # of +trans+:
+    # +Symbol+ :: Assume a request for a registered transformer, so look it up in the +TRANSFORRMERS+ hash.
+    # +Hash+ :: If +type+ is also a key in +trans+, return the related value from +trans+, unless the related
+    #           value is +nil+, in which case, return +nil+.  If +type+ is not a key in +trans+, use the
+    #           default transformer for the receiver.
+    # +nil+ :: Assume the default transformer for this receiver.
+    # otherwise :: return +trans+ directly if it responds to +call+, and raise an +Error+ if not.
     def transformer(type, trans)
       case trans
       when Symbol
@@ -207,21 +244,25 @@ module Forme
       transform(:formatter, input.opts, input)
     end
 
+    # Empty method designed to ease integration with other libraries where
+    # Forme is used in template code and some output implicitly
+    # created by Forme needs to be injected into the template output.
     def emit(tag)
     end
 
-    # Creates an +Input+ with the given +field+ and +opts+, and returns
-    # a serialized version of the formatted input.
+    # Creates an +Input+ with the given +field+ and +opts+ associated with
+    # the receiver, and add it to the list of children to the currently
+    # open tag.
     #
     # If the form is associated with an +obj+, or the :obj key exists in
-    # the +opts+ argument, treats the +field+ as a call to the obj.  If the
-    # obj responds to +forme_input+, that method is called with the field
+    # the +opts+ argument, treats the +field+ as a call to the +obj+.  If
+    # +obj+ responds to +forme_input+, that method is called with the +field+
     # and a copy of +opts+.  Otherwise, the field is used as a method call
-    # on the obj and a text input is created with the result.
+    # on the +obj+ and a text input is created with the result.
     # 
-    # If no +obj+ is associated with the form, +field+ represents an input
-    # type (e.g. :text, :textarea, :select), and an input is created directly
-    # with the field and opts.
+    # If no +obj+ is associated with the receiver, +field+ represents an input
+    # type (e.g. <tt>:text</tt>, <tt>:textarea</tt>, <tt>:select</tt>), and
+    # an input is created directly with the +field+ and +opts+.
     def input(field, opts={})
       if opts.has_key?(:obj)
         opts = opts.dup
@@ -242,44 +283,54 @@ module Forme
       input
     end
 
+    # Create a new +Input+ associated with the receiver with the given
+    # arguments, doing no other processing.
     def _input(*a)
-      input = Input.new(self, *a)
+      Input.new(self, *a)
     end
 
     # Creates a tag using the +inputs_wrapper+ (a fieldset by default), calls
-    # input on each given argument, and yields to the block if it is given.
+    # input on each element of +inputs+, and yields to if given a block.
     # You can use array arguments if you want inputs to be created with specific
     # options:
     #
     #   inputs([:field1, :field2])
     #   inputs([[:field1, {:name=>'foo'}], :field2])
-    def inputs(ins=[], opts={})
+    #
+    # The given +opts+ are passed to the +inputs_wrapper+, and the default
+    # +inputs_wrapper+ supports a <tt>:legend</tt> option that is used to
+    # set the legend for the fieldset.
+    def inputs(inputs=[], opts={})
       transform(:inputs_wrapper, opts, self, opts) do
-        ins.each do |i|
+        inputs.each do |i|
           emit(input(*i))
         end
         yield if block_given?
       end
     end
 
-    # Returns a string representing the opening of the form tag.
-    # Requires the serializer implements +serialize_open+.
+    # Returns a string representing the opening of the form tag for serializers
+    # that support opening tags.
     def open(attr)
       serializer.serialize_open(_tag(:form, attr)) if serializer.respond_to?(:serialize_open)
     end
 
-    # Returns a string representing the closing of the form tag.
-    # Requires the serializer implements +serialize_close+.
+    # Returns a string representing the closing of the form tag, for serializers
+    # that support closing tags.
     def close
       serializer.serialize_close(_tag(:form)) if serializer.respond_to?(:serialize_close)
     end
 
+    # Create a +Tag+ associated to the receiver with the given arguments and block,
+    # doing no other processing.
     def _tag(*a, &block)
       tag = Tag.new(self, *a, &block)
     end
 
-    # Creates a +Tag+ instance with the given arguments, and returns
-    # a serialized version of it.
+    # Creates a +Tag+ associated to the receiver with the given arguments.
+    # Add the tag to the the list of children for the currently open tag.
+    # If a block is given, make this tag the currently open tag while inside
+    # the block.
     def tag(*a, &block)
       tag = _tag(*a)
       self << tag
@@ -287,15 +338,15 @@ module Forme
       tag
     end
 
-    # Creates a :submit +Input+ with the given opts, and returns a serialized
-    # version of the formatted input.
+    # Creates a :submit +Input+ with the given opts, adding it to the list
+    # of children for the currently open tag.
     def button(opts={})
       input = _input(:submit, opts)
       self << input
       input
     end
 
-    # Add the input/tag to the innermost nesting tag.
+    # Add the +Input+/+Tag+ instance given to the currently open tag.
     def <<(tag)
       if n = @nesting.last
         n << tag
@@ -309,9 +360,9 @@ module Forme
 
     private
 
-    # Add a new nesting level by entering the tag.  Yield
-    # while inside the tag, and ensure when the block
-    # returns to remove the nesting level.
+    # Make the given tag the currently open tag, and yield.  After the
+    # block returns, make the previously open tag the currently open
+    # tag.
     def nest(tag)
       @nesting << tag
       yield self
@@ -320,15 +371,16 @@ module Forme
     end
   end
 
-  # High level abstract tag form.  Doesn't contain any logic.
+  # High level abstract tag form, transformed by formatters into the lower
+  # level +Tag+ form (or a +TagArray+ of them).
   class Input
-    # The +Form+ object related to this +Input+.
+    # The +Form+ object related to the receiver.
     attr_reader :form
 
     # The type of input, should be a symbol (e.g. :submit, :text, :select).
     attr_reader :type
 
-    # The options hash for this +Input+.
+    # The options hash for the receiver.
     attr_reader :opts
 
     # Set the +form+, +type+, and +opts+.
@@ -336,28 +388,31 @@ module Forme
       @form, @type, @opts = form, type, opts
     end
 
+    # Return a string containing the serialized content of the receiver.
     def to_s
       form.serialize(self)
     end
 
+    # Transform the receiver into a lower level +Tag+ form (or a +TagArray+
+    # of them).
     def format
       form.format(self)
     end
   end
 
-  # Low level abstract tag form.  Doesn't contain any logic.
+  # Low level abstract tag form, where each instance represents a
+  # html tag with attributes and children.
   class Tag
-    # The +Form+ object related to this +Tag+.
+    # The +Form+ object related to the receiver.
     attr_reader :form
 
     # The type of tag, should be a symbol (e.g. :input, :select).
     attr_reader :type
     
-    # The attributes hash of this +Tag+.
+    # The attributes hash of this receiver.
     attr_reader :attr
 
-    # Any children of this +Tag+, should be an array of +Tag+ objects
-    # or strings (representing text nodes).
+    # A +TagArray+ instance representing the children of the receiver.
     attr_reader :children
 
     # Set the +form+, +type+, +attr+, and +children+.
@@ -366,29 +421,38 @@ module Forme
       @form, @type, @attr, @children = form, type, attr, children
     end
 
-    # Adds a child to the list of receiver's children.
+    # Adds a child to the array of receiver's children.
     def <<(child)
       children << child
     end
 
+    # Create a new +Tag+ instance with the given arguments and block
+    # related to the receiver's +form+.
     def tag(*a, &block)
       form._tag(*a, &block)
     end
 
+    # Return a string containing the serialized content of the receiver.
     def to_s
       form.serialize(self)
     end
   end
 
+  # Array subclass related to a specific +Form+ instance.
   class TagArray < Array
+    # The +Form+ instance related to the receiver.
     attr_accessor :form
 
+    # Create a new instance using +contents+, associated to
+    # the given +form+.
     def self.new(form, contents)
       a = super(contents)
       a.form = form
       a
     end
 
+    # Create a new +Tag+ instance with the given arguments and block
+    # related to the receiver's +form+.
     def tag(*a, &block)
       form._tag(*a, &block)
     end
@@ -405,12 +469,34 @@ module Forme
 
   # The default formatter used by the library.  Any custom formatters should
   # probably inherit from this formatter unless they have very special needs.
+  #
+  # Unlike most other transformers which are registered as instances and use
+  # a functional style, this class is registered as a class due to the large
+  # amount of state it uses.
+  #
+  # Registered as :default.
   class Formatter::Default < Formatter
     Forme.register_transformer(:formatter, :default, self)
 
-    attr_reader :input
+    # The +Form+ instance for the receiver, taken from the +input+.
     attr_reader :form
+    
+    # The +Input+ instance for the receiver.  This is what the receiver
+    # converts to the lower level +Tag+ form (or a +TagArray+ of them). 
+    attr_reader :input
+    
+    # The attributes to to set on the lower level +Tag+ form returned.
+    # This are derived from the +input+'s +opts+, but some processing is done on
+    # them.
     attr_reader :attr
+    
+    # The options hash related to this formatter's processing, derived
+    # from the +input+'s +opts+.  Keys used:
+    # :error :: An error message for the +input+
+    # :error_handler :: A custom +error_handler+ to use, instead of the +form+'s default
+    # :label :: A label for the +input+
+    # :labeler :: A custom +labeler+ to use, instead of the +form+'s default
+    # :wrapper :: A custom +wrapper+ to use, instead of the +form+'s default
     attr_reader :opts
 
     # Used to specify the value of the hidden input created for checkboxes.
@@ -420,9 +506,10 @@ module Forme
     CHECKBOX_MAP = Hash.new(0)
     CHECKBOX_MAP['t'] = 'f'
 
-    # Transform the +input+ into a +Tag+ instance, wrapping it with the +form+'s
-    # wrapper, and the form's +error_handler+ and +labeler+ if the input has an
-    # error or a label.
+    # Transform the +input+ into a +Tag+ instance (or +TagArray+ of them),
+    # wrapping it with the +form+'s wrapper, and the form's +error_handler+
+    # and +labeler+ if the +input+ has an <tt>:error</tt> or <tt>:label</tt>
+    # options.
     def call(input)
       @input = input
       @form = input.form
@@ -444,7 +531,8 @@ module Forme
 
     private
 
-    # Convert the +Input+ to a +Tag+.
+    # Dispatch to a format_<i>type</i> method if there is one that matches the
+    # type, otherwise, call +format_input+ with the given +type+.
     def convert_to_tag(type)
       meth = :"format_#{type}"
       if respond_to?(meth, true)
@@ -486,7 +574,7 @@ module Forme
     end
 
     # The default fallback method for handling inputs.  Assumes an input tag
-    # with the type attribute set the the type of the input.
+    # with the type attribute set to input.
     def format_input(type)
       @attr[:type] = type
       tag(:input)
@@ -498,6 +586,9 @@ module Forme
     #             an array, takes the first entry in the hash as the text child
     #             of the option, and the last entry as the value of the option.
     #             if not set, ignores the remaining options.
+    # :add_blank :: Add a blank option if true.  If the value is a string,
+    #               use it as the text content of the blank option.  The value of
+    #               the blank option is always the empty string.
     # :text_method :: If set, each entry in the array has this option called on
     #                 it to get the text of the object.
     # :value_method :: If set (and :text_method is set), each entry in the array
@@ -563,11 +654,16 @@ module Forme
       end
     end
 
+    # If +tag+ is an +Array+ and not a +TagArray+, turn it into
+    # a +TagArray+ related to the receiver's +form+.  Otherwise,
+    # return +tag+.
     def handle_array(tag)
       (tag.is_a?(Array) && !tag.is_a?(TagArray)) ? TagArray.new(form, tag) : tag
     end
 
-    # Normalize the options used for all input types.
+    # Normalize the options used for all input types.  Handles:
+    # :required :: Sets the +required+ attribute on the resulting tag if true.
+    # :disabled :: Sets the +disabled+ attribute on the resulting tag if true.
     def normalize_options
       @attr[:required] = :required if @attr.delete(:required)
       @attr[:disabled] = :disabled if @attr.delete(:disabled)
@@ -579,6 +675,8 @@ module Forme
       @attr.delete(:formatter)
     end
 
+    # Create a +Tag+ instance related to the receiver's +form+ with the given
+    # arguments.
     def tag(type, attr=@attr, children=[])
       form._tag(type, attr, children)
     end
@@ -599,12 +697,17 @@ module Forme
     end
   end
 
-  # Formatter that disables all input fields
+  # Formatter that disables all input fields, 
+  #
+  # Registered as :disabled.
   class Formatter::Disabled < Formatter::Default
     Forme.register_transformer(:formatter, :disabled, self)
 
     private
 
+    # Unless the :disabled option is specifically set
+    # to +false+, set the :disabled attribute on the
+    # resulting tag.
     def normalize_options
       if @attr.delete(:disabled) == false
         super
@@ -615,8 +718,10 @@ module Forme
     end
   end
 
-  # Formatter that uses text spans for most input types,
+  # Formatter that uses span tags with text for most input types,
   # and disables radio/checkbox inputs.
+  #
+  # Registered as :readonly.
   class Formatter::ReadOnly < Formatter::Default
     Forme.register_transformer(:formatter, :readonly, self)
 
@@ -628,7 +733,7 @@ module Forme
       super
     end
 
-    # Use a span with plain text instead of an input field.
+    # Use a span with text instead of an input field.
     def format_input(type)
       tag(:span, {}, @attr[:value])
     end
@@ -639,11 +744,12 @@ module Forme
       super
     end
 
-    # Use a span with plain text of the selected value instead of a select box.
+    # Use a span with text of the selected values instead of a select box.
     def format_select
       tag(:span, {}, [super.children.select{|o| o.attr[:selected]}.map{|o| o.children}.join(', ')])
     end
 
+    # Use a span with text instead of a text area.
     def format_textarea
       tag(:span, {}, @attr[:value])
     end
@@ -656,6 +762,8 @@ module Forme
   # Default error handler used by the library, using an "error" class
   # for the input field and a span tag with an "error_message" class
   # for the error message.
+  #
+  # Registered as :default.
   class ErrorHandler::Default < ErrorHandler
     Forme.register_transformer(:error_handler, :default, new)
 
@@ -680,10 +788,14 @@ module Forme
 
   # Default labeler used by the library, using implicit labels (where the
   # label tag encloses the other tag).
+  #
+  # Registered as :default.
   class Labeler::Default < Labeler
     Forme.register_transformer(:labeler, :default, new)
 
-    # Return a label tag wrapping the given tag.
+    # Return a label tag wrapping the given tag.  For radio and checkbox
+    # inputs, the label occurs directly after the tag, for all other types,
+    # the label occurs before the tag.
     def call(label, tag)
       t = if tag.is_a?(Tag) && tag.type == :input && [:radio, :checkbox].include?(tag.attr[:type])
         [tag, " #{label}"]
@@ -694,14 +806,18 @@ module Forme
     end
   end
 
-  # Explicit labelers that creates a separate label tag that references
+  # Explicit labeler that creates a separate label tag that references
   # the given tag's id using a +for+ attribute.  Requires that all tags
   # with labels have +id+ fields.
+  #
+  # Registered as :explicit.
   class Labeler::Explicit < Labeler
     Forme.register_transformer(:labeler, :explicit, new)
 
-    # Return an array with a label tag as the first entry and the given
-    # tag as the second.
+    # Return an array with a label tag as the first entry and +tag+ as
+    # a second entry.  If +tag+ is an array, scan it for the first +Tag+
+    # instance that isn't hidden (since hidden tags shouldn't have labels). 
+    # If the +tag+ doesnt' have an id attribute, an +Error+ is raised.
     def call(label, tag)
       t = tag.is_a?(Tag) ? tag : tag.find{|tg| tg.is_a?(Tag) && tg.attr[:type] != :hidden}
       id = t.attr[:id]
@@ -718,11 +834,15 @@ module Forme
   class InputsWrapper
   end
 
-  # Default inputs_wrapper class used by the library, uses a fieldset.
+  # Default inputs_wrapper used by the library, uses a fieldset.
+  #
+  # Registered as :default.
   class InputsWrapper::Default < InputsWrapper
     Forme.register_transformer(:inputs_wrapper, :default, new)
 
-    # Wrap the inputs in a fieldset
+    # Wrap the inputs in a fieldset.  If the :legend
+    # option is given, add a +legend+ tag as the first
+    # child of the fieldset.
     def call(form, opts)
       if legend = opts.delete(:legend)
         form.tag(:fieldset) do
@@ -735,7 +855,9 @@ module Forme
     end
   end
 
-  # Use an ol tag to wrap the inputs
+  # Use an ol tag to wrap the inputs.
+  #
+  # Registered as :ol.
   class InputsWrapper::OL < InputsWrapper
     Forme.register_transformer(:inputs_wrapper, :ol, new)
 
@@ -745,11 +867,13 @@ module Forme
     end
   end
 
-  # Use a table tag to wrap the inputs
+  # Use a table tag to wrap the inputs.
+  #
+  # Registered as :table.
   class InputsWrapper::Table < InputsWrapper
     Forme.register_transformer(:inputs_wrapper, :table, new)
 
-    # Wrap the inputs in a table tag
+    # Wrap the inputs in a table tag.
     def call(form, opts, &block)
       form.tag(:table, &block)
     end
@@ -761,17 +885,13 @@ module Forme
 
   # Default serializer class used by the library.  Any other serializer
   # classes that want to produce html should probably subclass this class.
+  #
+  # Registered as :default.
   class Serializer::Default < Serializer
     Forme.register_transformer(:serializer, :default, new)
 
     # Borrowed from Rack::Utils, map of single character strings to html escaped versions.
-    ESCAPE_HTML = {
-      "&" => "&amp;",
-      "<" => "&lt;",
-      ">" => "&gt;",
-      "'" => "&#39;",
-      '"' => "&quot;",
-    }
+    ESCAPE_HTML = {"&" => "&amp;", "<" => "&lt;", ">" => "&gt;", "'" => "&#39;", '"' => "&quot;"}
 
     # A regexp that matches all html characters requiring escaping.
     ESCAPE_HTML_PATTERN = Regexp.union(*ESCAPE_HTML.keys)
@@ -780,8 +900,10 @@ module Forme
     SELF_CLOSING = [:img, :input]
 
     # Serialize the tag object to an html string.  Supports +Tag+ instances,
+    # +Input+ instances (recursing into +call+ with the result of formatting the input),
     # arrays (recurses into +call+ for each entry and joins the result), and
-    # strings (html escapes them).
+    # (html escapes the string version of them, unless they include the +Raw+
+    # module, in which case no escaping is done).
     def call(tag)
       case tag
       when Tag
@@ -792,7 +914,7 @@ module Forme
         end
       when Input
         call(tag.format)
-      when Array, TagArray
+      when Array
         tag.map{|x| call(x)}.join
       when Raw
         tag.to_s
@@ -827,6 +949,8 @@ module Forme
 
 
   # Serializer class that converts tags to plain text strings.
+  #
+  # Registered at :text.
   class Serializer::PlainText < Serializer
     Forme.register_transformer(:serializer, :text, new)
 
@@ -856,10 +980,10 @@ module Forme
         end
       when Input
         call(tag.format)
-      when Array, TagArray
+      when Array
         tag.map{|x| call(x)}.join
       else
-        tag
+        tag.to_s
       end
     end
   end
