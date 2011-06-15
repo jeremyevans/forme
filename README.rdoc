@@ -110,8 +110,10 @@ following API in your Sinatra ERB forms:
     <%= f.input(:field) %>
     <% f.tag(:fieldset) do %>
       <%= f.input(:field_two) %>
-    <% end%>
-  <% end%>
+    <% end %>
+  <% end %>
+
+
 
 = Other Similar Projects
 
