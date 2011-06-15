@@ -69,26 +69,83 @@ You can wrap up multiple inputs with the <tt>:inputs</tt> method:
   #   </fieldset>
   # </form>
 
-= Main Classes
+= Basic Design
+
+Interally, Forme builds an abstract syntax tree of objects that
+represent the form.  The abstract syntax tree goes through a
+series of transformations that convert it from high level
+abstract forms to low level abstract forms and finally to
+strings.  Here are the main classes used by the library:
 
 <tt>Forme::Form</tt> :: main object
-<tt>Forme::Input</tt> :: high level abstract tag
-<tt>Forme::Tag</tt> :: low level abstract tag 
-<tt>Forme::Formatter</tt> :: takes input, returns tag
-<tt>Forme::ErrorHandler</tt> :: takes input, returns version with errors noted
-<tt>Forme::Labeler</tt> :: takes tag, returns labeled version
-<tt>Forme::Wrapper</tt> :: takes (potentially labeled) tag, returns (potentially wrapped) version of tag
-<tt>Forme::InputsWrapper</tt> :: takes form and block, returns tag using block
-<tt>Forme::Serializer</tt> :: tags tag, returns string
+<tt>Forme::Input</tt> :: high level abstract tag (a single +Input+ could represent a select box with a bunch of options)
+<tt>Forme::Tag</tt> :: low level abstract tag representing an html tag (there would be a separate +Tag+ for each option in a select box)
+<tt>Forme::TagArray</tt> :: array of Tags, Inputs, and Strings
 
-See +Forme+ module RDoc documentation for a technical description of how the library
-uses the +Formatter+, +ErrorHandler+, +Labeler+, +Wrapper+, +InputsWrapper+, and +Serializer+ classes for converting
-+Input+ instances to +Tag+ instances and finally to html strings.
+The group of objects that perform the transformations to
+the abstract syntax trees are known as transformers.
+Transformers use a functional style, and all use a +call+-based
+API, so you can use a +Proc+ for any custom transformer.
+
+== Transformer Types
+
++serializer+ :: tags input/tag, returns string
++formatter+ :: takes input, returns tag
++error_handler+ :: takes error message and tag, returns version with errors noted
++labeler+ :: takes label and tag, returns labeled version
++wrapper+ :: takes tag, returns wrapped version
++inputs_wrapper+ :: takes form, options, and block, wrapping block in a tag
+
+The +serializer+ is the base of the library.  It turns +Tag+ into strings.  If it comes across
+an +Input+, it calls the +formatter+ on the +Input+ to turn it into a +Tag+, and then serializes
+that +Tag+.  The +formatter+ first converts the +Input+ to a +Tag+, and calls the
++error_handler+ and +labeler+ if necessary with the +Tag+ to add the error handling and
+labeling.  Finally, it calls the +wrapper+ to wrap the resulting tag before returning it.
+
+The +inputs_wrapper+ is called by <tt>Forme::Form#inputs</tt> and serves to wrap a bunch
+of related inputs.
+
+== Built-in Transformers
+
+Forme ships with a bunch of built-in transformers that you can use:
+
+=== +serializer+
+
+:default :: returns HTML strings
+:text :: returns plain text strings
+
+=== +formatter+
+
+:default :: turns Inputs into Tags
+:disabled :: disables all resulting input tags
+:readonly :: uses +span+ tags for most values, good for printable versions of forms
+
+=== +error_handler+
+
+:default :: modifies tag to add an error class and adds a span with the error message
+
+=== +labeler+
+
+:default :: uses implicit labels, where the tag is a child of the label tag
+:explicit :: uses explicit labels with the for attribute, where tag is a sibling of the label tag
+
+=== +wrapper+
+
+:default :: returns tag without wrapping
+:li :: wraps tag in li tag
+:trtd :: wraps tag in a tr tag with all parts wrapped in individual td tags, useful for lining up
+         inputs with the :explicit labeler without CSS
+
+=== +inputs_wrapper+
+
+:default :: uses a fieldset to wrap inputs
+:ol :: uses an ol tag to wrap inputs, useful with :li wrapper
+:table :: uses a table tag to wrap inputs, useful with :trtd wrapper
 
 = Sequel Support
 
 Forme ships with a Sequel plugin (use <tt>Sequel::Model.plugin :forme</tt> to enable), that makes
-Sequel::Model instances support the +forme_input+ method and return customized inputs.
+Sequel::Model instances support the +forme_config+ and +forme_input+ methods and return customized inputs.
 
 It deals with inputs based on database columns, virtual columns, and associations.  It also handles
 nested associations using the +subform+ method:
@@ -103,7 +160,7 @@ nested associations using the +subform+ method:
 = Sinatra ERB Support
 
 Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
-<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra::Application class.  It allows you to use the
+<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra::Base subclass.  It allows you to use the
 following API in your Sinatra ERB forms:
 
   <% form(@obj, :action=>'/foo') do |f| %>
@@ -112,8 +169,6 @@ following API in your Sinatra ERB forms:
       <%= f.input(:field_two) %>
     <% end %>
   <% end %>
-
-
 
 = Other Similar Projects
 
