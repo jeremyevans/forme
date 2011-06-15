@@ -27,6 +27,12 @@ module Sequel # :nodoc:
         # by +subform+.
         attr_accessor :namespaces
 
+        # Use the post method by default for Sequel forms, unless
+        # overridden with the :method attribute.
+        def form(attr={}, &block)
+          super({:method=>:post}.merge(attr), &block)
+        end
+
         # Call humanize on a string version of the argument if
         # String#humanize exists. Otherwise, do some monkeying
         # with the string manually.
