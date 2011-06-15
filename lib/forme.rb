@@ -976,7 +976,11 @@ module Forme
           "#{call([tag.attr[:selected] ? '_X_ ' : '___ ', tag.children])}\n"
         when :textarea, :label
           "#{call(tag.children)}\n"
+        when :legend
+          v = call(tag.children)
+          "#{v}\n#{'-' * v.length}\n"
         else
+          ''
         end
       when Input
         call(tag.format)
