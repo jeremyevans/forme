@@ -6,25 +6,35 @@ module Forme
     # Handles integrating into the view template so that
     # methods with blocks can inject strings into the output.
     class Form < ::Forme::Form
+      # Template output object, where serialized output gets
+      # injected.
       attr_reader :output
 
+      # Serialize the tag and inject it into the output
       def emit(tag)
         output << tag.to_s
       end
 
+      # Always return nil, so that use with <%= doesn't cause
+      # multiple things to be output. 
       def inputs(*a)
         super
         nil
       end
 
+      # Always return nil, so that use with <%= doesn't cause
+      # multiple things to be output. 
       def form(*a, &block)
         @output = eval('@_out_buf', block.binding)
         super
+        nil
       end
 
-      # If a block is provided and no children are present,
-      # inject an opening tag into the output, yield to the
-      # block, and then inject a closing tag into the output.
+      # If a block is provided, inject an opening tag into the
+      # output, inject any given children into the output, yield to the
+      # block, inject a closing tag into the output, and the return nil
+      # so that usage with <%= doesn't cause multiple things to be output.
+      # If a block is not given, just return the tag created.
       def tag(type, attr={}, children=[])
         tag = _tag(type, attr, children)
         if block_given?
@@ -32,8 +42,9 @@ module Forme
           children.each{|c| emit(c)}
           yield self
           emit serializer.serialize_close(tag) if serializer.respond_to?(:serialize_close)
+          nil
         else
-          serialize(tag)
+          tag
         end
       end
     end
@@ -64,6 +75,8 @@ module Forme
         Form.form(*a, &block)
       end
     end 
+
+    # Alias of <tt>Forme::Sinatra::ERB</tt>
     Erubis = ERB
   end
 end
