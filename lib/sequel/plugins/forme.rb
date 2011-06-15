@@ -15,7 +15,16 @@ module Sequel # :nodoc:
       # that use a <tt>Sequel::Model</tt> instance as the form's
       # +obj+.
       module SequelForm
+        # Stack of objects used by subform.  The current +obj+
+        # is added to the top of the stack on a call to +subform+,
+        # the nested associated object is set as the current +obj+ during the
+        # call to +subform+, and when +subform+ returns, the top of the
+        # stack is set as the current +obj+.
         attr_accessor :nested_associations
+
+        # The namespaces that should be added to the id and name
+        # attributes for the receiver's inputs.  Used as a stack
+        # by +subform+.
         attr_accessor :namespaces
 
         # Call humanize on a string version of the argument if
