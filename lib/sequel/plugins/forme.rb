@@ -57,7 +57,7 @@ module Sequel # :nodoc:
         #            in the associated object already for *_to_many associations),
         #            and should return the legend string to use for that object.
         def subform(association, opts={}, &block)
-          nested_obj = obj.send(association)
+          nested_obj = opts.has_key?(:obj) ? opts[:obj] : obj.send(association)
           ref = obj.class.association_reflection(association)
           multiple = ref.returns_array?
           i = -1

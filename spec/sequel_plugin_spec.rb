@@ -220,6 +220,10 @@ describe "Forme Sequel::Model forms" do
     Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name])}.to_s.should == '<form method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset><legend>Artist</legend><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></fieldset></form>'
   end
   
+  specify "should have #subform respect an :obj option overriding the object to use" do
+    Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :obj=>Artist.new(:name=>'b'))}.to_s.should == '<form method="post"><fieldset><legend>Artist</legend><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="b"/></label></fieldset></form>'
+  end
+  
   specify "should have #subform respect a :legend option if :inputs is used" do
     Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :legend=>'Foo')}.to_s.should == '<form method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset><legend>Foo</legend><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></fieldset></form>'
   end
@@ -235,6 +239,10 @@ describe "Forme Sequel::Model forms" do
   
   specify "should use allow nested forms with one_to_many associations" do
     Forme.form(@ab){|f| f.subform(:tracks){f.input(:name)}}.to_s.should == '<form method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></form>'
+  end
+  
+  specify "should support :obj option for *_to_many associations" do
+    Forme.form(@ab){|f| f.subform(:tracks, :obj=>[Track.new(:name=>'x'), Track.load(:id=>5, :name=>'y')]){f.input(:name)}}.to_s.should == '<form method="post"><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="x"/></label><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="5"/><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="y"/></label></form>'
   end
   
   specify "should auto number legends when using subform with inputs for *_to_many associations" do
