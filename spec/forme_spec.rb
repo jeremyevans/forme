@@ -1,4 +1,5 @@
 require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
+require 'date'
 
 describe "Forme plain forms" do
   before do
@@ -48,6 +49,20 @@ describe "Forme plain forms" do
 
   specify "should create select tag" do
     @f.input(:select).to_s.should == '<select></select>'
+  end
+
+  specify "should create date tag" do
+    @f.input(:date).to_s.should == '<input type="date"/>'
+  end
+
+  specify "should use multiple select boxes for dates if the :as=>:select option is given" do
+    pr = Proc.new{|a, v| a.map{|o| "<option #{'selected="selected" ' if o == v}value=\"#{o}\">#{o}</option>"}.join}
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5)).to_s.should == %{<select id="bar_year" name="foo[year]">#{pr[1900..2050, 2011]}</select><select id="bar_month" name="foo[month]">#{pr[1..12, 6]}</select><select id="bar_day" name="foo[day]">#{pr[1..31, 5]}</select>}
+  end
+
+  specify "should have explicit labeler and trtd wrapper work with multiple select boxes for dates" do
+    pr = Proc.new{|a, v| a.map{|o| "<option #{'selected="selected" ' if o == v}value=\"#{o}\">#{o}</option>"}.join}
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :wrapper=>:trtd, :labeler=>:explicit, :label=>'Baz').to_s.should == %{<tr><td><label for="bar_year">Baz</label></td><td><select id="bar_year" name="foo[year]">#{pr[1900..2050, 2011]}</select><select id="bar_month" name="foo[month]">#{pr[1..12, 6]}</select><select id="bar_day" name="foo[day]">#{pr[1..31, 5]}</select></td></tr>}
   end
 
   specify "should create select tag with options" do

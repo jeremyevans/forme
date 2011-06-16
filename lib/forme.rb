@@ -609,6 +609,25 @@ module Forme
       tag(:input)
     end
 
+    # Use a date input by default.  If the :as=>:select option is given,
+    # use a multiple select box for the options.
+    def format_date
+      if @attr.delete(:as) == :select
+        name = @attr[:name]
+        id = @attr[:id]
+        v = @attr[:value]
+        if v
+          v = Date.parse(v) unless v.is_a?(Date)
+          values = {}
+          values[:year], values[:month], values[:day] = v.year, v.month, v.day
+        end
+        ops = {:year=>1900..2050, :month=>1..12, :day=>1..31}
+        [:year, :month, :day].map{|x| form._input(:select, @attr.dup.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].to_a.map{|x| [x, x]})).format}
+      else
+        format_input(:date)
+      end
+    end
+
     # The default fallback method for handling inputs.  Assumes an input tag
     # with the type attribute set to input.
     def format_input(type)
