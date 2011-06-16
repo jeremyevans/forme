@@ -182,6 +182,12 @@ describe "Forme plain forms" do
     @f.tag(:div, :foo=>'<p></p>'.extend(Forme::Raw)).to_s.should == '<div foo="<p></p>"></div>'
   end
 
+  specify "should format dates, times, and datetimes in ISO format" do
+    @f.tag(:div, :foo=>Date.new(2011, 6, 5)).to_s.should == '<div foo="2011-06-05"></div>'
+    @f.tag(:div, :foo=>DateTime.new(2011, 6, 5, 4, 3, 2)).to_s.should == '<div foo="2011-06-05 04:03:02+00:00"></div>'
+    @f.tag(:div, :foo=>Time.utc(2011, 6, 5, 4, 3, 2)).to_s.should =~ /<div foo="2011-06-05 04:03:02(GMT|UTC)"><\/div>/
+  end
+
   specify "inputs should accept a :wrapper option to use a custom wrapper" do
     @f.input(:text, :wrapper=>:li).to_s.should == '<li><input type="text"/></li>'
   end

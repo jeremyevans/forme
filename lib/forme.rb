@@ -929,6 +929,10 @@ module Forme
         call(tag.format)
       when Array
         tag.map{|x| call(x)}.join
+      when DateTime, Time
+        tag.strftime("%F %H:%M:%S%Z")
+      when Date
+        tag.strftime("%F")
       when Raw
         tag.to_s
       else
