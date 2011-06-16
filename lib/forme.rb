@@ -956,7 +956,8 @@ module Forme
     # Transforms the +tag+'s attributes into an html string, sorting by the keys
     # and quoting and html escaping the values.
     def attr_html(tag)
-      " #{tag.attr.sort_by{|k,v| k.to_s}.reject{|k,v| v.nil?}.map{|k, v| "#{k}=\"#{h v}\""}.join(' ')}" unless tag.attr.empty?
+      attr = tag.attr.to_a.reject{|k,v| v.nil?}
+      " #{attr.map{|k, v| "#{k}=\"#{h v}\""}.sort.join(' ')}" unless attr.empty?
     end
   end
 

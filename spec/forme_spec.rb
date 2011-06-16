@@ -101,6 +101,7 @@ describe "Forme plain forms" do
 
   specify "inputs should not include options with nil values" do
     @f.input(:text, :name=>nil).to_s.should == '<input type="text"/>'
+    @f.input(:textarea, :name=>nil).to_s.should == '<textarea></textarea>'
   end
 
   specify "inputs should include options with false values" do
