@@ -10,7 +10,13 @@ module Forme
       # injected.
       attr_reader :output
 
-      # Serialize the tag and inject it into the output
+      # Set the template output object when initializing.
+      def initialize(*)
+        super
+        @output = @opts[:output]
+      end
+
+      # Serialize the tag and inject it into the output.
       def emit(tag)
         output << tag.to_s
       end
@@ -25,7 +31,6 @@ module Forme
       # Always return nil, so that use with <%= doesn't cause
       # multiple things to be output. 
       def form(*a, &block)
-        @output = eval('@_out_buf', block.binding)
         super
         nil
       end
@@ -38,10 +43,10 @@ module Forme
       def tag(type, attr={}, children=[])
         tag = _tag(type, attr, children)
         if block_given?
-          emit serializer.serialize_open(tag) if serializer.respond_to?(:serialize_open)
+          emit(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
           children.each{|c| emit(c)}
           yield self
-          emit serializer.serialize_close(tag) if serializer.respond_to?(:serialize_close)
+          emit(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
           nil
         else
           tag
@@ -71,8 +76,10 @@ module Forme
       # 1 non-hash arg, 1-2 hash args :: First argument is +Form+'s obj, second is
       #                                  opening attributes, third if provided is
       #                                  +Form+'s options.
-      def form(*a, &block)
-        Form.form(*a, &block)
+      def form(obj=nil, attr={}, opts={}, &block)
+        h = {:output=>@_out_buf}
+        (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
+        Form.form(obj, attr, opts, &block)
       end
     end 
 

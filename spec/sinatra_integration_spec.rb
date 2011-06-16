@@ -46,6 +46,18 @@ END
 END
   end
 
+  get '/combined' do
+    erb <<END
+<% form([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') do |f| %>
+  <p>FBB</p>
+  <%= f.input(:last) %>
+<% end %>
+END
+  end
+
+  get '/noblock' do
+    erb "<%= form([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') %>"
+  end
 end
 
 describe "Forme Sinatra ERB integration" do
@@ -71,5 +83,13 @@ describe "Forme Sinatra ERB integration" do
 
   specify "#form should deal with emitted code" do
     sin_get('/legend').should == '<form action="/baz"> <p>FBB</p> <fieldset><legend>Foo</legend><input id="first" name="first" type="text" value="foo"/><input id="last" name="last" type="text" value="bar"/></fieldset> <p>FBB2</p> </form>'
+  end
+
+  specify "#form should work with :inputs, :button, and :legend options" do
+    sin_get('/combined').should == '<form action="/baz"><fieldset><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset> <p>FBB</p> <input id="last" name="last" type="text" value="bar"/> <input type="submit" value="xyz"/></form>'
+  end
+
+  specify "#form should work without a block" do
+    sin_get('/noblock').should == '<form action="/baz"><fieldset><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
   end
 end
