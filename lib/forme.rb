@@ -935,9 +935,9 @@ module Forme
       when Array
         tag.map{|x| call(x)}.join
       when DateTime, Time
-        tag.strftime("%F %H:%M:%S%Z")
+        format_time(tag)
       when Date
-        tag.strftime("%F")
+        format_date(tag)
       when Raw
         tag.to_s
       else
@@ -957,6 +957,16 @@ module Forme
 
     private
 
+    # Return a string in ISO format representing the +Date+ instance.
+    def format_date(date)
+      date.strftime("%F")
+    end
+
+    # Return a string in ISO format representing the +Time+ or +DateTime+ instance.
+    def format_time(time)
+      time.strftime("%F %H:%M:%S%Z")
+    end
+
     # Escape ampersands, brackets and quotes to their HTML/XML entities.
     def h(string)
       string.to_s.gsub(ESCAPE_HTML_PATTERN){|c| ESCAPE_HTML[c] }
@@ -970,6 +980,23 @@ module Forme
     end
   end
 
+  # Overrides formatting of dates and times to use an American format without
+  # timezones.
+  module Serializer::AmericanTime
+    Forme.register_transformer(:serializer, :html_usa, Serializer.new.extend(self))
+
+    private
+
+    # Return a string in American format representing the +Date+ instance.
+    def format_date(date)
+      date.strftime("%m/%d/%Y")
+    end
+
+    # Return a string in American format representing the +Time+ or +DateTime+ instance, without the timezone.
+    def format_time(time)
+      time.strftime("%m/%d/%Y %I:%M:%S%p")
+    end
+  end
 
   # Serializer class that converts tags to plain text strings.
   #

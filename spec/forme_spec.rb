@@ -305,6 +305,12 @@ describe "Forme built-in custom" do
     Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea]).to_s.should == '<table><tr><td><textarea></textarea></td></tr></table>'
   end
 
+  specify "serializer: html_usa formats dates and datetimes in American format without timezones" do
+    Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>Date.new(2011, 6, 5)).to_s.should == '<div foo="06/05/2011"></div>'
+    Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>DateTime.new(2011, 6, 5, 16, 3, 2)).to_s.should == '<div foo="06/05/2011 04:03:02PM"></div>'
+    Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>Time.utc(2011, 6, 5, 4, 3, 2)).to_s.should == '<div foo="06/05/2011 04:03:02AM"></div>'
+  end
+
   specify "serializer: text uses plain text output instead of html" do
     Forme::Form.new(:serializer=>:text).input(:textarea, :label=>"Foo", :value=>"Bar").to_s.should == "Foo: Bar\n\n"
     Forme::Form.new(:serializer=>:text).input(:text, :label=>"Foo", :value=>"Bar").to_s.should == "Foo: Bar\n\n"
