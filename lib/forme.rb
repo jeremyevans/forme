@@ -225,7 +225,7 @@ module Forme
     def transformer(type, trans)
       case trans
       when Symbol
-        TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.join(', ')})")
+        TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.map{|k| k.inspect}.join(', ')})")
       when Hash
         if trans.has_key?(type)
           if v = trans[type]
