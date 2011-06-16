@@ -65,11 +65,31 @@ module Forme
   # Exception class for exceptions raised by Forme.
   class Error < StandardError
   end
+  
+  @default_config = :default
+  class << self
+    # Set the default configuration to use if none is explicitly
+    # specified (default: :default).
+    attr_accessor :default_config
+  end
 
+  # Array of all supported transformer types.
+  TRANSFORMER_TYPES = [:formatter, :serializer, :wrapper, :error_handler, :labeler, :inputs_wrapper]
+
+  # Hash storing all configurations.  Configurations are groups of related transformers,
+  # so that you can specify a single :config option when creating a +Form+ and have
+  # all of the transformers set from that.
+  CONFIGURATIONS = {:default=>{}}
+  
   # Main hash storing the registered transformers.  Maps transformer type symbols to subhashes
   # containing the registered transformers for that type.  Those subhashes should have symbol
   # keys and values that are either classes or objects that respond to +call+.
-  TRANSFORMERS = {:formatter=>{}, :serializer=>{}, :wrapper=>{}, :error_handler=>{}, :labeler=>{}, :inputs_wrapper=>{}}
+  TRANSFORMERS = {}
+
+  TRANSFORMER_TYPES.each do |t|
+    CONFIGURATIONS[:default][t] = :default
+    TRANSFORMERS[t] = {}
+  end
 
   # Register a new transformer with this library. Arguments:
   # +type+ :: Transformer type symbol
@@ -85,6 +105,14 @@ module Forme
     raise Error, "Must provide either block or obj, not both" if obj && block
     TRANSFORMERS[type][sym] = obj||block
   end
+
+  # Register a new configuration.  Type is the configuration name symbol,
+  # and hash maps transformer type symbols to transformer name symbols.
+  def self.register_config(type, hash)
+    CONFIGURATIONS[type] = CONFIGURATIONS[hash.fetch(:base, :default)].merge(hash)
+  end
+
+  register_config(:formtastic, :wrapper=>:li, :inputs_wrapper=>:fieldset_ol, :labeler=>:explicit)
 
   # Call <tt>Forme::Form.form</tt> with the given arguments and block.
   def self.form(*a, &block)
@@ -191,9 +219,8 @@ module Forme
       if @obj && @obj.respond_to?(:forme_config)
         @obj.forme_config(self)
       end
-      TRANSFORMERS.keys.each do |k|
-        instance_variable_set(:"@#{k}", transformer(k, @opts.fetch(k, :default)))
-      end
+      config = CONFIGURATIONS[@opts[:config]||Forme.default_config]
+      TRANSFORMER_TYPES.each{|k| instance_variable_set(:"@#{k}", transformer(k, @opts.fetch(k, config[k])))}
       @nesting = []
     end
 

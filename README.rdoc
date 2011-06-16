@@ -148,6 +148,30 @@ Forme ships with a bunch of built-in transformers that you can use:
 :fieldset_ol :: use both a fieldset and an ol tag to wrap inputs
 :table :: uses a table tag to wrap inputs, useful with :trtd wrapper
 
+== Configurations
+
+You can associate a group of transformers into a configuration.  This allows you to
+specify a single :config option when creating a +Form+ and have it automatically
+set all the related transformers.
+
+There are a few configurations supported by default:
+
+:default :: All +default+ transformers
+:formtastic :: +fieldset_ol+ inputs_wrapper, +li+ wrapper, +explicit+ labeler
+
+You can register and use your own configurations easily:
+
+  Forme.register_config(:mine, :wrapper=>:li, :inputs_wrapper=>:ol, :serializer=>:html_usa)
+  Forme::Form.new(:config=>:mine)
+
+If you want to, you can base your configuration on an existing configuration:
+
+  Forme.register_config(:yours, :base=>:mine, :inputs_wrapper=>:fieldset_ol)
+
+You can mark a configuration as the default using:
+
+  Forme.default_config = :mine
+
 = Sequel Support
 
 Forme ships with a Sequel plugin (use <tt>Sequel::Model.plugin :forme</tt> to enable), that makes

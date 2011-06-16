@@ -391,6 +391,32 @@ describe "Forme registering custom transformers" do
   end
 end
 
+describe "Forme configurations" do
+  after do
+    Forme.default_config = :default
+  end
+
+  specify "config: :formastic uses fieldset_ol inputs_wrapper and li wrapper, and explicit labeler" do
+    Forme::Form.new(:config=>:formtastic).inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset><ol><li><label for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
+  end
+
+  specify "should be able to set a default configuration with Forme.default_config=" do
+    Forme.default_config = :formtastic
+    Forme::Form.new.inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset><ol><li><label for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
+  end
+
+  specify "should have #register_config register a configuration for later use" do
+    Forme.register_config(:foo, :wrapper=>:li, :labeler=>:explicit)
+    Forme::Form.new(:config=>:foo).input(:textarea, :id=>:foo, :label=>'Foo').to_s.should == '<li><label for="foo">Foo</label><textarea id="foo"></textarea></li>'
+  end
+
+  specify "should have #register_config support a :base option to base it on an existing config" do
+    Forme.register_config(:foo2, :labeler=>:default, :base=>:formtastic)
+    Forme::Form.new(:config=>:foo2).inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset><ol><li><label>Foo: <textarea id="foo"></textarea></label></li></ol></fieldset>'
+  end
+
+end
+
 describe "Forme object forms" do
   specify "should handle a simple case" do
     obj = Class.new{def forme_input(form, field, opts) form._input(:text, :name=>"obj[#{field}]", :id=>"obj_#{field}", :value=>"#{field}_foo") end}.new 
