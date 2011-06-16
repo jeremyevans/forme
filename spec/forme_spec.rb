@@ -304,6 +304,18 @@ describe "Forme built-in custom" do
     Forme::Form.new(:wrapper=>:li).input(:textarea, :id=>'foo').to_s.should == '<li><textarea id="foo"></textarea></li>'
   end
 
+  specify "wrapper: p wraps tag in an p" do
+    Forme::Form.new(:wrapper=>:p).input(:textarea, :id=>'foo').to_s.should == '<p><textarea id="foo"></textarea></p>'
+  end
+
+  specify "wrapper: div wraps tag in an div" do
+    Forme::Form.new(:wrapper=>:div).input(:textarea, :id=>'foo').to_s.should == '<div><textarea id="foo"></textarea></div>'
+  end
+
+  specify "wrapper: span wraps tag in an span" do
+    Forme::Form.new(:wrapper=>:span).input(:textarea, :id=>'foo').to_s.should == '<span><textarea id="foo"></textarea></span>'
+  end
+
   specify "wrapper: trtd wraps tag in an tr/td" do
     Forme::Form.new(:wrapper=>:trtd).input(:textarea, :id=>'foo').to_s.should == '<tr><td><textarea id="foo"></textarea></td></tr>'
   end

@@ -134,6 +134,9 @@ Forme ships with a bunch of built-in transformers that you can use:
 
 :default :: returns tag without wrapping
 :li :: wraps tag in li tag
+:p :: wraps tag in p tag
+:div :: wraps tag in div tag
+:span :: wraps tag in span tag
 :trtd :: wraps tag in a tr tag with all parts wrapped in individual td tags, useful for lining up
          inputs with the :explicit labeler without CSS
 

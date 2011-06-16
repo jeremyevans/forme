@@ -876,7 +876,9 @@ module Forme
   end
 
   Forme.register_transformer(:wrapper, :default){|tag| tag}
-  Forme.register_transformer(:wrapper, :li){|tag| tag.tag(:li, {}, Array(tag))}
+  [:li, :p, :div, :span].each do |x|
+    Forme.register_transformer(:wrapper, x){|tag| tag.tag(x, {}, Array(tag))}
+  end
   Forme.register_transformer(:wrapper, :trtd) do |tag|
     a = Array(tag)
     tag.tag(:tr, {}, a.length == 1 ? tag.tag(:td, {}, a) : [tag.tag(:td, {}, [a.first]), tag.tag(:td, {}, a[1..-1])])
