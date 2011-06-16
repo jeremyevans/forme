@@ -390,5 +390,18 @@ describe "Forme.form DSL" do
     Forme.form{|f| f.tag(:div){f.input(:text)}; f.input(:radio)}.to_s.should ==  '<form><div><input type="text"/></div><input type="radio"/></form>'
     Forme.form{|f| f.tag(:div){f.tag(:fieldset){f.input(:text);  f.input(:radio)};  f.input(:checkbox)}}.to_s.should ==  '<form><div><fieldset><input type="text"/><input type="radio"/></fieldset><input type="checkbox"/></div></form>'
   end
+
+  specify "should handle an :inputs option to automatically create inputs" do
+    Forme.form({}, :inputs=>[:text, :textarea]).to_s.should ==  '<form><fieldset><input type="text"/><textarea></textarea></fieldset></form>'
+  end
+
+  specify "should handle a :legend option if inputs is used" do
+    Forme.form({}, :inputs=>[:text, :textarea], :legend=>'Foo').to_s.should ==  '<form><fieldset><legend>Foo</legend><input type="text"/><textarea></textarea></fieldset></form>'
+  end
+
+  specify "should still work with a block if :inputs is used" do
+    Forme.form({}, :inputs=>[:text]){|f| f.input(:textarea)}.to_s.should ==  '<form><fieldset><input type="text"/></fieldset><textarea></textarea></form>'
+  end
+
 end
 

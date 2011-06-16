@@ -153,14 +153,23 @@ module Forme
     #                                  opening attributes, third if provided is
     #                                  +Form+'s options.
     def self.form(obj=nil, attr={}, opts={}, &block)
-      t = if obj.is_a?(Hash)
+      f = if obj.is_a?(Hash)
         raise Error, "Can't provide 3 hash arguments to form" unless opts.empty?
         opts = attr
         attr = obj
-        new(opts).form(attr, &block)
+        new(opts)
       else
-        new(obj, opts).form(attr, &block)
+        new(obj, opts)
       end
+
+      if ins = opts[:inputs]
+        block = Proc.new do |f|
+          f.inputs(ins, opts)
+          yield f if block_given?
+        end
+      end
+
+      f.form(attr, &block)
     end
 
     # Creates a +Form+ object. Arguments:
