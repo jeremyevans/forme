@@ -487,6 +487,11 @@ module Forme
     def tag(*a, &block)
       form._tag(*a, &block)
     end
+
+    # Return a string containing the serialized content of the receiver.
+    def to_s
+      form.serialize(self)
+    end
   end
 
   # Empty module for marking objects as "raw", where they will no longer
