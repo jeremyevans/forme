@@ -354,6 +354,7 @@ module Forme
     # Creates a :submit +Input+ with the given opts, adding it to the list
     # of children for the currently open tag.
     def button(opts={})
+      opts = {:value=>opts} if opts.is_a?(String)
       input = _input(:submit, opts)
       self << input
       input

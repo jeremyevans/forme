@@ -131,6 +131,14 @@ describe "Forme plain forms" do
     @f.button.to_s.should == '<input type="submit"/>'
   end
 
+  specify "#button should accept an options hash" do
+    @f.button(:name=>'foo', :value=>'bar').to_s.should == '<input name="foo" type="submit" value="bar"/>'
+  end
+
+  specify "#button should accept a string to use as a value" do
+    @f.button('foo').to_s.should == '<input type="submit" value="foo"/>'
+  end
+
   specify "#tag should return a serialized_tag" do
     @f.tag(:textarea).to_s.should == '<textarea></textarea>'
     @f.tag(:textarea, :name=>:foo).to_s.should == '<textarea name="foo"></textarea>'
