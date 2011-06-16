@@ -83,9 +83,9 @@ describe "Forme Sequel::Model forms" do
     @c.input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" type="text" value="c"/></label>'
   end
   
-  specify "should allow :type=>:textarea to use a textarea" do
-    @b.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
-    @c.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
+  specify "should allow :as=>:textarea to use a textarea" do
+    @b.input(:name, :as=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
+    @c.input(:name, :as=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
   end
   
   specify "should use number inputs for integers" do
@@ -120,19 +120,19 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
 
-  specify "should use a set of radio buttons for many_to_one associations with :type=>:radio option" do
-    @b.input(:artist, :type=>:radio).to_s.should == 'Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label>'
-    @c.input(:artist, :type=>:radio).to_s.should == 'Artist: <label><input name="album[artist_id]" type="radio" value="1"/> a</label><label><input checked="checked" name="album[artist_id]" type="radio" value="2"/> d</label>'
+  specify "should use a set of radio buttons for many_to_one associations with :as=>:radio option" do
+    @b.input(:artist, :as=>:radio).to_s.should == 'Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label>'
+    @c.input(:artist, :as=>:radio).to_s.should == 'Artist: <label><input name="album[artist_id]" type="radio" value="1"/> a</label><label><input checked="checked" name="album[artist_id]" type="radio" value="2"/> d</label>'
   end
   
-  specify "should correctly use the forms wrapper for wrapping radio buttons for many_to_one associations with :type=>:radio option" do
+  specify "should correctly use the forms wrapper for wrapping radio buttons for many_to_one associations with :as=>:radio option" do
     @b = Forme::Form.new(@ab, :wrapper=>:li)
-    @b.input(:artist, :type=>:radio).to_s.should == '<li>Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label></li>'
+    @b.input(:artist, :as=>:radio).to_s.should == '<li>Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label></li>'
   end
   
-  specify "should support custom wrappers for many_to_one associations with :type=>:radio via :tag_wrapper option" do
+  specify "should support custom wrappers for many_to_one associations with :as=>:radio via :tag_wrapper option" do
     @b = Forme::Form.new(@ab, :wrapper=>:li)
-    @b.input(:artist, :type=>:radio, :wrapper=>proc{|t| t.tag(:div, {}, [t])}, :tag_wrapper=>proc{|t| t.tag(:span, {}, [t])}).to_s.should == '<div>Artist: <span><label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label></span><span><label><input name="album[artist_id]" type="radio" value="2"/> d</label></span></div>'
+    @b.input(:artist, :as=>:radio, :wrapper=>proc{|t| t.tag(:div, {}, [t])}, :tag_wrapper=>proc{|t| t.tag(:span, {}, [t])}).to_s.should == '<div>Artist: <span><label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label></span><span><label><input name="album[artist_id]" type="radio" value="2"/> d</label></span></div>'
   end
   
   specify "should respect an :options entry" do
@@ -183,24 +183,24 @@ describe "Forme Sequel::Model forms" do
     @c.input(:tags).to_s.should == '<label>Tags: <select id="album_tag_pks" multiple="multiple" name="album[tag_pks][]"><option value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label>'
   end
 
-  specify "should use multiple checkboxes for one_to_many associations if :type=>:checkbox" do
-    @b.input(:tracks, :type=>:checkbox).to_s.should == 'Tracks: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
-    @c.input(:tracks, :type=>:checkbox).to_s.should == 'Tracks: <label><input name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
+  specify "should use multiple checkboxes for one_to_many associations if :as=>:checkbox" do
+    @b.input(:tracks, :as=>:checkbox).to_s.should == 'Tracks: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
+    @c.input(:tracks, :as=>:checkbox).to_s.should == 'Tracks: <label><input name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
   end
   
-  specify "should use multiple checkboxes for many_to_many associations if :type=>:checkbox" do
-    @b.input(:tags, :type=>:checkbox).to_s.should == 'Tags: <label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="1"/> s</label><label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="2"/> t</label><label><input name="album[tag_pks][]" type="checkbox" value="3"/> u</label>'
-    @c.input(:tags, :type=>:checkbox).to_s.should == 'Tags: <label><input name="album[tag_pks][]" type="checkbox" value="1"/> s</label><label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="2"/> t</label><label><input name="album[tag_pks][]" type="checkbox" value="3"/> u</label>'
+  specify "should use multiple checkboxes for many_to_many associations if :as=>:checkbox" do
+    @b.input(:tags, :as=>:checkbox).to_s.should == 'Tags: <label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="1"/> s</label><label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="2"/> t</label><label><input name="album[tag_pks][]" type="checkbox" value="3"/> u</label>'
+    @c.input(:tags, :as=>:checkbox).to_s.should == 'Tags: <label><input name="album[tag_pks][]" type="checkbox" value="1"/> s</label><label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="2"/> t</label><label><input name="album[tag_pks][]" type="checkbox" value="3"/> u</label>'
   end
 
-  specify "should correctly use the forms wrapper for wrapping radio buttons for one_to_many associations with :type=>:checkbox option" do
+  specify "should correctly use the forms wrapper for wrapping radio buttons for one_to_many associations with :as=>:checkbox option" do
     @b = Forme::Form.new(@ab, :wrapper=>:li)
-    @b.input(:tracks, :type=>:checkbox).to_s.should == '<li>Tracks: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label></li>'
+    @b.input(:tracks, :as=>:checkbox).to_s.should == '<li>Tracks: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label></li>'
   end
   
-  specify "should support custom wrappers for many_to_one associations with :type=>:radio via :tag_wrapper option" do
+  specify "should support custom wrappers for one_to_many associations with :as=>:checkbox via :tag_wrapper option" do
     @b = Forme::Form.new(@ab, :wrapper=>:li)
-    @b.input(:tracks, :type=>:checkbox, :wrapper=>proc{|t| t.tag(:div, {}, [t])}, :tag_wrapper=>proc{|t| t.tag(:span, {}, [t])}).to_s.should == '<div>Tracks: <span><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label></span><span><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label></span><span><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label></span></div>'
+    @b.input(:tracks, :as=>:checkbox, :wrapper=>proc{|t| t.tag(:div, {}, [t])}, :tag_wrapper=>proc{|t| t.tag(:span, {}, [t])}).to_s.should == '<div>Tracks: <span><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label></span><span><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label></span><span><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label></span></div>'
   end
   
   specify "should use a text field methods not backed by columns" do

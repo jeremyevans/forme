@@ -218,7 +218,7 @@ module Sequel # :nodoc:
           opts[:name] = form.namespaced_name(key) unless opts.has_key?(:name)
           opts[:value] = obj.send(key) unless opts.has_key?(:value)
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
-          if opts.delete(:type) == :radio
+          if opts.delete(:as) == :radio
             label = opts.delete(:label)
             val = opts.delete(:value)
             tag_wrapper = opts.delete(:tag_wrapper) || :default
@@ -247,7 +247,7 @@ module Sequel # :nodoc:
           opts[:name] = form.namespaced_name(field, :multiple) unless opts.has_key?(:name)
           opts[:value] = obj.send(ref[:name]).map{|x| x.send(pk)} unless opts.has_key?(:value)
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
-          if opts.delete(:type) == :checkbox
+          if opts.delete(:as) == :checkbox
             label = opts.delete(:label)
             val = opts.delete(:value)
             tag_wrapper = opts.delete(:tag_wrapper) || :default
@@ -294,6 +294,9 @@ module Sequel # :nodoc:
 
         # Use the text type by default for other cases not handled.
         def input_other(sch)
+          if opts.delete(:as) == :textarea
+            opts[:type] = :textarea unless opts.has_key?(:type)
+          end
           standard_input(:text)
         end
 

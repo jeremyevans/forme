@@ -68,7 +68,7 @@ END
 
   get '/album/basic/alt_assoc' do
     @page_title = 'Album Basic - Association Radios/Checkboxes'
-    @form_opts_str = "{:wrapper=>:li, :inputs_wrapper=>:ol, :many=>{:type=>:checkbox}, :one=>{:type=>:radio}}"
+    @form_opts_str = "{:wrapper=>:li, :inputs_wrapper=>:ol, :many=>{:as=>:checkbox}, :one=>{:as=>:radio}}"
     @css = "ol {list-style-type: none;}"
     demo :album_basic
   end
