@@ -19,6 +19,11 @@ DB.create_table(:albums) do
   DateTime :created_at
   Integer :copies_sold
 end
+DB.create_table(:album_infos) do
+  primary_key :id
+  foreign_key :album_id, :albums
+  String :info
+end
 DB.create_table(:tracks) do
   primary_key :id
   foreign_key :album_id, :albums
@@ -48,6 +53,7 @@ u = DB[:tags].insert(:name=>'u')
 Sequel::Model.plugin :forme
 class Album < Sequel::Model
   many_to_one :artist, :order=>:name
+  one_to_one :album_info
   one_to_many :tracks
   many_to_many :tags
 
@@ -61,6 +67,7 @@ class Artist < Sequel::Model
 end
 class Track < Sequel::Model; end
 class Tag < Sequel::Model; end
+class AlbumInfo < Sequel::Model; end
 
 describe "Forme Sequel::Model forms" do
   before do
@@ -256,6 +263,10 @@ describe "Forme Sequel::Model forms" do
   specify "should not add hidden primary key field for new many_to_one associated objects" do
     @ab.associations[:artist] = Artist.new(:name=>'a')
     Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.to_s.should == '<form method="post"><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></form>'
+  end
+  
+  specify "should use allow nested forms with one_to_one associations" do
+    Forme.form(@ab){|f| f.subform(:album_info, :obj=>AlbumInfo.new(:info=>'a')){f.input(:info)}}.to_s.should == '<form method="post"><label>Info: <input id="album_album_info_attributes_info" name="album[album_info_attributes][info]" type="text" value="a"/></label></form>'
   end
   
   specify "should use allow nested forms with one_to_many associations" do
