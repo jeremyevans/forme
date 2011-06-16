@@ -162,10 +162,13 @@ module Forme
         new(obj, opts)
       end
 
-      if ins = opts[:inputs]
-        block = Proc.new do |f|
-          f.inputs(ins, opts)
-          yield f if block_given?
+      ins = opts[:inputs]
+      button = opts[:button]
+      if ins || button
+        block = Proc.new do |form|
+          form.inputs(ins, opts) if ins
+          yield form if block_given?
+          form.emit(form.button(button)) if button
         end
       end
 

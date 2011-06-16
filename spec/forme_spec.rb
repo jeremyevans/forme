@@ -411,5 +411,21 @@ describe "Forme.form DSL" do
     Forme.form({}, :inputs=>[:text]){|f| f.input(:textarea)}.to_s.should ==  '<form><fieldset><input type="text"/></fieldset><textarea></textarea></form>'
   end
 
+  specify "should handle an :button option to automatically create a button" do
+    Forme.form({}, :button=>'Foo').to_s.should ==  '<form><input type="submit" value="Foo"/></form>'
+  end
+
+  specify "should allow :button option value to be a hash" do
+    Forme.form({}, :button=>{:value=>'Foo', :name=>'bar'}).to_s.should ==  '<form><input name="bar" type="submit" value="Foo"/></form>'
+  end
+
+  specify "should handle an :button option work with a block" do
+    Forme.form({}, :button=>'Foo'){|f| f.input(:textarea)}.to_s.should ==  '<form><textarea></textarea><input type="submit" value="Foo"/></form>'
+  end
+
+  specify "should have an :button and :inputs option work together" do
+    Forme.form({}, :inputs=>[:text, :textarea], :button=>'Foo').to_s.should ==  '<form><fieldset><input type="text"/><textarea></textarea></fieldset><input type="submit" value="Foo"/></form>'
+  end
+
 end
 
