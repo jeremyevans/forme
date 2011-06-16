@@ -905,6 +905,18 @@ module Forme
     end
   end
 
+  # Use a fieldset and an ol tag to wrap the inputs.
+  #
+  # Registered as :fieldset_ol.
+  class InputsWrapper::FieldSetOL < InputsWrapper
+    Forme.register_transformer(:inputs_wrapper, :fieldset_ol, new)
+
+    # Wrap the inputs in an ol tag
+    def call(form, opts)
+      super(form, opts){form.tag(:ol){yield}}
+    end
+  end
+
   # Use an ol tag to wrap the inputs.
   #
   # Registered as :ol.
@@ -914,6 +926,18 @@ module Forme
     # Wrap the inputs in an ol tag
     def call(form, opts, &block)
       form.tag(:ol, &block)
+    end
+  end
+
+  # Use a div tag to wrap the inputs.
+  #
+  # Registered as :div.
+  class InputsWrapper::Div
+    Forme.register_transformer(:inputs_wrapper, :div, new)
+
+    # Wrap the inputs in an ol tag
+    def call(form, opts, &block)
+      form.tag(:div, &block)
     end
   end
 

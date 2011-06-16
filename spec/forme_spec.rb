@@ -332,6 +332,18 @@ describe "Forme built-in custom" do
     Forme::Form.new(:inputs_wrapper=>:ol, :wrapper=>:li).inputs([:textarea]).to_s.should == '<ol><li><textarea></textarea></li></ol>'
   end
 
+  specify "inputs_wrapper: fieldset_ol wraps tags in a fieldset and an ol" do
+    Forme::Form.new(:inputs_wrapper=>:fieldset_ol, :wrapper=>:li).inputs([:textarea]).to_s.should == '<fieldset><ol><li><textarea></textarea></li></ol></fieldset>'
+  end
+
+  specify "inputs_wrapper: fieldset_ol supports a :legend option" do
+    Forme.form({}, :inputs_wrapper=>:fieldset_ol, :wrapper=>:li, :legend=>'Foo', :inputs=>[:textarea]).to_s.should == '<form><fieldset><legend>Foo</legend><ol><li><textarea></textarea></li></ol></fieldset></form>'
+  end
+
+  specify "inputs_wrapper: div wraps tags in a div" do
+    Forme::Form.new(:inputs_wrapper=>:div, :wrapper=>:span).inputs([:textarea]).to_s.should == '<div><span><textarea></textarea></span></div>'
+  end
+
   specify "inputs_wrapper: table wraps tags in an table" do
     Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea]).to_s.should == '<table><tr><td><textarea></textarea></td></tr></table>'
   end
