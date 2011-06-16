@@ -17,6 +17,7 @@ DB.create_table(:albums) do
   TrueClass :platinum, :null=>false, :default=>false
   Date :release_date
   DateTime :created_at
+  Integer :copies_sold
 end
 DB.create_table(:tracks) do
   primary_key :id
@@ -34,7 +35,7 @@ end
 
 a = DB[:artists].insert(:name=>'a')
 d = DB[:artists].insert(:name=>'d')
-b = DB[:albums].insert(:name=>'b', :artist_id=>a, :gold=>false, :release_date=>Date.new(2011, 6, 5), :created_at=>Date.new(2011, 6, 5))
+b = DB[:albums].insert(:name=>'b', :artist_id=>a, :gold=>false, :release_date=>Date.new(2011, 6, 5), :created_at=>Date.new(2011, 6, 5), :copies_sold=>10)
 DB[:tracks].insert(:name=>'m', :album_id=>b)
 DB[:tracks].insert(:name=>'n', :album_id=>b)
 c = DB[:albums].insert(:name=>'c', :artist_id=>d, :gold=>true, :platinum=>true)
@@ -85,6 +86,10 @@ describe "Forme Sequel::Model forms" do
   specify "should allow :type=>:textarea to use a textarea" do
     @b.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
     @c.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
+  end
+  
+  specify "should use number inputs for integers" do
+    @b.input(:copies_sold).to_s.should == '<label>Copies sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="10"/></label>'
   end
   
   specify "should use date inputs for Dates" do

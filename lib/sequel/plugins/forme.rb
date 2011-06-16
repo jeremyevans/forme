@@ -292,23 +292,31 @@ module Sequel # :nodoc:
           end
         end
 
-        # Fallback to using the text type for all other types of input.
+        # Use the text type by default for other cases not handled.
         def input_other(sch)
-          opts[:value] = obj.send(field) unless opts.has_key?(:value)
-          type = opts.delete(:type) || :text
-          _input(type, opts)
+          standard_input(:text)
+        end
+
+        # Use number inputs for integers.
+        def input_integer(sch)
+          standard_input(:number)
         end
 
         # Use date inputs for dates.
         def input_date(sch)
-          type = opts.delete(:type) || :date
-          opts[:value] = obj.send(field) unless opts.has_key?(:value)
-          _input(type, opts)
+          standard_input(:date)
         end
 
         # Use datetime inputs for datetimes.
         def input_datetime(sch)
-          type = opts.delete(:type) || :datetime
+          standard_input(:datetime)
+        end
+
+        # Allow overriding the given type using the :type option,
+        # and set the :value option to the field value unless it
+        # is overridden.
+        def standard_input(type)
+          type = opts.delete(:type) || type
           opts[:value] = obj.send(field) unless opts.has_key?(:value)
           _input(type, opts)
         end
