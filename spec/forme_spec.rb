@@ -354,6 +354,13 @@ describe "Forme object forms" do
     Forme::Form.new(obj).input(:foo).to_s.should ==  '<input id="foo" name="foo" type="text" value="bar"/>'
   end
 
+  specify "should respect opts hash when obj doesn't respond to forme_input" do
+    Forme::Form.new([:foo]).input(:first, :name=>'bar').to_s.should ==  '<input id="first" name="bar" type="text" value="foo"/>'
+    Forme::Form.new([:foo]).input(:first, :id=>'bar').to_s.should ==  '<input id="bar" name="first" type="text" value="foo"/>'
+    Forme::Form.new([:foo]).input(:first, :value=>'bar').to_s.should ==  '<input id="first" name="first" type="text" value="bar"/>'
+    Forme::Form.new([:foo]).input(:first, :x=>'bar').to_s.should ==  '<input id="first" name="first" type="text" value="foo" x="bar"/>'
+  end
+
   specify "should handle obj passed in via :obj hash key" do
     Forme::Form.new(:obj=>[:foo]).input(:first).to_s.should ==  '<input id="first" name="first" type="text" value="foo"/>'
   end

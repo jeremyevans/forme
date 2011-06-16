@@ -274,7 +274,11 @@ module Forme
         if obj.respond_to?(:forme_input)
           obj.forme_input(self, field, opts.dup)
         else
-          _input(:text, :name=>field, :id=>field, :value=>obj.send(field))
+          opts = opts.dup
+          opts[:name] = field unless opts.has_key?(:name)
+          opts[:id] = field unless opts.has_key?(:id)
+          opts[:value] = obj.send(field) unless opts.has_key?(:value)
+          _input(:text, opts)
         end
       else
         _input(field, opts)
