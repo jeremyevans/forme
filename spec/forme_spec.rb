@@ -55,6 +55,10 @@ describe "Forme plain forms" do
     @f.input(:date).to_s.should == '<input type="date"/>'
   end
 
+  specify "should not error for input type :input" do
+    @f.input(:input).to_s.should == '<input type="input"/>'
+  end
+
   specify "should use multiple select boxes for dates if the :as=>:select option is given" do
     pr = Proc.new{|a, v| a.map{|o| "<option #{'selected="selected" ' if o == v}value=\"#{o}\">#{o}</option>"}.join}
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5)).to_s.should == %{<select id="bar_year" name="foo[year]">#{pr[1900..2050, 2011]}</select><select id="bar_month" name="foo[month]">#{pr[1..12, 6]}</select><select id="bar_day" name="foo[day]">#{pr[1..31, 5]}</select>}

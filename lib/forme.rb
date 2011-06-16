@@ -568,13 +568,13 @@ module Forme
     private
 
     # Dispatch to a format_<i>type</i> method if there is one that matches the
-    # type, otherwise, call +format_input+ with the given +type+.
+    # type, otherwise, call +_format_input+ with the given +type+.
     def convert_to_tag(type)
       meth = :"format_#{type}"
       if respond_to?(meth, true)
         send(meth)
       else
-        format_input(type)
+        _format_input(type)
       end
     end
 
@@ -624,13 +624,13 @@ module Forme
         ops = {:year=>1900..2050, :month=>1..12, :day=>1..31}
         [:year, :month, :day].map{|x| form._input(:select, @attr.dup.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].to_a.map{|x| [x, x]})).format}
       else
-        format_input(:date)
+        _format_input(:date)
       end
     end
 
     # The default fallback method for handling inputs.  Assumes an input tag
     # with the type attribute set to input.
-    def format_input(type)
+    def _format_input(type)
       @attr[:type] = type
       tag(:input)
     end
@@ -791,7 +791,7 @@ module Forme
     end
 
     # Use a span with text instead of an input field.
-    def format_input(type)
+    def _format_input(type)
       tag(:span, {}, @attr[:value])
     end
 
