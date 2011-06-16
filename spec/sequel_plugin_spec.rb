@@ -4,6 +4,7 @@ require 'rubygems'
 require 'sequel'
 
 DB = Sequel.sqlite
+Sequel.default_timezone = :utc
 DB.create_table(:artists) do
   primary_key :id
   String :name
@@ -14,6 +15,8 @@ DB.create_table(:albums) do
   String :name
   TrueClass :gold
   TrueClass :platinum, :null=>false, :default=>false
+  Date :release_date
+  DateTime :created_at
 end
 DB.create_table(:tracks) do
   primary_key :id
@@ -31,7 +34,7 @@ end
 
 a = DB[:artists].insert(:name=>'a')
 d = DB[:artists].insert(:name=>'d')
-b = DB[:albums].insert(:name=>'b', :artist_id=>a, :gold=>false)
+b = DB[:albums].insert(:name=>'b', :artist_id=>a, :gold=>false, :release_date=>Date.new(2011, 6, 5), :created_at=>Date.new(2011, 6, 5))
 DB[:tracks].insert(:name=>'m', :album_id=>b)
 DB[:tracks].insert(:name=>'n', :album_id=>b)
 c = DB[:albums].insert(:name=>'c', :artist_id=>d, :gold=>true, :platinum=>true)
@@ -82,6 +85,19 @@ describe "Forme Sequel::Model forms" do
   specify "should allow :type=>:textarea to use a textarea" do
     @b.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
     @c.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
+  end
+  
+  specify "should use date inputs for Dates" do
+    @b.input(:release_date).to_s.should == '<label>Release date: <input id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></label>'
+  end
+  
+  specify "should use datetime inputs for Time" do
+    @b.input(:created_at).to_s.should =~ %r{<label>Created at: <input id="album_created_at" name="album\[created_at\]" type="datetime" value="2011-06-05 00:00:00(GMT|UTC)"/></label>}
+  end
+  
+  specify "should use datetime inputs for DateTimes" do
+    @ab.values[:created_at] = DateTime.new(2011, 6, 5)
+    @b.input(:created_at).to_s.should == '<label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime" value="2011-06-05 00:00:00+00:00"/></label>'
   end
   
   specify "should use a select box for tri-valued boolean fields" do

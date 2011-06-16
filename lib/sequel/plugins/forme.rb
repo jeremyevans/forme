@@ -299,13 +299,17 @@ module Sequel # :nodoc:
           _input(type, opts)
         end
 
-        # Format date values using US-style MM/DD/YYYY, though this will
-        # change in the future.
+        # Use date inputs for dates.
         def input_date(sch)
-          if !opts.has_key?(:value) && (v = obj.send(field))
-            opts[:value] = v.strftime('%m/%d/%Y')
-          end
-          type = opts.delete(:type) || :text
+          type = opts.delete(:type) || :date
+          opts[:value] = obj.send(field) unless opts.has_key?(:value)
+          _input(type, opts)
+        end
+
+        # Use datetime inputs for datetimes.
+        def input_datetime(sch)
+          type = opts.delete(:type) || :datetime
+          opts[:value] = obj.send(field) unless opts.has_key?(:value)
           _input(type, opts)
         end
       end
