@@ -60,6 +60,12 @@ END
     demo :album_basic
   end
 
+  get '/album/basic/date' do
+    @page_title = 'Album Basic - Date Multiple Select Boxes'
+    @form_opts_str = '{:date=>{:as=>:select}, :labeler=>:explicit, :wrapper=>:trtd, :inputs_wrapper=>:table}'
+    demo :album_basic
+  end
+
   get '/album/basic/alt_assoc' do
     @page_title = 'Album Basic - Association Radios/Checkboxes'
     @form_opts_str = "{:wrapper=>:li, :inputs_wrapper=>:ol, :many=>{:type=>:checkbox}, :one=>{:type=>:radio}}"
