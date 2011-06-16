@@ -297,6 +297,10 @@ describe "Forme built-in custom" do
     Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo').to_s.should == '<tr><td><label for="foo">Foo</label></td><td><textarea id="foo"></textarea></td></tr>'
   end
 
+  specify "wrapper: trtd should use at most 2 td tags" do
+    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo', :error=>'Bar').to_s.should == '<tr><td><label for="foo">Foo</label></td><td><textarea class="error" id="foo"></textarea><span class="error_message">Bar</span></td></tr>'
+  end
+
   specify "inputs_wrapper: ol wraps tags in an ol" do
     Forme::Form.new(:inputs_wrapper=>:ol, :wrapper=>:li).inputs([:textarea]).to_s.should == '<ol><li><textarea></textarea></li></ol>'
   end

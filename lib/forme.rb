@@ -858,7 +858,10 @@ module Forme
 
   Forme.register_transformer(:wrapper, :default){|tag| tag}
   Forme.register_transformer(:wrapper, :li){|tag| tag.tag(:li, {}, Array(tag))}
-  Forme.register_transformer(:wrapper, :trtd){|tag| tag.tag(:tr, {}, Array(tag).map{|t| tag.tag(:td, {}, [t])})}
+  Forme.register_transformer(:wrapper, :trtd) do |tag|
+    a = Array(tag)
+    tag.tag(:tr, {}, a.length == 1 ? tag.tag(:td, {}, a) : [tag.tag(:td, {}, [a.first]), tag.tag(:td, {}, a[1..-1])])
+  end
 
   # Default inputs_wrapper used by the library, uses a fieldset.
   #
