@@ -144,6 +144,8 @@ Forme ships with a bunch of built-in transformers that you can use:
 
 :default :: uses a fieldset to wrap inputs
 :ol :: uses an ol tag to wrap inputs, useful with :li wrapper
+:div :: uses a div tag to wrap inputs
+:fieldset_ol :: use both a fieldset and an ol tag to wrap inputs
 :table :: uses a table tag to wrap inputs, useful with :trtd wrapper
 
 = Sequel Support

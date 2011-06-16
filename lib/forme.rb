@@ -722,11 +722,13 @@ module Forme
     def normalize_options
       @attr[:required] = :required if @attr.delete(:required)
       @attr[:disabled] = :disabled if @attr.delete(:disabled)
-      @opts[:label] = @attr.delete(:label)
-      @opts[:error] = @attr.delete(:error)
+      if @opts[:label] = @attr.delete(:label)
+        @opts[:labeler] = @attr.delete(:labeler) if @attr.has_key?(:labeler)
+      end
+      if @opts[:error] = @attr.delete(:error)
+        @opts[:error_handler] = @attr.delete(:error_handler) if @attr.has_key?(:error_handler)
+      end
       @opts[:wrapper] = @attr.delete(:wrapper) if @attr.has_key?(:wrapper)
-      @opts[:error_handler] = @attr.delete(:error_handler) if @attr.has_key?(:error_handler)
-      @opts[:labeler] = @attr.delete(:labeler) if @attr.has_key?(:labeler)
       @attr.delete(:formatter)
     end
 
