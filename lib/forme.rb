@@ -957,7 +957,7 @@ module Forme
     # and quoting and html escaping the values.
     def attr_html(tag)
       attr = tag.attr.to_a.reject{|k,v| v.nil?}
-      " #{attr.map{|k, v| "#{k}=\"#{h v}\""}.sort.join(' ')}" unless attr.empty?
+      " #{attr.map{|k, v| "#{k}=\"#{call(v)}\""}.sort.join(' ')}" unless attr.empty?
     end
   end
 

@@ -174,6 +174,14 @@ describe "Forme plain forms" do
     @f.tag(:div, {}, ['<p></p>'.extend(Forme::Raw)]).to_s.should == '<div><p></p></div>'
   end
 
+  specify "should escape tag content in attribute values" do
+    @f.tag(:div, :foo=>'<p></p>').to_s.should == '<div foo="&lt;p&gt;&lt;/p&gt;"></div>'
+  end
+
+  specify "should not escape raw tag content in attribute values" do
+    @f.tag(:div, :foo=>'<p></p>'.extend(Forme::Raw)).to_s.should == '<div foo="<p></p>"></div>'
+  end
+
   specify "inputs should accept a :wrapper option to use a custom wrapper" do
     @f.input(:text, :wrapper=>:li).to_s.should == '<li><input type="text"/></li>'
   end
