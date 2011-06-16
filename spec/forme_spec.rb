@@ -337,11 +337,6 @@ describe "Forme registering custom transformers" do
     Forme::Form.new(:wrapper=>:div1).input(:textarea).to_s.should == '<div1><textarea></textarea></div1>'
   end
 
-  specify "should have #register_transformer register a transformer class for later use" do
-    Forme.register_transformer(:wrapper, :div2, Class.new{def call(t) t.tag(:div2, {}, [t]) end})
-    Forme::Form.new(:wrapper=>:div2).input(:textarea).to_s.should == '<div2><textarea></textarea></div2>'
-  end
-
   specify "should have #register_transformer raise an error if given a block and an object" do
     proc do
       Forme.register_transformer(:wrapper, :div1, proc{|t| t}){|t| t.tag(:div1, {}, [t])}

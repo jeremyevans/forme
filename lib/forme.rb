@@ -225,8 +225,7 @@ module Forme
     def transformer(type, trans)
       case trans
       when Symbol
-        t = TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.join(', ')})")
-        t.is_a?(Class) ? t.new : t
+        TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.join(', ')})")
       when Hash
         if trans.has_key?(type)
           if v = trans[type]
@@ -509,6 +508,11 @@ module Forme
   # Registered as :default.
   class Formatter
     Forme.register_transformer(:formatter, :default, self)
+
+    # Create a new instance and call it
+    def self.call(input)
+      new.call(input)
+    end
 
     # The +Form+ instance for the receiver, taken from the +input+.
     attr_reader :form
