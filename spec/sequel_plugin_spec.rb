@@ -111,7 +111,7 @@ describe "Forme Sequel::Model forms" do
     @ab.values[:created_at] = DateTime.new(2011, 6, 5)
     @b.input(:created_at).to_s.should == '<label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime" value="2011-06-05 00:00:00+00:00"/></label>'
   end
-  
+
   specify "should use a select box for tri-valued boolean fields" do
     @b.input(:gold).to_s.should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
     @c.input(:gold).to_s.should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
@@ -301,5 +301,42 @@ describe "Forme Sequel::Model forms" do
 
   specify "should handle multiple nested levels" do
     Forme.form(Artist[1]){|f| f.subform(:albums){f.input(:name); f.subform(:tracks){f.input(:name)}}}.to_s.to_s.should == '<form method="post"><input id="artist_albums_attributes_0_id" name="artist[albums_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="artist_albums_attributes_0_name" name="artist[albums_attributes][0][name]" type="text" value="b"/></label><input id="artist_albums_attributes_0_tracks_attributes_0_id" name="artist[albums_attributes][0][tracks_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_0_name" name="artist[albums_attributes][0][tracks_attributes][0][name]" type="text" value="m"/></label><input id="artist_albums_attributes_0_tracks_attributes_1_id" name="artist[albums_attributes][0][tracks_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_1_name" name="artist[albums_attributes][0][tracks_attributes][1][name]" type="text" value="n"/></label></form>'
+  end
+end
+
+describe "Forme Sequel plugin default input types based on column names" do
+  def f(name)
+    DB.create_table!(:test){String name}
+    Forme::Form.new(Class.new(Sequel::Model){def self.name; 'Test' end; set_dataset :test}.new).input(name, :value=>'foo')
+  end
+
+  specify "should use password input with no value for string columns with name password" do
+    f(:password).to_s.should == '<label>Password: <input id="test_password" name="test[password]" type="password"/></label>'
+  end
+
+  specify "should use email input for string columns with name email" do
+    f(:email).to_s.should == '<label>Email: <input id="test_email" name="test[email]" type="email" value="foo"/></label>'
+  end
+
+  specify "should use tel input for string columns with name phone or fax" do
+    f(:phone).to_s.should == '<label>Phone: <input id="test_phone" name="test[phone]" type="tel" value="foo"/></label>'
+    f(:fax).to_s.should == '<label>Fax: <input id="test_fax" name="test[fax]" type="tel" value="foo"/></label>'
+  end
+
+  specify "should use url input for string columns with name url, uri, or website" do
+    f(:url).to_s.should == '<label>Url: <input id="test_url" name="test[url]" type="url" value="foo"/></label>'
+    f(:uri).to_s.should == '<label>Uri: <input id="test_uri" name="test[uri]" type="url" value="foo"/></label>'
+    f(:website).to_s.should == '<label>Website: <input id="test_website" name="test[website]" type="url" value="foo"/></label>'
+  end
+end 
+
+describe "Forme Sequel plugin default input types based on column type" do
+  def f(type)
+    DB.create_table!(:test){column :foo, type}
+    Forme::Form.new(Class.new(Sequel::Model){def self.name; 'Test' end; set_dataset :test}.new).input(:foo, :value=>'foo')
+  end
+
+  specify "should use password input with no value for string columns with name password" do
+    f(File).to_s.should == '<label>Foo: <input id="test_foo" name="test[foo]" type="file"/></label>'
   end
 end

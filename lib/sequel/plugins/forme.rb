@@ -292,12 +292,31 @@ module Sequel # :nodoc:
           end
         end
 
+        # Use a file type for blobs.
+        def input_blob(sch)
+          opts[:value] = nil
+          standard_input(:file)
+        end
+
         # Use the text type by default for other cases not handled.
-        def input_other(sch)
-          if opts.delete(:as) == :textarea
-            opts[:type] = :textarea unless opts.has_key?(:type)
+        def input_string(sch)
+          if opts[:as] == :textarea
+            standard_input(:textarea)
+          else
+            case field.to_s
+            when "password"
+              opts[:value] = nil
+              standard_input(:password)
+            when "email"
+              standard_input(:email)
+            when "phone", "fax"
+              standard_input(:tel)
+            when "url", "uri", "website"
+              standard_input(:url)
+            else
+              standard_input(:text)
+            end
           end
-          standard_input(:text)
         end
 
         # Use number inputs for integers.
@@ -313,6 +332,11 @@ module Sequel # :nodoc:
         # Use datetime inputs for datetimes.
         def input_datetime(sch)
           standard_input(:datetime)
+        end
+
+        # Use a text input for all other types.
+        def input_other(sch)
+          standard_input(:text)
         end
 
         # Allow overriding the given type using the :type option,
