@@ -18,6 +18,46 @@ describe "Forme plain forms" do
     @f.input(:submit).to_s.should == '<input type="submit"/>'
   end
 
+  specify "should use :name option as attribute" do
+    @f.input(:text, :name=>"foo").to_s.should == '<input name="foo" type="text"/>'
+  end
+
+  specify "should use :id option as attribute" do
+    @f.input(:text, :id=>"foo").to_s.should == '<input id="foo" type="text"/>'
+  end
+
+  specify "should use :class option as attribute" do
+    @f.input(:text, :class=>"foo").to_s.should == '<input class="foo" type="text"/>'
+  end
+
+  specify "should use :value option as attribute" do
+    @f.input(:text, :value=>"foo").to_s.should == '<input type="text" value="foo"/>'
+  end
+
+  specify "should use :placeholder option as attribute" do
+    @f.input(:text, :placeholder=>"foo").to_s.should == '<input placeholder="foo" type="text"/>'
+  end
+
+  specify "should allow arbitrary attributes using the :attr option" do
+    @f.input(:text, :attr=>{:bar=>"foo"}).to_s.should == '<input bar="foo" type="text"/>'
+  end
+
+  specify "should convert the :data option into attributes" do
+    @f.input(:text, :data=>{:bar=>"foo"}).to_s.should == '<input data-bar="foo" type="text"/>'
+  end
+
+  specify "should not have standard options override the :attr option" do
+    @f.input(:text, :name=>:bar, :attr=>{:name=>"foo"}).to_s.should == '<input name="foo" type="text"/>'
+  end
+
+  specify "should combine :class standard option with :attr option" do
+    @f.input(:text, :class=>:bar, :attr=>{:class=>"foo"}).to_s.should == '<input class="foo bar" type="text"/>'
+  end
+
+  specify "should not have :data options override the :attr option" do
+    @f.input(:text, :data=>{:bar=>"baz"}, :attr=>{:"data-bar"=>"foo"}).to_s.should == '<input data-bar="foo" type="text"/>'
+  end
+
   specify "should create hidden input with value 0 for each checkbox with a name" do
     @f.input(:checkbox, :name=>"foo").to_s.should == '<input name="foo" type="hidden" value="0"/><input name="foo" type="checkbox"/>'
   end
@@ -252,23 +292,23 @@ end
 
 describe "Forme custom" do
   specify "formatters can be specified as a proc" do
-    Forme::Form.new(:formatter=>proc{|i| i.form._tag(:textarea, i.opts.map{|k,v| [v.upcase, k.to_s.downcase]})}).input(:text, :NAME=>'foo').to_s.should == '<textarea FOO="name"></textarea>'
+    Forme::Form.new(:formatter=>proc{|i| i.form._tag(:textarea, i.opts.map{|k,v| [v.upcase, k.to_s.downcase]})}).input(:text, :name=>'foo').to_s.should == '<textarea FOO="name"></textarea>'
   end
 
   specify "serializers can be specified as a proc" do
-    Forme::Form.new(:serializer=>proc{|t| "#{t.type} = #{t.opts.inspect}"}).input(:textarea, :NAME=>'foo').to_s.should == 'textarea = {:NAME=>"foo"}'
+    Forme::Form.new(:serializer=>proc{|t| "#{t.type} = #{t.opts.inspect}"}).input(:textarea, :name=>'foo').to_s.should == 'textarea = {:name=>"foo"}'
   end
 
   specify "labelers can be specified as a proc" do
-    Forme::Form.new(:labeler=>proc{|t, i| ["#{i.opts[:label]}: ", t]}).input(:textarea, :NAME=>'foo', :label=>'bar').to_s.should == 'bar: <textarea NAME="foo"></textarea>'
+    Forme::Form.new(:labeler=>proc{|t, i| ["#{i.opts[:label]}: ", t]}).input(:textarea, :name=>'foo', :label=>'bar').to_s.should == 'bar: <textarea name="foo"></textarea>'
   end
 
   specify "error_handlers can be specified as a proc" do
-    Forme::Form.new(:error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}).input(:textarea, :NAME=>'foo', :error=>'bar').to_s.should == '<textarea NAME="foo"></textarea>!!! bar'
+    Forme::Form.new(:error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}).input(:textarea, :name=>'foo', :error=>'bar').to_s.should == '<textarea name="foo"></textarea>!!! bar'
   end
 
   specify "wrappers can be specified as a proc" do
-    Forme::Form.new(:wrapper=>proc{|t, i| t.tag(:div, {:bar=>i.opts[:NAME]}, t)}).input(:textarea, :NAME=>'foo').to_s.should == '<div bar="foo"><textarea NAME="foo"></textarea></div>'
+    Forme::Form.new(:wrapper=>proc{|t, i| t.tag(:div, {:bar=>i.opts[:name]}, t)}).input(:textarea, :name=>'foo').to_s.should == '<div bar="foo"><textarea name="foo"></textarea></div>'
   end
 
   specify "inputs_wrappers can be specified as a proc" do
@@ -441,7 +481,7 @@ describe "Forme object forms" do
     end.new('&foo', 3)
     f = Forme::Form.new(obj)
     f.input(:x).to_s.should == '<label>X: <textarea id="foo_x" name="foo[x]">&amp;foo</textarea></label>'
-    f.input(:y, :brain=>'no').to_s.should == '<label>Y: <input brain="no" id="foo_y" name="foo[y]" type="text" value="3"/></label>'
+    f.input(:y, :attr=>{:brain=>'no'}).to_s.should == '<label>Y: <input brain="no" id="foo_y" name="foo[y]" type="text" value="3"/></label>'
   end
 
   specify "should handle case where obj doesn't respond to forme_input" do
@@ -455,7 +495,7 @@ describe "Forme object forms" do
     Forme::Form.new([:foo]).input(:first, :name=>'bar').to_s.should ==  '<input id="first" name="bar" type="text" value="foo"/>'
     Forme::Form.new([:foo]).input(:first, :id=>'bar').to_s.should ==  '<input id="bar" name="first" type="text" value="foo"/>'
     Forme::Form.new([:foo]).input(:first, :value=>'bar').to_s.should ==  '<input id="first" name="first" type="text" value="bar"/>'
-    Forme::Form.new([:foo]).input(:first, :x=>'bar').to_s.should ==  '<input id="first" name="first" type="text" value="foo" x="bar"/>'
+    Forme::Form.new([:foo]).input(:first, :attr=>{:x=>'bar'}).to_s.should ==  '<input id="first" name="first" type="text" value="foo" x="bar"/>'
   end
 
   specify "should handle obj passed in via :obj hash key" do

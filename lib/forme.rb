@@ -433,7 +433,29 @@ module Forme
     # The type of input, should be a symbol (e.g. :submit, :text, :select).
     attr_reader :type
 
-    # The options hash for the receiver.
+    # The options hash for the receiver.  Here are some of the supported options
+    # used by the built-in formatter transformers:
+    #
+    # :error :: Set an error message, invoking the error_handler
+    # :label :: Set a label, invoking the labeler
+    # :wrapper :: Set a custom wrapper, overriding the form's default
+    # :labeler :: Set a custom labeler, overriding the form's default
+    # :error_handler :: Set a custom error_handler, overriding the form's default
+    # :attr :: The attributes hash to use for the given tag, takes precedence over
+    #          other options that set attributes.
+    # :data :: A hash of data-* attributes for the resulting tag.  Keys in this hash
+    #          will have attributes created with data- prepended to the attribute name.
+    # :name :: The name attribute to use
+    # :id :: The id attribute to use
+    # :placeholder :: The placeholder attribute to use
+    # :value :: The value attribute to use for input tags, the content of the textarea
+    #           for textarea tags, or the selected option(s) for select tags.
+    # :class :: A class to use.  Unlike other options, this is combined with the
+    #           classes set in the :attr hash.
+    # :disabled :: Set the disabled attribute if true
+    # :required :: Set the required attribute if true
+    #
+    # For other supported options, see the private methods in +Formatter+.
     attr_reader :opts
 
     # Set the +form+, +type+, and +opts+.
@@ -544,6 +566,12 @@ module Forme
   class Formatter
     Forme.register_transformer(:formatter, :default, self)
 
+    # These options are copied directly from the options hash to the the
+    # attributes hash, so they don't need to be specified in the :attr
+    # option.  However, they can be specified in both places, and if so,
+    # the :attr option version takes precedence.
+    ATTRIBUTE_OPTIONS = [:name, :id, :placeholder, :value]
+
     # Create a new instance and call it
     def self.call(input)
       new.call(input)
@@ -561,13 +589,7 @@ module Forme
     # them.
     attr_reader :attr
     
-    # The options hash related to this formatter's processing, derived
-    # from the +input+'s +opts+.  Keys used:
-    # :error :: An error message for the +input+
-    # :error_handler :: A custom +error_handler+ to use, instead of the +form+'s default
-    # :label :: A label for the +input+
-    # :labeler :: A custom +labeler+ to use, instead of the +form+'s default
-    # :wrapper :: A custom +wrapper+ to use, instead of the +form+'s default
+    # The +opts+ hash of the +input+.
     attr_reader :opts
 
     # Used to specify the value of the hidden input created for checkboxes.
@@ -584,8 +606,9 @@ module Forme
     def call(input)
       @input = input
       @form = input.form
-      @attr = input.opts.dup
-      @opts = {}
+      attr = input.opts[:attr]
+      @attr = attr ? attr.dup : {}
+      @opts = input.opts
       normalize_options
 
       tag = convert_to_tag(input.type)
@@ -614,12 +637,13 @@ module Forme
     # input tag.  Recognizes the following options:
     # :checked :: checkbox is set to checked if so.
     # :hidden_value :: sets the value of the hidden input tag.
+    # :no_hidden :: don't create a hidden input tag
     def format_checkbox
       @attr[:type] = :checkbox
-      @attr[:checked] = :checked if @attr.delete(:checked)
-      if @attr[:name] && !@attr.delete(:no_hidden)
+      @attr[:checked] = :checked if @opts[:checked]
+      if @attr[:name] && !@opts[:no_hidden]
         attr = {:type=>:hidden}
-        unless attr[:value] = @attr.delete(:hidden_value)
+        unless attr[:value] = @opts[:hidden_value]
           attr[:value] = CHECKBOX_MAP[@attr[:value]]
         end
         attr[:id] = "#{@attr[:id]}_hidden" if @attr[:id]
@@ -633,7 +657,7 @@ module Forme
     # For radio buttons, recognizes the :checked option and sets the :checked
     # attribute in the tag appropriately.
     def format_radio
-      @attr[:checked] = :checked if @attr.delete(:checked)
+      @attr[:checked] = :checked if @opts[:checked]
       @attr[:type] = :radio
       tag(:input)
     end
@@ -641,7 +665,7 @@ module Forme
     # Use a date input by default.  If the :as=>:select option is given,
     # use a multiple select box for the options.
     def format_date
-      if @attr.delete(:as) == :select
+      if @opts[:as] == :select
         name = @attr[:name]
         id = @attr[:id]
         v = @attr[:value]
@@ -652,7 +676,7 @@ module Forme
         end
         ops = {:year=>1900..2050, :month=>1..12, :day=>1..31}
         input.merge_opts(:label_id=>"#{id}_year")
-        [:year, :month, :day].map{|x| form._input(:select, @attr.dup.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].to_a.map{|x| [x, x]})).format}
+        [:year, :month, :day].map{|x| form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].to_a.map{|x| [x, x]})).format}
       else
         _format_input(:date)
       end
@@ -684,11 +708,11 @@ module Forme
     # :multiple :: Creates a multiple select box.
     # :value :: Same as :selected, but has lower priority.
     def format_select
-      if os = @attr.delete(:options)
-        vm = @attr.delete(:value_method)
-        tm = @attr.delete(:text_method)
-        sel = @attr.delete(:selected) || @attr.delete(:value)
-        if @attr.delete(:multiple)
+      if os = @opts[:options]
+        vm = @opts[:value_method]
+        tm = @opts[:text_method]
+        sel = @opts[:selected] || @attr.delete(:value)
+        if @opts[:multiple]
           @attr[:multiple] = :multiple
           sel = Array(sel)
           cmp = lambda{|v| sel.include?(v)}
@@ -722,7 +746,7 @@ module Forme
             tag(:option, attr, [x])
           end
         end
-        if prompt = @attr.delete(:add_blank)
+        if prompt = @opts[:add_blank]
           os.unshift(tag(:option, {:value=>''}, prompt.is_a?(String) ? [prompt] : []))
         end
       end
@@ -743,16 +767,29 @@ module Forme
     # :required :: Sets the +required+ attribute on the resulting tag if true.
     # :disabled :: Sets the +disabled+ attribute on the resulting tag if true.
     def normalize_options
-      @attr[:required] = :required if @attr.delete(:required)
-      @attr[:disabled] = :disabled if @attr.delete(:disabled)
-      if @opts[:label] = @attr.delete(:label)
-        @opts[:labeler] = @attr.delete(:labeler) if @attr.has_key?(:labeler)
+      ATTRIBUTE_OPTIONS.each do |k|
+        if @opts.has_key?(k) && !@attr.has_key?(k)
+          @attr[k] = @opts[k]
+        end
       end
-      if @opts[:error] = @attr.delete(:error)
-        @opts[:error_handler] = @attr.delete(:error_handler) if @attr.has_key?(:error_handler)
+
+      if @opts.has_key?(:class)
+        if @attr.has_key?(:class)
+          @attr[:class] += " #{@opts[:class]}"
+        else
+          @attr[:class] = @opts[:class]
+        end
       end
-      @opts[:wrapper] = @attr.delete(:wrapper) if @attr.has_key?(:wrapper)
-      @attr.delete(:formatter)
+
+      if data = opts[:data]
+        data.each do |k, v|
+          sym = :"data-#{k}"
+          @attr[sym] = v unless @attr.has_key?(sym)
+        end
+      end
+
+      @attr[:required] = :required if @opts[:required] && !@attr.has_key?(:required)
+      @attr[:disabled] = :disabled if @opts[:disabled] && !@attr.has_key?(:disabled)
     end
 
     # Create a +Tag+ instance related to the receiver's +form+ with the given
@@ -789,7 +826,7 @@ module Forme
     # to +false+, set the :disabled attribute on the
     # resulting tag.
     def normalize_options
-      if @attr.delete(:disabled) == false
+      if @opts[:disabled] == false
         super
       else
         super
