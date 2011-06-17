@@ -675,7 +675,7 @@ module Forme
           values[:year], values[:month], values[:day] = v.year, v.month, v.day
         end
         ops = {:year=>1900..2050, :month=>1..12, :day=>1..31}
-        input.merge_opts(:label_id=>"#{id}_year")
+        input.merge_opts(:label_for=>"#{id}_year")
         [:year, :month, :day].map{|x| form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].to_a.map{|x| [x, x]})).format}
       else
         _format_input(:date)
@@ -927,12 +927,12 @@ module Forme
     Forme.register_transformer(:labeler, :explicit, new)
 
     # Return an array with a label tag as the first entry and +tag+ as
-    # a second entry.  If +tag+ is an array, scan it for the first +Tag+
-    # instance that isn't hidden (since hidden tags shouldn't have labels). 
-    # If the +tag+ doesnt' have an id attribute, an +Error+ is raised.
+    # a second entry.  If the +input+ has a :label_for option, use that,
+    # otherwise use the input's :id option.  If neither the :id or
+    # :label_for option is used, the label created will not be
+    # associated with an input.
     def call(tag, input)
-      raise Error, "Explicit labels require an id field" unless id = input.opts.fetch(:label_id, input.opts[:id])
-      [input.tag(:label, {:for=>id}, [input.opts[:label]]), tag]
+      [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}, [input.opts[:label]]), tag]
     end
   end
 
