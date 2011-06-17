@@ -226,7 +226,7 @@ module Sequel # :nodoc:
             opts.delete(:wrapper)
             radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>(pk == val)))}
             radios.unshift("#{label}: ")
-            wrapper ? wrapper.call(TagArray.new(form, radios), _input(:radio, opts)) : radios
+            wrapper ? wrapper.call(radios, _input(:radio, opts)) : radios
           else
             opts[:id] = form.namespaced_id(key) unless opts.has_key?(:id)
             opts[:add_blank] = true if !opts.has_key?(:add_blank) && (sch = obj.model.db_schema[key])  && sch[:allow_null]
@@ -255,7 +255,7 @@ module Sequel # :nodoc:
             opts.delete(:wrapper)
             cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>val.include?(pk), :no_hidden=>true))}
             cbs.unshift("#{label}: ")
-            wrapper ? wrapper.call(TagArray.new(form, cbs), _input(:checkbox, opts)) : cbs
+            wrapper ? wrapper.call(cbs, _input(:checkbox, opts)) : cbs
           else
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:multiple] = true

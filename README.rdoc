@@ -80,7 +80,6 @@ strings.  Here are the main classes used by the library:
 <tt>Forme::Form</tt> :: main object
 <tt>Forme::Input</tt> :: high level abstract tag (a single +Input+ could represent a select box with a bunch of options)
 <tt>Forme::Tag</tt> :: low level abstract tag representing an html tag (there would be a separate +Tag+ for each option in a select box)
-<tt>Forme::TagArray</tt> :: array of Tags, Inputs, and Strings
 
 The group of objects that perform the transformations to
 the abstract syntax trees are known as transformers.

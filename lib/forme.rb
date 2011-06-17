@@ -321,6 +321,7 @@ module Forme
       else
         _input(field, opts)
       end
+      use_serializer(input) if input.is_a?(Array)
       self << input
       input
     end
@@ -403,6 +404,15 @@ module Forme
 
     private
 
+    # Extend +obj+ with +Serialized+ and associate it with the receiver, such
+    # that calling +to_s+ on the object will use the receiver's serializer
+    # to generate the resulting string.
+    def use_serializer(obj)
+      obj.extend(Serialized)
+      obj._form = self
+      obj
+    end
+
     # Make the given tag the currently open tag, and yield.  After the
     # block returns, make the previously open tag the currently open
     # tag.
@@ -415,7 +425,7 @@ module Forme
   end
 
   # High level abstract tag form, transformed by formatters into the lower
-  # level +Tag+ form (or a +TagArray+ of them).
+  # level +Tag+ form (or an array of them).
   class Input
     # The +Form+ object related to the receiver.
     attr_reader :form
@@ -448,7 +458,7 @@ module Forme
       form.serialize(self)
     end
 
-    # Transform the receiver into a lower level +Tag+ form (or a +TagArray+
+    # Transform the receiver into a lower level +Tag+ form (or an array
     # of them).
     def format
       form.format(self)
@@ -467,21 +477,19 @@ module Forme
     # The attributes hash of this receiver.
     attr_reader :attr
 
-    # A +TagArray+ instance representing the children of the receiver,
+    # An array instance representing the children of the receiver,
     # or possibly +nil+ if the receiver has no children.
     attr_reader :children
 
     # Set the +form+, +type+, +attr+, and +children+.
     def initialize(form, type, attr={}, children=nil)
       case children
-      when TagArray
-        @children = children
       when Array
-        @children = TagArray.new(form, children)
+        @children = children
       when nil
         @children = nil
       else
-        @children = TagArray.new(form, [children])
+        @children = [children]
       end
       @form, @type, @attr = form, type, attr
     end
@@ -491,7 +499,7 @@ module Forme
       if children
         children << child
       else
-        @children = TagArray.new(form, [child])
+        @children = [child]
       end
     end
 
@@ -507,22 +515,16 @@ module Forme
     end
   end
 
-  # Array subclass related to a specific +Form+ instance.
-  class TagArray < Array
+  # Module that can extend objects associating them with a specific
+  # +Form+ instance.  Calling +to_s+ on the object will then use the
+  # form's serializer to return a string.
+  module Serialized
     # The +Form+ instance related to the receiver.
-    attr_accessor :form
-
-    # Create a new instance using +contents+, associated to
-    # the given +form+.
-    def self.new(form, contents)
-      a = super(contents)
-      a.form = form
-      a
-    end
+    attr_accessor :_form
 
     # Return a string containing the serialized content of the receiver.
     def to_s
-      form.serialize(self)
+      _form.serialize(self)
     end
   end
 
@@ -551,7 +553,7 @@ module Forme
     attr_reader :form
     
     # The +Input+ instance for the receiver.  This is what the receiver
-    # converts to the lower level +Tag+ form (or a +TagArray+ of them). 
+    # converts to the lower level +Tag+ form (or an array of them). 
     attr_reader :input
     
     # The attributes to to set on the lower level +Tag+ form returned.
@@ -575,7 +577,7 @@ module Forme
     CHECKBOX_MAP = Hash.new(0)
     CHECKBOX_MAP['t'] = 'f'
 
-    # Transform the +input+ into a +Tag+ instance (or +TagArray+ of them),
+    # Transform the +input+ into a +Tag+ instance (or an array of them),
     # wrapping it with the +form+'s wrapper, and the form's +error_handler+
     # and +labeler+ if the +input+ has an <tt>:error</tt> or <tt>:label</tt>
     # options.
@@ -589,7 +591,7 @@ module Forme
       tag = convert_to_tag(input.type)
       tag = wrap_tag_with_error(tag) if input.opts[:error]
       tag = wrap_tag_with_label(tag) if input.opts[:label]
-      handle_array(wrap_tag(tag))
+      wrap_tag(tag)
     end
 
     private
@@ -735,13 +737,6 @@ module Forme
       else
         tag(:textarea)
       end
-    end
-
-    # If +tag+ is an +Array+ and not a +TagArray+, turn it into
-    # a +TagArray+ related to the receiver's +form+.  Otherwise,
-    # return +tag+.
-    def handle_array(tag)
-      (tag.is_a?(Array) && !tag.is_a?(TagArray)) ? TagArray.new(form, tag) : tag
     end
 
     # Normalize the options used for all input types.  Handles:
