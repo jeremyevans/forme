@@ -226,17 +226,17 @@ module Forme
 
     # If there is a related transformer, call it with the given +args+ and +block+.
     # Otherwise, attempt to return the initial input without modifying it.
-    def transform(type, trans, *args, &block)
-      if trans = transformer(type, trans)
+    def transform(type, trans_name, *args, &block)
+      if trans = transformer(type, trans_name)
         trans.call(*args, &block)
       else
         case type
         when :inputs_wrapper
           yield
-        when :labeler, :error_handler
-          args[1]
+        when :labeler, :error_handler, :wrapper
+          args.first
         else
-          args[0]
+          raise Error, "No matching #{type}: #{trans_name.inspect}"
         end
       end
     end
@@ -431,6 +431,18 @@ module Forme
       @form, @type, @opts = form, type, opts
     end
 
+    # Replace the +opts+ by merging the given +hash+ into +opts+,
+    # without modifying +opts+.
+    def merge_opts(hash)
+      @opts = @opts.merge(hash)
+    end
+
+    # Create a new +Tag+ instance with the given arguments and block
+    # related to the receiver's +form+.
+    def tag(*a, &block)
+      form._tag(*a, &block)
+    end
+
     # Return a string containing the serialized content of the receiver.
     def to_s
       form.serialize(self)
@@ -508,12 +520,6 @@ module Forme
       a
     end
 
-    # Create a new +Tag+ instance with the given arguments and block
-    # related to the receiver's +form+.
-    def tag(*a, &block)
-      form._tag(*a, &block)
-    end
-
     # Return a string containing the serialized content of the receiver.
     def to_s
       form.serialize(self)
@@ -580,15 +586,9 @@ module Forme
       @opts = {}
       normalize_options
 
-      tag = handle_array(convert_to_tag(input.type))
-
-      if error = @opts[:error]
-        tag = handle_array(wrap_tag_with_error(error, tag))
-      end
-      if label = @opts[:label]
-        tag = handle_array(wrap_tag_with_label(label, tag))
-      end
-
+      tag = convert_to_tag(input.type)
+      tag = wrap_tag_with_error(tag) if input.opts[:error]
+      tag = wrap_tag_with_label(tag) if input.opts[:label]
       handle_array(wrap_tag(tag))
     end
 
@@ -649,6 +649,7 @@ module Forme
           values[:year], values[:month], values[:day] = v.year, v.month, v.day
         end
         ops = {:year=>1900..2050, :month=>1..12, :day=>1..31}
+        input.merge_opts(:label_id=>"#{id}_year")
         [:year, :month, :day].map{|x| form._input(:select, @attr.dup.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].to_a.map{|x| [x, x]})).format}
       else
         _format_input(:date)
@@ -767,17 +768,17 @@ module Forme
     
     # Wrap the tag with the form's +wrapper+.
     def wrap_tag(tag)
-      form.transform(:wrapper, @opts, tag)
+      form.transform(:wrapper, @opts, tag, input)
     end
 
     # Wrap the tag with the form's +error_handler+.
-    def wrap_tag_with_error(error, tag)
-      form.transform(:error_handler, @opts, error, tag)
+    def wrap_tag_with_error(tag)
+      form.transform(:error_handler, @opts, tag, input)
     end
 
     # Wrap the tag with the form's +labeler+.
-    def wrap_tag_with_label(label, tag)
-      form.transform(:labeler, @opts, label, tag)
+    def wrap_tag_with_label(tag)
+      form.transform(:labeler, @opts, tag, input)
     end
   end
 
@@ -850,8 +851,8 @@ module Forme
     Forme.register_transformer(:error_handler, :default, new)
 
     # Return a label tag wrapping the given tag.
-    def call(err_msg, tag)
-      msg_tag = tag.tag(:span, {:class=>'error_message'}, err_msg)
+    def call(tag, input)
+      msg_tag = tag.tag(:span, {:class=>'error_message'}, input.opts[:error])
       if tag.is_a?(Tag)
         attr = tag.attr
         if attr[:class]
@@ -874,13 +875,14 @@ module Forme
     # Return a label tag wrapping the given tag.  For radio and checkbox
     # inputs, the label occurs directly after the tag, for all other types,
     # the label occurs before the tag.
-    def call(label, tag)
-      t = if tag.is_a?(Tag) && tag.type == :input && [:radio, :checkbox].include?(tag.attr[:type])
+    def call(tag, input)
+      label = input.opts[:label]
+      t = if [:radio, :checkbox].include?(input.type)
         [tag, " #{label}"]
       else
         ["#{label}: ", tag]
       end
-      tag.tag(:label, {}, t)
+      input.tag(:label, {}, t)
     end
   end
 
@@ -896,21 +898,19 @@ module Forme
     # a second entry.  If +tag+ is an array, scan it for the first +Tag+
     # instance that isn't hidden (since hidden tags shouldn't have labels). 
     # If the +tag+ doesnt' have an id attribute, an +Error+ is raised.
-    def call(label, tag)
-      t = tag.is_a?(Tag) ? tag : tag.find{|tg| tg.is_a?(Tag) && tg.attr[:type] != :hidden}
-      id = t.attr[:id]
-      raise Error, "Explicit labels require an id field" unless id
-      [tag.tag(:label, {:for=>id}, [label]), tag]
+    def call(tag, input)
+      raise Error, "Explicit labels require an id field" unless id = input.opts.fetch(:label_id, input.opts[:id])
+      [input.tag(:label, {:for=>id}, [input.opts[:label]]), tag]
     end
   end
 
-  Forme.register_transformer(:wrapper, :default){|tag| tag}
+  Forme.register_transformer(:wrapper, :default){|tag, input| tag}
   [:li, :p, :div, :span].each do |x|
-    Forme.register_transformer(:wrapper, x){|tag| tag.tag(x, {}, Array(tag))}
+    Forme.register_transformer(:wrapper, x){|tag, input| input.tag(x, {}, Array(tag))}
   end
-  Forme.register_transformer(:wrapper, :trtd) do |tag|
+  Forme.register_transformer(:wrapper, :trtd) do |tag, input|
     a = Array(tag)
-    tag.tag(:tr, {}, a.length == 1 ? tag.tag(:td, {}, a) : [tag.tag(:td, {}, [a.first]), tag.tag(:td, {}, a[1..-1])])
+    input.tag(:tr, {}, a.length == 1 ? input.tag(:td, {}, a) : [input.tag(:td, {}, [a.first]), input.tag(:td, {}, a[1..-1])])
   end
 
   # Default inputs_wrapper used by the library, uses a fieldset.

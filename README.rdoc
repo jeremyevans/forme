@@ -91,16 +91,16 @@ API, so you can use a +Proc+ for any custom transformer.
 
 +serializer+ :: tags input/tag, returns string
 +formatter+ :: takes input, returns tag
-+error_handler+ :: takes error message and tag, returns version with errors noted
-+labeler+ :: takes label and tag, returns labeled version
-+wrapper+ :: takes tag, returns wrapped version
-+inputs_wrapper+ :: takes form, options, and block, wrapping block in a tag
++error_handler+ :: takes tag and input, returns version of tag with errors noted
++labeler+ :: takes tag and input, returns labeled version of tag
++wrapper+ :: takes tag and input, returns wrapped version of tag
++inputs_wrapper+ :: takes form, options hash, and block, wrapping block in a tag
 
-The +serializer+ is the base of the library.  It turns +Tag+ into strings.  If it comes across
+The +serializer+ is the base of the transformations.  It turns +Tag+ instances into strings.  If it comes across
 an +Input+, it calls the +formatter+ on the +Input+ to turn it into a +Tag+, and then serializes
-that +Tag+.  The +formatter+ first converts the +Input+ to a +Tag+, and calls the
-+error_handler+ and +labeler+ if necessary with the +Tag+ to add the error handling and
-labeling.  Finally, it calls the +wrapper+ to wrap the resulting tag before returning it.
+that +Tag+.  The +formatter+ first converts the +Input+ to a +Tag+, and then calls the
++error_handler+ if the <tt>:error</tt> option is set and the +labeler+  if the <tt>:label</tt>
+option is set.  Finally, it calls the +wrapper+ to wrap the resulting tag before returning it.
 
 The +inputs_wrapper+ is called by <tt>Forme::Form#inputs</tt> and serves to wrap a bunch
 of related inputs.

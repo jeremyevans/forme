@@ -221,7 +221,7 @@ describe "Forme plain forms" do
   end
 
   specify "inputs should accept a :error_handler option to use a custom error_handler" do
-    @f.input(:textarea, :error_handler=>proc{|e, t| [t, "!!! #{e}"]}, :error=>'bar', :id=>:foo).to_s.should == '<textarea id="foo"></textarea>!!! bar'
+    @f.input(:textarea, :error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}, :error=>'bar', :id=>:foo).to_s.should == '<textarea id="foo"></textarea>!!! bar'
   end
 
   specify "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do
@@ -260,15 +260,15 @@ describe "Forme custom" do
   end
 
   specify "labelers can be specified as a proc" do
-    Forme::Form.new(:labeler=>proc{|l, t| ["#{l}: ", t]}).input(:textarea, :NAME=>'foo', :label=>'bar').to_s.should == 'bar: <textarea NAME="foo"></textarea>'
+    Forme::Form.new(:labeler=>proc{|t, i| ["#{i.opts[:label]}: ", t]}).input(:textarea, :NAME=>'foo', :label=>'bar').to_s.should == 'bar: <textarea NAME="foo"></textarea>'
   end
 
   specify "error_handlers can be specified as a proc" do
-    Forme::Form.new(:error_handler=>proc{|e, t| [t, "!!! #{e}"]}).input(:textarea, :NAME=>'foo', :error=>'bar').to_s.should == '<textarea NAME="foo"></textarea>!!! bar'
+    Forme::Form.new(:error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}).input(:textarea, :NAME=>'foo', :error=>'bar').to_s.should == '<textarea NAME="foo"></textarea>!!! bar'
   end
 
   specify "wrappers can be specified as a proc" do
-    Forme::Form.new(:wrapper=>proc{|t| t.tag(:div, {}, t)}).input(:textarea, :NAME=>'foo').to_s.should == '<div><textarea NAME="foo"></textarea></div>'
+    Forme::Form.new(:wrapper=>proc{|t, i| t.tag(:div, {:bar=>i.opts[:NAME]}, t)}).input(:textarea, :NAME=>'foo').to_s.should == '<div bar="foo"><textarea NAME="foo"></textarea></div>'
   end
 
   specify "inputs_wrappers can be specified as a proc" do
@@ -375,18 +375,18 @@ end
 
 describe "Forme registering custom transformers" do
   specify "should have #register_transformer register a transformer object for later use" do
-    Forme.register_transformer(:wrapper, :div, proc{|t| t.tag(:div, {}, [t])})
+    Forme.register_transformer(:wrapper, :div, proc{|t, i| t.tag(:div, {}, [t])})
     Forme::Form.new(:wrapper=>:div).input(:textarea).to_s.should == '<div><textarea></textarea></div>'
   end
 
   specify "should have #register_transformer register a transformer block for later use" do
-    Forme.register_transformer(:wrapper, :div1){|t| t.tag(:div1, {}, [t])}
+    Forme.register_transformer(:wrapper, :div1){|t, i| t.tag(:div1, {}, [t])}
     Forme::Form.new(:wrapper=>:div1).input(:textarea).to_s.should == '<div1><textarea></textarea></div1>'
   end
 
   specify "should have #register_transformer raise an error if given a block and an object" do
     proc do
-      Forme.register_transformer(:wrapper, :div1, proc{|t| t}){|t| t.tag(:div1, {}, [t])}
+      Forme.register_transformer(:wrapper, :div1, proc{|t, i| t}){|t| t.tag(:div1, {}, [t])}
     end.should raise_error(Forme::Error)
   end
 end
