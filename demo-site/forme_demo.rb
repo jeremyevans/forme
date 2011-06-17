@@ -16,7 +16,7 @@ class FormeDemo < Sinatra::Base
     end
 
     def form_opts
-      @form_opts ||= @form_opts_str ? eval(@form_opts_str) : {}
+      @form_opts ||= @form_opts_str ? eval(@form_opts_str, binding, __FILE__, __LINE__) : {}
     end
 
     def demo(t, opts={})
@@ -38,7 +38,7 @@ class FormeDemo < Sinatra::Base
 
   get '/album/basic/explicit' do
     @page_title = 'Album Basic - Explicit Labels'
-    @form_opts_str = '{:labeler=>:explicit, :wrapper=>proc{|tag| tag.tag(:div, {}, tag)}}'
+    @form_opts_str = '{:labeler=>:explicit, :wrapper=>:div}'
     @css = <<-END
 label, input, select { display: block; float: left }
 label { min-width: 120px; }

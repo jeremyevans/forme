@@ -31,7 +31,7 @@ DB.create_table!(:tracks) do
   primary_key :id
   Integer :number, :null=>false
   String :name, :null=>false
-  foreign_key :album_id, :albums, :null=>false
+  foreign_key :album_id, :albums
   Float :length
 end
 DB[:tracks].insert(:name=>'R', :number=>1, :album_id=>1, :length=>3.2)
@@ -56,4 +56,7 @@ DB[:albums_tags].insert(2, 3)
 
 Sequel::Model.plugin :defaults_setter
 Sequel::Model.plugin :forme
+Sequel::Model.plugin :association_pks
+Sequel::Model.plugin :prepared_statements
+Sequel::Model.plugin :prepared_statements_associations
 Dir['models/*.rb'].each{|f| require f}
