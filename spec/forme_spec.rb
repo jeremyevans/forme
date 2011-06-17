@@ -287,6 +287,7 @@ describe "Forme plain forms" do
   specify "invalid custom transformers should raise an Error" do
     proc{Forme::Form.new(:wrapper=>Object.new)}.should raise_error(Forme::Error)
     proc{@f.input(:textarea, :wrapper=>Object.new).to_s}.should raise_error(Forme::Error)
+    proc{@f.input(:textarea, :formatter=>nil).to_s}.should raise_error(Forme::Error)
   end
 end
 
