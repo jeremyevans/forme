@@ -1,3 +1,4 @@
+require 'date'
 require 'forme/version'
 
 # Forme is designed to make creating HTML forms easier.  Flexibility and
