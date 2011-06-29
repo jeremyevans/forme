@@ -9,18 +9,18 @@ Forme is a HTML forms library for ruby with the following goals:
 
 = Demo Site
 
-A demo site is available at http://forme.heroku.com.
+A demo site is available at http://forme.heroku.com
 
 = Source Code
 
-Source code is available on GitHub at https://github.com/jeremyevans/forme.
+Source code is available on GitHub at https://github.com/jeremyevans/forme
 
 = Basic Usage
 
 Without an object, Forme is a simple form builder:
 
   f = Forme::Form.new
-  f.open(:action=>'/foo', :method=>:post) # '<form action="/foo" method="post">
+  f.open(:action=>'/foo', :method=>:post) # '<form action="/foo" method="post">'
   f.input(:textarea, :value=>'foo', :name=>'bar') # '<textarea name="bar">foo</textarea>'
   f.input(:text, :value=>'foo', :name=>'bar') # '<input name="bar" type="text" value="foo"/>'
   f.close # '</form>'
@@ -60,14 +60,19 @@ Forme comes with a DSL:
 You can wrap up multiple inputs with the <tt>:inputs</tt> method:
 
   Forme.form(:action=>'/foo') do |f|
-    f.inputs([[:text, :name=>'bar'], [:textarea, :name=>'baz']])
+    f.inputs([[:text, {:name=>'bar'}], [:textarea, {:name=>'baz'}]])
   end
   # <form action="/foo">
-  #   <fieldset>
+  #   <fieldset class="inputs">
   #     <input name="bar" type="text"/>
   #     <textarea name="baz"></textarea>
   #   </fieldset>
   # </form>
+
+You can even do everything in a single method call:
+
+  Forme.form({:action=>'/foo'},
+    :inputs=>[[:text, {:name=>'bar'}], [:textarea, {:name=>'baz'}]])
 
 = Basic Design
 
@@ -136,7 +141,7 @@ Forme ships with a bunch of built-in transformers that you can use:
 :p :: wraps tag in p tag
 :div :: wraps tag in div tag
 :span :: wraps tag in span tag
-:trtd :: wraps tag in a tr tag with all parts wrapped in individual td tags, useful for lining up
+:trtd :: wraps tag in a tr tag with a td for the label and a td for the tag, useful for lining up
          inputs with the :explicit labeler without CSS
 
 === +inputs_wrapper+
@@ -186,6 +191,15 @@ nested associations using the +subform+ method:
     end
   end
 
+For many_to_one associations, you can use the <tt>:as=>:radio</tt> option to use a series of radio buttons,
+and for one_to_many and many_to_many associations, you can use the <tt>:as=>:checkbox</tt> option to use a
+series of checkboxes.  For one_to_many and many_to_many associations, you will probably want to use the
++association_pks+ plugin that ships with Sequel.
+
+The Forme Sequel plugin also integerates with Sequel's validation reflection support with the
++validation_class_methods+ plugin that ships with Sequel.  It will add +pattern+ and +maxlength+ attributes
+based on the format, numericality, and length validations.
+
 = Sinatra ERB Support
 
 Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
@@ -198,6 +212,8 @@ following API in your Sinatra ERB forms:
       <%= f.input(:field_two) %>
     <% end %>
   <% end %>
+
+In addition to ERB, it also works with Sinatra's Erubis support.
 
 = Other Similar Projects
 
