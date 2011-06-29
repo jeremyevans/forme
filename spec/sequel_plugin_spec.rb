@@ -357,3 +357,21 @@ describe "Forme Sequel plugin default input types based on column type" do
     f(File).to_s.should == '<label>Foo: <input id="test_foo" name="test[foo]" type="file"/></label>'
   end
 end
+
+describe "Forme Sequel::Model validation parsing" do
+  def f(*a)
+    c = Class.new(Album){def self.name; "Album"; end}
+    c.plugin :validation_class_methods
+    c.send(*a)
+    Forme::Form.new(c.new)
+  end
+
+  specify "should turn format into a pattern" do
+    f(:validates_format_of, :name, :with=>/[A-z]+/).input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" pattern="[A-z]+" type="text"/></label>'
+  end
+
+  specify "should respect :title option for format" do
+    f(:validates_format_of, :name, :with=>/[A-z]+/, :title=>'Foo').input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" pattern="[A-z]+" title="Foo" type="text"/></label>'
+  end
+end
+

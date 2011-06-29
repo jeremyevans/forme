@@ -149,10 +149,13 @@ module Sequel # :nodoc:
         # column or association, but the object responds to +field+,
         # create a text input.  Otherwise, raise an +Error+.
         def input
+          opts[:attr] = opts[:attr] ? opts[:attr].dup : {}
           opts[:wrapper_attr] = opts[:wrapper_attr] ? opts[:wrapper_attr].dup : {}
           opts[:label] = humanize(field) unless opts.has_key?(:label)
+
           if sch = obj.db_schema[field] 
             handle_errors(field)
+            handle_validations(field)
             meth = :"input_#{sch[:type]}"
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
@@ -195,6 +198,21 @@ module Sequel # :nodoc:
         def handle_errors(f)
           if e = obj.errors.on(f)
             opts[:error] = e.join(', ')
+          end
+        end
+
+        # Update the attributes and options for any recognized validations
+        def handle_validations(f)
+          m = obj.model
+          if m.respond_to?(:validation_reflections) and (vs = m.validation_reflections[f])
+            attr = opts[:attr]
+            vs.each do |type, options|
+              case type
+              when :format
+                attr[:pattern] = options[:with].source unless attr.has_key?(:pattern)
+                attr[:title] = options[:title] unless attr.has_key?(:title)
+              end
+            end
           end
         end
 
