@@ -518,7 +518,7 @@ module Forme
       else
         @children = [children]
       end
-      @form, @type, @attr = form, type, attr
+      @form, @type, @attr = form, type, (attr||{})
     end
 
     # Adds a child to the array of receiver's children.
@@ -950,13 +950,15 @@ module Forme
     # option is given, add a +legend+ tag as the first
     # child of the fieldset.
     def call(form, opts)
-      if legend = opts.delete(:legend)
-        form.tag(:fieldset) do
-          form.emit(form.tag(:legend, {}, legend))
+      attr = opts[:attr] ? opts[:attr].dup : {}
+      attr[:class] = Forme.merge_classes(attr[:class], 'inputs')
+      if legend = opts[:legend]
+        form.tag(:fieldset, attr) do
+          form.emit(form.tag(:legend, opts[:legend_attr], legend))
           yield
         end
       else
-        form.tag(:fieldset, &Proc.new)
+        form.tag(:fieldset, attr, &Proc.new)
       end
     end
   end

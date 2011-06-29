@@ -206,23 +206,31 @@ describe "Forme plain forms" do
   end
 
   specify "should have an #inputs method for multiple inputs wrapped in a fieldset" do
-    @f.inputs([:textarea, :text]).to_s.should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
+    @f.inputs([:textarea, :text]).to_s.should == '<fieldset class="inputs"><textarea></textarea><input type="text"/></fieldset>'
+  end
+
+  specify "should have default #inputs method accept an :attr option" do
+    @f.inputs([:textarea, :text], :legend=>'Inputs', :attr=>{:class=>'foo', :bar=>'baz'}).to_s.should == '<fieldset bar="baz" class="foo inputs"><legend>Inputs</legend><textarea></textarea><input type="text"/></fieldset>'
   end
 
   specify "should have default #inputs method accept a :legend option" do
-    @f.inputs([:textarea, :text], :legend=>'Inputs').to_s.should == '<fieldset><legend>Inputs</legend><textarea></textarea><input type="text"/></fieldset>'
+    @f.inputs([:textarea, :text], :legend=>'Inputs').to_s.should == '<fieldset class="inputs"><legend>Inputs</legend><textarea></textarea><input type="text"/></fieldset>'
+  end
+
+  specify "should have default #inputs method accept a :legend_attr option" do
+    @f.inputs([:textarea, :text], :legend=>'Inputs', :legend_attr=>{:class=>'foo'}).to_s.should == '<fieldset class="inputs"><legend class="foo">Inputs</legend><textarea></textarea><input type="text"/></fieldset>'
   end
 
   specify "should have an #inputs method take a block and yield to it" do
-    @f.inputs{@f.input(:textarea); @f.input(:text)}.to_s.should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
+    @f.inputs{@f.input(:textarea); @f.input(:text)}.to_s.should == '<fieldset class="inputs"><textarea></textarea><input type="text"/></fieldset>'
   end
 
   specify "should have an #inputs method work with both args and block" do
-    @f.inputs([:textarea]){@f.input(:text)}.to_s.should == '<fieldset><textarea></textarea><input type="text"/></fieldset>'
+    @f.inputs([:textarea]){@f.input(:text)}.to_s.should == '<fieldset class="inputs"><textarea></textarea><input type="text"/></fieldset>'
   end
 
   specify "should have an #inputs method support array arguments and creating inputs with the array as argument list" do
-    @f.inputs([[:textarea, {:name=>'foo'}], [:text, {:id=>'bar'}]]).to_s.should == '<fieldset><textarea name="foo"></textarea><input id="bar" type="text"/></fieldset>'
+    @f.inputs([[:textarea, {:name=>'foo'}], [:text, {:id=>'bar'}]]).to_s.should == '<fieldset class="inputs"><textarea name="foo"></textarea><input id="bar" type="text"/></fieldset>'
   end
 
   specify "should escape tag content" do
@@ -378,11 +386,11 @@ describe "Forme built-in custom" do
   end
 
   specify "inputs_wrapper: fieldset_ol wraps tags in a fieldset and an ol" do
-    Forme::Form.new(:inputs_wrapper=>:fieldset_ol, :wrapper=>:li).inputs([:textarea]).to_s.should == '<fieldset><ol><li><textarea></textarea></li></ol></fieldset>'
+    Forme::Form.new(:inputs_wrapper=>:fieldset_ol, :wrapper=>:li).inputs([:textarea]).to_s.should == '<fieldset class="inputs"><ol><li><textarea></textarea></li></ol></fieldset>'
   end
 
   specify "inputs_wrapper: fieldset_ol supports a :legend option" do
-    Forme.form({}, :inputs_wrapper=>:fieldset_ol, :wrapper=>:li, :legend=>'Foo', :inputs=>[:textarea]).to_s.should == '<form><fieldset><legend>Foo</legend><ol><li><textarea></textarea></li></ol></fieldset></form>'
+    Forme.form({}, :inputs_wrapper=>:fieldset_ol, :wrapper=>:li, :legend=>'Foo', :inputs=>[:textarea]).to_s.should == '<form><fieldset class="inputs"><legend>Foo</legend><ol><li><textarea></textarea></li></ol></fieldset></form>'
   end
 
   specify "inputs_wrapper: div wraps tags in a div" do
@@ -438,12 +446,12 @@ describe "Forme configurations" do
   end
 
   specify "config: :formastic uses fieldset_ol inputs_wrapper and li wrapper, and explicit labeler" do
-    Forme::Form.new(:config=>:formtastic).inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset><ol><li><label for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
+    Forme::Form.new(:config=>:formtastic).inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset class="inputs"><ol><li><label for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
   end
 
   specify "should be able to set a default configuration with Forme.default_config=" do
     Forme.default_config = :formtastic
-    Forme::Form.new.inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset><ol><li><label for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
+    Forme::Form.new.inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset class="inputs"><ol><li><label for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
   end
 
   specify "should have #register_config register a configuration for later use" do
@@ -453,7 +461,7 @@ describe "Forme configurations" do
 
   specify "should have #register_config support a :base option to base it on an existing config" do
     Forme.register_config(:foo2, :labeler=>:default, :base=>:formtastic)
-    Forme::Form.new(:config=>:foo2).inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset><ol><li><label>Foo: <textarea id="foo"></textarea></label></li></ol></fieldset>'
+    Forme::Form.new(:config=>:foo2).inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset class="inputs"><ol><li><label>Foo: <textarea id="foo"></textarea></label></li></ol></fieldset>'
   end
 
 end
@@ -530,15 +538,15 @@ describe "Forme.form DSL" do
   end
 
   specify "should handle an :inputs option to automatically create inputs" do
-    Forme.form({}, :inputs=>[:text, :textarea]).to_s.should ==  '<form><fieldset><input type="text"/><textarea></textarea></fieldset></form>'
+    Forme.form({}, :inputs=>[:text, :textarea]).to_s.should ==  '<form><fieldset class="inputs"><input type="text"/><textarea></textarea></fieldset></form>'
   end
 
   specify "should handle a :legend option if inputs is used" do
-    Forme.form({}, :inputs=>[:text, :textarea], :legend=>'Foo').to_s.should ==  '<form><fieldset><legend>Foo</legend><input type="text"/><textarea></textarea></fieldset></form>'
+    Forme.form({}, :inputs=>[:text, :textarea], :legend=>'Foo').to_s.should ==  '<form><fieldset class="inputs"><legend>Foo</legend><input type="text"/><textarea></textarea></fieldset></form>'
   end
 
   specify "should still work with a block if :inputs is used" do
-    Forme.form({}, :inputs=>[:text]){|f| f.input(:textarea)}.to_s.should ==  '<form><fieldset><input type="text"/></fieldset><textarea></textarea></form>'
+    Forme.form({}, :inputs=>[:text]){|f| f.input(:textarea)}.to_s.should ==  '<form><fieldset class="inputs"><input type="text"/></fieldset><textarea></textarea></form>'
   end
 
   specify "should handle an :button option to automatically create a button" do
@@ -554,7 +562,7 @@ describe "Forme.form DSL" do
   end
 
   specify "should have an :button and :inputs option work together" do
-    Forme.form({}, :inputs=>[:text, :textarea], :button=>'Foo').to_s.should ==  '<form><fieldset><input type="text"/><textarea></textarea></fieldset><input type="submit" value="Foo"/></form>'
+    Forme.form({}, :inputs=>[:text, :textarea], :button=>'Foo').to_s.should ==  '<form><fieldset class="inputs"><input type="text"/><textarea></textarea></fieldset><input type="submit" value="Foo"/></form>'
   end
 
 end
