@@ -41,7 +41,7 @@ class FormeDemo < Sinatra::Base
     @form_opts_str = '{:labeler=>:explicit, :wrapper=>:div}'
     @css = <<-END
 label, input, select { display: block; float: left }
-label { min-width: 120px; }
+label { min-width: 150px; }
 form div { padding: 5px; clear: both; }
 END
     demo :album_basic

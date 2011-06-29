@@ -45,3 +45,10 @@ label[for]:after {
 li label input[type="checkbox"], li label input[type="radio"] {
   margin-left: 0.7em;
 }
+
+form.forme ol {
+  padding: 0;
+}
+form.forme li.boolean input[type="checkbox"] {
+  margin: 0;
+}
