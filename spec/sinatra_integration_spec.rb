@@ -3,10 +3,10 @@ require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
 require 'rubygems'
 require 'sinatra/base'
 require 'forme/sinatra'
-require 'erb'
+require(ENV['ERUBIS'] ? 'erubis' : 'erb')
 
 class FormeSinatraTest < Sinatra::Base
-  helpers Forme::Sinatra::ERB
+  helpers(ENV['ERUBIS'] ? Forme::Sinatra::Erubis : Forme::Sinatra::ERB)
   disable :show_exceptions
   enable :raise_errors
 
@@ -28,6 +28,7 @@ END
     <%= f.input(:first) %>
     <%= f.input(:last) %>
   <% end %>
+
 <% end %>
 END
   end
