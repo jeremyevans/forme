@@ -938,11 +938,11 @@ module Forme
 
   Forme.register_transformer(:wrapper, :default){|tag, input| tag}
   [:li, :p, :div, :span].each do |x|
-    Forme.register_transformer(:wrapper, x){|tag, input| input.tag(x, {}, Array(tag))}
+    Forme.register_transformer(:wrapper, x){|tag, input| input.tag(x, input.opts[:wrapper_attr], Array(tag))}
   end
   Forme.register_transformer(:wrapper, :trtd) do |tag, input|
     a = Array(tag)
-    input.tag(:tr, {}, a.length == 1 ? input.tag(:td, {}, a) : [input.tag(:td, {}, [a.first]), input.tag(:td, {}, a[1..-1])])
+    input.tag(:tr, input.opts[:wrapper_attr], a.length == 1 ? input.tag(:td, {}, a) : [input.tag(:td, {}, [a.first]), input.tag(:td, {}, a[1..-1])])
   end
 
   # Default inputs_wrapper used by the library, uses a fieldset.

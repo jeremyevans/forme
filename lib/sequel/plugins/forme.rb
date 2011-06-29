@@ -149,6 +149,7 @@ module Sequel # :nodoc:
         # column or association, but the object responds to +field+,
         # create a text input.  Otherwise, raise an +Error+.
         def input
+          opts[:wrapper_attr] = opts[:wrapper_attr] ? opts[:wrapper_attr].dup : {}
           opts[:label] = humanize(field) unless opts.has_key?(:label)
           if sch = obj.db_schema[field] 
             handle_errors(field)
@@ -156,12 +157,17 @@ module Sequel # :nodoc:
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
             opts[:required] = true if !opts.has_key?(:required) && sch[:allow_null] == false
+
+            ::Forme.attr_classes(opts[:wrapper_attr], sch[:type])
+            ::Forme.attr_classes(opts[:wrapper_attr], "required") if opts[:required]
+
             if respond_to?(meth, true)
               send(meth, sch)
             else
               input_other(sch)
             end
           elsif ref = obj.model.association_reflection(field)
+            ::Forme.attr_classes(opts[:wrapper_attr], ref[:type])
             meth = :"association_#{ref[:type]}"
             if respond_to?(meth, true)
               send(meth, ref)

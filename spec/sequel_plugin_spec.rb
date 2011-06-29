@@ -98,7 +98,7 @@ describe "Forme Sequel::Model forms" do
   specify "should use number inputs for integers" do
     @b.input(:copies_sold).to_s.should == '<label>Copies sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="10"/></label>'
   end
-  
+
   specify "should use date inputs for Dates" do
     @b.input(:release_date).to_s.should == '<label>Release date: <input id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></label>'
   end
@@ -112,6 +112,19 @@ describe "Forme Sequel::Model forms" do
     @b.input(:created_at).to_s.should == '<label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime" value="2011-06-05 00:00:00+00:00"/></label>'
   end
 
+  specify "should include type as wrapper class" do
+    @ab.values[:created_at] = DateTime.new(2011, 6, 5)
+    f = Forme::Form.new(@ab, :wrapper=>:li)
+    f.input(:name).to_s.should == '<li class="string"><label>Name: <input id="album_name" name="album[name]" type="text" value="b"/></label></li>'
+    f.input(:release_date).to_s.should == '<li class="date"><label>Release date: <input id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></label></li>'
+    f.input(:created_at).to_s.should == '<li class="datetime"><label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime" value="2011-06-05 00:00:00+00:00"/></label></li>'
+  end
+  
+  specify "should include required wrapper class if required" do
+    f = Forme::Form.new(@ab, :wrapper=>:li)
+    f.input(:name, :required=>true).to_s.should == '<li class="string required"><label>Name: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label></li>'
+  end
+  
   specify "should use a select box for tri-valued boolean fields" do
     @b.input(:gold).to_s.should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
     @c.input(:gold).to_s.should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
@@ -134,7 +147,7 @@ describe "Forme Sequel::Model forms" do
   
   specify "should correctly use the forms wrapper for wrapping radio buttons for many_to_one associations with :as=>:radio option" do
     @b = Forme::Form.new(@ab, :wrapper=>:li)
-    @b.input(:artist, :as=>:radio).to_s.should == '<li>Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label></li>'
+    @b.input(:artist, :as=>:radio).to_s.should == '<li class="many_to_one">Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label></li>'
   end
   
   specify "should support custom wrappers for many_to_one associations with :as=>:radio via :tag_wrapper option" do
@@ -202,12 +215,12 @@ describe "Forme Sequel::Model forms" do
 
   specify "should correctly use the forms wrapper for wrapping radio buttons for one_to_many associations with :as=>:checkbox option" do
     @b = Forme::Form.new(@ab, :wrapper=>:li)
-    @b.input(:tracks, :as=>:checkbox).to_s.should == '<li>Tracks: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label></li>'
+    @b.input(:tracks, :as=>:checkbox).to_s.should == '<li class="one_to_many">Tracks: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label></li>'
   end
   
   specify "should support custom wrappers for one_to_many associations with :as=>:checkbox via :tag_wrapper option" do
     @b = Forme::Form.new(@ab, :wrapper=>:li)
-    @b.input(:tracks, :as=>:checkbox, :wrapper=>proc{|t, i| i.tag(:div, {}, [t])}, :tag_wrapper=>proc{|t, i| i.tag(:span, {}, [t])}).to_s.should == '<div>Tracks: <span><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label></span><span><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label></span><span><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label></span></div>'
+    @b.input(:tracks, :as=>:checkbox, :wrapper=>proc{|t, i| i.tag(:div, i.opts[:wrapper_attr], [t])}, :tag_wrapper=>proc{|t, i| i.tag(:span, {}, [t])}).to_s.should == '<div class="one_to_many">Tracks: <span><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label></span><span><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label></span><span><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label></span></div>'
   end
   
   specify "should use a text field methods not backed by columns" do
