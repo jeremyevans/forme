@@ -52,3 +52,6 @@ form.forme ol {
 form.forme li.boolean input[type="checkbox"] {
   margin: 0;
 }
+abbr[title="required"] {
+  color: red;
+}
