@@ -17,15 +17,14 @@ DB.create_table!(:albums) do
   String :name, :null=>false
   foreign_key :artist_id, :artists, :null=>false
   Date :release_date, :null=>false
-  DateTime :created_at, :null=>false, :default=>'now()'
-  DateTime :updated_at
+  DateTime :release_party_time, :null=>false
   Integer :copies_sold, :null=>false, :default=>0
   TrueClass :debut_album, :null=>false
   TrueClass :out_of_print
   index [:name, :artist_id], :unique=>true
 end
-DB[:albums].insert(:name=>'J', :artist_id=>1, :release_date=>'1979-01-02', :debut_album=>true, :out_of_print=>false)
-DB[:albums].insert(:name=>'K', :artist_id=>2, :release_date=>'1980-03-02', :debut_album=>false, :out_of_print=>true)
+DB[:albums].insert(:name=>'J', :artist_id=>1, :release_date=>'1979-01-02', :release_party_time=>'1979-01-03 04:05:06', :debut_album=>true, :out_of_print=>false)
+DB[:albums].insert(:name=>'K', :artist_id=>2, :release_date=>'1980-03-02', :release_party_time=>'1979-03-02 04:05:06', :debut_album=>false, :out_of_print=>true)
 
 DB.create_table!(:tracks) do
   primary_key :id
