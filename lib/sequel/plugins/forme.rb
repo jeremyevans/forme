@@ -151,7 +151,6 @@ module Sequel # :nodoc:
         def input
           opts[:attr] = opts[:attr] ? opts[:attr].dup : {}
           opts[:wrapper_attr] = opts[:wrapper_attr] ? opts[:wrapper_attr].dup : {}
-          opts[:label] = humanize(field) unless opts.has_key?(:label)
 
           if sch = obj.db_schema[field] 
             handle_errors(field)
@@ -159,7 +158,8 @@ module Sequel # :nodoc:
             meth = :"input_#{sch[:type]}"
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
-            opts[:required] = true if !opts.has_key?(:required) && sch[:allow_null] == false
+            opts[:required] = true if !opts.has_key?(:required) && sch[:allow_null] == false && sch[:type] != :boolean
+            handle_label(field)
 
             ::Forme.attr_classes(opts[:wrapper_attr], sch[:type])
             ::Forme.attr_classes(opts[:wrapper_attr], "required") if opts[:required]
@@ -180,6 +180,7 @@ module Sequel # :nodoc:
           elsif obj.respond_to?(field)
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
+            handle_label(field)
             input_other({})
           else
             raise Error, "Unrecognized field used: #{field}"
@@ -198,6 +199,18 @@ module Sequel # :nodoc:
         def handle_errors(f)
           if e = obj.errors.on(f)
             opts[:error] = e.join(', ')
+          end
+        end
+
+        # Set the label option appropriately, adding a * if the field
+        # is required.
+        def handle_label(f)
+          unless opts.has_key?(:label)
+            opts[:label] = if opts[:required]
+              [humanize(field), form._tag(:abbr, {:title=>'required'}, '*')]
+            else
+              humanize(field)
+            end
           end
         end
 
@@ -268,6 +281,7 @@ module Sequel # :nodoc:
           opts[:value] = obj.send(key) unless opts.has_key?(:value)
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
           if opts.delete(:as) == :radio
+            handle_label(field)
             label = opts.delete(:label)
             val = opts.delete(:value)
             tag_wrapper = opts.delete(:tag_wrapper) || :default
@@ -280,6 +294,7 @@ module Sequel # :nodoc:
             opts[:id] = form.namespaced_id(key) unless opts.has_key?(:id)
             opts[:add_blank] = true if !opts.has_key?(:add_blank)
             opts[:required] = true if !opts.has_key?(:required) && (sch = obj.model.db_schema[key]) && !sch[:allow_null]
+            handle_label(field)
             ::Forme.attr_classes(opts[:wrapper_attr], "required") if opts[:required]
             _input(:select, opts)
           end
@@ -298,6 +313,7 @@ module Sequel # :nodoc:
           opts[:name] = form.namespaced_name(field, :multiple) unless opts.has_key?(:name)
           opts[:value] = obj.send(ref[:name]).map{|x| x.send(pk)} unless opts.has_key?(:value)
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
+          handle_label(field)
           if opts.delete(:as) == :checkbox
             label = opts.delete(:label)
             val = opts.delete(:value)
@@ -330,7 +346,7 @@ module Sequel # :nodoc:
         # If the column allows +NULL+ values, use a three-valued select
         # input.  If not, use a simple checkbox.
         def input_boolean(sch)
-          if !opts.delete(:required)
+          if sch[:allow_null]
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?
             opts[:add_blank] = true

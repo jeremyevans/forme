@@ -904,7 +904,7 @@ module Forme
   class ErrorHandler
     Forme.register_transformer(:error_handler, :default, new)
 
-    # Return a label tag wrapping the given tag.
+    # Return tag with error message span tag after it.
     def call(tag, input)
       msg_tag = tag.tag(:span, {:class=>'error_message'}, input.opts[:error])
       if tag.is_a?(Tag)
@@ -928,9 +928,9 @@ module Forme
     def call(tag, input)
       label = input.opts[:label]
       t = if [:radio, :checkbox].include?(input.type)
-        [tag, " #{label}"]
+        [tag, ' ', label]
       else
-        ["#{label}: ", tag]
+        [label, ": ", tag]
       end
       input.tag(:label, {}, t)
     end

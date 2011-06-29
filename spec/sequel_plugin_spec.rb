@@ -120,9 +120,13 @@ describe "Forme Sequel::Model forms" do
     f.input(:created_at).to_s.should == '<li class="datetime"><label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime" value="2011-06-05 00:00:00+00:00"/></label></li>'
   end
   
+  specify "should include required * in label if required" do
+    @b.input(:name, :required=>true).to_s.should == '<label>Name<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
+  end
+  
   specify "should include required wrapper class if required" do
     f = Forme::Form.new(@ab, :wrapper=>:li)
-    f.input(:name, :required=>true).to_s.should == '<li class="string required"><label>Name: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label></li>'
+    f.input(:name, :required=>true).to_s.should == '<li class="string required"><label>Name<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label></li>'
   end
   
   specify "should use a select box for tri-valued boolean fields" do
@@ -141,7 +145,7 @@ describe "Forme Sequel::Model forms" do
   end
 
   specify "should use a required wrapper tag for many_to_one required associations" do
-    @b.input(:artist, :required=>true, :wrapper=>:li).to_s.should == '<li class="many_to_one required"><label>Artist: <select id="album_artist_id" name="album[artist_id]" required="required"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label></li>'
+    @b.input(:artist, :required=>true, :wrapper=>:li).to_s.should == '<li class="many_to_one required"><label>Artist<abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label></li>'
   end
 
   specify "should use a set of radio buttons for many_to_one associations with :as=>:radio option" do
@@ -254,7 +258,7 @@ describe "Forme Sequel::Model forms" do
 
   specify "should add required attribute if the column doesn't support nil values" do
     def @ab.db_schema; h = super.dup; h[:name] = h[:name].merge(:allow_null=>false); h end
-    @b.input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
+    @b.input(:name).to_s.should == '<label>Name<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
   end
   
   specify "should use allow nested forms with many_to_one associations" do
