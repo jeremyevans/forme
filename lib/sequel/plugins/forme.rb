@@ -30,7 +30,9 @@ module Sequel # :nodoc:
         # Use the post method by default for Sequel forms, unless
         # overridden with the :method attribute.
         def form(attr={}, &block)
-          super({:method=>:post}.merge(attr), &block)
+          attr = {:method=>:post}.merge(attr)
+          attr[:class] = ::Forme.merge_classes(attr[:class], "forme", obj.model.send(:underscore, obj.model.name))
+          super(attr, &block)
         end
 
         # Call humanize on a string version of the argument if
