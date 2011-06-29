@@ -381,5 +381,17 @@ describe "Forme Sequel::Model validation parsing" do
     f(:validates_length_of, :name, :within=>2...11).input(:name).to_s.should == '<label>Name: <input id="album_name" maxlength="10" name="album[name]" type="text"/></label>'
   end
 
+  specify "should turn numericality into a pattern" do
+    f(:validates_numericality_of, :name).input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" pattern="^[+\-]?\d+(\.\d+)?$" title="must be a number" type="text"/></label>'
+  end
+
+  specify "should turn numericality :only_integer into a pattern" do
+    f(:validates_numericality_of, :name, :only_integer=>true).input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" pattern="^[+\-]?\d+$" title="must be a number" type="text"/></label>'
+  end
+
+  specify "should respect :title option for numericality" do
+    f(:validates_numericality_of, :name, :title=>'Foo').input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" pattern="^[+\-]?\d+(\.\d+)?$" title="Foo" type="text"/></label>'
+  end
+
 end
 

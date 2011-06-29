@@ -212,15 +212,26 @@ module Sequel # :nodoc:
                 attr[:pattern] = options[:with].source unless attr.has_key?(:pattern)
                 attr[:title] = options[:title] unless attr.has_key?(:title)
               when :length
-                if max =(options[:maximum] || options[:is])
-                  attr[:maxlength] = max
-                elsif (w = options[:within]) && w.is_a?(Range)
-                  attr[:maxlength] = if w.exclude_end? && w.end.is_a?(Integer)
-                    w.end - 1
-                  else
-                    w.end
+                unless attr.has_key?(:maxlength)
+                  if max =(options[:maximum] || options[:is])
+                    attr[:maxlength] = max
+                  elsif (w = options[:within]) && w.is_a?(Range)
+                    attr[:maxlength] = if w.exclude_end? && w.end.is_a?(Integer)
+                      w.end - 1
+                    else
+                      w.end
+                    end
                   end
                 end
+              when :numericality
+                unless attr.has_key?(:pattern)
+                  attr[:pattern] = if options[:only_integer]
+                    "^[+\\-]?\\d+$"
+                  else
+                    "^[+\\-]?\\d+(\\.\\d+)?$"
+                  end
+                end
+                attr[:title] = options[:title] || "must be a number" unless attr.has_key?(:title)
               end
             end
           end
