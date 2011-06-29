@@ -140,6 +140,10 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
 
+  specify "should use a required wrapper tag for many_to_one required associations" do
+    @b.input(:artist, :required=>true, :wrapper=>:li).to_s.should == '<li class="many_to_one required"><label>Artist: <select id="album_artist_id" name="album[artist_id]" required="required"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label></li>'
+  end
+
   specify "should use a set of radio buttons for many_to_one associations with :as=>:radio option" do
     @b.input(:artist, :as=>:radio).to_s.should == 'Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label>'
     @c.input(:artist, :as=>:radio).to_s.should == 'Artist: <label><input name="album[artist_id]" type="radio" value="1"/> a</label><label><input checked="checked" name="album[artist_id]" type="radio" value="2"/> d</label>'
