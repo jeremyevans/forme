@@ -119,6 +119,11 @@ module Forme
     Form.form(*a, &block)
   end
 
+  # Return a string that includes all given class strings
+  def self.merge_classes(*classes)
+    classes.compact.join(' ')
+  end
+
   # The +Form+ class is the main entry point to the library.  
   # Using the +form+, +input+, +tag+, and +inputs+ methods, one can easily build 
   # an abstract syntax tree of +Tag+ and +Input+ instances, which can be serialized
@@ -773,13 +778,7 @@ module Forme
         end
       end
 
-      if @opts.has_key?(:class)
-        if @attr.has_key?(:class)
-          @attr[:class] += " #{@opts[:class]}"
-        else
-          @attr[:class] = @opts[:class]
-        end
-      end
+      @attr[:class] = Forme.merge_classes(@attr[:class], @opts[:class]) if @opts.has_key?(:class)
 
       if data = opts[:data]
         data.each do |k, v|
@@ -887,11 +886,7 @@ module Forme
       msg_tag = tag.tag(:span, {:class=>'error_message'}, input.opts[:error])
       if tag.is_a?(Tag)
         attr = tag.attr
-        if attr[:class]
-          attr[:class] += ' error'
-        else
-          attr[:class] = 'error'
-        end
+        attr[:class] = Forme.merge_classes(attr[:class], 'error')
       end
       [tag, msg_tag]
     end
