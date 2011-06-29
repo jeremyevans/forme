@@ -207,6 +207,8 @@ module Sequel # :nodoc:
           if m.respond_to?(:validation_reflections) and (vs = m.validation_reflections[f])
             attr = opts[:attr]
             vs.each do |type, options|
+              attr[:placeholder] = options[:placeholder] if options[:placeholder] && !attr.has_key?(:placeholder)
+
               case type
               when :format
                 attr[:pattern] = options[:with].source unless attr.has_key?(:pattern)

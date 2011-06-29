@@ -393,5 +393,9 @@ describe "Forme Sequel::Model validation parsing" do
     f(:validates_numericality_of, :name, :title=>'Foo').input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" pattern="^[+\-]?\d+(\.\d+)?$" title="Foo" type="text"/></label>'
   end
 
+  specify "should respect :placeholder option for any validation" do
+    f(:validates_uniqueness_of, :name, :placeholder=>'must be unique').input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" placeholder="must be unique" type="text"/></label>'
+  end
+
 end
 
