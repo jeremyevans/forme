@@ -11,6 +11,8 @@ class FormeDemo < Sinatra::Base
 
   helpers Forme::Sinatra::ERB
   helpers do
+    attr_reader :form_attr
+
     def h(s)
       Rack::Utils.escape_html(s.to_s)
     end
@@ -21,6 +23,7 @@ class FormeDemo < Sinatra::Base
 
     def demo(t, opts={})
       @templ = t
+      @form_attr = DEMO_MODE ? {:onsubmit=>'return false'} : {:action=>"/#{t.to_s.split('_').first}"}
       erb(t, opts)
     end
   end
@@ -99,16 +102,17 @@ END
     demo :artist_nested
   end
 
-  post '/album' do
-    Album[1].update(params[:album])
-    redirect back
-  end
+  unless ENV['DATABASE_URL']
+    post '/album' do
+      Album[1].update(params[:album])
+      redirect back
+    end
 
-  post '/artist' do
-    Artist[1].update(params[:artist])
-    redirect back
+    post '/artist' do
+      Artist[1].update(params[:artist])
+      redirect back
+    end
   end
-
 end
 
 class FileServer

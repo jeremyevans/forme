@@ -1,4 +1,4 @@
-<% form(Album[1], {:action=>'/album'}, form_opts) do |f| %>
+<% form(Album[1], form_attr, form_opts) do |f| %>
   <% f.inputs([:name, :release_date, :copies_sold, :debut_album, :out_of_print], :legend=>:Album) do %>
     <%= f.subform(:artist, :inputs=>[:name]) %>
     <%= f.subform(:tracks, :inputs=>[:number, :name, :length]) %>
