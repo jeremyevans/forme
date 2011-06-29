@@ -119,6 +119,11 @@ module Forme
     Form.form(*a, &block)
   end
 
+  # Update the <tt>:class</tt> entry in the +attr+ hash with the given +classes+.
+  def self.attr_classes(attr, *classes)
+    attr[:class] = merge_classes(attr[:class], *classes)
+  end
+
   # Return a string that includes all given class strings
   def self.merge_classes(*classes)
     classes.compact.join(' ')
@@ -778,7 +783,7 @@ module Forme
         end
       end
 
-      @attr[:class] = Forme.merge_classes(@attr[:class], @opts[:class]) if @opts.has_key?(:class)
+      Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
 
       if data = opts[:data]
         data.each do |k, v|
@@ -886,7 +891,7 @@ module Forme
       msg_tag = tag.tag(:span, {:class=>'error_message'}, input.opts[:error])
       if tag.is_a?(Tag)
         attr = tag.attr
-        attr[:class] = Forme.merge_classes(attr[:class], 'error')
+        Forme.attr_classes(attr, 'error')
       end
       [tag, msg_tag]
     end
@@ -951,7 +956,7 @@ module Forme
     # child of the fieldset.
     def call(form, opts)
       attr = opts[:attr] ? opts[:attr].dup : {}
-      attr[:class] = Forme.merge_classes(attr[:class], 'inputs')
+      Forme.attr_classes(attr, 'inputs')
       if legend = opts[:legend]
         form.tag(:fieldset, attr) do
           form.emit(form.tag(:legend, opts[:legend_attr], legend))
