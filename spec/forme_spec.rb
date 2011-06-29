@@ -109,6 +109,11 @@ describe "Forme plain forms" do
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :wrapper=>:trtd, :labeler=>:explicit, :label=>'Baz').to_s.should == %{<tr><td><label for="bar_year">Baz</label></td><td><select id="bar_year" name="foo[year]">#{pr[1900..2050, 2011]}</select><select id="bar_month" name="foo[month]">#{pr[1..12, 6]}</select><select id="bar_day" name="foo[day]">#{pr[1..31, 5]}</select></td></tr>}
   end
 
+  specify "should use multiple select boxes for datetimes if the :as=>:select option is given" do
+    pr = Proc.new{|a, v| a.map{|o| "<option #{'selected="selected" ' if o == v}value=\"#{o}\">#{o}</option>"}.join}
+    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 4, 3, 2)).to_s.should == %{<select id="bar_year" name="foo[year]">#{pr[1900..2050, 2011]}</select><select id="bar_month" name="foo[month]">#{pr[1..12, 6]}</select><select id="bar_day" name="foo[day]">#{pr[1..31, 5]}</select><select id="bar_hour" name="foo[hour]">#{pr[0..23, 4]}</select><select id="bar_minute" name="foo[minute]">#{pr[0..59, 3]}</select><select id="bar_second" name="foo[second]">#{pr[0..59, 2]}</select>}
+  end
+
   specify "should create select tag with options" do
     @f.input(:select, :options=>[1, 2, 3], :selected=>2).to_s.should == '<select><option>1</option><option selected="selected">2</option><option>3</option></select>'
     @f.input(:select, :options=>[1, 2, 3], :value=>2).to_s.should == '<select><option>1</option><option selected="selected">2</option><option>3</option></select>'

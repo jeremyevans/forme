@@ -686,9 +686,27 @@ module Forme
         end
         ops = {:year=>1900..2050, :month=>1..12, :day=>1..31}
         input.merge_opts(:label_for=>"#{id}_year")
-        [:year, :month, :day].map{|x| form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].to_a.map{|x| [x, x]})).format}
+        [:year, :month, :day].map{|x| form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [x, x]})).format}
       else
         _format_input(:date)
+      end
+    end
+
+    # Use a datetime input by default.  If the :as=>:select option is given,
+    # use a multiple select box for the options.
+    def format_datetime
+      if @opts[:as] == :select
+        name = @attr[:name]
+        id = @attr[:id]
+        v = @attr[:value]
+        v = DateTime.parse(v) unless v.is_a?(Time) || v.is_a?(DateTime)
+        values = {}
+        values[:year], values[:month], values[:day], values[:hour], values[:minute], values[:second] = v.year, v.month, v.day, v.hour, v.min, v.sec
+        ops = {:year=>1900..2050, :month=>1..12, :day=>1..31, :hour=>0..23, :minute=>0..59, :second=>0..59}
+        input.merge_opts(:label_for=>"#{id}_year")
+        [:year, :month, :day, :hour, :minute, :second].map{|x| form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [x, x]})).format}
+      else
+        _format_input(:datetime)
       end
     end
 
