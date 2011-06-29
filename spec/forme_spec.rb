@@ -3,7 +3,7 @@ require 'date'
 
 describe "Forme plain forms" do
   def sel(opts, s)
-    opts.map{|o| "<option #{'selected="selected" ' if o == s}value=\"#{o}\">#{o}</option>"}.join
+    opts.map{|o| "<option #{'selected="selected" ' if o == s}value=\"#{o}\">#{sprintf("%02i", o)}</option>"}.join
   end
 
   before do
