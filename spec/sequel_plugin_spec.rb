@@ -373,5 +373,13 @@ describe "Forme Sequel::Model validation parsing" do
   specify "should respect :title option for format" do
     f(:validates_format_of, :name, :with=>/[A-z]+/, :title=>'Foo').input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" pattern="[A-z]+" title="Foo" type="text"/></label>'
   end
+
+  specify "should use maxlength for length :maximum, :is, and :within" do
+    f(:validates_length_of, :name, :maximum=>10).input(:name).to_s.should == '<label>Name: <input id="album_name" maxlength="10" name="album[name]" type="text"/></label>'
+    f(:validates_length_of, :name, :is=>10).input(:name).to_s.should == '<label>Name: <input id="album_name" maxlength="10" name="album[name]" type="text"/></label>'
+    f(:validates_length_of, :name, :within=>2..10).input(:name).to_s.should == '<label>Name: <input id="album_name" maxlength="10" name="album[name]" type="text"/></label>'
+    f(:validates_length_of, :name, :within=>2...11).input(:name).to_s.should == '<label>Name: <input id="album_name" maxlength="10" name="album[name]" type="text"/></label>'
+  end
+
 end
 
