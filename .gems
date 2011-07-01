@@ -1,0 +1,4 @@
+sequel --version '>= 3.25.0'
+forme
+sinatra
+pg
