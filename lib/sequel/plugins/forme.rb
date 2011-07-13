@@ -354,7 +354,19 @@ module Sequel # :nodoc:
         # If the column allows +NULL+ values, use a three-valued select
         # input.  If not, use a simple checkbox.
         def input_boolean(sch)
-          if sch[:allow_null]
+          if opts[:as] == :radio
+            yes_opts = opts.merge(:value=>'t', :label=>'Yes')
+            no_opts = opts.merge(:value=>'f', :label=>'No')
+            if i = opts[:id]
+              yes_opts[:id] = "#{i}_yes"
+              no_opts[:id] = "#{i}_no"
+            end
+            v = opts[:value] || obj.send(field)
+            unless v.nil?
+              (v ? yes_opts : no_opts)[:checked] = true
+            end
+            [_input(:radio, yes_opts), _input(:radio, no_opts)]
+          elsif sch[:allow_null]
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?
             opts[:add_blank] = true

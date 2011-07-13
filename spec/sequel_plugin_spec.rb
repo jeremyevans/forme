@@ -143,6 +143,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:platinum).to_s.should == '<label><input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
   end
   
+  specify "should use radio buttons for boolean fields if :as=>:radio is used" do
+    @b.input(:platinum, :as=>:radio).to_s.should == '<label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+    @c.input(:platinum, :as=>:radio).to_s.should == '<label><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+  end
+  
   specify "should use a select box for many_to_one associations" do
     @b.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
     @c.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'

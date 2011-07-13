@@ -1,5 +1,7 @@
 === HEAD
 
+* Support :as=>:radio option for boolean fields in the Sequel plugin (jeremyevans)
+
 * Allow specifying label attributes with :label_attr in labelers (jeremyevans)
 
 * Allow Form#inputs to be called with a single options hash argument (jeremyevans)
