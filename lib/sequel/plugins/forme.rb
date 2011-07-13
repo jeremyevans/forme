@@ -183,7 +183,20 @@ module Sequel # :nodoc:
             handle_label(field)
             input_other({})
           else
-            raise Error, "Unrecognized field used: #{field}"
+            if type = opts[:type]
+              meth = :"input_#{type}"
+              opts[:value] = nil unless opts.has_key?(:value)
+              opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
+              opts[:name] = form.namespaced_name(field, opts[:multiple]) unless opts.has_key?(:name)
+              if respond_to?(meth, true)
+                opts.delete(:type)
+                send(meth, opts)
+              else
+                input_other(opts)
+              end
+            else
+              raise Error, "Unrecognized field used: #{field}"
+            end
           end
         end
 

@@ -256,8 +256,21 @@ describe "Forme Sequel::Model forms" do
     proc{Forme::Form.new(al.new).input(:tags)}.should raise_error(Forme::Error)
   end
   
-  specify "should raise an error for unhandled fields" do
+  specify "should raise an error for unhandled fields with no :type option" do
     proc{@b.input(:foo)}.should raise_error(Forme::Error)
+  end
+
+  specify "should respect a :type option with a schema type as the input type for unhandled fields" do
+    @b.input(:foo, :type=>:string).to_s.should == '<input id="album_foo" name="album[foo]" type="text"/>'
+    @b.input(:password, :type=>:string).to_s.should == '<input id="album_password" name="album[password]" type="password"/>'
+  end
+
+  specify "should respect a :type option with an input type as the input type for unhandled fields" do
+    @b.input(:foo, :type=>:phone).to_s.should == '<input id="album_foo" name="album[foo]" type="phone"/>'
+  end
+
+  specify "should respect a :multiple option for the name attribute for unhandled fields" do
+    @b.input(:foo, :type=>:phone, :multiple=>true).to_s.should == '<input id="album_foo" name="album[foo][]" type="phone"/>'
   end
 
   specify "should add required attribute if the column doesn't support nil values" do

@@ -1,5 +1,7 @@
 === HEAD
 
+* Handle unrecognized fields in the Sequel plugin if a :type option is given (jeremyevans)
+
 * Add required * to label even if :label is already specified in the Sequel plugin (jeremyevans)
 
 === 0.5.0 (2011-07-01)
