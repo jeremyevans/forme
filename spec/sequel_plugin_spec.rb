@@ -124,6 +124,10 @@ describe "Forme Sequel::Model forms" do
     @b.input(:name, :required=>true).to_s.should == '<label>Name<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
   end
   
+  specify "should add required to label even if :label option specified" do
+    @b.input(:name, :required=>true, :label=>'Foo').to_s.should == '<label>Foo<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
+  end
+  
   specify "should include required wrapper class if required" do
     f = Forme::Form.new(@ab, :wrapper=>:li)
     f.input(:name, :required=>true).to_s.should == '<li class="string required"><label>Name<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label></li>'
