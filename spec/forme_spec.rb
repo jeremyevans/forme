@@ -177,6 +177,10 @@ describe "Forme plain forms" do
     @f.input(:text, :label=>'Foo', :value=>'foo').to_s.should == '<label>Foo: <input type="text" value="foo"/></label>'
   end
 
+  specify "should set label attributes with :label_attr option" do
+    @f.input(:text, :label=>'Foo', :value=>'foo', :label_attr=>{:class=>'bar'}).to_s.should == '<label class="bar">Foo: <input type="text" value="foo"/></label>'
+  end
+
   specify "should automatically note the input has errors if :error option is used" do
     @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.should == '<input class="error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
   end

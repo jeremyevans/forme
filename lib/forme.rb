@@ -937,7 +937,7 @@ module Forme
       else
         [label, ": ", tag]
       end
-      input.tag(:label, {}, t)
+      input.tag(:label, input.opts[:label_attr]||{}, t)
     end
   end
 
@@ -955,7 +955,7 @@ module Forme
     # :label_for option is used, the label created will not be
     # associated with an input.
     def call(tag, input)
-      [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}, [input.opts[:label]]), tag]
+      [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
     end
   end
 
