@@ -302,6 +302,10 @@ describe "Forme plain forms" do
     @f.form{|f| f.inputs([:textarea], :inputs_wrapper=>nil)}.to_s.should == '<form><textarea></textarea></form>'
   end
 
+  specify "#inputs should treat a single hash argument as an options hash with no default inputs" do
+    @f.inputs(:inputs_wrapper=>:ol){@f.input(:textarea)}.to_s.should == '<ol><textarea></textarea></ol>'
+  end
+
   specify "invalid custom transformers should raise an Error" do
     proc{Forme::Form.new(:wrapper=>Object.new)}.should raise_error(Forme::Error)
     proc{@f.input(:textarea, :wrapper=>Object.new).to_s}.should raise_error(Forme::Error)

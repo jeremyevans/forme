@@ -1,5 +1,7 @@
 === HEAD
 
+* Allow Form#inputs to be called with a single options hash argument (jeremyevans)
+
 * Handle unrecognized fields in the Sequel plugin if a :type option is given (jeremyevans)
 
 * Add required * to label even if :label is already specified in the Sequel plugin (jeremyevans)

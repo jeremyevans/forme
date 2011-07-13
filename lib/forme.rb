@@ -355,6 +355,10 @@ module Forme
     # +inputs_wrapper+ supports a <tt>:legend</tt> option that is used to
     # set the legend for the fieldset.
     def inputs(inputs=[], opts={})
+      if inputs.is_a?(Hash)
+        opts = inputs.merge(opts)
+        inputs = []
+      end
       transform(:inputs_wrapper, opts, self, opts) do
         inputs.each do |i|
           emit(input(*i))
