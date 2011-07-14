@@ -217,6 +217,15 @@ module Sequel # :nodoc:
           opts[:label] = [opts[:label], form._tag(:abbr, {:title=>'required'}, '*')] if opts[:required]
         end
 
+        # Add the label to the start of the array, returning the array.
+        def add_label(label, array)
+          if label
+            array.unshift(": ") unless label.is_a?(::Forme::Raw)
+            array.unshift(label)
+          end
+          array
+        end
+
         # Update the attributes and options for any recognized validations
         def handle_validations(f)
           m = obj.model
@@ -291,7 +300,7 @@ module Sequel # :nodoc:
             wrapper = form.transformer(:wrapper, opts)
             opts.delete(:wrapper)
             radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>(pk == val)))}
-            radios.unshift("#{label}: ")
+            add_label(label, radios)
             wrapper ? wrapper.call(radios, _input(:radio, opts)) : radios
           else
             opts[:id] = form.namespaced_id(key) unless opts.has_key?(:id)
@@ -324,7 +333,7 @@ module Sequel # :nodoc:
             wrapper = form.transformer(:wrapper, opts)
             opts.delete(:wrapper)
             cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>val.include?(pk), :no_hidden=>true))}
-            cbs.unshift("#{label}: ")
+            add_label(label, cbs)
             wrapper ? wrapper.call(cbs, _input(:checkbox, opts)) : cbs
           else
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
@@ -365,12 +374,7 @@ module Sequel # :nodoc:
             unless v.nil?
               (v ? true_opts : false_opts)[:checked] = true
             end
-            r  = [_input(:radio, true_opts), _input(:radio, false_opts)]
-            if l = opts[:label]
-              r.unshift(": ") unless l.is_a?(::Forme::Raw)
-              r.unshift(l)
-            end
-            r
+            add_label(opts[:label], [_input(:radio, true_opts), _input(:radio, false_opts)])
           when :select
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?

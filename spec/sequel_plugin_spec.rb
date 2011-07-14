@@ -184,6 +184,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist, :as=>:radio).to_s.should == 'Artist: <label><input name="album[artist_id]" type="radio" value="1"/> a</label><label><input checked="checked" name="album[artist_id]" type="radio" value="2"/> d</label>'
   end
   
+  specify "should handle Raw label for many_to_one associations with :as=>:radio option" do
+    @b.input(:artist, :as=>:radio, :label=>'Foo:<br />'.extend(Forme::Raw)).to_s.should == 'Foo:<br /><label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label>'
+    @b.input(:artist, :as=>:radio, :label=>'Foo<br />').to_s.should == 'Foo&lt;br /&gt;: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label>'
+  end
+  
   specify "should correctly use the forms wrapper for wrapping radio buttons for many_to_one associations with :as=>:radio option" do
     @b = Forme::Form.new(@ab, :wrapper=>:li)
     @b.input(:artist, :as=>:radio).to_s.should == '<li class="many_to_one">Artist: <label><input checked="checked" name="album[artist_id]" type="radio" value="1"/> a</label><label><input name="album[artist_id]" type="radio" value="2"/> d</label></li>'
@@ -252,6 +257,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:tags, :as=>:checkbox).to_s.should == 'Tags: <label><input name="album[tag_pks][]" type="checkbox" value="1"/> s</label><label><input checked="checked" name="album[tag_pks][]" type="checkbox" value="2"/> t</label><label><input name="album[tag_pks][]" type="checkbox" value="3"/> u</label>'
   end
 
+  specify "should handle Raw label for associations with :as=>:checkbox" do
+    @b.input(:tracks, :as=>:checkbox, :label=>'Foo<br />:'.extend(Forme::Raw)).to_s.should == 'Foo<br />:<label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
+    @b.input(:tracks, :as=>:checkbox, :label=>'Foo<br />').to_s.should == 'Foo&lt;br /&gt;: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
+  end
+  
   specify "should correctly use the forms wrapper for wrapping radio buttons for one_to_many associations with :as=>:checkbox option" do
     @b = Forme::Form.new(@ab, :wrapper=>:li)
     @b.input(:tracks, :as=>:checkbox).to_s.should == '<li class="one_to_many">Tracks: <label><input checked="checked" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label><input checked="checked" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label><input name="album[track_pks][]" type="checkbox" value="3"/> o</label></li>'
