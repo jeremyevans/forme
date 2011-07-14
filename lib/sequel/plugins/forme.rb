@@ -365,7 +365,12 @@ module Sequel # :nodoc:
             unless v.nil?
               (v ? true_opts : false_opts)[:checked] = true
             end
-            [_input(:radio, true_opts), _input(:radio, false_opts)]
+            r  = [_input(:radio, true_opts), _input(:radio, false_opts)]
+            if l = opts[:label]
+              r.unshift(": ") unless l.is_a?(::Forme::Raw)
+              r.unshift(l)
+            end
+            r
           when :select
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?

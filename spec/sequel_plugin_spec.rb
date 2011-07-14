@@ -144,21 +144,26 @@ describe "Forme Sequel::Model forms" do
   end
   
   specify "should use radio buttons for boolean fields if :as=>:radio is used" do
-    @b.input(:platinum, :as=>:radio).to_s.should == '<label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
-    @c.input(:platinum, :as=>:radio).to_s.should == '<label><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+    @b.input(:platinum, :as=>:radio).to_s.should == 'Platinum: <label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+    @c.input(:platinum, :as=>:radio).to_s.should == 'Platinum: <label><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
   end
   
   specify "should handle errors on radio buttons for boolean fields if :as=>:radio is used" do
     @ab.errors.add(:platinum, 'foo')
-    @b.input(:platinum, :as=>:radio).to_s.should == '<label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" class="error" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label><span class="error_message">foo</span>'
+    @b.input(:platinum, :as=>:radio).to_s.should == 'Platinum: <label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" class="error" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label><span class="error_message">foo</span>'
+  end
+  
+  specify "should handle Raw :label options if :as=>:radio is used" do
+    @b.input(:platinum, :as=>:radio, :label=>'Foo:<br />'.extend(Forme::Raw)).to_s.should == 'Foo:<br /><label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+    @b.input(:platinum, :as=>:radio, :label=>'Foo:<br />').to_s.should == 'Foo:&lt;br /&gt;: <label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
   end
   
   specify "should respect :true_label and :false_label options for boolean fields if :as=>:radio is used" do
-    @b.input(:platinum, :as=>:radio, :true_label=>"Foo", :false_label=>"Bar").to_s.should == '<label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Foo</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> Bar</label>'
+    @b.input(:platinum, :as=>:radio, :true_label=>"Foo", :false_label=>"Bar").to_s.should == 'Platinum: <label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Foo</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> Bar</label>'
   end
   
   specify "should respect :true_value and :false_value options for boolean fields if :as=>:radio is used" do
-    @b.input(:platinum, :as=>:radio, :true_value=>"Foo", :false_value=>"Bar").to_s.should == '<label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="Foo"/> Yes</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="Bar"/> No</label>'
+    @b.input(:platinum, :as=>:radio, :true_value=>"Foo", :false_value=>"Bar").to_s.should == 'Platinum: <label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="Foo"/> Yes</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="Bar"/> No</label>'
   end
   
   specify "should use a select box for many_to_one associations" do
