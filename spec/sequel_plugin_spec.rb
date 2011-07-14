@@ -148,6 +148,12 @@ describe "Forme Sequel::Model forms" do
     @c.input(:platinum, :as=>:radio).to_s.should == 'Platinum: <label><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
   end
   
+  specify "should wrap both inputs if :as=>:radio is used" do
+    @b = Forme::Form.new(@ab, :wrapper=>:li)
+    @b.input(:platinum, :as=>:radio).to_s.should == '<li class="boolean">Platinum: <label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></li>'
+    @b.input(:platinum, :as=>:radio, :wrapper=>:div, :tag_wrapper=>:span).to_s.should == '<div class="boolean">Platinum: <span><label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></span><span><label><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></span></div>'
+  end
+  
   specify "should handle errors on radio buttons for boolean fields if :as=>:radio is used" do
     @ab.errors.add(:platinum, 'foo')
     @b.input(:platinum, :as=>:radio).to_s.should == 'Platinum: <label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" class="error" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label><span class="error_message">foo</span>'

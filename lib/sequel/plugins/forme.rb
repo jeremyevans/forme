@@ -226,6 +226,16 @@ module Sequel # :nodoc:
           array
         end
 
+        # Unset the wrapper and tag_wrapper options and return a
+        # array with the wrapper and tag_wrapper to use.  The tag_wrapper
+        # is for wrapping each individual tag.
+        def get_wrappers
+          tag_wrapper = opts.delete(:tag_wrapper) || :default
+          wrapper = form.transformer(:wrapper, opts)
+          opts.delete(:wrapper)
+          [wrapper, tag_wrapper]
+        end
+
         # Update the attributes and options for any recognized validations
         def handle_validations(f)
           m = obj.model
@@ -296,9 +306,7 @@ module Sequel # :nodoc:
             handle_label(field)
             label = opts.delete(:label)
             val = opts.delete(:value)
-            tag_wrapper = opts.delete(:tag_wrapper) || :default
-            wrapper = form.transformer(:wrapper, opts)
-            opts.delete(:wrapper)
+            wrapper, tag_wrapper = get_wrappers
             radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>(pk == val)))}
             add_label(label, radios)
             wrapper ? wrapper.call(radios, _input(:radio, opts)) : radios
@@ -329,9 +337,7 @@ module Sequel # :nodoc:
           if opts.delete(:as) == :checkbox
             label = opts.delete(:label)
             val = opts.delete(:value)
-            tag_wrapper = opts.delete(:tag_wrapper) || :default
-            wrapper = form.transformer(:wrapper, opts)
-            opts.delete(:wrapper)
+            wrapper, tag_wrapper = get_wrappers
             cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>val.include?(pk), :no_hidden=>true))}
             add_label(label, cbs)
             wrapper ? wrapper.call(cbs, _input(:checkbox, opts)) : cbs
@@ -364,8 +370,9 @@ module Sequel # :nodoc:
 
           case opts[:as]
           when :radio
-            true_opts = opts.merge(:value=>opts[:true_value]||'t', :label=>opts[:true_label]||'Yes', :error=>nil)
-            false_opts = opts.merge(:value=>opts[:false_value]||'f', :label=>opts[:false_label]||'No')
+            wrapper, tag_wrapper = get_wrappers
+            true_opts = opts.merge(:value=>opts[:true_value]||'t', :label=>opts[:true_label]||'Yes', :error=>nil, :wrapper=>tag_wrapper, :wrapper_attr=>{})
+            false_opts = opts.merge(:value=>opts[:false_value]||'f', :label=>opts[:false_label]||'No', :wrapper=>tag_wrapper, :wrapper_attr=>{})
             if i = opts[:id]
               true_opts[:id] = "#{i}_yes"
               false_opts[:id] = "#{i}_no"
@@ -374,7 +381,8 @@ module Sequel # :nodoc:
             unless v.nil?
               (v ? true_opts : false_opts)[:checked] = true
             end
-            add_label(opts[:label], [_input(:radio, true_opts), _input(:radio, false_opts)])
+            array = add_label(opts[:label], [_input(:radio, true_opts), _input(:radio, false_opts)])
+            wrapper ? wrapper.call(array, _input(:radio, opts)) : array
           when :select
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?

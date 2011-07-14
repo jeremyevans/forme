@@ -1,5 +1,7 @@
 === HEAD
 
+* Fix wrapping for :as=>:radio boolean fields to handle them like association :as=>:radio fields (jeremyevans)
+
 * Fix handling of Raw :label option in for association fields with :as=>:radio and :as=>:checkbox in the Sequel plugin (jeremyevans)
 
 * Use label text for :as=>:radio boolean fields in the Sequel plugin (jeremyevans)
