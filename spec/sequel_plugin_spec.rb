@@ -148,6 +148,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:platinum, :as=>:radio).to_s.should == '<label><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
   end
   
+  specify "should handle errors on radio buttons for boolean fields if :as=>:radio is used" do
+    @ab.errors.add(:platinum, 'foo')
+    @b.input(:platinum, :as=>:radio).to_s.should == '<label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" class="error" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/><span class="error_message">foo</span> No</label>'
+  end
+  
   specify "should use a select box for many_to_one associations" do
     @b.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
     @c.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
@@ -243,6 +248,11 @@ describe "Forme Sequel::Model forms" do
   specify "should use a text field methods not backed by columns" do
     @b.input(:artist_name).to_s.should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="a"/></label>'
     @c.input(:artist_name).to_s.should == '<label>Artist name: <input id="album_artist_name" name="album[artist_name]" type="text" value="d"/></label>'
+  end
+
+  specify "should handle errors on methods not backed by columns" do
+    @ab.errors.add(:artist_name, 'foo')
+    @b.input(:artist_name).to_s.should == '<label>Artist name: <input class="error" id="album_artist_name" name="album[artist_name]" type="text" value="a"/><span class="error_message">foo</span></label>'
   end
 
   specify "should correctly show an error message if there is one" do

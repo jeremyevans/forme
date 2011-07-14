@@ -151,10 +151,10 @@ module Sequel # :nodoc:
         def input
           opts[:attr] = opts[:attr] ? opts[:attr].dup : {}
           opts[:wrapper_attr] = opts[:wrapper_attr] ? opts[:wrapper_attr].dup : {}
+          handle_errors(field)
+          handle_validations(field)
 
           if sch = obj.db_schema[field] 
-            handle_errors(field)
-            handle_validations(field)
             meth = :"input_#{sch[:type]}"
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
@@ -355,7 +355,7 @@ module Sequel # :nodoc:
         # input.  If not, use a simple checkbox.
         def input_boolean(sch)
           if opts[:as] == :radio
-            yes_opts = opts.merge(:value=>'t', :label=>'Yes')
+            yes_opts = opts.merge(:value=>'t', :label=>'Yes', :error=>nil)
             no_opts = opts.merge(:value=>'f', :label=>'No')
             if i = opts[:id]
               yes_opts[:id] = "#{i}_yes"
