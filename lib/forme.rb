@@ -627,8 +627,8 @@ module Forme
       normalize_options
 
       tag = convert_to_tag(input.type)
-      tag = wrap_tag_with_error(tag) if input.opts[:error]
       tag = wrap_tag_with_label(tag) if input.opts[:label]
+      tag = wrap_tag_with_error(tag) if input.opts[:error]
       wrap_tag(tag)
     end
 
@@ -960,7 +960,7 @@ module Forme
     Forme.register_transformer(:wrapper, x){|tag, input| input.tag(x, input.opts[:wrapper_attr], Array(tag))}
   end
   Forme.register_transformer(:wrapper, :trtd) do |tag, input|
-    a = Array(tag)
+    a = Array(tag).flatten
     input.tag(:tr, input.opts[:wrapper_attr], a.length == 1 ? input.tag(:td, {}, a) : [input.tag(:td, {}, [a.first]), input.tag(:td, {}, a[1..-1])])
   end
 

@@ -185,6 +185,10 @@ describe "Forme plain forms" do
     @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.should == '<input class="error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
   end
 
+  specify "should add an error message after the label" do
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :label=>"Foo").to_s.should == '<label>Foo: <input class="error" type="text" value="foo"/></label><span class="error_message">Bad Stuff!</span>'
+  end
+
   specify "should add to existing :class option if :error option is used" do
     @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo').to_s.should == '<input class="bar error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
   end

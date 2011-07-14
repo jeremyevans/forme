@@ -150,7 +150,7 @@ describe "Forme Sequel::Model forms" do
   
   specify "should handle errors on radio buttons for boolean fields if :as=>:radio is used" do
     @ab.errors.add(:platinum, 'foo')
-    @b.input(:platinum, :as=>:radio).to_s.should == '<label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" class="error" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/><span class="error_message">foo</span> No</label>'
+    @b.input(:platinum, :as=>:radio).to_s.should == '<label><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label><input checked="checked" class="error" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label><span class="error_message">foo</span>'
   end
   
   specify "should use a select box for many_to_one associations" do
@@ -252,7 +252,7 @@ describe "Forme Sequel::Model forms" do
 
   specify "should handle errors on methods not backed by columns" do
     @ab.errors.add(:artist_name, 'foo')
-    @b.input(:artist_name).to_s.should == '<label>Artist name: <input class="error" id="album_artist_name" name="album[artist_name]" type="text" value="a"/><span class="error_message">foo</span></label>'
+    @b.input(:artist_name).to_s.should == '<label>Artist name: <input class="error" id="album_artist_name" name="album[artist_name]" type="text" value="a"/></label><span class="error_message">foo</span>'
   end
 
   specify "should respect a :type option with a schema type as the input type for methods not backed by columns" do
@@ -267,12 +267,12 @@ describe "Forme Sequel::Model forms" do
 
   specify "should correctly show an error message if there is one" do
     @ab.errors.add(:name, 'tis not valid')
-    @b.input(:name).to_s.should == '<label>Name: <input class="error" id="album_name" name="album[name]" type="text" value="b"/><span class="error_message">tis not valid</span></label>'
+    @b.input(:name).to_s.should == '<label>Name: <input class="error" id="album_name" name="album[name]" type="text" value="b"/></label><span class="error_message">tis not valid</span>'
   end
   
   specify "should correctly show an error message for many_to_one associations if there is one" do
     @ab.errors.add(:artist_id, 'tis not valid')
-    @b.input(:artist).to_s.should == '<label>Artist: <select class="error" id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select><span class="error_message">tis not valid</span></label>'
+    @b.input(:artist).to_s.should == '<label>Artist: <select class="error" id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label><span class="error_message">tis not valid</span>'
   end
   
   specify "should raise an error for unhandled associations" do
