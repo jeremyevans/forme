@@ -911,7 +911,7 @@ module Forme
 
     # Return tag with error message span tag after it.
     def call(tag, input)
-      msg_tag = tag.tag(:span, {:class=>'error_message'}, input.opts[:error])
+      msg_tag = input.tag(:span, {:class=>'error_message'}, input.opts[:error])
       if tag.is_a?(Tag)
         attr = tag.attr
         Forme.attr_classes(attr, 'error')

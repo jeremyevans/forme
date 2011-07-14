@@ -1,5 +1,7 @@
 === HEAD
 
+* Fix default error_handler if input yields an area of tags (jeremyevans)
+
 * Support :as=>:radio option for boolean fields in the Sequel plugin (jeremyevans)
 
 * Allow specifying label attributes with :label_attr in labelers (jeremyevans)
