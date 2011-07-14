@@ -355,17 +355,17 @@ module Sequel # :nodoc:
 
           case opts[:as]
           when :radio
-            yes_opts = opts.merge(:value=>'t', :label=>'Yes', :error=>nil)
-            no_opts = opts.merge(:value=>'f', :label=>'No')
+            true_opts = opts.merge(:value=>opts[:true_value]||'t', :label=>opts[:true_label]||'Yes', :error=>nil)
+            false_opts = opts.merge(:value=>opts[:false_value]||'f', :label=>opts[:false_label]||'No')
             if i = opts[:id]
-              yes_opts[:id] = "#{i}_yes"
-              no_opts[:id] = "#{i}_no"
+              true_opts[:id] = "#{i}_yes"
+              false_opts[:id] = "#{i}_no"
             end
-            v = opts[:value] || obj.send(field)
+            v = opts.has_key?(:value) ? opts[:value] : obj.send(field)
             unless v.nil?
-              (v ? yes_opts : no_opts)[:checked] = true
+              (v ? true_opts : false_opts)[:checked] = true
             end
-            [_input(:radio, yes_opts), _input(:radio, no_opts)]
+            [_input(:radio, true_opts), _input(:radio, false_opts)]
           when :select
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?

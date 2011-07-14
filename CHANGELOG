@@ -1,5 +1,7 @@
 === HEAD
 
+* Support overriding the true/false label and values for :as=>:radio boolean fields in the Sequel plugin (jeremyevans)
+
 * Allow overriding the type of input for schema columns and associations in the Sequel plugin (jeremyevans)
 
 * Add the label before the error option, so the error always comes after the label (jeremyevans)
