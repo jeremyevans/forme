@@ -154,7 +154,8 @@ module Sequel # :nodoc:
           handle_errors(field)
           handle_validations(field)
 
-          if sch = obj.db_schema[field] 
+          type = opts[:type]
+          if !type && (sch = obj.db_schema[field])
             meth = :"input_#{sch[:type]}"
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
@@ -169,7 +170,7 @@ module Sequel # :nodoc:
             else
               input_other(sch)
             end
-          elsif ref = obj.model.association_reflection(field)
+          elsif !type && (ref = obj.model.association_reflection(field))
             ::Forme.attr_classes(opts[:wrapper_attr], ref[:type])
             meth = :"association_#{ref[:type]}"
             if respond_to?(meth, true)
@@ -179,7 +180,6 @@ module Sequel # :nodoc:
             end
           else
             rt = obj.respond_to?(field)
-            type = opts[:type]
             raise(Error, "Unrecognized field used: #{field}") unless rt || type
             meth = :"input_#{type}"
             opts[:value] = nil unless rt || opts.has_key?(:value)

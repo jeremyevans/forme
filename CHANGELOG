@@ -1,5 +1,7 @@
 === HEAD
 
+* Allow overriding the type of input for schema columns and associations in the Sequel plugin (jeremyevans)
+
 * Add the label before the error option, so the error always comes after the label (jeremyevans)
 
 * Always add error class to formatted input tag, regardless of error_handler (jeremyevans)
