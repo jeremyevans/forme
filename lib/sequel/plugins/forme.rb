@@ -177,25 +177,20 @@ module Sequel # :nodoc:
             else
               raise Error, "Association type #{ref[:type]} not currently handled for association #{ref[:name]}"
             end
-          elsif obj.respond_to?(field)
-            opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
-            opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
-            handle_label(field)
-            input_other({})
           else
-            if type = opts[:type]
-              meth = :"input_#{type}"
-              opts[:value] = nil unless opts.has_key?(:value)
-              opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
-              opts[:name] = form.namespaced_name(field, opts[:multiple]) unless opts.has_key?(:name)
-              if respond_to?(meth, true)
-                opts.delete(:type)
-                send(meth, opts)
-              else
-                input_other(opts)
-              end
+            rt = obj.respond_to?(field)
+            type = opts[:type]
+            raise(Error, "Unrecognized field used: #{field}") unless rt || type
+            meth = :"input_#{type}"
+            opts[:value] = nil unless rt || opts.has_key?(:value)
+            opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
+            opts[:name] = form.namespaced_name(field, opts[:multiple]) unless opts.has_key?(:name)
+            handle_label(field)
+            if respond_to?(meth, true)
+              opts.delete(:type)
+              send(meth, opts)
             else
-              raise Error, "Unrecognized field used: #{field}"
+              input_other(opts)
             end
           end
         end
@@ -354,7 +349,12 @@ module Sequel # :nodoc:
         # If the column allows +NULL+ values, use a three-valued select
         # input.  If not, use a simple checkbox.
         def input_boolean(sch)
-          if opts[:as] == :radio
+          unless opts.has_key?(:as)
+            opts[:as] = sch[:allow_null] ? :select : :checkbox
+          end
+
+          case opts[:as]
+          when :radio
             yes_opts = opts.merge(:value=>'t', :label=>'Yes', :error=>nil)
             no_opts = opts.merge(:value=>'f', :label=>'No')
             if i = opts[:id]
@@ -366,7 +366,7 @@ module Sequel # :nodoc:
               (v ? yes_opts : no_opts)[:checked] = true
             end
             [_input(:radio, yes_opts), _input(:radio, no_opts)]
-          elsif sch[:allow_null]
+          when :select
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?
             opts[:add_blank] = true

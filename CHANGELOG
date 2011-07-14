@@ -1,5 +1,9 @@
 === HEAD
 
+* Add labels to inputs for fields that the object doesn't respond to in the Sequel plugin (jeremyevans)
+
+* Allow customization for non-schema columns that the object responds to in the Sequel plugin (jeremyevans)
+
 * Handle errors on all inputs in the Sequel plugin, not just those backed by columns (jeremyevans)
 
 * Fix default error_handler if input yields an area of tags (jeremyevans)

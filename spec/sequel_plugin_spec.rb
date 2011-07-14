@@ -255,6 +255,16 @@ describe "Forme Sequel::Model forms" do
     @b.input(:artist_name).to_s.should == '<label>Artist name: <input class="error" id="album_artist_name" name="album[artist_name]" type="text" value="a"/><span class="error_message">foo</span></label>'
   end
 
+  specify "should respect a :type option with a schema type as the input type for methods not backed by columns" do
+    def @ab.foo; false end
+    @b.input(:foo, :type=>:boolean, :as=>:select).to_s.should == '<label>Foo: <select id="album_foo" name="album[foo]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
+  end
+
+  specify "should respect a :type option with an input type as the input type for methods not backed by columns" do
+    def @ab.foo; "bar" end
+    @b.input(:foo, :type=>:phone).to_s.should == '<label>Foo: <input id="album_foo" name="album[foo]" type="phone" value="bar"/></label>'
+  end
+
   specify "should correctly show an error message if there is one" do
     @ab.errors.add(:name, 'tis not valid')
     @b.input(:name).to_s.should == '<label>Name: <input class="error" id="album_name" name="album[name]" type="text" value="b"/><span class="error_message">tis not valid</span></label>'
@@ -276,16 +286,16 @@ describe "Forme Sequel::Model forms" do
   end
 
   specify "should respect a :type option with a schema type as the input type for unhandled fields" do
-    @b.input(:foo, :type=>:string).to_s.should == '<input id="album_foo" name="album[foo]" type="text"/>'
-    @b.input(:password, :type=>:string).to_s.should == '<input id="album_password" name="album[password]" type="password"/>'
+    @b.input(:foo, :type=>:string).to_s.should == '<label>Foo: <input id="album_foo" name="album[foo]" type="text"/></label>'
+    @b.input(:password, :type=>:string).to_s.should == '<label>Password: <input id="album_password" name="album[password]" type="password"/></label>'
   end
 
   specify "should respect a :type option with an input type as the input type for unhandled fields" do
-    @b.input(:foo, :type=>:phone).to_s.should == '<input id="album_foo" name="album[foo]" type="phone"/>'
+    @b.input(:foo, :type=>:phone).to_s.should == '<label>Foo: <input id="album_foo" name="album[foo]" type="phone"/></label>'
   end
 
   specify "should respect a :multiple option for the name attribute for unhandled fields" do
-    @b.input(:foo, :type=>:phone, :multiple=>true).to_s.should == '<input id="album_foo" name="album[foo][]" type="phone"/>'
+    @b.input(:foo, :type=>:phone, :multiple=>true).to_s.should == '<label>Foo: <input id="album_foo" name="album[foo][]" type="phone"/></label>'
   end
 
   specify "should add required attribute if the column doesn't support nil values" do
