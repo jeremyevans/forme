@@ -807,6 +807,7 @@ module Forme
       end
 
       Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
+      Forme.attr_classes(@attr, 'error') if @opts[:error]
 
       if data = opts[:data]
         data.each do |k, v|
@@ -911,12 +912,7 @@ module Forme
 
     # Return tag with error message span tag after it.
     def call(tag, input)
-      msg_tag = input.tag(:span, {:class=>'error_message'}, input.opts[:error])
-      if tag.is_a?(Tag)
-        attr = tag.attr
-        Forme.attr_classes(attr, 'error')
-      end
-      [tag, msg_tag]
+      [tag, input.tag(:span, {:class=>'error_message'}, input.opts[:error])]
     end
   end
 
