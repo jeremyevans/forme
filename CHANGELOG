@@ -1,4 +1,4 @@
-=== HEAD
+=== 0.6.0 (2011-08-01)
 
 * Fix wrapping for :as=>:radio boolean fields to handle them like association :as=>:radio fields (jeremyevans)
 
