@@ -304,7 +304,7 @@ module Sequel # :nodoc:
             label = opts.delete(:label)
             val = opts.delete(:value)
             wrapper, tag_wrapper = get_wrappers
-            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>(pk == val)))}
+            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>(pk == val)))}
             add_label(label, radios)
             wrapper ? wrapper.call(radios, _input(:radio, opts)) : radios
           else
@@ -335,7 +335,7 @@ module Sequel # :nodoc:
             label = opts.delete(:label)
             val = opts.delete(:value)
             wrapper, tag_wrapper = get_wrappers
-            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :checked=>val.include?(pk), :no_hidden=>true))}
+            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>val.include?(pk), :no_hidden=>true))}
             add_label(label, cbs)
             wrapper ? wrapper.call(cbs, _input(:checkbox, opts)) : cbs
           else
@@ -368,8 +368,8 @@ module Sequel # :nodoc:
           case opts[:as]
           when :radio
             wrapper, tag_wrapper = get_wrappers
-            true_opts = opts.merge(:value=>opts[:true_value]||'t', :label=>opts[:true_label]||'Yes', :error=>nil, :wrapper=>tag_wrapper, :wrapper_attr=>{})
-            false_opts = opts.merge(:value=>opts[:false_value]||'f', :label=>opts[:false_label]||'No', :wrapper=>tag_wrapper, :wrapper_attr=>{})
+            true_opts = opts.merge(:value=>opts[:true_value]||'t', :label=>opts[:true_label]||'Yes', :label_attr=>{:class=>:option}, :error=>nil, :wrapper=>tag_wrapper, :wrapper_attr=>{})
+            false_opts = opts.merge(:value=>opts[:false_value]||'f', :label=>opts[:false_label]||'No', :label_attr=>{:class=>:option}, :wrapper=>tag_wrapper, :wrapper_attr=>{})
             if i = opts[:id]
               true_opts[:id] = "#{i}_yes"
               false_opts[:id] = "#{i}_no"
