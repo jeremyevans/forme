@@ -1,10 +1,5 @@
 require "rake"
 require "rake/clean"
-begin
-  require "hanna/rdoctask"
-rescue LoadError
-  require "rake/rdoctask"
-end
 
 NAME = 'forme'
 VERS = lambda do
@@ -12,8 +7,6 @@ VERS = lambda do
   Forme.version
 end
 CLEAN.include ["#{NAME}-*.gem", "rdoc", "coverage", '**/*.rbc']
-RDOC_DEFAULT_OPTS = ["--quiet", "--line-numbers", "--inline-source", '--title', 'Forme']
-RDOC_OPTS = RDOC_DEFAULT_OPTS + ['--main', 'README.rdoc']
 
 # Gem Packaging and Release
 
@@ -29,7 +22,20 @@ end
 
 ### RDoc
 
-Rake::RDocTask.new do |rdoc|
+RDOC_DEFAULT_OPTS = ["--quiet", "--line-numbers", "--inline-source", '--title', 'Forme']
+
+rdoc_task_class = begin
+  require "rdoc/task"
+  RDOC_DEFAULT_OPTS.concat(['-f', 'hanna'])
+  RDoc::Task
+rescue LoadError
+  require "rake/rdoctask"
+  Rake::RDocTask
+end
+
+RDOC_OPTS = RDOC_DEFAULT_OPTS + ['--main', 'README.rdoc']
+
+rdoc_task_class.new do |rdoc|
   rdoc.rdoc_dir = "rdoc"
   rdoc.options += RDOC_OPTS
   rdoc.rdoc_files.add %w"README.rdoc CHANGELOG MIT-LICENSE lib/**/*.rb"
