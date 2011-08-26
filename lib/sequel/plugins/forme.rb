@@ -219,10 +219,7 @@ module Sequel # :nodoc:
 
         # Add the label to the start of the array, returning the array.
         def add_label(label, array)
-          if label
-            array.unshift(": ") unless label.is_a?(::Forme::Raw)
-            array.unshift(label)
-          end
+          array.unshift(form._tag(:span, {:class=>:label}, label)) if label
           array
         end
 

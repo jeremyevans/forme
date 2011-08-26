@@ -1,5 +1,7 @@
 === HEAD
 
+* Wrap text acting as a label in a span with class label for :as=>:radio or :as=>:checkbox fields (jeremyevans)
+
 * Support overriding the true/false label and values for select boolean fields in the Sequel plugin (jeremyevans)
 
 === 0.6.0 (2011-08-01)
