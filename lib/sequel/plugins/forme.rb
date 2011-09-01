@@ -304,7 +304,7 @@ module Sequel # :nodoc:
             label = opts.delete(:label)
             val = opts.delete(:value)
             wrapper, tag_wrapper = get_wrappers
-            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>(pk == val)))}
+            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :id=>"#{form.namespaced_id(key)}_#{pk}", :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>(pk == val)))}
             add_label(label, radios)
             wrapper ? wrapper.call(radios, _input(:radio, opts)) : radios
           else
@@ -335,7 +335,7 @@ module Sequel # :nodoc:
             label = opts.delete(:label)
             val = opts.delete(:value)
             wrapper, tag_wrapper = get_wrappers
-            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>val.include?(pk), :no_hidden=>true))}
+            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :id=>"#{form.namespaced_id(field)}_#{pk}", :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>val.include?(pk), :no_hidden=>true))}
             add_label(label, cbs)
             wrapper ? wrapper.call(cbs, _input(:checkbox, opts)) : cbs
           else

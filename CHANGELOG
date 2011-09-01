@@ -1,5 +1,7 @@
 === HEAD
 
+* Add id attributes for association :as=>:radio or :as=>:checkbox fields (jeremyevans)
+
 * Add an html class attribute for radio/checkbox labels in :as=>:radio or :as=>:checkbox fields (jeremyevans)
 
 * Wrap text acting as a label in a span with class label for :as=>:radio or :as=>:checkbox fields (jeremyevans)
