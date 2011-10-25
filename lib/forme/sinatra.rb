@@ -13,7 +13,7 @@ module Forme
       # Set the template output object when initializing.
       def initialize(*)
         super
-        @output = @opts[:output]
+        @output = @opts[:output] ? @opts[:output] : ''
       end
 
       # Serialize the tag and inject it into the output.
@@ -22,14 +22,14 @@ module Forme
       end
 
       # Always return nil, so that use with <%= doesn't cause
-      # multiple things to be output. 
+      # multiple things to be output.
       def inputs(*a)
         super
         nil
       end
 
       # Always return nil, so that use with <%= doesn't cause
-      # multiple things to be output. 
+      # multiple things to be output.
       def form(*a, &block)
         super
         nil
@@ -53,13 +53,13 @@ module Forme
         end
       end
     end
-    
+
     # This is the module used to add the Forme integration
     # to Sinatra.  It should be enabled in Sinatra with the
     # following code in your <tt>Sinatra::Base</tt> subclass:
     #
-    #   helpers Forme::Sinatra::ERB
-    module ERB
+    #   helpers Forme::Sinatra::Helper
+    module Helper
       # Create a +Form+ object and yield it to the block,
       # injecting the opening form tag before yielding and
       # the closing form tag after yielding.
@@ -81,9 +81,12 @@ module Forme
         (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
         Form.form(obj, attr, opts, &block)
       end
-    end 
+    end
 
-    # Alias of <tt>Forme::Sinatra::ERB</tt>
-    Erubis = ERB
+    # Alias of <tt>Forme::Sinatra::Template</tt>
+    ERB = Helper
+
+    # Alias of <tt>Forme::Sinatra::Template</tt>
+    Erubis = Helper
   end
 end
