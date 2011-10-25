@@ -6,7 +6,7 @@ require 'forme/sinatra'
 require(ENV['ERUBIS'] ? 'erubis' : 'erb')
 
 class FormeSinatraTest < Sinatra::Base
-  helpers(ENV['ERUBIS'] ? Forme::Sinatra::Erubis : Forme::Sinatra::ERB)
+  helpers(Forme::Sinatra::Helper)
   disable :show_exceptions
   enable :raise_errors
 

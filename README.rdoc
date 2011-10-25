@@ -200,11 +200,11 @@ The Forme Sequel plugin also integerates with Sequel's validation reflection sup
 +validation_class_methods+ plugin that ships with Sequel.  It will add +pattern+ and +maxlength+ attributes
 based on the format, numericality, and length validations.
 
-= Sinatra ERB Support
+= Sinatra Support
 
 Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
-<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra::Base subclass.  It allows you to use the
-following API in your Sinatra ERB forms:
+<tt>helpers Forme::Sinatra::Helper</tt> in your Sinatra::Base subclass.  It allows you to use the
+following API in your Sinatra Helper forms:
 
   <% form(@obj, :action=>'/foo') do |f| %>
     <%= f.input(:field) %>
@@ -213,7 +213,17 @@ following API in your Sinatra ERB forms:
     <% end %>
   <% end %>
 
-In addition to ERB, it also works with Sinatra's Erubis support.
+This example is for ERB/Erubis, but Forme has also been reported to work with haml and slim,
+and hopefully is generic enough to work with any template library Sinatra supports.
+
+Note that if you use partials or anything that changes the @_out_buf instance variable,
+you have to reset the form's output in the partial before calling any method on the form,
+and also reset it after the partial returns:
+
+  <%= f.output = @_out_buf %>
+
+Hopefully, the integration can be made more complete in the future so that this is not
+required.
 
 = Other Similar Projects
 
