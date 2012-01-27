@@ -1,7 +1,7 @@
 require File.expand_path("../lib/forme/version", __FILE__)
 spec = Gem::Specification.new do |s|
   s.name = 'forme'
-  s.version = Forme.version
+  s.version = Forme.version.dup
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
   s.extra_rdoc_files = ["README.rdoc", "CHANGELOG", "MIT-LICENSE"]
