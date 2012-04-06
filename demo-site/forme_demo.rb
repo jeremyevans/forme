@@ -59,7 +59,7 @@ END
   get '/album/basic/list' do
     @page_title = 'Album Basic - List'
     @form_opts_str = '{:wrapper=>:li, :inputs_wrapper=>:ol}'
-    @css = "ol {list-style-type: none;}"
+    @css = "ol, li {list-style-type: none;}"
     demo :album_basic
   end
 
@@ -72,14 +72,14 @@ END
   get '/album/basic/alt_assoc' do
     @page_title = 'Album Basic - Association Radios/Checkboxes'
     @form_opts_str = "{:wrapper=>:li, :inputs_wrapper=>:ol, :many=>{:as=>:checkbox}, :one=>{:as=>:radio}}"
-    @css = "ol {list-style-type: none;}"
+    @css = "ol, li {list-style-type: none;}"
     demo :album_basic
   end
 
   get '/album/basic/readonly' do
     @page_title = 'Album Basic - Read Only'
     @form_opts_str = "{:wrapper=>:li, :inputs_wrapper=>:ol, :formatter=>:readonly}"
-    @css = "ol {list-style-type: none;}"
+    @css = "ol, li {list-style-type: none;}"
     demo :album_basic
   end
 
