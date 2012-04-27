@@ -1,7 +1,7 @@
 require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
 
 require 'rubygems'
-require 'sequel'
+require 'sequel/no_core_ext'
 
 DB = Sequel.sqlite
 Sequel.default_timezone = :utc
