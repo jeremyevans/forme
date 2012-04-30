@@ -6,7 +6,7 @@ require 'forme/sinatra'
 require(ENV['ERUBIS'] ? 'erubis' : 'erb')
 
 class FormeSinatraTest < Sinatra::Base
-  helpers(Forme::Sinatra::Helper)
+  helpers(Forme::Sinatra::ERB)
   disable :show_exceptions
   enable :raise_errors
 
@@ -30,6 +30,30 @@ END
   <% end %>
 
 <% end %>
+END
+  end
+
+  get '/nest_sep' do
+    @nest = <<END
+  n1
+  <% f.tag(:div) do %>
+    n2
+    <%= f.input(:first) %>
+    <%= f.input(:last) %>
+    n3
+  <% end %>
+  n4
+END
+    erb <<END
+0
+<% form([:foo, :bar], :action=>'/baz') do |f| %>
+  1
+  <%= f.tag(:p, {}, 'FBB') %>
+  2
+  <%= erb(@nest, :locals=>{:f=>f}) %>
+  3
+<% end %>
+4
 END
   end
 
@@ -76,6 +100,10 @@ describe "Forme Sinatra ERB integration" do
 
   specify "#form should add start and end tags and yield Forme::Form instance" do
     sin_get('/nest').should == '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
+  end
+
+  specify "#form should correctly handle situation where multiple templates are used with same form object" do
+    sin_get('/nest_sep').should == "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <div> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </div> n4 3 </form>4"
   end
 
   specify "#form should accept two hashes instead of requiring obj as first argument" do

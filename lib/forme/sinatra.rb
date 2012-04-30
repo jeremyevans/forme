@@ -13,7 +13,7 @@ module Forme
       # Set the template output object when initializing.
       def initialize(*)
         super
-        @output = @opts[:output]
+        @output = @opts[:output] ? @opts[:output] : ''
       end
 
       # Serialize the tag and inject it into the output.
@@ -23,16 +23,22 @@ module Forme
 
       # Always return nil, so that use with <%= doesn't cause
       # multiple things to be output. 
-      def inputs(*a)
-        super
-        nil
+      def inputs(*a, &block)
+        if block
+          capture(block){super}
+        else
+          super
+        end
       end
 
       # Always return nil, so that use with <%= doesn't cause
       # multiple things to be output. 
       def form(*a, &block)
-        super
-        nil
+        if block
+          capture(block){super}
+        else
+          super
+        end
       end
 
       # If a block is provided, inject an opening tag into the
@@ -40,17 +46,27 @@ module Forme
       # block, inject a closing tag into the output, and the return nil
       # so that usage with <%= doesn't cause multiple things to be output.
       # If a block is not given, just return the tag created.
-      def tag(type, attr={}, children=[])
+      def tag(type, attr={}, children=[], &block)
         tag = _tag(type, attr, children)
-        if block_given?
-          emit(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
-          children.each{|c| emit(c)}
-          yield self
-          emit(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
+        if block
+          capture(block) do
+            emit(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
+            children.each{|c| emit(c)}
+            yield self
+            emit(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
+          end
           nil
         else
           tag
         end
+      end
+
+      def capture(block)
+        buf_was, @output = @output, eval("@_out_buf", block.binding) || @output
+        yield
+        ret = @output
+        @output = buf_was
+        ret
       end
     end
     
@@ -77,9 +93,17 @@ module Forme
       #                                  opening attributes, third if provided is
       #                                  +Form+'s options.
       def form(obj=nil, attr={}, opts={}, &block)
-        h = {:output=>@_out_buf}
-        (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
-        Form.form(obj, attr, opts, &block)
+        if block
+          h = {:output=>@_out_buf}
+          (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
+          Form.form(obj, attr, opts, &block)
+        else
+          output = ''
+          h = {:output=>output}
+          (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
+          Form.form(obj, attr, opts)
+          output
+        end
       end
     end 
 
