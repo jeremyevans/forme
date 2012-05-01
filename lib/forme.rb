@@ -796,6 +796,7 @@ module Forme
     # Formats a textarea.  Respects the following options:
     # :value :: Sets value as the child of the textarea.
     def format_textarea
+      copy_options_to_attributes([:cols, :rows])
       if val = @attr.delete(:value)
         tag(:textarea, @attr, [val])
       else

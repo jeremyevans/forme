@@ -98,6 +98,12 @@ describe "Forme plain forms" do
 
   specify "should create textarea tag" do
     @f.input(:textarea).to_s.should == '<textarea></textarea>'
+    @f.input(:textarea, :value=>'a').to_s.should == '<textarea>a</textarea>'
+  end
+
+  specify "should use :cols and :rows options as attributes for textarea inputs" do
+    @f.input(:text, :cols=>5, :rows=>10).to_s.should == '<input type="text"/>'
+    @f.input(:textarea, :cols=>5, :rows=>10).to_s.should == '<textarea cols="5" rows="10"></textarea>'
   end
 
   specify "should create select tag" do
