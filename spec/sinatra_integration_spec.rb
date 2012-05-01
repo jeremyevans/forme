@@ -43,6 +43,8 @@ END
     n3
   <% end %>
   n4
+  <%= f.inputs([:first, :last], :legend=>'Foo') %>
+  n5
 END
     erb <<END
 0
@@ -103,7 +105,7 @@ describe "Forme Sinatra ERB integration" do
   end
 
   specify "#form should correctly handle situation where multiple templates are used with same form object" do
-    sin_get('/nest_sep').should == "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <div> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </div> n4 3 </form>4"
+    sin_get('/nest_sep').should == "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <div> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </div> n4 <fieldset class=\"inputs\"><legend>Foo</legend><input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/><input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/></fieldset> n5 3 </form>4"
   end
 
   specify "#form should accept two hashes instead of requiring obj as first argument" do

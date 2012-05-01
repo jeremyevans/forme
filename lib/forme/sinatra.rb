@@ -27,7 +27,7 @@ module Forme
         if block
           capture(block){super}
         else
-          super
+          capture{super}
         end
       end
 
@@ -61,8 +61,8 @@ module Forme
         end
       end
 
-      def capture(block)
-        buf_was, @output = @output, eval("@_out_buf", block.binding) || @output
+      def capture(block='')
+        buf_was, @output = @output, block.is_a?(Proc) ? (eval("@_out_buf", block.binding) || @output) : block
         yield
         ret = @output
         @output = buf_was

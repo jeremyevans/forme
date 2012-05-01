@@ -205,7 +205,7 @@ module Forme
       button = opts[:button]
       if ins || button
         block = Proc.new do |form|
-          form.inputs(ins, opts) if ins
+          form._inputs(ins, opts) if ins
           yield form if block_given?
           form.emit(form.button(button)) if button
         end
@@ -354,7 +354,13 @@ module Forme
     # The given +opts+ are passed to the +inputs_wrapper+, and the default
     # +inputs_wrapper+ supports a <tt>:legend</tt> option that is used to
     # set the legend for the fieldset.
-    def inputs(inputs=[], opts={})
+    def inputs(*a, &block)
+      _inputs(*a, &block)
+    end
+    
+    # Internals of #inputs, should be used internally by the library, where #inputs
+    # is designed for external use.
+    def _inputs(inputs=[], opts={})
       if inputs.is_a?(Hash)
         opts = inputs.merge(opts)
         inputs = []
