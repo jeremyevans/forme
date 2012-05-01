@@ -84,7 +84,7 @@ module Sequel # :nodoc:
                     options[:legend] = humanize(association)
                   end
                 end
-                inputs(ins, options, &block)  
+                _inputs(ins, options, &block)  
               else
                 yield
               end
@@ -450,6 +450,20 @@ module Sequel # :nodoc:
         end
       end
 
+      # Helper module used for Sequel/Sinatra forms.  Necessary for
+      # proper subform handling when using such forms with partials.
+      module SinatraSequelForm
+        # Capture the inside of the inputs, injecting it into the template
+        # if a block is given, or returning it as a string if not.
+        def subform(*, &block)
+          if block
+            capture(block){super}
+          else
+            capture{super}
+          end
+        end
+      end
+
       module InstanceMethods
         # Configure the +form+ with support for <tt>Sequel::Model</tt>
         # specific code, such as support for nested attributes.
@@ -457,6 +471,7 @@ module Sequel # :nodoc:
           form.extend(SequelForm)
           form.nested_associations = []
           form.namespaces = [model.send(:underscore, model.name)]
+          form.extend(SinatraSequelForm) if defined?(::Forme::Sinatra::Form) && form.is_a?(::Forme::Sinatra::Form)
         end
 
         # Return <tt>Forme::Input</tt> instance based on the given arguments.

@@ -1,4 +1,5 @@
 require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
+require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_helper.rb')
 
 require 'rubygems'
 require 'sinatra/base'
@@ -59,6 +60,33 @@ END
 END
   end
 
+  get '/nest_seq' do
+    @album = Album.load(:name=>'N', :copies_sold=>2, :id=>1)
+    @album.associations[:artist] = Artist.load(:name=>'A', :id=>2)
+    @nest = <<END
+  n1
+  <% f.subform(:artist) do %>
+    n2
+    <%= f.input(:name2) %>
+    n3
+  <% end %>
+  n4
+  <%= f.subform(:artist, :inputs=>[:name3], :legend=>'Bar') %>
+  n5
+END
+    erb <<END
+0
+<% form(@album, :action=>'/baz') do |f| %>
+  1
+  <%= f.subform(:artist, :inputs=>[:name], :legend=>'Foo') %>
+  2
+  <%= erb(@nest, :locals=>{:f=>f}) %>
+  3
+<% end %>
+4
+END
+  end
+
   get '/hash' do
     erb "<% form({:action=>'/baz'}, :obj=>[:foo]) do |f| %> <%= f.input(:first) %> <% end %>"
   end
@@ -106,6 +134,10 @@ describe "Forme Sinatra ERB integration" do
 
   specify "#form should correctly handle situation where multiple templates are used with same form object" do
     sin_get('/nest_sep').should == "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <div> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </div> n4 <fieldset class=\"inputs\"><legend>Foo</legend><input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/><input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/></fieldset> n5 3 </form>4"
+  end
+
+  specify "#form should correctly handle situation Sequel integration with subforms where multiple templates are used with same form object" do
+    sin_get('/nest_seq').should == "0 <form action=\"/baz\" class=\"forme album\" method=\"post\"> 1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Foo</legend><label>Name: <input id=\"album_artist_attributes_name\" name=\"album[artist_attributes][name]\" type=\"text\" value=\"A\"/></label></fieldset> 2 n1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/> n2 <label>Name2: <input id=\"album_artist_attributes_name2\" name=\"album[artist_attributes][name2]\" type=\"text\" value=\"A2\"/></label> n3 n4 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Bar</legend><label>Name3: <input id=\"album_artist_attributes_name3\" name=\"album[artist_attributes][name3]\" type=\"text\" value=\"A3\"/></label></fieldset> n5 3 </form>4"
   end
 
   specify "#form should accept two hashes instead of requiring obj as first argument" do
