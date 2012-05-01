@@ -1,5 +1,9 @@
 === HEAD
 
+* Recognize :size and :maxlength options as attributes for text inputs in the default formatter (jeremyevans)
+
+* Recognize :style option as attributes in the default formatter (jeremyevans)
+
 * Join attribute values specified as arrays with spaces instead of the empty string (jeremyevans)
 
 * Make Sinatra ERB integration work with partials (jeremyevans)

@@ -591,7 +591,7 @@ module Forme
     # attributes hash, so they don't need to be specified in the :attr
     # option.  However, they can be specified in both places, and if so,
     # the :attr option version takes precedence.
-    ATTRIBUTE_OPTIONS = [:name, :id, :placeholder, :value]
+    ATTRIBUTE_OPTIONS = [:name, :id, :placeholder, :value, :style]
 
     # Create a new instance and call it
     def self.call(input)
@@ -725,6 +725,7 @@ module Forme
     # with the type attribute set to input.
     def _format_input(type)
       @attr[:type] = type
+      copy_options_to_attributes([:size, :maxlength])
       tag(:input)
     end
 
@@ -802,15 +803,19 @@ module Forme
       end
     end
 
-    # Normalize the options used for all input types.  Handles:
-    # :required :: Sets the +required+ attribute on the resulting tag if true.
-    # :disabled :: Sets the +disabled+ attribute on the resulting tag if true.
-    def normalize_options
-      ATTRIBUTE_OPTIONS.each do |k|
+    def copy_options_to_attributes(attributes)
+      attributes.each do |k|
         if @opts.has_key?(k) && !@attr.has_key?(k)
           @attr[k] = @opts[k]
         end
       end
+    end
+
+    # Normalize the options used for all input types.  Handles:
+    # :required :: Sets the +required+ attribute on the resulting tag if true.
+    # :disabled :: Sets the +disabled+ attribute on the resulting tag if true.
+    def normalize_options
+      copy_options_to_attributes(ATTRIBUTE_OPTIONS)
 
       Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
       Forme.attr_classes(@attr, 'error') if @opts[:error]

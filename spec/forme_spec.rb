@@ -42,6 +42,10 @@ describe "Forme plain forms" do
     @f.input(:text, :placeholder=>"foo").to_s.should == '<input placeholder="foo" type="text"/>'
   end
 
+  specify "should use :style option as attribute" do
+    @f.input(:text, :style=>"foo").to_s.should == '<input style="foo" type="text"/>'
+  end
+
   specify "should allow arbitrary attributes using the :attr option" do
     @f.input(:text, :attr=>{:bar=>"foo"}).to_s.should == '<input bar="foo" type="text"/>'
   end
@@ -60,6 +64,11 @@ describe "Forme plain forms" do
 
   specify "should not have :data options override the :attr option" do
     @f.input(:text, :data=>{:bar=>"baz"}, :attr=>{:"data-bar"=>"foo"}).to_s.should == '<input data-bar="foo" type="text"/>'
+  end
+
+  specify "should use :size and :maxlength options as attributes for text inputs" do
+    @f.input(:text, :size=>5, :maxlength=>10).to_s.should == '<input maxlength="10" size="5" type="text"/>'
+    @f.input(:textarea, :size=>5, :maxlength=>10).to_s.should == '<textarea></textarea>'
   end
 
   specify "should create hidden input with value 0 for each checkbox with a name" do
