@@ -21,8 +21,8 @@ module Forme
         output << tag.to_s
       end
 
-      # Always return nil, so that use with <%= doesn't cause
-      # multiple things to be output. 
+      # Capture the inside of the inputs, injecting it into the template
+      # if a block is given, or returning it as a string if not.
       def inputs(*a, &block)
         if block
           capture(block){super}
@@ -31,20 +31,19 @@ module Forme
         end
       end
 
-      # Always return nil, so that use with <%= doesn't cause
-      # multiple things to be output. 
+      # Capture the inside of the form, injecting it into the template if
+      # a block is given, or returning it as a string if not.
       def form(*a, &block)
         if block
           capture(block){super}
         else
-          super
+          capture{super}
         end
       end
 
-      # If a block is provided, inject an opening tag into the
+      # If a block is given, inject an opening tag into the
       # output, inject any given children into the output, yield to the
-      # block, inject a closing tag into the output, and the return nil
-      # so that usage with <%= doesn't cause multiple things to be output.
+      # block, inject a closing tag into the output.
       # If a block is not given, just return the tag created.
       def tag(type, attr={}, children=[], &block)
         tag = _tag(type, attr, children)
@@ -55,7 +54,6 @@ module Forme
             yield self
             emit(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
           end
-          nil
         else
           tag
         end
@@ -98,11 +96,7 @@ module Forme
           (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
           Form.form(obj, attr, opts, &block)
         else
-          output = ''
-          h = {:output=>output}
-          (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
           Form.form(obj, attr, opts)
-          output
         end
       end
     end 
