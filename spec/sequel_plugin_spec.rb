@@ -17,6 +17,11 @@ describe "Forme Sequel::Model forms" do
     @b.form(:class=>:foo, :method=>:get).to_s.should == '<form class="foo forme album" method="get"></form>'
   end
 
+  specify "should allow an array of classes" do
+    @b.form(:class=>[:foo, :bar]).to_s.should == '<form class="foo bar forme album" method="post"></form>'
+    @b.form(:class=>[:foo, [:bar, :baz]]).to_s.should == '<form class="foo bar baz forme album" method="post"></form>'
+  end
+
   specify "should use a text field for strings" do
     @b.input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" type="text" value="b"/></label>'
     @c.input(:name).to_s.should == '<label>Name: <input id="album_name" name="album[name]" type="text" value="c"/></label>'

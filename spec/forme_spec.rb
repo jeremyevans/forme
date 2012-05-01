@@ -547,6 +547,11 @@ describe "Forme.form DSL" do
     Forme.form{|f| f.should be_a_kind_of(Forme::Form)}
   end
 
+  specify "should respect an array of classes" do
+    Forme.form(:class=>[:foo, :bar]).to_s.should ==  '<form class="foo bar"></form>'
+    Forme.form(:class=>[:foo, [:bar, :baz]]).to_s.should ==  '<form class="foo bar baz"></form>'
+  end
+
   specify "should have inputs called instead the block be added to the existing form" do
     Forme.form{|f| f.input(:text)}.to_s.should ==  '<form><input type="text"/></form>'
   end

@@ -1,5 +1,7 @@
 === HEAD
 
+* Join attribute values specified as arrays with spaces instead of the empty string (jeremyevans)
+
 * Make Sinatra ERB integration work with partials (jeremyevans)
 
 * Add id attributes for association :as=>:radio or :as=>:checkbox fields (jeremyevans)

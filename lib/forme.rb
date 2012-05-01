@@ -1112,11 +1112,21 @@ module Forme
       string.to_s.gsub(ESCAPE_HTML_PATTERN){|c| ESCAPE_HTML[c] }
     end
 
+    # Join attribute values that are arrays with spaces instead of an empty
+    # string.
+    def attr_value(v)
+      if v.is_a?(Array)
+        v.map{|c| attr_value(c)}.join(' ')
+      else
+        call(v)
+      end
+    end
+
     # Transforms the +tag+'s attributes into an html string, sorting by the keys
     # and quoting and html escaping the values.
     def attr_html(tag)
       attr = tag.attr.to_a.reject{|k,v| v.nil?}
-      " #{attr.map{|k, v| "#{k}=\"#{call(v)}\""}.sort.join(' ')}" unless attr.empty?
+      " #{attr.map{|k, v| "#{k}=\"#{attr_value(v)}\""}.sort.join(' ')}" unless attr.empty?
     end
   end
 
