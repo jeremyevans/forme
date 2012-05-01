@@ -196,6 +196,10 @@ describe "Forme plain forms" do
     @f.input(:text, :label=>'Foo', :value=>'foo', :label_attr=>{:class=>'bar'}).to_s.should == '<label class="bar">Foo: <input type="text" value="foo"/></label>'
   end
 
+  specify "should handle implicit labels with checkboxes" do
+    @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a').to_s.should == '<input name="a" type="hidden" value="0"/><label><input name="a" type="checkbox" value="foo"/> Foo</label>'
+  end
+
   specify "should automatically note the input has errors if :error option is used" do
     @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.should == '<input class="error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
   end
@@ -299,6 +303,10 @@ describe "Forme plain forms" do
 
   specify "inputs should accept a :labeler option to use a custom labeler" do
     @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo).to_s.should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
+  end
+
+  specify "should handle explicit labels with checkboxes" do
+    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar').to_s.should == '<input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/><label for="bar">Foo</label>'
   end
 
   specify "inputs should accept a :error_handler option to use a custom error_handler" do

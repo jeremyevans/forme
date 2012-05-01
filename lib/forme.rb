@@ -940,10 +940,14 @@ module Forme
     # the label occurs before the tag.
     def call(tag, input)
       label = input.opts[:label]
-      t = if [:radio, :checkbox].include?(input.type)
-        [tag, ' ', label]
+      if [:radio, :checkbox].include?(input.type)
+        if input.type == :checkbox && tag.is_a?(Array) && tag.length == 2 && tag.first.attr[:type].to_s == 'hidden' 
+          return [tag.first , input.tag(:label, input.opts[:label_attr]||{}, [tag.last, ' ', label])]
+        else
+          t = [tag, ' ', label]
+        end
       else
-        [label, ": ", tag]
+        t = [label, ": ", tag]
       end
       input.tag(:label, input.opts[:label_attr]||{}, t)
     end
@@ -963,7 +967,11 @@ module Forme
     # :label_for option is used, the label created will not be
     # associated with an input.
     def call(tag, input)
-      [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
+      if [:radio, :checkbox].include?(input.type)
+        [tag, input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]])]
+      else
+        [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
+      end
     end
   end
 

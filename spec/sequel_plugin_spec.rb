@@ -84,8 +84,8 @@ describe "Forme Sequel::Model forms" do
   end
   
   specify "should use a checkbox for dual-valued boolean fields" do
-    @b.input(:platinum).to_s.should == '<label><input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
-    @c.input(:platinum).to_s.should == '<label><input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
+    @b.input(:platinum).to_s.should == '<input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><label><input id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
+    @c.input(:platinum).to_s.should == '<input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><label><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
   end
   
   specify "should use radio buttons for boolean fields if :as=>:radio is used" do

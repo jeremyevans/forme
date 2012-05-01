@@ -1,5 +1,9 @@
 === HEAD
 
+* Make explicit labeler put label after checkboxes and radio buttons instead of before (jeremyevans)
+
+* Make implicit labeler not include hidden checkbox inside label (jeremyevans)
+
 * Recognize :cols and :rows options as attributes for textarea inputs in the default formatter (jeremyevans)
 
 * Recognize :size and :maxlength options as attributes for text inputs in the default formatter (jeremyevans)
