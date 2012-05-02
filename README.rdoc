@@ -203,8 +203,8 @@ based on the format, numericality, and length validations.
 = Sinatra Support
 
 Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
-<tt>helpers Forme::Sinatra::Helper</tt> in your Sinatra::Base subclass.  It allows you to use the
-following API in your Sinatra Helper forms:
+<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra::Base subclass.  It allows you to use the
+following API in your Sinatra ERB forms:
 
   <% form(@obj, :action=>'/foo') do |f| %>
     <%= f.input(:field) %>
@@ -213,17 +213,23 @@ following API in your Sinatra Helper forms:
     <% end %>
   <% end %>
 
-This example is for ERB/Erubis, but Forme has also been reported to work with haml and slim,
-and hopefully is generic enough to work with any template library Sinatra supports.
+This example is for ERB/Erubis.  Other Sinatra template libraries work differently and
+probably do not support this integration.
 
-Note that if you use partials or anything that changes the @_out_buf instance variable,
-you have to reset the form's output in the partial before calling any method on the form,
-and also reset it after the partial returns:
+= Rails Support
 
-  <%= f.output = @_out_buf %>
+Forme ships with a Rails extension that you can get by <tt>require "forme/rails"</tt> and using
+<tt>helpers Forme::Rails::ERB</tt> in your controller.  If allows you to use the following API
+in your Rails forms:
 
-Hopefully, the integration can be made more complete in the future so that this is not
-required.
+  <%= forme(@obj, :action=>'/foo') do |f| %>
+    <%= f.input(:field) %>
+    <%= f.tag(:fieldset) do %>
+      <%= f.input(:field_two) %>
+    <% end %>
+  <% end %>
+
+This has been tested on Rails 3.2, but should hopefully work on Rails 3.0+.
 
 = Other Similar Projects
 

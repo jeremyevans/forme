@@ -1,5 +1,7 @@
 === HEAD
 
+* Add Rails integration (jeremyevans)
+
 * Make explicit labeler put label after checkboxes and radio buttons instead of before (jeremyevans)
 
 * Make implicit labeler not include hidden checkbox inside label (jeremyevans)
