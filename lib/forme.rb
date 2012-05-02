@@ -402,6 +402,10 @@ module Forme
       tag
     end
 
+    def tag_(*a, &block)
+      tag(*a, &block)
+    end
+
     # Creates a :submit +Input+ with the given opts, adding it to the list
     # of children for the currently open tag.
     def button(opts={})
@@ -1032,7 +1036,7 @@ module Forme
 
     # Wrap the inputs in an ol tag
     def call(form, opts)
-      super(form, opts){form.tag(:ol){yield}}
+      super(form, opts){form.tag_(:ol){yield}}
     end
   end
 

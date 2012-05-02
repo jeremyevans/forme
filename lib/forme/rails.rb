@@ -49,18 +49,21 @@ module Forme
       # output of the tag goes into that buffer, and return the buffer.
       # Otherwise, just return a string version of the tag that is already
       # marked as safe.
-      def tag(type, attr={}, children=[])
-        tag = _tag(type, attr, children)
+      def tag(type, attr={}, children=[], &block)
         if block_given?
-          template.send(:with_output_buffer) do
-            emit(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
-            Array(children).each{|c| emit(c)}
-            yield self if block_given?
-            emit(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
-          end
+          template.send(:with_output_buffer){tag_(type, attr, children, &block)}
         else
+          tag = _tag(type, attr, children)
           template.raw(tag.to_s)
         end
+      end
+
+      def tag_(type, attr={}, children=[])
+        tag = _tag(type, attr, children)
+        emit(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
+        Array(children).each{|c| emit(c)}
+        yield self if block_given?
+        emit(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
       end
     end
 

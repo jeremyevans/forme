@@ -31,6 +31,16 @@ END
 END
   end
 
+  get '/inputs_block_wrapper' do
+    erb <<END
+<% form([:foo, :bar], {:action=>'/baz'}, :inputs_wrapper=>:fieldset_ol) do |f| %>
+  <% f.inputs(:legend=>'FBB') do %>
+    <%= f.input(:last) %>
+  <% end %>
+<% end %>
+END
+  end
+
   get '/nest' do
     erb <<END
 <% form([:foo, :bar], :action=>'/baz') do |f| %>
@@ -141,6 +151,10 @@ describe "Forme Sinatra ERB integration" do
 
   specify "#form should have inputs work with a block" do
     sin_get('/inputs_block').should == '<form action="/baz"><fieldset class="inputs"><legend>FBB</legend> <input id="last" name="last" type="text" value="bar"/> </fieldset></form>'
+  end
+
+  specify "#form should have inputs with fieldset_ol wrapper work with block" do
+    sin_get('/inputs_block_wrapper').should == '<form action="/baz"><fieldset class="inputs"><legend>FBB</legend><ol> <input id="last" name="last" type="text" value="bar"/> </ol></fieldset></form>'
   end
 
   specify "#form should add start and end tags and yield Forme::Form instance" do
