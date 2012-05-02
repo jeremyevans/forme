@@ -45,6 +45,11 @@ module Forme
         template.raw(super.to_s)
       end
 
+      # Return a string version of the button that is already marked as safe.
+      def button(*)
+        template.raw(super.to_s)
+      end
+
       # If a block is given, create a new output buffer and make sure all the
       # output of the tag goes into that buffer, and return the buffer.
       # Otherwise, just return a string version of the tag that is already

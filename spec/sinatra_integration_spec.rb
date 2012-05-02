@@ -17,6 +17,7 @@ class FormeSinatraTest < Sinatra::Base
   <p>FBB</p>
   <%= f.input(:first) %>
   <%= f.input(:last) %>
+  <%= f.button('Save') %>
 <% end %>
 END
   end
@@ -146,7 +147,7 @@ describe "Forme Sinatra ERB integration" do
   end
 
   specify "#form should add start and end tags and yield Forme::Form instance" do
-    sin_get('/').should == '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </form>'
+    sin_get('/').should == '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> <input type="submit" value="Save"/> </form>'
   end
 
   specify "#form should have inputs work with a block" do
