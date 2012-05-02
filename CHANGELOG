@@ -1,5 +1,7 @@
 === HEAD
 
+* Support :label_position option in both of the labelers, can be set to :before or :after to override the default (jeremyevans)
+
 * Add Rails integration (jeremyevans)
 
 * Make explicit labeler put label after checkboxes and radio buttons instead of before (jeremyevans)

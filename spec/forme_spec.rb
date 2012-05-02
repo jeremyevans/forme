@@ -200,6 +200,14 @@ describe "Forme plain forms" do
     @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a').to_s.should == '<input name="a" type="hidden" value="0"/><label><input name="a" type="checkbox" value="foo"/> Foo</label>'
   end
 
+  specify "should handle implicit labels with :label_position=>:after" do
+    @f.input(:text, :label=>'Foo', :value=>'foo', :label_position=>:after).to_s.should == '<label><input type="text" value="foo"/> Foo</label>'
+  end
+
+  specify "should handle implicit labels with checkboxes with :label_position=>:before" do
+    @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a', :label_position=>:before).to_s.should == '<input name="a" type="hidden" value="0"/><label>Foo <input name="a" type="checkbox" value="foo"/></label>'
+  end
+
   specify "should automatically note the input has errors if :error option is used" do
     @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.should == '<input class="error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
   end
@@ -305,8 +313,16 @@ describe "Forme plain forms" do
     @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo).to_s.should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
   end
 
+  specify "inputs handle explicit labels with :label_position=>:after" do
+    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo, :label_position=>:after).to_s.should == '<textarea id="foo"></textarea><label for="foo">bar</label>'
+  end
+
   specify "should handle explicit labels with checkboxes" do
     @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar').to_s.should == '<input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/><label for="bar">Foo</label>'
+  end
+
+  specify "should handle explicit labels with checkboxes with :label_position=>:before" do
+    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar', :label_position=>:before).to_s.should == '<label for="bar">Foo</label><input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/>'
   end
 
   specify "inputs should accept a :error_handler option to use a custom error_handler" do

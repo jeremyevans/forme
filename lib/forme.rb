@@ -940,12 +940,22 @@ module Forme
     # the label occurs before the tag.
     def call(tag, input)
       label = input.opts[:label]
+      label_position = input.opts[:label_position]
       if [:radio, :checkbox].include?(input.type)
         if input.type == :checkbox && tag.is_a?(Array) && tag.length == 2 && tag.first.attr[:type].to_s == 'hidden' 
-          return [tag.first , input.tag(:label, input.opts[:label_attr]||{}, [tag.last, ' ', label])]
+          t = if label_position == :before
+            [label, ' ', tag.last]
+          else
+            [tag.last, ' ', label]
+          end
+          return [tag.first , input.tag(:label, input.opts[:label_attr]||{}, t)]
+        elsif label_position == :before
+          t = [label, ' ', tag]
         else
           t = [tag, ' ', label]
         end
+      elsif label_position == :after
+        t = [tag, ' ', label]
       else
         t = [label, ": ", tag]
       end
@@ -968,9 +978,16 @@ module Forme
     # associated with an input.
     def call(tag, input)
       if [:radio, :checkbox].include?(input.type)
-        [tag, input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]])]
+        t = [tag, input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]])]
+        p = :before
       else
-        [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
+        t = [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
+        p = :after
+      end
+      if input.opts[:label_position] == p
+        t.reverse
+      else
+        t
       end
     end
   end
