@@ -26,6 +26,16 @@ class FormeController < ActionController::Base
 END
   end
 
+  def inputs_block
+    render :inline => <<END
+<%= forme([:foo, :bar], :action=>'/baz') do |f| %>
+  <%= f.inputs(:legend=>'FBB') do %>
+    <%= f.input(:last) %>
+  <% end %>
+<% end %>
+END
+  end
+
   def nest
     render :inline => <<END
 <%= forme([:foo, :bar], :action=>'/baz') do |f| %>
@@ -134,6 +144,10 @@ describe "Forme Rails integration" do
 
   specify "#form should add start and end tags and yield Forme::Form instance" do
     sin_get('/index').should == '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </form>'
+  end
+
+  specify "#form should have inputs work with a block" do
+    sin_get('/inputs_block').should == '<form action="/baz"> <fieldset class="inputs"><legend>FBB</legend> <input id="last" name="last" type="text" value="bar"/> </fieldset></form>'
   end
 
   specify "#form should add start and end tags and yield Forme::Form instance" do

@@ -21,9 +21,13 @@ module Forme
       end
 
       # Capture the inputs into a new output buffer, and return
-      # the buffer.
+      # the buffer if not given a block
       def inputs(*)
-        template.send(:with_output_buffer){super}
+        if block_given?
+          super
+        else
+          template.send(:with_output_buffer){super}
+        end
       end
       
       # If a block is not given, emit the inputs into the current output

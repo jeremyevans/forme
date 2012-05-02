@@ -21,6 +21,16 @@ class FormeSinatraTest < Sinatra::Base
 END
   end
 
+  get '/inputs_block' do
+    erb <<END
+<% form([:foo, :bar], :action=>'/baz') do |f| %>
+  <% f.inputs(:legend=>'FBB') do %>
+    <%= f.input(:last) %>
+  <% end %>
+<% end %>
+END
+  end
+
   get '/nest' do
     erb <<END
 <% form([:foo, :bar], :action=>'/baz') do |f| %>
@@ -124,8 +134,13 @@ describe "Forme Sinatra ERB integration" do
     def o.puts(*) end
     @rack = {'rack.input'=>'', 'REQUEST_METHOD'=>'GET', 'rack.errors'=>o}
   end
+
   specify "#form should add start and end tags and yield Forme::Form instance" do
     sin_get('/').should == '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </form>'
+  end
+
+  specify "#form should have inputs work with a block" do
+    sin_get('/inputs_block').should == '<form action="/baz"><fieldset class="inputs"><legend>FBB</legend> <input id="last" name="last" type="text" value="bar"/> </fieldset></form>'
   end
 
   specify "#form should add start and end tags and yield Forme::Form instance" do
