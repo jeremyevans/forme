@@ -76,7 +76,7 @@ You can even do everything in a single method call:
 
 = Basic Design
 
-Interally, Forme builds an abstract syntax tree of objects that
+Internally, Forme builds an abstract syntax tree of objects that
 represent the form.  The abstract syntax tree goes through a
 series of transformations that convert it from high level
 abstract forms to low level abstract forms and finally to
