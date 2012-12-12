@@ -1,3 +1,7 @@
+=== HEAD
+
+* ActiveSupport::SafeBuffer objects are now automatically treated as raw in the Rails integration (jeremyevans)
+
 === 0.7.0 (2012-05-02)
 
 * Support :label_position option in both of the labelers, can be set to :before or :after to override the default (jeremyevans)

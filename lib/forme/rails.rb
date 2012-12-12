@@ -1,5 +1,9 @@
 require 'forme'
 
+class ActiveSupport::SafeBuffer
+  include Forme::Raw
+end
+
 module Forme
   module Rails # :nodoc:
     # Subclass used when using Forme/Rails ERB integration,

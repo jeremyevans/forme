@@ -139,6 +139,10 @@ END
   def noblock
     render :inline => "<%= forme([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') %>"
   end
+
+  def safe_buffer
+    render :inline => "<%= forme([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'<b>foo</b>'.html_safe) %>"
+  end
 end
 
 describe "Forme Rails integration" do
@@ -191,5 +195,9 @@ describe "Forme Rails integration" do
 
   specify "#form should work without a block" do
     sin_get('/noblock').should == '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
+  end
+
+  specify "#form should handle Rails SafeBuffers" do
+    sin_get('/safe_buffer').should == '<form action="/baz"><fieldset class="inputs"><legend><b>foo</b></legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
   end
 end
