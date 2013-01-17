@@ -138,7 +138,9 @@ end
 
 describe "Forme Sinatra ERB integration" do
   def sin_get(path)
-    FormeSinatraTest.new.call(@rack.merge('PATH_INFO'=>path))[2].join.gsub(/\s+/, ' ').strip
+    s = ''
+    FormeSinatraTest.new.call(@rack.merge('PATH_INFO'=>path))[2].each{|str| s << str}
+    s.gsub(/\s+/, ' ').strip
   end
   before do
     o = Object.new
