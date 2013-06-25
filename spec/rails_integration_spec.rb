@@ -6,10 +6,12 @@ require 'action_controller/railtie'
 require 'forme/rails'
 
 class FormeRails < Rails::Application
-  config.secret_token = routes.append { match ':action' , :controller=>'forme' }.inspect
+  config.secret_token = routes.append { get ':action' , :controller=>'forme' }.inspect
   config.active_support.deprecation = :stderr
   config.middleware.delete(ActionDispatch::ShowExceptions)
-  config.threadsafe!
+  config.middleware.delete("Rack::Lock")
+  config.secret_key_base = 'foo'
+  config.eager_load = true
   initialize!
 end
 
