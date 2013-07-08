@@ -122,12 +122,16 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
 
+  specify "should not add a blank option by default if there is a default value and it is required" do
+    @b.input(:artist, :required=>true).to_s.should == '<label>Artist<abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
+  end
+
   specify "should allow overriding default input type using a :type option" do
     @b.input(:artist, :type=>:string, :value=>nil).to_s.should == '<label>Artist: <input id="album_artist" name="album[artist]" type="text"/></label>'
   end
 
   specify "should use a required wrapper tag for many_to_one required associations" do
-    @b.input(:artist, :required=>true, :wrapper=>:li).to_s.should == '<li class="many_to_one required"><label>Artist<abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label></li>'
+    @b.input(:artist, :required=>true, :wrapper=>:li).to_s.should == '<li class="many_to_one required"><label>Artist<abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option selected="selected" value="1">a</option><option value="2">d</option></select></label></li>'
   end
 
   specify "should use a set of radio buttons for many_to_one associations with :as=>:radio option" do

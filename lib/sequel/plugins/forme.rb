@@ -309,8 +309,8 @@ module Sequel # :nodoc:
             wrapper ? wrapper.call(radios, _input(:radio, opts)) : radios
           else
             opts[:id] = form.namespaced_id(key) unless opts.has_key?(:id)
-            opts[:add_blank] = true if !opts.has_key?(:add_blank)
             opts[:required] = true if !opts.has_key?(:required) && (sch = obj.model.db_schema[key]) && !sch[:allow_null]
+            opts[:add_blank] = true if !opts.has_key?(:add_blank) && !(opts[:required] && opts[:value])
             handle_label(field)
             ::Forme.attr_classes(opts[:wrapper_attr], "required") if opts[:required]
             _input(:select, opts)

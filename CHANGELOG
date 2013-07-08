@@ -1,5 +1,7 @@
 === HEAD
 
+* Sequel many_to_one associations with existing and required values no longer have a blank option added by default (jeremyevans)
+
 * ActiveSupport::SafeBuffer objects are now automatically treated as raw in the Rails integration (jeremyevans)
 
 === 0.7.0 (2012-05-02)
