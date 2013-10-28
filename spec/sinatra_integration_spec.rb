@@ -24,21 +24,17 @@ END
 
   get '/inputs_block' do
     erb <<END
-<% form([:foo, :bar], :action=>'/baz') do |f| %>
-  <% f.inputs(:legend=>'FBB') do %>
+<% form([:foo, :bar], :action=>'/baz') do |f| %><% f.inputs(:legend=>'FBB') do %>
     <%= f.input(:last) %>
-  <% end %>
-<% end %>
+  <% end %><% end %>
 END
   end
 
   get '/inputs_block_wrapper' do
     erb <<END
-<% form([:foo, :bar], {:action=>'/baz'}, :inputs_wrapper=>:fieldset_ol) do |f| %>
-  <% f.inputs(:legend=>'FBB') do %>
+<% form([:foo, :bar], {:action=>'/baz'}, :inputs_wrapper=>:fieldset_ol) do |f| %><% f.inputs(:legend=>'FBB') do %>
     <%= f.input(:last) %>
-  <% end %>
-<% end %>
+  <% end %><% end %>
 END
   end
 
