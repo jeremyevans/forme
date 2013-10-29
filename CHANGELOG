@@ -1,5 +1,9 @@
 === HEAD
 
+* CSRF token tags are now automatically added to forms in Rails and Sinatra if using rack_csrf (jeremyevans) (#5)
+
+* Form objects now support a :hidden_tags option for automatically adding hidden tags (jeremyevans)
+
 * Sequel many_to_one associations with existing and required values no longer have a blank option added by default (jeremyevans)
 
 * ActiveSupport::SafeBuffer objects are now automatically treated as raw in the Rails integration (jeremyevans)

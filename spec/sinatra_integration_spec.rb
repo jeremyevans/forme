@@ -5,11 +5,14 @@ require 'rubygems'
 require 'sinatra/base'
 require 'forme/sinatra'
 require(ENV['ERUBIS'] ? 'erubis' : 'erb')
+require 'rack/csrf'
 
 class FormeSinatraTest < Sinatra::Base
   helpers(Forme::Sinatra::ERB)
   disable :show_exceptions
   enable :raise_errors
+  enable :sessions
+  use Rack::Csrf
 
   get '/' do
     erb <<END
@@ -165,7 +168,7 @@ describe "Forme Sinatra ERB integration" do
   end
 
   specify "#form should correctly handle situation Sequel integration with subforms where multiple templates are used with same form object" do
-    sin_get('/nest_seq').should == "0 <form action=\"/baz\" class=\"forme album\" method=\"post\"> 1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Foo</legend><label>Name: <input id=\"album_artist_attributes_name\" name=\"album[artist_attributes][name]\" type=\"text\" value=\"A\"/></label></fieldset> 2 n1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/> n2 <label>Name2: <input id=\"album_artist_attributes_name2\" name=\"album[artist_attributes][name2]\" type=\"text\" value=\"A2\"/></label> n3 n4 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Bar</legend><label>Name3: <input id=\"album_artist_attributes_name3\" name=\"album[artist_attributes][name3]\" type=\"text\" value=\"A3\"/></label></fieldset> n5 3 </form>4"
+    sin_get('/nest_seq').sub(%r{<input name=\"_csrf\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"_csrf\" type=\"hidden\" value=\"csrf\"/>").should == "0 <form action=\"/baz\" class=\"forme album\" method=\"post\"><input name=\"_csrf\" type=\"hidden\" value=\"csrf\"/> 1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Foo</legend><label>Name: <input id=\"album_artist_attributes_name\" name=\"album[artist_attributes][name]\" type=\"text\" value=\"A\"/></label></fieldset> 2 n1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/> n2 <label>Name2: <input id=\"album_artist_attributes_name2\" name=\"album[artist_attributes][name2]\" type=\"text\" value=\"A2\"/></label> n3 n4 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Bar</legend><label>Name3: <input id=\"album_artist_attributes_name3\" name=\"album[artist_attributes][name3]\" type=\"text\" value=\"A3\"/></label></fieldset> n5 3 </form>4"
   end
 
   specify "#form should accept two hashes instead of requiring obj as first argument" do

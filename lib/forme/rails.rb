@@ -5,7 +5,24 @@ class ActiveSupport::SafeBuffer
 end
 
 module Forme
-  module Rails # :nodoc:
+  module Rails
+    HIDDEN_TAGS = []
+
+    # Add a hidden tag proc that will be used for all forms created via Forme::Rails::ERB#form.
+    # The block is yielded the Forme::Tag object for the form tag.
+    # The block should return either nil if hidden tag should be added, or a Forme::Tag object (or an array of them),
+    # or a hash with keys specifying the name of the tags and the values specifying the values of the tags .
+    def self.add_hidden_tag(&block)
+      HIDDEN_TAGS << block
+    end
+
+    # Add CSRF token tag by default for POST forms
+    add_hidden_tag do |tag|
+      if (form = tag.form) && (template = form.template) && template.protect_against_forgery? && tag.attr[:method].to_s.upcase == 'POST'
+        {template.request_forgery_protection_token=>template.form_authenticity_token}
+      end
+    end
+
     # Subclass used when using Forme/Rails ERB integration,
     # handling integration with the view template.
     class Form < ::Forme::Form
@@ -70,7 +87,7 @@ module Forme
       def tag_(type, attr={}, children=[])
         tag = _tag(type, attr, children)
         emit(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
-        Array(children).each{|c| emit(c)}
+        Array(tag.children).each{|c| emit(c)}
         yield self if block_given?
         emit(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
       end
@@ -94,7 +111,7 @@ module Forme
       #                                  opening attributes, third if provided is
       #                                  +Form+'s options.
       def forme(obj=nil, attr={}, opts={}, &block)
-        h = {:template=>self}
+        h = {:template=>self, :hidden_tags=>Forme::Rails::HIDDEN_TAGS}
         (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
         Form.form(obj, attr, opts, &block)
       end
