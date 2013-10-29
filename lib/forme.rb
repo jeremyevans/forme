@@ -99,7 +99,7 @@ module Forme
   #                       +obj+ or +block+, but not both.  If +obj+ is given, should be
   #                       either a +Class+ instance or it should respond to +call+.  If a
   #                       +Class+ instance is given, instances of that class should respond
-  #                       to +call+, and the a new instance of that class should be used
+  #                       to +call+, and a new instance of that class should be used
   #                       for each transformation.
   def self.register_transformer(type, sym, obj=nil, &block)
     raise Error, "Not a valid transformer type" unless TRANSFORMERS.has_key?(type)
@@ -145,6 +145,7 @@ module Forme
     # :obj :: Sets the +obj+ attribute
     # :error_handler :: Sets the +error_handler+ for the form
     # :formatter :: Sets the +formatter+ for the form
+    # :hidden_tags :: Sets the hidden tags to automatically add to this form.
     # :inputs_wrapper :: Sets the +inputs_wrapper+ for the form
     # :labeler :: Sets the +labeler+ for the form
     # :wrapper :: Sets the +wrapper+ for the form
@@ -174,6 +175,15 @@ module Forme
     # The +serializer+ determines how +Tag+ objects are transformed into strings.
     # Must respond to +call+ or be a registered symbol.
     attr_reader :serializer
+
+    # The hidden tags to automatically add to the form.  If set, this should be an
+    # array, where elements are one of the following types:
+    # String, Array, Forme::Tag :: Added directly as a child of the form tag.
+    # Hash :: Adds a hidden tag for each entry, with keys as the name of the hidden
+    #         tag and values as the value of the hidden tag.
+    # Proc :: Will be called with the form tag object, and should return an instance
+    #         of one of the handled types (or nil to not add a tag).
+    attr_reader :hidden_tags
 
     # Create a +Form+ instance and yield it to the block,
     # injecting the opening form tag before yielding and
@@ -232,6 +242,7 @@ module Forme
       end
       config = CONFIGURATIONS[@opts[:config]||Forme.default_config]
       TRANSFORMER_TYPES.each{|k| instance_variable_set(:"@#{k}", transformer(k, @opts.fetch(k, config[k])))}
+      @hidden_tags = @opts[:hidden_tags]
       @nesting = []
     end
 
@@ -285,7 +296,7 @@ module Forme
 
     # Create a form tag with the given attributes.
     def form(attr={}, &block)
-      tag(:form, attr, &block)
+      tag(:form, attr, method(:hidden_form_tags), &block)
     end
 
     # Formats the +input+ using the +formatter+.
@@ -429,6 +440,35 @@ module Forme
 
     private
 
+    # Return array of hidden tags to use for this form,
+    # or nil if the form does not have hidden tags added automatically.
+    def hidden_form_tags(form_tag)
+      if hidden_tags
+        tags = []
+        hidden_tags.each do |hidden_tag|
+          hidden_tag = hidden_tag.call(form_tag) if hidden_tag.respond_to?(:call)
+          tags.concat(parse_hidden_tags(hidden_tag))
+        end
+        tags
+      end
+    end
+
+    # Handle various types of hidden tags for the form.
+    def parse_hidden_tags(hidden_tag)
+      case hidden_tag
+      when Array
+        hidden_tag
+      when Tag, String
+        [hidden_tag]
+      when Hash
+        hidden_tag.map{|k,v| _tag(:input, :type=>:hidden, :name=>k, :value=>v)}
+      when nil
+        []
+      else
+        raise Error, "unhandled hidden_tag response: #{hidden_tag.inspect}"
+      end
+    end
+
     # Extend +obj+ with +Serialized+ and associate it with the receiver, such
     # that calling +to_s+ on the object will use the receiver's serializer
     # to generate the resulting string.
@@ -530,15 +570,8 @@ module Forme
 
     # Set the +form+, +type+, +attr+, and +children+.
     def initialize(form, type, attr={}, children=nil)
-      case children
-      when Array
-        @children = children
-      when nil
-        @children = nil
-      else
-        @children = [children]
-      end
       @form, @type, @attr = form, type, (attr||{})
+      @children = parse_children(children)
     end
 
     # Adds a child to the array of receiver's children.
@@ -559,6 +592,22 @@ module Forme
     # Return a string containing the serialized content of the receiver.
     def to_s
       form.serialize(self)
+    end
+
+    private
+
+    # Convert children constructor argument into the children to use for the tag.
+    def parse_children(children)
+      case children
+      when Array
+        children
+      when Proc, Method
+        parse_children(children.call(self))
+      when nil
+        nil
+      else
+        [children]
+      end
     end
   end
 

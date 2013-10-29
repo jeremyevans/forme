@@ -246,6 +246,16 @@ describe "Forme plain forms" do
     @f.tag(:textarea, {:name=>:foo}, :bar).to_s.should == '<textarea name="foo">bar</textarea>'
   end
 
+  specify "#tag should accept children as procs" do
+    @f.tag(:div, {:class=>"foo"}, lambda{|t| t.form.tag(:input, :class=>t.attr[:class])}).to_s.should == '<div class="foo"><input class="foo"/></div>'
+  end
+
+  specify "#tag should accept children as methods" do
+    o = Object.new
+    def o.foo(t) t.form.tag(:input, :class=>t.attr[:class]) end
+    @f.tag(:div, {:class=>"foo"}, o.method(:foo)).to_s.should == '<div class="foo"><input class="foo"/></div>'
+  end
+
   specify "should have an #inputs method for multiple inputs wrapped in a fieldset" do
     @f.inputs([:textarea, :text]).to_s.should == '<fieldset class="inputs"><textarea></textarea><input type="text"/></fieldset>'
   end
@@ -357,6 +367,36 @@ describe "Forme plain forms" do
     proc{Forme::Form.new(:wrapper=>Object.new)}.should raise_error(Forme::Error)
     proc{@f.input(:textarea, :wrapper=>Object.new).to_s}.should raise_error(Forme::Error)
     proc{@f.input(:textarea, :formatter=>nil).to_s}.should raise_error(Forme::Error)
+  end
+end
+
+describe "Forme::Form :hidden_tags option " do
+  before do
+    @f = Forme::Form.new
+  end
+
+  specify "should handle hash" do
+    Forme.form({}, :hidden_tags=>[{:a=>'b'}]).to_s.should == '<form><input name="a" type="hidden" value="b"/></form>'
+  end
+
+  specify "should handle array" do
+    Forme.form({}, :hidden_tags=>[["a ", "b"]]).to_s.should == '<form>a b</form>'
+  end
+
+  specify "should handle string" do
+    Forme.form({}, :hidden_tags=>["a "]).to_s.should == '<form>a </form>'
+  end
+
+  specify "should handle proc return hash" do
+    Forme.form({}, :hidden_tags=>[lambda{|tag| {:a=>'b'}}]).to_s.should == '<form><input name="a" type="hidden" value="b"/></form>'
+  end
+
+  specify "should handle proc return tag" do
+    Forme.form({:method=>'post'}, :hidden_tags=>[lambda{|tag| tag.form._tag(tag.attr[:method])}]).to_s.should == '<form method="post"><post></post></form>'
+  end
+
+  specify "should raise error for unhandled object" do
+    proc{Forme.form({}, :hidden_tags=>[Object.new])}.should raise_error
   end
 end
 
