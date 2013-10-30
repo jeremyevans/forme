@@ -54,7 +54,7 @@ module Forme
         if block
           capture(block){super}
         else
-          capture{super}
+          super
         end
       end
 

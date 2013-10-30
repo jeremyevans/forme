@@ -133,6 +133,10 @@ END
   get '/noblock' do
     erb "<%= form([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') %>"
   end
+
+  get '/noblock_empty' do
+    erb "<%= form(:action=>'/baz') %>"
+  end
 end
 
 describe "Forme Sinatra ERB integration" do
@@ -185,5 +189,9 @@ describe "Forme Sinatra ERB integration" do
 
   specify "#form should work without a block" do
     sin_get('/noblock').should == '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
+  end
+
+  specify "#form with an empty form should work" do
+    sin_get('/noblock_empty').should == '<form action="/baz"></form>'
   end
 end
