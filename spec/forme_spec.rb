@@ -335,6 +335,10 @@ describe "Forme plain forms" do
     @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar', :label_position=>:before).to_s.should == '<label for="bar">Foo</label><input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/>'
   end
 
+  specify "inputs handle implicit labels or checkboxes without hidden fields with :label_position=>:before" do
+    @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar', :label_position=>:before, :no_hidden=>true).to_s.should == '<label>Foo <input id="bar" name="a" type="checkbox" value="foo"/></label>'
+  end
+
   specify "inputs should accept a :error_handler option to use a custom error_handler" do
     @f.input(:textarea, :error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}, :error=>'bar', :id=>:foo).to_s.should == '<textarea class="error" id="foo"></textarea>!!! bar'
   end
