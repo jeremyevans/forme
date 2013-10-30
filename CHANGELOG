@@ -1,4 +1,4 @@
-=== HEAD
+=== 0.8.0 (2013-10-30)
 
 * form calls without block or :inputs or :button options are now handled correctly in the Sinatra integration (jeremyevans)
 
