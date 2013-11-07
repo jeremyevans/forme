@@ -145,7 +145,7 @@ module Sequel # :nodoc:
         # If the field is a column, use the column's type to determine
         # an appropriate field type. If the field is an association,
         # use either a regular or multiple select input (or multiple radios or
-        # checkboxes if the related :type option is used).  If it's not a
+        # checkboxes if the related :as option is used).  If it's not a
         # column or association, but the object responds to +field+,
         # create a text input.  Otherwise, raise an +Error+.
         def input
@@ -290,8 +290,8 @@ module Sequel # :nodoc:
 
         # Create a select input made up of options for all entries the object
         # could be associated to, with the one currently associated to being selected.
-        # If the :type=>:radio option is used, use multiple radio buttons instead of
-        # a select box.  For :type=>:radio, you can also provide a :tag_wrapper option
+        # If the :as=>:radio option is used, use multiple radio buttons instead of
+        # a select box.  For :as=>:radio, you can also provide a :tag_wrapper option
         # used to wrap the individual radio buttons.
         def association_many_to_one(ref)
           key = ref[:key]
@@ -319,8 +319,8 @@ module Sequel # :nodoc:
 
         # Create a multiple select input made up of options for all entries the object
         # could be associated to, with all of the ones currently associated to being selected.
-        # If the :type=>:checkbox option is used, use multiple checkboxes instead of
-        # a multiple select box.  For :type=>:checkbox, you can also provide a :tag_wrapper option
+        # If the :as=>:checkbox option is used, use multiple checkboxes instead of
+        # a multiple select box.  For :as=>:checkbox, you can also provide a :tag_wrapper option
         # used to wrap the individual checkboxes.
         def association_one_to_many(ref)
           key = ref[:key]
@@ -359,7 +359,8 @@ module Sequel # :nodoc:
         end
 
         # If the column allows +NULL+ values, use a three-valued select
-        # input.  If not, use a simple checkbox.
+        # input.  If not, use a simple checkbox.  You can also use :as=>:select,
+        # as :as=>:radio, or :as=>:checkbox to specify a particular style.
         def input_boolean(sch)
           unless opts.has_key?(:as)
             opts[:as] = sch[:allow_null] ? :select : :checkbox
