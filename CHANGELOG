@@ -1,3 +1,7 @@
+=== HEAD
+
+* The :name_method option used for associations in the Sequel plugin now allows for arbitrary callables (jeremyevans)
+
 === 0.8.0 (2013-10-30)
 
 * form calls without block or :inputs or :button options are now handled correctly in the Sinatra integration (jeremyevans)

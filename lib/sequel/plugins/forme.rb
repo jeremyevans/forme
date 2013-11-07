@@ -350,7 +350,12 @@ module Sequel # :nodoc:
         # select options that should be created.
         def association_select_options(ref)
           name_method = forme_name_method(ref)
-          obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all.map{|a| [a.send(name_method), a.pk]}
+          rows = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all
+          if name_method.is_a?(Symbol) || name_method.is_a?(String)
+            rows.map{|a| [a.send(name_method), a.pk]}
+          else
+            rows.map{|a| [name_method.call(a), a.pk]}
+          end
         end
 
         # Delegate to the +form+.

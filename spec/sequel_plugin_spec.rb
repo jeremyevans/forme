@@ -171,6 +171,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist, :name_method=>:idname).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">1a</option><option selected="selected" value="2">2d</option></select></label>'
   end
   
+  specify "should support :name_method option being a callable object" do
+    @b.input(:artist, :name_method=>lambda{|obj| obj.idname * 2}).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">1a1a</option><option value="2">2d2d</option></select></label>'
+    @c.input(:artist, :name_method=>lambda{|obj| obj.idname * 2}).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">1a1a</option><option selected="selected" value="2">2d2d</option></select></label>'
+  end
+  
   specify "should try a list of methods to get a suitable one for select box naming" do
     al = Class.new(Album){def self.name() 'Album' end}
     ar = Class.new(Artist)
