@@ -367,7 +367,7 @@ module Sequel # :nodoc:
 
         # The dataset to use to retrieve the association select options
         def association_select_options_dataset(ref)
-          obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited
+          obj.send(:_apply_association_options, ref, ref.associated_dataset).unlimited
         end
 
         # Delegate to the +form+.
