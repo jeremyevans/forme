@@ -1,5 +1,7 @@
 === HEAD
 
+* Associtions in the Sequel plugin now support a :dataset option to specify dataset to use for options (jeremyevans)
+
 * The :name_method option used for associations in the Sequel plugin now allows for arbitrary callables (jeremyevans)
 
 === 0.8.0 (2013-10-30)

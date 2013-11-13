@@ -349,13 +349,25 @@ module Sequel # :nodoc:
         # Return an array of two element arrays representing the
         # select options that should be created.
         def association_select_options(ref)
-          name_method = forme_name_method(ref)
-          rows = obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited.all
-          if name_method.is_a?(Symbol) || name_method.is_a?(String)
+          case ds = opts[:dataset]
+          when nil
+            ds = association_select_options_dataset(ref)
+          when Proc, Method
+            ds = ds.call(association_select_options_dataset(ref))
+          end
+          rows = ds.all
+
+          case name_method = forme_name_method(ref)
+          when Symbol, String
             rows.map{|a| [a.send(name_method), a.pk]}
           else
             rows.map{|a| [name_method.call(a), a.pk]}
           end
+        end
+
+        # The dataset to use to retrieve the association select options
+        def association_select_options_dataset(ref)
+          obj.send(:_apply_association_options, ref, ref.associated_class.dataset).unlimited
         end
 
         # Delegate to the +form+.

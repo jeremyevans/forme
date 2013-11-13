@@ -176,6 +176,16 @@ describe "Forme Sequel::Model forms" do
     @c.input(:artist, :name_method=>lambda{|obj| obj.idname * 2}).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">1a1a</option><option selected="selected" value="2">2d2d</option></select></label>'
   end
   
+  specify "should support :dataset option providing dataset to search" do
+    @b.input(:artist, :dataset=>Artist.reverse_order(:name)).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="2">d</option><option selected="selected" value="1">a</option></select></label>'
+    @c.input(:artist, :dataset=>Artist.reverse_order(:name)).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="2">d</option><option value="1">a</option></select></label>'
+  end
+  
+  specify "should support :dataset option being a callback proc returning modified dataset to search" do
+    @b.input(:artist, :dataset=>proc{|ds| ds.reverse_order(:name)}).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="2">d</option><option selected="selected" value="1">a</option></select></label>'
+    @c.input(:artist, :dataset=>proc{|ds| ds.reverse_order(:name)}).to_s.should == '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="2">d</option><option value="1">a</option></select></label>'
+  end
+  
   specify "should try a list of methods to get a suitable one for select box naming" do
     al = Class.new(Album){def self.name() 'Album' end}
     ar = Class.new(Artist)
