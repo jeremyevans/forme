@@ -224,6 +224,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:tags).to_s.should == '<label>Tags: <select id="album_tag_pks" multiple="multiple" name="album[tag_pks][]"><option value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label>'
   end
 
+  specify "should use a regular select box for *_to_many associations if multiple if false" do
+    @b.input(:tracks, :multiple=>false).to_s.should == '<label>Tracks: <select id="album_track_pks" name="album[track_pks][]"><option value="1">m</option><option value="2">n</option><option value="3">o</option></select></label>'
+    @c.input(:tags, :multiple=>false).to_s.should == '<label>Tags: <select id="album_tag_pks" name="album[tag_pks][]"><option value="1">s</option><option value="2">t</option><option value="3">u</option></select></label>'
+  end
+
   specify "should use multiple checkboxes for one_to_many associations if :as=>:checkbox" do
     @b.input(:tracks, :as=>:checkbox).to_s.should == '<span class="label">Tracks</span><label class="option"><input checked="checked" id="album_track_pks_1" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label class="option"><input checked="checked" id="album_track_pks_2" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label class="option"><input id="album_track_pks_3" name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
     @c.input(:tracks, :as=>:checkbox).to_s.should == '<span class="label">Tracks</span><label class="option"><input id="album_track_pks_1" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label class="option"><input id="album_track_pks_2" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label class="option"><input checked="checked" id="album_track_pks_3" name="album[track_pks][]" type="checkbox" value="3"/> o</label>'

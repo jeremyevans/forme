@@ -340,7 +340,7 @@ module Sequel # :nodoc:
             wrapper ? wrapper.call(cbs, _input(:checkbox, opts)) : cbs
           else
             opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
-            opts[:multiple] = true
+            opts[:multiple] = true unless opts.has_key?(:multiple)
             _input(:select, opts)
           end
         end
