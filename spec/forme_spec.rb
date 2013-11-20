@@ -305,6 +305,10 @@ describe "Forme plain forms" do
     @f.tag(:div, :foo=>Time.utc(2011, 6, 5, 4, 3, 2)).to_s.should =~ /<div foo="2011-06-05 04:03:02(GMT|UTC)"><\/div>/
   end
 
+  specify "should format bigdecimals in standard notation" do
+    @f.tag(:div, :foo=>BigDecimal.new('10000.010')).to_s.should == '<div foo="10000.01"></div>'
+  end
+
   specify "inputs should accept a :wrapper option to use a custom wrapper" do
     @f.input(:text, :wrapper=>:li).to_s.should == '<li><input type="text"/></li>'
   end

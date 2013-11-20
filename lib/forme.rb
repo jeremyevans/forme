@@ -1,4 +1,5 @@
 require 'date'
+require 'bigdecimal'
 require 'forme/version'
 
 # Forme is designed to make creating HTML forms easier.  Flexibility and
@@ -1172,6 +1173,8 @@ module Forme
         format_time(tag)
       when Date
         format_date(tag)
+      when BigDecimal
+        tag.to_s('F')
       when Raw
         tag.to_s
       else
