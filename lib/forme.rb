@@ -1229,8 +1229,25 @@ module Forme
 
   # Overrides formatting of dates and times to use an American format without
   # timezones.
-  module Serializer::AmericanTime
-    Forme.register_transformer(:serializer, :html_usa, Serializer.new.extend(self))
+  class Serializer::AmericanTime < Serializer
+    Forme.register_transformer(:serializer, :html_usa, new)
+
+    def call(tag)
+      case tag
+      when Tag
+        if tag.type.to_s == 'input' && %w'date datetime'.include?((tag.attr[:type] || tag.attr['type']).to_s)
+          attr = tag.attr.dup
+          attr.delete(:type)
+          attr.delete('type')
+          attr['type'] = 'text'
+          "<#{tag.type}#{attr_html(attr)}/>"
+        else
+          super
+        end
+      else
+        super
+      end
+    end
 
     private
 

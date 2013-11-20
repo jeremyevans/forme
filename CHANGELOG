@@ -1,5 +1,7 @@
 === HEAD
 
+* Make html_usa serializer convert date/datetime inputs to text for better compatibility (jeremyevans)
+
 * Format BigDecimal in standard notation instead of default scientific notation (jeremyevans)
 
 * Make trtd wrapper always have labels on left side (jeremyevans)

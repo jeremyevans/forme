@@ -519,6 +519,11 @@ describe "Forme built-in custom" do
     Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>Time.utc(2011, 6, 5, 4, 3, 2)).to_s.should == '<div foo="06/05/2011 04:03:02AM"></div>'
   end
 
+  specify "serializer: html_usa should convert date and datetime inputs into text inputs" do
+    Forme::Form.new(:serializer=>:html_usa).input(:date, :value=>Date.new(2011, 6, 5)).to_s.should == '<input type="text" value="06/05/2011"/>'
+    Forme::Form.new(:serializer=>:html_usa).input(:datetime, :value=>DateTime.new(2011, 6, 5, 16, 3, 2)).to_s.should == '<input type="text" value="06/05/2011 04:03:02PM"/>'
+  end
+
   specify "serializer: text uses plain text output instead of html" do
     Forme::Form.new(:serializer=>:text).input(:textarea, :label=>"Foo", :value=>"Bar").to_s.should == "Foo: Bar\n\n"
     Forme::Form.new(:serializer=>:text).input(:text, :label=>"Foo", :value=>"Bar").to_s.should == "Foo: Bar\n\n"
