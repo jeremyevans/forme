@@ -1,5 +1,4 @@
 require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
-require 'date'
 
 describe "Forme plain forms" do
   def sel(opts, s)
