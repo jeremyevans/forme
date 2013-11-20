@@ -1161,7 +1161,7 @@ module Forme
       case tag
       when Tag
         if SELF_CLOSING.include?(tag.type)
-          "<#{tag.type}#{attr_html(tag)}/>"
+          "<#{tag.type}#{attr_html(tag.attr)}/>"
         else
           "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
         end
@@ -1184,7 +1184,7 @@ module Forme
 
     # Returns the opening part of the given tag.
     def serialize_open(tag)
-      "<#{tag.type}#{attr_html(tag)}>"
+      "<#{tag.type}#{attr_html(tag.attr)}>"
     end
 
     # Returns the closing part of the given tag.
@@ -1221,8 +1221,8 @@ module Forme
 
     # Transforms the +tag+'s attributes into an html string, sorting by the keys
     # and quoting and html escaping the values.
-    def attr_html(tag)
-      attr = tag.attr.to_a.reject{|k,v| v.nil?}
+    def attr_html(attr)
+      attr = attr.to_a.reject{|k,v| v.nil?}
       " #{attr.map{|k, v| "#{k}=\"#{attr_value(v)}\""}.sort.join(' ')}" unless attr.empty?
     end
   end
