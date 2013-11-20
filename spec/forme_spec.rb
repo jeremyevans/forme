@@ -475,7 +475,7 @@ describe "Forme built-in custom" do
   end
 
   specify "wrapper: trtd wraps tag in an tr/td" do
-    Forme::Form.new(:wrapper=>:trtd).input(:textarea, :id=>'foo').to_s.should == '<tr><td><textarea id="foo"></textarea></td></tr>'
+    Forme::Form.new(:wrapper=>:trtd).input(:textarea, :id=>'foo').to_s.should == '<tr><td><textarea id="foo"></textarea></td><td></td></tr>'
   end
 
   specify "wrapper: trtd supports multiple tags in separate tds" do
@@ -484,6 +484,10 @@ describe "Forme built-in custom" do
 
   specify "wrapper: trtd should use at most 2 td tags" do
     Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo', :error=>'Bar').to_s.should == '<tr><td><label for="foo">Foo</label></td><td><textarea class="error" id="foo"></textarea><span class="error_message">Bar</span></td></tr>'
+  end
+
+  specify "wrapper: trtd should handle inputs with label after" do
+    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:checkbox, :id=>'foo', :name=>'foo', :label=>'Foo').to_s.should == '<tr><td><label for="foo">Foo</label></td><td><input id="foo_hidden" name="foo" type="hidden" value="0"/><input id="foo" name="foo" type="checkbox"/></td></tr>'
   end
 
   specify "inputs_wrapper: ol wraps tags in an ol" do
@@ -503,7 +507,7 @@ describe "Forme built-in custom" do
   end
 
   specify "inputs_wrapper: table wraps tags in an table" do
-    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea]).to_s.should == '<table><tr><td><textarea></textarea></td></tr></table>'
+    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea]).to_s.should == '<table><tr><td><textarea></textarea></td><td></td></tr></table>'
   end
 
   specify "serializer: html_usa formats dates and datetimes in American format without timezones" do

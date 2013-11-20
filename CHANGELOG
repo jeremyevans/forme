@@ -1,5 +1,9 @@
 === HEAD
 
+* Make trtd wrapper always have labels on left side (jeremyevans)
+
+* Make trtd wrapper always use 2 cells (jeremyevans)
+
 * Use regular (not-multiple) select box for *_to_many associations for :multiple=>false option (jeremyevans)
 
 * Associtions in the Sequel plugin now support a :dataset option to specify dataset to use for options (jeremyevans)

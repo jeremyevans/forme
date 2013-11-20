@@ -1051,7 +1051,17 @@ module Forme
   end
   Forme.register_transformer(:wrapper, :trtd) do |tag, input|
     a = Array(tag).flatten
-    input.tag(:tr, input.opts[:wrapper_attr], a.length == 1 ? input.tag(:td, {}, a) : [input.tag(:td, {}, [a.first]), input.tag(:td, {}, a[1..-1])])
+    labels, other = a.partition{|e| e.is_a?(Tag) && e.type.to_s == 'label'}
+    if labels.length == 1
+      ltd = labels
+      rtd = other
+    elsif a.length == 1
+      ltd = [a.first]
+      rtd = a[1..-1]
+    else
+      ltd = a
+    end
+    input.tag(:tr, input.opts[:wrapper_attr], [input.tag(:td, {}, ltd), input.tag(:td, {}, rtd)])
   end
 
   # Default inputs_wrapper used by the library, uses a fieldset.
