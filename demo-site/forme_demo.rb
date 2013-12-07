@@ -8,6 +8,7 @@ require 'forme/sinatra'
 class FormeDemo < Sinatra::Base
   disable :run
   disable :session
+  enable :static
 
   helpers Forme::Sinatra::ERB
   helpers do
@@ -114,15 +115,3 @@ END
     end
   end
 end
-
-class FileServer
-  def initialize(app, root)
-    @app = app
-    @rfile = Rack::File.new(root)
-  end
-  def call(env)
-    res = @rfile.call(env)
-    res[0] == 200 ? res : @app.call(env)
-  end
-end
-
