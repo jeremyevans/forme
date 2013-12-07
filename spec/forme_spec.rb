@@ -370,6 +370,12 @@ describe "Forme plain forms" do
     @f.inputs(:inputs_wrapper=>:ol){@f.input(:textarea)}.to_s.should == '<ol><textarea></textarea></ol>'
   end
 
+  specify "should support setting defaults for inputs at the form level" do
+    f = Forme::Form.new(:input_defaults=>{'text'=>{:size=>20}, 'textarea'=>{:cols=>80, :rows=>6}})
+    f.input(:text, :name=>"foo").to_s.should == '<input name="foo" size="20" type="text"/>'
+    f.input(:textarea, :name=>"foo").to_s.should == '<textarea cols="80" name="foo" rows="6"></textarea>'
+  end
+
   specify "invalid custom transformers should raise an Error" do
     proc{Forme::Form.new(:wrapper=>Object.new)}.should raise_error(Forme::Error)
     proc{@f.input(:textarea, :wrapper=>Object.new).to_s}.should raise_error(Forme::Error)

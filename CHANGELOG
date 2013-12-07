@@ -1,5 +1,7 @@
 === HEAD
 
+* Support :input_defaults Form option for setting defaults for inputs by type (jeremyevans)
+
 * Make html_usa serializer convert date/datetime inputs to text for better compatibility (jeremyevans)
 
 * Format BigDecimal in standard notation instead of default scientific notation (jeremyevans)

@@ -147,6 +147,7 @@ module Forme
     # :error_handler :: Sets the +error_handler+ for the form
     # :formatter :: Sets the +formatter+ for the form
     # :hidden_tags :: Sets the hidden tags to automatically add to this form.
+    # :input_defaults :: Sets the default options for each input type
     # :inputs_wrapper :: Sets the +inputs_wrapper+ for the form
     # :labeler :: Sets the +labeler+ for the form
     # :wrapper :: Sets the +wrapper+ for the form
@@ -168,6 +169,10 @@ module Forme
     # The +wrapper+ determines how (potentially labeled) tags are wrapped.  Must
     # respond to +call+ or be a registered symbol.
     attr_reader :wrapper
+
+    # Set the default options for inputs by type.  This should be a hash with
+    # input type string keys and values that are hashes of input options.
+    attr_reader :input_defaults
 
     # The +inputs_wrapper+ determines how calls to +inputs+ are wrapped.  Must
     # respond to +call+ or be a registered symbol.
@@ -243,6 +248,7 @@ module Forme
       end
       config = CONFIGURATIONS[@opts[:config]||Forme.default_config]
       TRANSFORMER_TYPES.each{|k| instance_variable_set(:"@#{k}", transformer(k, @opts.fetch(k, config[k])))}
+      @input_defaults = @opts[:input_defaults] || {}
       @hidden_tags = @opts[:hidden_tags]
       @nesting = []
     end
@@ -526,7 +532,8 @@ module Forme
 
     # Set the +form+, +type+, and +opts+.
     def initialize(form, type, opts={})
-      @form, @type, @opts = form, type, opts
+      @form, @type = form, type
+      @opts = (form.input_defaults[type.to_s] || {}).merge(opts)
     end
 
     # Replace the +opts+ by merging the given +hash+ into +opts+,
