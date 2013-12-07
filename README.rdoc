@@ -9,7 +9,7 @@ Forme is a HTML forms library for ruby with the following goals:
 
 = Demo Site
 
-A demo site is available at http://forme.heroku.com
+A demo site is available at http://forme-demo.jeremyevans.net
 
 = Source Code
 
