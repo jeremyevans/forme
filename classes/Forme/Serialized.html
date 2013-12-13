@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Forme::Serialized</title>
+    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Forme::Serialized
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../files/lib/forme_rb.html">lib/forme.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a target="docwin" href="../Forme.html">Forme</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>Module that can extend objects associating them with a specific
+            <code>Form</code> instance.  Calling <code>to_s</code> on the object will
+            then use the form&#39;s serializer to return a string.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#attribute-i-_form">_form</a></li>
+              <li><a target="docwin" href="#method-i-to_s">to_s</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-_form'>_form</a>
+                    </td>
+                    <td class='context-item-value'>[RW]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The <code>Form</code> instance related to the receiver.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-to_s'>
+                <a name='method-i-to_s'></a>
+                <div class='synopsis'>
+                  <span class='name'>to_s</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return a string containing the serialized content of the receiver.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-to_s-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/forme.rb, line 630</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-identifier">_form</span>.<span class="ruby-identifier">serialize</span>(<span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

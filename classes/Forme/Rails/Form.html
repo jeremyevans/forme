@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Forme::Rails::Form</title>
+    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>class</span>
+          Forme::Rails::Form
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/forme/rails_rb.html">lib/forme/rails.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a target="docwin" href="../Rails.html">Rails</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>Subclass used when using Forme/Rails <a href="ERB.html">ERB</a>
+            integration, handling integration with the view template.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-new">new</a></li>
+            </ol>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-_inputs">_inputs</a></li>
+              <li><a target="docwin" href="#method-i-button">button</a></li>
+              <li><a target="docwin" href="#method-i-emit">emit</a></li>
+              <li><a target="docwin" href="#method-i-input">input</a></li>
+              <li><a target="docwin" href="#method-i-inputs">inputs</a></li>
+              <li><a target="docwin" href="#method-i-tag">tag</a></li>
+              <li><a target="docwin" href="#method-i-tag_">tag_</a></li>
+              <li><a target="docwin" href="#attribute-i-template">template</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-template'>template</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The <a href="../Rails.html">Rails</a> template that created this form.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-new'>
+                <a name='method-c-new'></a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(*)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Set the template object when initializing.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(*)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-ivar">@template</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:template</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-_inputs'>
+                <a name='method-i-_inputs'></a>
+                <div class='synopsis'>
+                  <span class='name'>_inputs</span>
+                  <span class='arguments'>(*)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>If a block is not given, emit the inputs into the current output buffer.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-_inputs-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-_inputs-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">_inputs</span>(*)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">emit</span>(<span class="ruby-keyword">super</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-button'>
+                <a name='method-i-button'></a>
+                <div class='synopsis'>
+                  <span class='name'>button</span>
+                  <span class='arguments'>(*)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return a string version of the button that is already marked as safe.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-button-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-button-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 70</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">button</span>(*)&#x000A;  <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-keyword">super</span>.<span class="ruby-identifier">to_s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-emit'>
+                <a name='method-i-emit'></a>
+                <div class='synopsis'>
+                  <span class='name'>emit</span>
+                  <span class='arguments'>(tag)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Serialize and mark as already escaped the string version of the input.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-emit-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-emit-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 40</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-identifier">template</span>.<span class="ruby-identifier">output_buffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-input'>
+                <a name='method-i-input'></a>
+                <div class='synopsis'>
+                  <span class='name'>input</span>
+                  <span class='arguments'>(*)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return a string version of the input that is already marked as safe.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-input-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-input-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 65</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">input</span>(*)&#x000A;  <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-keyword">super</span>.<span class="ruby-identifier">to_s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-inputs'>
+                <a name='method-i-inputs'></a>
+                <div class='synopsis'>
+                  <span class='name'>inputs</span>
+                  <span class='arguments'>(*)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Capture the inputs into a new output buffer, and return the buffer if not
+                  given a block</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-inputs-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-inputs-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 46</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inputs</span>(*)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:with_output_buffer</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-tag'>
+                <a name='method-i-tag'></a>
+                <div class='synopsis'>
+                  <span class='name'>tag</span>
+                  <span class='arguments'>(type, attr={}, children=[], &block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>If a block is given, create a new output buffer and make sure all the
+                  output of the tag goes into that buffer, and return the buffer. Otherwise,
+                  just return a string version of the tag that is already marked as safe.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 78</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[], &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:with_output_buffer</span>){<span class="ruby-identifier">tag_</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>, &amp;<span class="ruby-identifier">block</span>)}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-tag_'>
+                <a name='method-i-tag_'></a>
+                <div class='synopsis'>
+                  <span class='name'>tag_</span>
+                  <span class='arguments'>(type, attr={}, children=[])</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag_-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-tag_-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 87</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[])&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;  <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">tag</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_open</span>)&#x000A;  <span class="ruby-constant">Array</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">children</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">c</span>)}&#x000A;  <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;  <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">tag</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_close</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

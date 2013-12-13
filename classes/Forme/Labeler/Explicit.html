@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Forme::Labeler::Explicit</title>
+    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>class</span>
+          Forme::Labeler::Explicit
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/forme_rb.html">lib/forme.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a target="docwin" href="../Labeler.html">Labeler</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p><a href="Explicit.html">Explicit</a> labeler that creates a separate label
+            tag that references the given tag&#39;s id using a <code>for</code>
+            attribute.  Requires that all tags with labels have <code>id</code> fields.</p>
+            
+            <p>Registered as :explicit.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-call">call</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-call'>
+                <a name='method-i-call'></a>
+                <div class='synopsis'>
+                  <span class='name'>call</span>
+                  <span class='arguments'>(tag, input)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return an array with a label tag as the first entry and <code>tag</code> as
+                  a second entry.  If the <code>input</code> has a :label_for option, use
+                  that, otherwise use the input&#39;s :id option.  If neither the :id or
+                  :label_for option is used, the label created will not be associated with an
+                  input.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme.rb, line 1040</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-keyword">if</span> [<span class="ruby-value">:radio</span>, <span class="ruby-value">:checkbox</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>)&#x000A;    <span class="ruby-identifier">t</span> = [<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:label</span>, {<span class="ruby-value">:for</span>=<span class="ruby-operator">&gt;</span><span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:label_for</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:id</span>])}.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label_attr</span>]<span class="ruby-operator">||</span>{}), [<span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>]])]&#x000A;    <span class="ruby-identifier">p</span> = <span class="ruby-value">:before</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">t</span> = [<span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:label</span>, {<span class="ruby-value">:for</span>=<span class="ruby-operator">&gt;</span><span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:label_for</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:id</span>])}.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label_attr</span>]<span class="ruby-operator">||</span>{}), [<span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>]]), <span class="ruby-identifier">tag</span>]&#x000A;    <span class="ruby-identifier">p</span> = <span class="ruby-value">:after</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label_position</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">p</span>&#x000A;    <span class="ruby-identifier">t</span>.<span class="ruby-identifier">reverse</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">t</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

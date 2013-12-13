@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>CHANGELOG</title>
+    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>CHANGELOG</h1>
+        <div class='paths'>
+          CHANGELOG
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>2013-12-13 09:39:52 -0800</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <h3 id="label-0.9.0+%282013-12-13%29">0.9.0 (2013-12-13)</h3>
+            <ul><li>
+            <p>Support :input_defaults Form option for setting defaults for inputs by type
+            (jeremyevans)</p>
+            </li><li>
+            <p>Make html_usa serializer convert date/datetime inputs to text for better
+            compatibility (jeremyevans)</p>
+            </li><li>
+            <p>Format BigDecimal in standard notation instead of default scientific
+            notation (jeremyevans)</p>
+            </li><li>
+            <p>Make trtd wrapper always have labels on left side (jeremyevans)</p>
+            </li><li>
+            <p>Make trtd wrapper always use 2 cells (jeremyevans)</p>
+            </li><li>
+            <p>Use regular (not-multiple) select box for *_to_many associations for
+            :multiple=&gt;false option (jeremyevans)</p>
+            </li><li>
+            <p>Associtions in the <a href="../classes/Sequel.html">Sequel</a> plugin now
+            support a :dataset option to specify dataset to use for options
+            (jeremyevans)</p>
+            </li><li>
+            <p>The :name_method option used for associations in the <a
+            href="../classes/Sequel.html">Sequel</a> plugin now allows for arbitrary
+            callables (jeremyevans)</p>
+            </li></ul>
+            
+            <h3 id="label-0.8.0+%282013-10-30%29">0.8.0 (2013-10-30)</h3>
+            <ul><li>
+            <p>form calls without block or :inputs or :button options are now handled
+            correctly in the Sinatra integration (jeremyevans)</p>
+            </li><li>
+            <p>CSRF token tags are now automatically added to forms in Rails and Sinatra
+            if using rack_csrf (jeremyevans) (#5)</p>
+            </li><li>
+            <p>Form objects now support a :hidden_tags option for automatically adding
+            hidden tags (jeremyevans)</p>
+            </li><li>
+            <p><a href="../classes/Sequel.html">Sequel</a> many_to_one associations with
+            existing and required values no longer have a blank option added by default
+            (jeremyevans)</p>
+            </li><li>
+            <p><a
+            href="../classes/ActiveSupport/SafeBuffer.html">ActiveSupport::SafeBuffer</a>
+            objects are now automatically treated as raw in the Rails integration
+            (jeremyevans)</p>
+            </li></ul>
+            
+            <h3 id="label-0.7.0+%282012-05-02%29">0.7.0 (2012-05-02)</h3>
+            <ul><li>
+            <p>Support :label_position option in both of the labelers, can be set to
+            :before or :after to override the default (jeremyevans)</p>
+            </li><li>
+            <p>Add Rails integration (jeremyevans)</p>
+            </li><li>
+            <p>Make explicit labeler put label after checkboxes and radio buttons instead
+            of before (jeremyevans)</p>
+            </li><li>
+            <p>Make implicit labeler not include hidden checkbox inside label
+            (jeremyevans)</p>
+            </li><li>
+            <p>Recognize :cols and :rows options as attributes for textarea inputs in the
+            default formatter (jeremyevans)</p>
+            </li><li>
+            <p>Recognize :size and :maxlength options as attributes for text inputs in the
+            default formatter (jeremyevans)</p>
+            </li><li>
+            <p>Recognize :style option as attributes in the default formatter
+            (jeremyevans)</p>
+            </li><li>
+            <p>Join attribute values specified as arrays with spaces instead of the empty
+            string (jeremyevans)</p>
+            </li><li>
+            <p>Make Sinatra ERB integration work with partials (jeremyevans)</p>
+            </li><li>
+            <p>Add id attributes for association :as=&gt;:radio or :as=&gt;:checkbox
+            fields (jeremyevans)</p>
+            </li><li>
+            <p>Add an html class attribute for radio/checkbox labels in :as=&gt;:radio or
+            :as=&gt;:checkbox fields (jeremyevans)</p>
+            </li><li>
+            <p>Wrap text acting as a label in a span with class label for :as=&gt;:radio
+            or :as=&gt;:checkbox fields (jeremyevans)</p>
+            </li><li>
+            <p>Support overriding the true/false label and values for select boolean
+            fields in the <a href="../classes/Sequel.html">Sequel</a> plugin
+            (jeremyevans)</p>
+            </li></ul>
+            
+            <h3 id="label-0.6.0+%282011-08-01%29">0.6.0 (2011-08-01)</h3>
+            <ul><li>
+            <p>Fix wrapping for :as=&gt;:radio boolean fields to handle them like
+            association :as=&gt;:radio fields (jeremyevans)</p>
+            </li><li>
+            <p>Fix handling of Raw :label option in for association fields with
+            :as=&gt;:radio and :as=&gt;:checkbox in the <a
+            href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+            </li><li>
+            <p>Use label text for :as=&gt;:radio boolean fields in the <a
+            href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+            </li><li>
+            <p>Support overriding the true/false label and values for :as=&gt;:radio
+            boolean fields in the <a href="../classes/Sequel.html">Sequel</a> plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Allow overriding the type of input for schema columns and associations in
+            the <a href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+            </li><li>
+            <p>Add the label before the error option, so the error always comes after the
+            label (jeremyevans)</p>
+            </li><li>
+            <p>Always add error class to formatted input tag, regardless of error_handler
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add labels to inputs for fields that the object doesn&#39;t respond to in
+            the <a href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+            </li><li>
+            <p>Allow customization for non-schema columns that the object responds to in
+            the <a href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+            </li><li>
+            <p>Handle errors on all inputs in the <a
+            href="../classes/Sequel.html">Sequel</a> plugin, not just those backed by
+            columns (jeremyevans)</p>
+            </li><li>
+            <p>Fix default error_handler if input yields an area of tags (jeremyevans)</p>
+            </li><li>
+            <p>Support :as=&gt;:radio option for boolean fields in the <a
+            href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+            </li><li>
+            <p>Allow specifying label attributes with :label_attr in labelers
+            (jeremyevans)</p>
+            </li><li>
+            <p>Allow Form#inputs to be called with a single options hash argument
+            (jeremyevans)</p>
+            </li><li>
+            <p>Handle unrecognized fields in the <a
+            href="../classes/Sequel.html">Sequel</a> plugin if a :type option is given
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add required * to label even if :label is already specified in the <a
+            href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+            </li></ul>
+            
+            <h3 id="label-0.5.0+%282011-07-01%29">0.5.0 (2011-07-01)</h3>
+            <ul><li>
+            <p>Initial Release</p>
+            </li></ul>
+          </div>
+          <div id='context'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

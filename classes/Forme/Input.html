@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Forme::Input</title>
+    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>class</span>
+          Forme::Input
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../files/lib/forme_rb.html">lib/forme.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a target="docwin" href="../Forme.html">Forme</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>High level abstract tag form, transformed by formatters into the lower
+            level <code>Tag</code> form (or an array of them).</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-new">new</a></li>
+            </ol>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#attribute-i-form">form</a></li>
+              <li><a target="docwin" href="#method-i-format">format</a></li>
+              <li><a target="docwin" href="#method-i-merge_opts">merge_opts</a></li>
+              <li><a target="docwin" href="#attribute-i-opts">opts</a></li>
+              <li><a target="docwin" href="#method-i-tag">tag</a></li>
+              <li><a target="docwin" href="#method-i-to_s">to_s</a></li>
+              <li><a target="docwin" href="#attribute-i-type">type</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-form'>form</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The <code>Form</code> object related to the receiver.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-opts'>opts</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The options hash for the receiver.  Here are some of the supported options
+                      used by the built-in formatter transformers:</p>
+                      <dl class="rdoc-list note-list"><dt>:error 
+                      <dd>
+                      <p>Set an error message, invoking the error_handler</p>
+                      </dd><dt>:label 
+                      <dd>
+                      <p>Set a label, invoking the labeler</p>
+                      </dd><dt>:wrapper 
+                      <dd>
+                      <p>Set a custom wrapper, overriding the form&#39;s default</p>
+                      </dd><dt>:labeler 
+                      <dd>
+                      <p>Set a custom labeler, overriding the form&#39;s default</p>
+                      </dd><dt>:error_handler 
+                      <dd>
+                      <p>Set a custom error_handler, overriding the form&#39;s default</p>
+                      </dd><dt>:attr 
+                      <dd>
+                      <p>The attributes hash to use for the given tag, takes precedence over other
+                      options that set attributes.</p>
+                      </dd><dt>:data 
+                      <dd>
+                      <p>A hash of data-* attributes for the resulting tag.  Keys in this hash will
+                      have attributes created with data- prepended to the attribute name.</p>
+                      </dd><dt>:name 
+                      <dd>
+                      <p>The name attribute to use</p>
+                      </dd><dt>:id 
+                      <dd>
+                      <p>The id attribute to use</p>
+                      </dd><dt>:placeholder 
+                      <dd>
+                      <p>The placeholder attribute to use</p>
+                      </dd><dt>:value 
+                      <dd>
+                      <p>The value attribute to use for input tags, the content of the textarea for
+                      textarea tags, or the selected option(s) for select tags.</p>
+                      </dd><dt>:class 
+                      <dd>
+                      <p>A class to use.  Unlike other options, this is combined with the classes
+                      set in the :attr hash.</p>
+                      </dd><dt>:disabled 
+                      <dd>
+                      <p>Set the disabled attribute if true</p>
+                      </dd><dt>:required 
+                      <dd>
+                      <p>Set the required attribute if true</p>
+                      </dd></dl>
+                      
+                      <p>For other supported options, see the private methods in
+                      <code>Formatter</code>.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-type'>type</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The type of input, should be a symbol (e.g. :submit, :text, :select).</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-new'>
+                <a name='method-c-new'></a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(form, type, opts={})</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Set the <code>form</code>, <code>type</code>, and <code>opts</code>.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme.rb, line 534</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-ivar">@opts</span> = (<span class="ruby-identifier">form</span>.<span class="ruby-identifier">input_defaults</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-format'>
+                <a name='method-i-format'></a>
+                <div class='synopsis'>
+                  <span class='name'>format</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Transform the receiver into a lower level <code>Tag</code> form (or an
+                  array of them).</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-format-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-format-source'><span class="ruby-comment"># File lib/forme.rb, line 558</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">format</span>&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">format</span>(<span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-merge_opts'>
+                <a name='method-i-merge_opts'></a>
+                <div class='synopsis'>
+                  <span class='name'>merge_opts</span>
+                  <span class='arguments'>(hash)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Replace the <code>opts</code> by merging the given <code>hash</code> into
+                  <code>opts</code>, without modifying <code>opts</code>.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-merge_opts-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-merge_opts-source'><span class="ruby-comment"># File lib/forme.rb, line 541</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">merge_opts</span>(<span class="ruby-identifier">hash</span>)&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">hash</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-tag'>
+                <a name='method-i-tag'></a>
+                <div class='synopsis'>
+                  <span class='name'>tag</span>
+                  <span class='arguments'>(*a, &block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Create a new <code>Tag</code> instance with the given arguments and block
+                  related to the receiver&#39;s <code>form</code>.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme.rb, line 547</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(*<span class="ruby-identifier">a</span>, &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(*<span class="ruby-identifier">a</span>, &amp;<span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-to_s'>
+                <a name='method-i-to_s'></a>
+                <div class='synopsis'>
+                  <span class='name'>to_s</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return a string containing the serialized content of the receiver.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-to_s-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/forme.rb, line 552</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">serialize</span>(<span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

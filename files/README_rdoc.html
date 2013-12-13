@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>README.rdoc</title>
+    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>README.rdoc</h1>
+        <div class='paths'>
+          README.rdoc
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>2013-12-13 09:42:04 -0800</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <h1 id="label-Forme"><a href="../classes/Forme.html">Forme</a></h1>
+            
+            <p><a href="../classes/Forme.html">Forme</a> is a HTML forms library for ruby
+            with the following goals:</p>
+            <ol><li>
+            <p>Have no external dependencies</p>
+            </li><li>
+            <p>Have a simple API</p>
+            </li><li>
+            <p>Support forms both with and without related objects</p>
+            </li><li>
+            <p>Allow compiling down to different types of output</p>
+            </li></ol>
+            
+            <h1 id="label-Demo+Site">Demo Site</h1>
+            
+            <p>A demo site is available at <a
+            href="http://forme-demo.jeremyevans.net">forme-demo.jeremyevans.net</a></p>
+            
+            <h1 id="label-Documentation+Site">Documentation Site</h1>
+            
+            <p>RDoc Documentation is available at <a
+            href="http://forme.jeremyevans.net">forme.jeremyevans.net</a></p>
+            
+            <h1 id="label-Source+Code">Source Code</h1>
+            
+            <p>Source code is available on GitHub at <a
+            href="https://github.com/jeremyevans/forme">github.com/jeremyevans/forme</a></p>
+            
+            <h1 id="label-Basic+Usage">Basic Usage</h1>
+            
+            <p>Without an object, <a href="../classes/Forme.html">Forme</a> is a simple
+            form builder:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">open</span>(:<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>, :<span class="ruby-identifier">method=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">post</span>) <span class="ruby-comment"># &#39;&lt;form action=&quot;/foo&quot; method=&quot;post&quot;&gt;&#39;</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(:<span class="ruby-identifier">textarea</span>, :<span class="ruby-identifier">value=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;foo&#39;</span>, :<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-comment"># &#39;&lt;textarea name=&quot;bar&quot;&gt;foo&lt;/textarea&gt;&#39;</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(:<span class="ruby-identifier">text</span>, :<span class="ruby-identifier">value=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;foo&#39;</span>, :<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-comment"># &#39;&lt;input name=&quot;bar&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">close</span> <span class="ruby-comment"># &#39;&lt;/form&gt;&#39;</span></pre>
+            
+            <p>With an object, <code>Form#input</code> calls <code>forme_input</code> on
+            the obj with the form, field, and options, which should return a
+            <code>Forme::Input</code> or <code>Forme::Tag</code> instance.  Also, in
+            <code>Form#initialize</code>, <code>forme_config</code> is called on object
+            with the form if the object responds to it, allowing customization of the
+            entire form based on the object.</p>
+            
+            <pre>f = Forme::Form.new(obj)&#x000A;f.input(:field) # &#39;&lt;input id=&quot;obj_field&quot; name=&quot;obj[field]&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</pre>
+            
+            <p>If the object doesn&#39;t respond to <code>forme_input</code>, it falls
+            back to creating text fields with the name and id set to the field name and
+            the value set by calling the given method on the object.</p>
+            
+            <pre>f = Forme::Form.new([:foo])&#x000A;f.input(:first) # &#39;&lt;input id=&quot;first&quot; name=&quot;first&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</pre>
+            
+            <h1 id="label-DSL">DSL</h1>
+            
+            <p><a href="../classes/Forme.html">Forme</a> comes with a DSL:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(:<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(:<span class="ruby-identifier">text</span>, :<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span>)&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">tag</span>(:<span class="ruby-identifier">fieldset</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(:<span class="ruby-identifier">textarea</span>, :<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;baz&#39;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># &lt;form action=&quot;/foo&quot;&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;input name=&quot;bar&quot; type=&quot;text&quot;/&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;fieldset&gt;</span>&#x000A;<span class="ruby-comment">#     &lt;textarea name=&quot;baz&quot;&gt;&lt;/textarea&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;/fieldset&gt;</span>&#x000A;<span class="ruby-comment"># &lt;/form&gt;</span></pre>
+            
+            <p>You can wrap up multiple inputs with the <code>:inputs</code> method:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(:<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>([[:<span class="ruby-identifier">text</span>, {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span>}], [:<span class="ruby-identifier">textarea</span>, {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;baz&#39;</span>}]])&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># &lt;form action=&quot;/foo&quot;&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;fieldset class=&quot;inputs&quot;&gt;</span>&#x000A;<span class="ruby-comment">#     &lt;input name=&quot;bar&quot; type=&quot;text&quot;/&gt;</span>&#x000A;<span class="ruby-comment">#     &lt;textarea name=&quot;baz&quot;&gt;&lt;/textarea&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;/fieldset&gt;</span>&#x000A;<span class="ruby-comment"># &lt;/form&gt;</span></pre>
+            
+            <p>You can even do everything in a single method call:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>({:<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>},&#x000A;  :<span class="ruby-identifier">inputs=</span><span class="ruby-operator">&gt;</span>[[:<span class="ruby-identifier">text</span>, {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span>}], [:<span class="ruby-identifier">textarea</span>, {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;baz&#39;</span>}]])</pre>
+            
+            <h1 id="label-Basic+Design">Basic Design</h1>
+            
+            <p>Internally, <a href="../classes/Forme.html">Forme</a> builds an abstract
+            syntax tree of objects that represent the form.  The abstract syntax tree
+            goes through a series of transformations that convert it from high level
+            abstract forms to low level abstract forms and finally to strings.  Here
+            are the main classes used by the library:</p>
+            <dl class="rdoc-list note-list"><dt><code>Forme::Form</code> 
+            <dd>
+            <p>main object</p>
+            </dd><dt><code>Forme::Input</code> 
+            <dd>
+            <p>high level abstract tag (a single <code>Input</code> could represent a
+            select box with a bunch of options)</p>
+            </dd><dt><code>Forme::Tag</code> 
+            <dd>
+            <p>low level abstract tag representing an html tag (there would be a separate
+            <code>Tag</code> for each option in a select box)</p>
+            </dd></dl>
+            
+            <p>The group of objects that perform the transformations to the abstract
+            syntax trees are known as transformers. Transformers use a functional
+            style, and all use a <code>call</code>-based API, so you can use a
+            <code>Proc</code> for any custom transformer.</p>
+            
+            <h2 id="label-Transformer+Types">Transformer Types</h2>
+            <dl class="rdoc-list note-list"><dt><code>serializer</code> 
+            <dd>
+            <p>tags input/tag, returns string</p>
+            </dd><dt><code>formatter</code> 
+            <dd>
+            <p>takes input, returns tag</p>
+            </dd><dt><code>error_handler</code> 
+            <dd>
+            <p>takes tag and input, returns version of tag with errors noted</p>
+            </dd><dt><code>labeler</code> 
+            <dd>
+            <p>takes tag and input, returns labeled version of tag</p>
+            </dd><dt><code>wrapper</code> 
+            <dd>
+            <p>takes tag and input, returns wrapped version of tag</p>
+            </dd><dt><code>inputs_wrapper</code> 
+            <dd>
+            <p>takes form, options hash, and block, wrapping block in a tag</p>
+            </dd></dl>
+            
+            <p>The <code>serializer</code> is the base of the transformations.  It turns
+            <code>Tag</code> instances into strings.  If it comes across an
+            <code>Input</code>, it calls the <code>formatter</code> on the
+            <code>Input</code> to turn it into a <code>Tag</code>, and then serializes
+            that <code>Tag</code>.  The <code>formatter</code> first converts the
+            <code>Input</code> to a <code>Tag</code>, and then calls the
+            <code>error_handler</code> if the <code>:error</code> option is set and the
+            <code>labeler</code>  if the <code>:label</code> option is set.  Finally,
+            it calls the <code>wrapper</code> to wrap the resulting tag before
+            returning it.</p>
+            
+            <p>The <code>inputs_wrapper</code> is called by
+            <code>Forme::Form#inputs</code> and serves to wrap a bunch of related
+            inputs.</p>
+            
+            <h2 id="label-Built-in+Transformers">Built-in Transformers</h2>
+            
+            <p><a href="../classes/Forme.html">Forme</a> ships with a bunch of built-in
+            transformers that you can use:</p>
+            
+            <h3 id="label-serializer"><code>serializer</code></h3>
+            <dl class="rdoc-list note-list"><dt>:default 
+            <dd>
+            <p>returns HTML strings</p>
+            </dd><dt>:html_usa 
+            <dd>
+            <p>returns HTML strings, formats dates and times in American format without
+            timezones</p>
+            </dd><dt>:text 
+            <dd>
+            <p>returns plain text strings</p>
+            </dd></dl>
+            
+            <h3 id="label-formatter"><code>formatter</code></h3>
+            <dl class="rdoc-list note-list"><dt>:default 
+            <dd>
+            <p>turns Inputs into Tags</p>
+            </dd><dt>:disabled 
+            <dd>
+            <p>disables all resulting input tags</p>
+            </dd><dt>:readonly 
+            <dd>
+            <p>uses <code>span</code> tags for most values, good for printable versions of
+            forms</p>
+            </dd></dl>
+            
+            <h3 id="label-error_handler"><code>error_handler</code></h3>
+            <dl class="rdoc-list note-list"><dt>:default 
+            <dd>
+            <p>modifies tag to add an error class and adds a span with the error message</p>
+            </dd></dl>
+            
+            <h3 id="label-labeler"><code>labeler</code></h3>
+            <dl class="rdoc-list note-list"><dt>:default 
+            <dd>
+            <p>uses implicit labels, where the tag is a child of the label tag</p>
+            </dd><dt>:explicit 
+            <dd>
+            <p>uses explicit labels with the for attribute, where tag is a sibling of the
+            label tag</p>
+            </dd></dl>
+            
+            <h3 id="label-wrapper"><code>wrapper</code></h3>
+            <dl class="rdoc-list note-list"><dt>:default 
+            <dd>
+            <p>returns tag without wrapping</p>
+            </dd><dt>:li 
+            <dd>
+            <p>wraps tag in li tag</p>
+            </dd><dt>:p 
+            <dd>
+            <p>wraps tag in p tag</p>
+            </dd><dt>:div 
+            <dd>
+            <p>wraps tag in div tag</p>
+            </dd><dt>:span 
+            <dd>
+            <p>wraps tag in span tag</p>
+            </dd><dt>:trtd 
+            <dd>
+            <p>wraps tag in a tr tag with a td for the label and a td for the tag, useful
+            for lining up inputs with the :explicit labeler without CSS</p>
+            </dd></dl>
+            
+            <h3 id="label-inputs_wrapper"><code>inputs_wrapper</code></h3>
+            <dl class="rdoc-list note-list"><dt>:default 
+            <dd>
+            <p>uses a fieldset to wrap inputs</p>
+            </dd><dt>:ol 
+            <dd>
+            <p>uses an ol tag to wrap inputs, useful with :li wrapper</p>
+            </dd><dt>:div 
+            <dd>
+            <p>uses a div tag to wrap inputs</p>
+            </dd><dt>:fieldset_ol 
+            <dd>
+            <p>use both a fieldset and an ol tag to wrap inputs</p>
+            </dd><dt>:table 
+            <dd>
+            <p>uses a table tag to wrap inputs, useful with :trtd wrapper</p>
+            </dd></dl>
+            
+            <h2 id="label-Configurations">Configurations</h2>
+            
+            <p>You can associate a group of transformers into a configuration.  This
+            allows you to specify a single :config option when creating a
+            <code>Form</code> and have it automatically set all the related
+            transformers.</p>
+            
+            <p>There are a few configurations supported by default:</p>
+            <dl class="rdoc-list note-list"><dt>:default 
+            <dd>
+            <p>All <code>default</code> transformers</p>
+            </dd><dt>:formtastic 
+            <dd>
+            <p><code>fieldset_ol</code> inputs_wrapper, <code>li</code> wrapper,
+            <code>explicit</code> labeler</p>
+            </dd></dl>
+            
+            <p>You can register and use your own configurations easily:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">register_config</span>(:<span class="ruby-identifier">mine</span>, :<span class="ruby-identifier">wrapper=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">li</span>, :<span class="ruby-identifier">inputs_wrapper=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">ol</span>, :<span class="ruby-identifier">serializer=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">html_usa</span>)&#x000A;<span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(:<span class="ruby-identifier">config=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">mine</span>)</pre>
+            
+            <p>If you want to, you can base your configuration on an existing
+            configuration:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">register_config</span>(:<span class="ruby-identifier">yours</span>, :<span class="ruby-identifier">base=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">mine</span>, :<span class="ruby-identifier">inputs_wrapper=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">fieldset_ol</span>)</pre>
+            
+            <p>You can mark a configuration as the default using:</p>
+            
+            <pre>Forme.default_config = :mine</pre>
+            
+            <h1 id="label-Sequel+Support"><a href="../classes/Sequel.html">Sequel</a> Support</h1>
+            
+            <p><a href="../classes/Forme.html">Forme</a> ships with a <a
+            href="../classes/Sequel.html">Sequel</a> plugin (use
+            <code>Sequel::Model.plugin :forme</code> to enable), that makes
+            Sequel::Model instances support the <code>forme_config</code> and
+            <code>forme_input</code> methods and return customized inputs.</p>
+            
+            <p>It deals with inputs based on database columns, virtual columns, and
+            associations.  It also handles nested associations using the
+            <code>subform</code> method:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>], :<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>([:<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">copies_sold</span>, :<span class="ruby-identifier">tags</span>]) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">subform</span>(:<span class="ruby-identifier">artist</span>, :<span class="ruby-identifier">inputs=</span><span class="ruby-operator">&gt;</span>[:<span class="ruby-identifier">name</span>])&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">subform</span>(:<span class="ruby-identifier">tracks</span>, :<span class="ruby-identifier">inputs=</span><span class="ruby-operator">&gt;</span>[:<span class="ruby-identifier">number</span>, :<span class="ruby-identifier">name</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>For many_to_one associations, you can use the <code>:as=&gt;:radio</code>
+            option to use a series of radio buttons, and for one_to_many and
+            many_to_many associations, you can use the <code>:as=&gt;:checkbox</code>
+            option to use a series of checkboxes.  For one_to_many and many_to_many
+            associations, you will probably want to use the
+            <code>association_pks</code> plugin that ships with <a
+            href="../classes/Sequel.html">Sequel</a>.</p>
+            
+            <p>The <a href="../classes/Forme.html">Forme</a> <a
+            href="../classes/Sequel.html">Sequel</a> plugin also integerates with
+            Sequel&#39;s validation reflection support with the
+            <code>validation_class_methods</code> plugin that ships with <a
+            href="../classes/Sequel.html">Sequel</a>.  It will add <code>pattern</code>
+            and <code>maxlength</code> attributes based on the format, numericality,
+            and length validations.</p>
+            
+            <h1 id="label-Sinatra+Support">Sinatra Support</h1>
+            
+            <p><a href="../classes/Forme.html">Forme</a> ships with a Sinatra extension
+            that you can get by <code>require &quot;forme/sinatra&quot;</code> and
+            using <code>helpers Forme::Sinatra::ERB</code> in your Sinatra::Base
+            subclass.  It allows you to use the following API in your Sinatra ERB
+            forms:</p>
+            
+            <pre>&lt;% form(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;% f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
+            
+            <p>This example is for ERB/Erubis.  Other Sinatra template libraries work
+            differently and probably do not support this integration.</p>
+            
+            <h1 id="label-Rails+Support">Rails Support</h1>
+            
+            <p><a href="../classes/Forme.html">Forme</a> ships with a Rails extension that
+            you can get by <code>require &quot;forme/rails&quot;</code> and using
+            <code>helpers Forme::Rails::ERB</code> in your controller.  If allows you
+            to use the following API in your Rails forms:</p>
+            
+            <pre>&lt;%= forme(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;%= f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
+            
+            <p>This has been tested on Rails 3.2, but should hopefully work on Rails 3.0+.</p>
+            
+            <h1 id="label-Other+Similar+Projects">Other Similar Projects</h1>
+            
+            <p>All of these have external dependencies:</p>
+            <ol><li>
+            <p>Rails built-in helpers</p>
+            </li><li>
+            <p>Formtastic</p>
+            </li><li>
+            <p>simple_form</p>
+            </li><li>
+            <p>padrino-helpers</p>
+            </li></ol>
+            
+            <p>Forme&#39;s API draws a lot of inspiration from both Formtastic and
+            simple_form.</p>
+            
+            <h1 id="label-Author">Author</h1>
+            
+            <p>Jeremy Evans &lt;code@jeremyevans.net&gt;</p>
+          </div>
+          <div id='context'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

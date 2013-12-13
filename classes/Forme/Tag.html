@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Forme::Tag</title>
+    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>class</span>
+          Forme::Tag
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../files/lib/forme_rb.html">lib/forme.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a target="docwin" href="../Forme.html">Forme</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>Low level abstract tag form, where each instance represents a html tag with
+            attributes and children.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-new">new</a></li>
+            </ol>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-3C-3C"><<</a></li>
+              <li><a target="docwin" href="#attribute-i-attr">attr</a></li>
+              <li><a target="docwin" href="#attribute-i-children">children</a></li>
+              <li><a target="docwin" href="#attribute-i-form">form</a></li>
+              <li><a target="docwin" href="#method-i-tag">tag</a></li>
+              <li><a target="docwin" href="#method-i-to_s">to_s</a></li>
+              <li><a target="docwin" href="#attribute-i-type">type</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-attr'>attr</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The attributes hash of this receiver.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-children'>children</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>An array instance representing the children of the receiver, or possibly
+                      <code>nil</code> if the receiver has no children.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-form'>form</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The <code>Form</code> object related to the receiver.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-type'>type</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The type of tag, should be a symbol (e.g. :input, :select).</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-new'>
+                <a name='method-c-new'></a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(form, type, attr={}, children=nil)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Set the <code>form</code>, <code>type</code>, <code>attr</code>, and
+                  <code>children</code>.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme.rb, line 580</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span>, <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, (<span class="ruby-identifier">attr</span><span class="ruby-operator">||</span>{})&#x000A;  <span class="ruby-ivar">@children</span> = <span class="ruby-identifier">parse_children</span>(<span class="ruby-identifier">children</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-3C-3C'>
+                <a name='method-i-3C-3C'></a>
+                <div class='synopsis'>
+                  <span class='name'><<</span>
+                  <span class='arguments'>(child)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Adds a child to the array of receiver&#39;s children.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-3C-3C-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-3C-3C-source'><span class="ruby-comment"># File lib/forme.rb, line 586</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">child</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">children</span>&#x000A;    <span class="ruby-identifier">children</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">child</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-ivar">@children</span> = [<span class="ruby-identifier">child</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-tag'>
+                <a name='method-i-tag'></a>
+                <div class='synopsis'>
+                  <span class='name'>tag</span>
+                  <span class='arguments'>(*a, &block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Create a new <code>Tag</code> instance with the given arguments and block
+                  related to the receiver&#39;s <code>form</code>.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme.rb, line 596</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(*<span class="ruby-identifier">a</span>, &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(*<span class="ruby-identifier">a</span>, &amp;<span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-to_s'>
+                <a name='method-i-to_s'></a>
+                <div class='synopsis'>
+                  <span class='name'>to_s</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return a string containing the serialized content of the receiver.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-to_s-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/forme.rb, line 601</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">serialize</span>(<span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
