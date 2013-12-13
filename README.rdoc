@@ -7,6 +7,10 @@ Forme is a HTML forms library for ruby with the following goals:
 3. Support forms both with and without related objects
 4. Allow compiling down to different types of output
 
+= Installation
+
+  sudo gem install forme
+
 = Demo Site
 
 A demo site is available at http://forme-demo.jeremyevans.net
