@@ -11,6 +11,10 @@ Forme is a HTML forms library for ruby with the following goals:
 
 A demo site is available at http://forme-demo.jeremyevans.net
 
+= Documentation Site
+
+RDoc Documentation is available at http://forme.jeremyevans.net
+
 = Source Code
 
 Source code is available on GitHub at https://github.com/jeremyevans/forme
