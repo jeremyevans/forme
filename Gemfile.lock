@@ -1,7 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    forme (0.9.0)
     kgio (2.7.4)
     pg (0.17.0)
     rack (1.5.2)
@@ -23,7 +22,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  forme
   pg
   sequel
   sinatra
