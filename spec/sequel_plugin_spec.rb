@@ -90,6 +90,11 @@ describe "Forme Sequel::Model forms" do
     @b.input(:gold, :true_value=>"Foo", :false_value=>"Bar").to_s.should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="Foo">True</option><option value="Bar">False</option></select></label>'
   end
   
+  specify "should use a select box for dual-valued boolean fields where :required => false" do
+    @b.input(:platinum, :required=>false).to_s.should == '<label>Platinum: <select id="album_platinum" name="album[platinum]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
+    @c.input(:platinum, :required=>false).to_s.should == '<label>Platinum: <select id="album_platinum" name="album[platinum]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
+  end
+  
   specify "should use a checkbox for dual-valued boolean fields" do
     @b.input(:platinum).to_s.should == '<input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><label><input id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
     @c.input(:platinum).to_s.should == '<input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><label><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'

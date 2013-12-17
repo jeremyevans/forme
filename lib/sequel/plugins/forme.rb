@@ -380,7 +380,7 @@ module Sequel # :nodoc:
         # as :as=>:radio, or :as=>:checkbox to specify a particular style.
         def input_boolean(sch)
           unless opts.has_key?(:as)
-            opts[:as] = sch[:allow_null] ? :select : :checkbox
+            opts[:as] = (sch[:allow_null] || opts[:required] == false) ? :select : :checkbox
           end
 
           case opts[:as]
