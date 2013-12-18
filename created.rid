@@ -1,9 +1,9 @@
-Fri, 13 Dec 2013 09:58:54 -0800
-README.rdoc	Fri, 13 Dec 2013 09:42:04 -0800
-CHANGELOG	Fri, 13 Dec 2013 09:39:52 -0800
+Wed, 18 Dec 2013 10:56:14 -0800
+README.rdoc	Fri, 13 Dec 2013 13:05:14 -0800
+CHANGELOG	Wed, 18 Dec 2013 10:44:43 -0800
 MIT-LICENSE	Sat, 07 Dec 2013 19:24:39 -0800
 lib/forme.rb	Sat, 07 Dec 2013 11:04:22 -0800
 lib/forme/rails.rb	Fri, 06 Dec 2013 17:05:16 -0800
 lib/forme/sinatra.rb	Fri, 06 Dec 2013 17:05:16 -0800
-lib/forme/version.rb	Fri, 13 Dec 2013 09:39:52 -0800
-lib/sequel/plugins/forme.rb	Fri, 06 Dec 2013 17:05:16 -0800
+lib/forme/version.rb	Wed, 18 Dec 2013 10:44:43 -0800
+lib/sequel/plugins/forme.rb	Tue, 17 Dec 2013 14:40:22 -0800
