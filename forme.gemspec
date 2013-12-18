@@ -11,6 +11,7 @@ spec = Gem::Specification.new do |s|
   s.email = "code@jeremyevans.net"
   s.homepage = "http://gihub.com/jeremyevans/forme"
   s.files = %w(MIT-LICENSE CHANGELOG README.rdoc Rakefile) + Dir["{spec,lib}/**/*.rb"]
+  s.license = 'MIT'
   s.description = <<END
 Forme is a forms library with the following goals:
 
