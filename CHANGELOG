@@ -1,4 +1,4 @@
-=== HEAD
+=== 0.9.1 (2013-12-18)
 
 * Use a tri-valued select box by default for boolean inputs with :required=>false option (jeremyevans)
 
