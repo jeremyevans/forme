@@ -1213,7 +1213,7 @@ module Forme
 
     # Escape ampersands, brackets and quotes to their HTML/XML entities.
     def h(string)
-      string.to_s.gsub(ESCAPE_HTML_PATTERN){|c| ESCAPE_HTML[c] }
+      string.to_s && string.to_s.gsub(ESCAPE_HTML_PATTERN){|c| ESCAPE_HTML[c] }
     end
 
     # Join attribute values that are arrays with spaces instead of an empty
