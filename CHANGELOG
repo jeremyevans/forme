@@ -1,3 +1,7 @@
+=== 0.9.2 (2014-04-10)
+
+* Make association_select_options compatible with Sequel 4.10+ (jeremyevans)
+
 === 0.9.1 (2013-12-18)
 
 * Use a tri-valued select box by default for boolean inputs with :required=>false option (jeremyevans)
