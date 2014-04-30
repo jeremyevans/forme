@@ -27,17 +27,17 @@ require 'forme/version'
 # The processing of high level <tt>Forme::Input</tt>s into raw html
 # data is broken down to the following steps (called transformers):
 #
-# 1. +Formatter+: converts a <tt>Forme::Input</tt> instance into a
-#    <tt>Forme::Tag</tt> instance (or array of them).
-# 2. +ErrorHandler+: If the <tt>Forme::Input</tt> instance has a error,
-#    takes the formatted tag and marks it as having the error.
-# 2. +Labeler+: If the <tt>Forme::Input</tt> instance has a label,
-#    takes the formatted output and labels it.
-# 3. +Wrapper+: Takes the output of the labeler (or formatter if
-#    no label), and wraps it in another tag (or just returns it
-#    directly).
-# 4. +Serializer+: converts a <tt>Forme::Tag</tt> instance into a
-#    string.
+# * +Formatter+: converts a <tt>Forme::Input</tt> instance into a
+#   <tt>Forme::Tag</tt> instance (or array of them).
+# * +ErrorHandler+: If the <tt>Forme::Input</tt> instance has a error,
+#   takes the formatted tag and marks it as having the error.
+# * +Labeler+: If the <tt>Forme::Input</tt> instance has a label,
+#   takes the formatted output and labels it.
+# * +Wrapper+: Takes the output of the labeler (or formatter if
+#   no label), and wraps it in another tag (or just returns it
+#   directly).
+# * +Serializer+: converts a <tt>Forme::Tag</tt> instance into a
+#   string.
 #
 # Technically, only the +Serializer+ is necessary.  The +input+
 # and +tag+ methods return +Input+ and +Tag+ objects.  These objects
