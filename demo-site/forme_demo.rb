@@ -19,7 +19,12 @@ class FormeDemo < Sinatra::Base
     end
 
     def form_opts
-      @form_opts ||= @form_opts_str ? eval(@form_opts_str, binding, __FILE__, __LINE__) : {}
+      return @form_opts if @form_opts
+      @form_opts = @form_opts_str ? eval(@form_opts_str, binding, __FILE__, __LINE__) : {}
+      @form_opts[:one] ||= {}
+      @form_opts[:many] ||= {}
+      @form_opts[:date] ||= {}
+      @form_opts
     end
 
     def demo(t, opts={})
