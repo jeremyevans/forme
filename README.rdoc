@@ -9,19 +9,16 @@ Forme is a HTML forms library for ruby with the following goals:
 
 = Installation
 
-  sudo gem install forme
+  gem install forme
 
-= Demo Site
+= Links
 
-A demo site is available at http://forme-demo.jeremyevans.net
-
-= Documentation Site
-
-RDoc Documentation is available at http://forme.jeremyevans.net
-
-= Source Code
-
-Source code is available on GitHub at https://github.com/jeremyevans/forme
+Demo Site :: http://forme-demo.jeremyevans.net
+RDoc :: http://forme.jeremyevans.net
+Source :: https://github.com/jeremyevans/forme
+IRC :: irc://irc.freenode.net/forme
+Google Group :: https://groups.google.com/forum/#!forum/ruby-forme
+Bug Tracker :: https://github.com/jeremyevans/forme/issues
 
 = Basic Usage
 
