@@ -1,4 +1,4 @@
-<% form(Album[1], form_attr, form_opts) do |f| %>
+<% form(Album.first, form_attr, form_opts) do |f| %>
   <% f.inputs(:legend=>'Album') do %>
     <%= f.input(:name) %>
     <%= f.input(:artist, form_opts[:one]) %>
