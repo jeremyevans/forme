@@ -79,6 +79,109 @@ You can even do everything in a single method call:
   Forme.form({:action=>'/foo'},
     :inputs=>[[:text, {:name=>'bar'}], [:textarea, {:name=>'baz'}]])
 
+= Supported Input Types and Options
+
+== General Options
+
+These options are supported by all of the input types:
+
+:attr :: The attributes hash to use for the given tag, takes precedence over
+         other options that set attributes.
+:data :: A hash of data-* attributes for the resulting tag.  Keys in this hash
+         will have attributes created with data- prepended to the attribute name.
+:key :: The base to use for the name and id attributes, based on the current
+        namespace for the form.
+:name :: The name attribute to use
+:id :: The id attribute to use
+:placeholder :: The placeholder attribute to use
+:value :: The value attribute to use for input tags, the content of the textarea
+          for textarea tags, or the selected option(s) for select tags.
+:class :: A class to use.  Unlike other options, this is combined with the
+          classes set in the :attr hash.
+:disabled :: Set the disabled attribute if true
+:required :: Set the required attribute if true
+:error :: Set an error message, invoking the error_handler
+:label :: Set a label, invoking the labeler
+:wrapper :: Set a custom wrapper, overriding the form's default
+:labeler :: Set a custom labeler, overriding the form's default
+:error_handler :: Set a custom error_handler, overriding the form's default
+
+== Input Types
+
+=== :checkbox
+
+Creates an input tag with type checkbox, as well as a hidden input tag. Options:
+
+:no_hidden :: Don't create a hidden input tag.
+:checked :: Mark the checkbox as checked.
+:hidden_value :: The value to use for the hidden input tag.
+
+=== :radio
+
+Creates an input tag with type radio. Options:
+
+:checked :: Mark the radio button as checkedr.
+
+=== :date
+
+By default, creates an input tag with type date.  With the :as=>:select option, creates
+3 select boxes, one for the year, month, and day. Options:
+
+:as :: When value is :select, uses 3 select boxes.
+
+=== :datetime
+
+By default, creates an input tag with type datetime.  With the :as=>:select option, creates
+6 select boxes, one for the year, month, day, hour, minute, and second. Options:
+
+:as :: When value is :select, uses 6 select boxes.
+
+=== :select
+
+Creates a select tag, containing option tags specified by the :options option.  Options:
+
+:options :: an array of options used for creating option tags.
+            If the :text_method and :value_method are not given and the entry is an 
+            array, uses the first entry of the array as the text of the option, and
+            the second entry of the array as the value of the option.
+:add_blank :: Add a blank option if true.  If the value is a string,
+              use it as the text content of the blank option.  The value of
+              the blank option is always the empty string.
+:text_method :: If set, each entry in the array has this option called on
+                it to get the text of the object.
+:value_method :: If set (and :text_method is set), each entry in the array
+                 has this method called on it to get the value of the option.
+:selected :: The value that should be selected.  Any options that are equal to
+             this value (or included in this value if a multiple select box),
+             are set to selected.
+:multiple :: Creates a multiple select box.
+:value :: Same as :selected, but has lower priority.
+
+=== :checkboxset
+
+Creates a set of checkbox inputs all using the same name.  Supports the same options
+as the select type, except that the :multiple option is assumed to be true.
+
+=== :radioset
+
+Creates a set of radio buttons all using the same name.  Supports the same options
+as the select type.
+
+=== :textarea
+
+Creates a textarea tag.  Options:
+
+:cols :: The number of columns in the text area.
+:rows :: The number of rows in the text area.
+
+== all others
+
+Creates an input tag with the given type. This makes it easy to use inputs such
+as text and password, as well as newer HTML5 inputs such as number or email. Options:
+
+:size :: Uses the size attribute on the tag
+:maxlength :: Use the maxlength attribute on the tag
+
 = Basic Design
 
 Internally, Forme builds an abstract syntax tree of objects that

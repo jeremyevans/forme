@@ -548,33 +548,7 @@ module Forme
     # The type of input, should be a symbol (e.g. :submit, :text, :select).
     attr_reader :type
 
-    # The options hash for the receiver.  Here are some of the supported options
-    # used by the built-in formatter transformers:
-    #
-    # :error :: Set an error message, invoking the error_handler
-    # :label :: Set a label, invoking the labeler
-    # :wrapper :: Set a custom wrapper, overriding the form's default
-    # :labeler :: Set a custom labeler, overriding the form's default
-    # :error_handler :: Set a custom error_handler, overriding the form's default
-    # :attr :: The attributes hash to use for the given tag, takes precedence over
-    #          other options that set attributes.
-    # :data :: A hash of data-* attributes for the resulting tag.  Keys in this hash
-    #          will have attributes created with data- prepended to the attribute name.
-    # :key :: The base to use for the name and id attributes, based on the current
-    #         namespace for the form.
-    # :key_id :: A suffix to add to the id attribute created by the :key option, useful
-    #            when using multiple radio buttons or checkboxes.
-    # :name :: The name attribute to use
-    # :id :: The id attribute to use
-    # :placeholder :: The placeholder attribute to use
-    # :value :: The value attribute to use for input tags, the content of the textarea
-    #           for textarea tags, or the selected option(s) for select tags.
-    # :class :: A class to use.  Unlike other options, this is combined with the
-    #           classes set in the :attr hash.
-    # :disabled :: Set the disabled attribute if true
-    # :required :: Set the required attribute if true
-    #
-    # For other supported options, see the private methods in +Formatter+.
+    # The options hash for the Input.
     attr_reader :opts
 
     # Set the +form+, +type+, and +opts+.
@@ -775,10 +749,7 @@ module Forme
     # same name that comes before this checkbox.  That way, if the checkbox
     # is checked, the web app will generally see the value of the checkbox, and
     # if it is not checked, the web app will generally see the value of the hidden
-    # input tag.  Recognizes the following options:
-    # :checked :: checkbox is set to checked if so.
-    # :hidden_value :: sets the value of the hidden input tag.
-    # :no_hidden :: don't create a hidden input tag
+    # input tag.
     def format_checkbox
       @attr[:type] = :checkbox
       @attr[:checked] = :checked if @opts[:checked]
@@ -850,23 +821,7 @@ module Forme
     end
 
     # Takes a select input and turns it into a select tag with (possibly) option
-    # children tags.  Respects the following options:
-    # :options :: an array of options.  Processes each entry.  If that entry is
-    #             an array, takes the first entry in the hash as the text child
-    #             of the option, and the last entry as the value of the option.
-    #             if not set, ignores the remaining options.
-    # :add_blank :: Add a blank option if true.  If the value is a string,
-    #               use it as the text content of the blank option.  The value of
-    #               the blank option is always the empty string.
-    # :text_method :: If set, each entry in the array has this option called on
-    #                 it to get the text of the object.
-    # :value_method :: If set (and :text_method is set), each entry in the array
-    #                  has this method called on it to get the value of the option.
-    # :selected :: The value that should be selected.  Any options that are equal to
-    #              this value (or included in this value if a multiple select box),
-    #              are set to selected.
-    # :multiple :: Creates a multiple select box.
-    # :value :: Same as :selected, but has lower priority.
+    # children tags.
     def format_select
       if os = process_select_options(@opts[:options])
         @attr[:multiple] = :multiple if @opts[:multiple]
