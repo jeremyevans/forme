@@ -196,12 +196,6 @@ module Sequel # :nodoc:
           opts[:label] = [opts[:label], form._tag(:abbr, {:title=>'required'}, '*')] if opts[:required]
         end
 
-        # Add the label to the start of the array, returning the array.
-        def add_label(label, array)
-          array.unshift(form._tag(:span, {:class=>:label}, label)) if label
-          array
-        end
-
         # Unset the wrapper and tag_wrapper options and return a
         # array with the wrapper and tag_wrapper to use.  The tag_wrapper
         # is for wrapping each individual tag.
@@ -280,12 +274,7 @@ module Sequel # :nodoc:
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
           if opts.delete(:as) == :radio
             handle_label(field)
-            label = opts.delete(:label)
-            val = opts.delete(:value)
-            wrapper, tag_wrapper = get_wrappers
-            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :key_id=>pk, :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>(pk == val)))}
-            add_label(label, radios)
-            wrapper ? wrapper.call(radios, _input(:radio, opts)) : radios
+            _input(:radioset, opts)
           else
             opts[:required] = true if !opts.has_key?(:required) && (sch = obj.model.db_schema[key]) && !sch[:allow_null]
             opts[:add_blank] = true if !opts.has_key?(:add_blank) && !(opts[:required] && opts[:value])
@@ -313,12 +302,7 @@ module Sequel # :nodoc:
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
           handle_label(field)
           if opts.delete(:as) == :checkbox
-            label = opts.delete(:label)
-            val = opts.delete(:value)
-            wrapper, tag_wrapper = get_wrappers
-            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :key_id=>pk, :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>val.include?(pk), :no_hidden=>true))}
-            add_label(label, cbs)
-            wrapper ? wrapper.call(cbs, _input(:checkbox, opts)) : cbs
+            _input(:checkboxset, opts)
           else
             opts[:multiple] = true unless opts.has_key?(:multiple)
             _input(:select, opts)
@@ -365,15 +349,14 @@ module Sequel # :nodoc:
 
           case opts[:as]
           when :radio
-            wrapper, tag_wrapper = get_wrappers
-            true_opts = opts.merge(:value=>opts[:true_value]||'t', :label=>opts[:true_label]||'Yes', :label_attr=>{:class=>:option}, :error=>nil, :wrapper=>tag_wrapper, :wrapper_attr=>{}, :key_id=>'yes')
-            false_opts = opts.merge(:value=>opts[:false_value]||'f', :label=>opts[:false_label]||'No', :label_attr=>{:class=>:option}, :wrapper=>tag_wrapper, :wrapper_attr=>{}, :key_id=>'no')
             v = opts.has_key?(:value) ? opts[:value] : obj.send(field)
+            true_value = opts[:true_value]||'t'
+            false_value = opts[:false_value]||'f'
+            opts[:options] = [[opts[:true_label]||'Yes', {:value=>true_value, :key_id=>'yes'}], [opts[:false_label]||'No', {:value=>false_value, :key_id=>'no'}]]
             unless v.nil?
-              (v ? true_opts : false_opts)[:checked] = true
+              opts[:value] = v ? true_value : false_value
             end
-            array = add_label(opts[:label], [_input(:radio, true_opts), _input(:radio, false_opts)])
-            wrapper ? wrapper.call(array, _input(:radio, opts)) : array
+            _input(:radioset, opts)
           when :select
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?

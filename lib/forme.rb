@@ -868,49 +868,63 @@ module Forme
     # :multiple :: Creates a multiple select box.
     # :value :: Same as :selected, but has lower priority.
     def format_select
-      if os = @opts[:options]
-        vm = @opts[:value_method]
-        tm = @opts[:text_method]
-        sel = @opts[:selected] || @attr.delete(:value)
-        if @opts[:multiple]
-          @attr[:multiple] = :multiple
-          sel = Array(sel)
-          cmp = lambda{|v| sel.include?(v)}
-        else
-          cmp = lambda{|v| v == sel}
-        end
-        os = os.map do |x|
-          attr = {}
-          if tm
-            text = x.send(tm)
-            if vm
-              val = x.send(vm)
-              attr[:value] = val
-              attr[:selected] = :selected if cmp.call(val)
-            else
-              attr[:selected] = :selected if cmp.call(text)
-            end
-            form._tag(:option, attr, [text])
-          elsif x.is_a?(Array)
-            val = x.last
-            if val.is_a?(Hash)
-              attr.merge!(val)
-              val = attr[:value]
-            else
-              attr[:value] = val
-            end
-            attr[:selected] = :selected if attr.has_key?(:value) && cmp.call(val)
-            tag(:option, attr, [x.first])
-          else
-            attr[:selected] = :selected if cmp.call(x)
-            tag(:option, attr, [x])
+      if os = process_select_options(@opts[:options])
+        @attr[:multiple] = :multiple if @opts[:multiple]
+
+        os = os.map do |label, value, sel, attrs|
+          if value || sel
+            attrs = attrs.dup
+            attrs[:value] = value if value
+            attrs[:selected] = :selected if sel
           end
-        end
-        if prompt = @opts[:add_blank]
-          os.unshift(tag(:option, {:value=>''}, prompt.is_a?(String) ? [prompt] : []))
+          tag(:option, attrs, [label])
         end
       end
       tag(:select, @attr, os)
+    end
+
+    def format_checkboxset
+      @opts[:multiple] = true unless @opts.has_key?(:multiple)
+      _format_set(:checkbox, :no_hidden=>true, :multiple=>true)
+    end
+
+    def format_radioset
+      _format_set(:radio)
+    end
+
+    def _format_set(type, tag_attrs={})
+      raise Error, "can't have radioset with no options" unless os = @opts[:options]
+      key = @opts[:key]
+      name = @opts[:name]
+      if @opts[:error]
+        @opts[:set_error] = @opts.delete(:error)
+      end
+      if @opts[:label]
+        @opts[:set_label] = @opts.delete(:label)
+      end
+      tag_wrapper = @opts.delete(:tag_wrapper) || :default
+      wrapper = form.transformer(:wrapper, @opts)
+
+      tags = process_select_options(os).map do |label, value, sel, attrs|
+        value ||= label
+        r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>{:class=>:option}, :wrapper=>tag_wrapper)
+        r_opts[:value] ||= value if value
+        r_opts[:checked] ||= :checked if sel
+
+        if key
+          r_opts[:key] ||= key
+          r_opts[:key_id] ||= value
+        else
+          r_opts[:name] ||= name
+        end
+
+        form._input(type, r_opts)
+      end
+
+      tags.last.opts[:error] = @opts[:set_error]
+      tags.unshift(form._tag(:span, {:class=>:label}, @opts[:set_label])) if @opts[:set_label]
+      wrapper.call(tags, form._input(type, opts)) if wrapper
+      tags
     end
 
     # Formats a textarea.  Respects the following options:
@@ -950,6 +964,50 @@ module Forme
 
       @attr[:required] = :required if @opts[:required] && !@attr.has_key?(:required)
       @attr[:disabled] = :disabled if @opts[:disabled] && !@attr.has_key?(:disabled)
+    end
+
+    # Returns an array of arrays, where each array entry contains the label, value,
+    # currently selected flag, and attributes for that tag.
+    def process_select_options(os)
+      if os
+        vm = @opts[:value_method]
+        tm = @opts[:text_method]
+        sel = @opts[:selected] || @attr.delete(:value)
+
+        if @opts[:multiple]
+          sel = Array(sel)
+          cmp = lambda{|v| sel.include?(v)}
+        else
+          cmp = lambda{|v| v == sel}
+        end
+
+        os = os.map do |x|
+          attr = {}
+          if tm
+            text = x.send(tm)
+            val = x.send(vm) if vm
+          elsif x.is_a?(Array)
+            text = x.first
+            val = x.last
+
+            if val.is_a?(Hash)
+              value = val[:value]
+              attr.merge!(val)
+              val = value
+            end
+          else
+            text = x
+          end
+
+          [text, val, val ? cmp.call(val) : cmp.call(text), attr]
+        end
+
+        if prompt = @opts[:add_blank]
+          os.unshift([(prompt if prompt.is_a?(String)), '', false, {}])
+        end
+
+        os
+      end
     end
 
     # Create a +Tag+ instance related to the receiver's +form+ with the given

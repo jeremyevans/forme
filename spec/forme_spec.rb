@@ -181,6 +181,66 @@ describe "Forme plain forms" do
     @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.should == '<select><option value="">Prompt Here</option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
   end
 
+  specify "should create set of radio buttons" do
+    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2).to_s.should == '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'
+    @f.input(:radioset, :options=>[1, 2, 3], :value=>2).to_s.should == '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'
+  end
+
+  specify "should create set of radio buttons with options and values" do
+    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.should == '<label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label>'
+  end
+
+  specify "should create set of radio buttons with options and values with hashes" do
+    @f.input(:radioset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.should == '<label class="option"><input foo="1" type="radio" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="radio" value="2"/> b</label><label class="option"><input id="baz" type="radio" value="c"/> c</label>'
+  end
+
+  specify "should create set of radio buttons with options and values using given method" do
+    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.should == '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'
+    @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.should == '<label class="option"><input type="radio" value="a"/> 1</label><label class="option"><input checked="checked" type="radio" value="b"/> 2</label><label class="option"><input type="radio" value="c"/> 3</label>'
+  end
+
+  specify "should support :add_blank option for radioset inputs" do
+    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.should == '<label class="option"><input type="radio" value=""/> </label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label>'
+  end
+
+  specify "should use :add_blank option value as prompt if it is a String" do
+    @f.input(:radioset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.should == '<label class="option"><input type="radio" value=""/> Prompt Here</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label>'
+  end
+
+  specify "should respect the :key option for radio sets" do
+    @f.input(:radioset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.should == '<label class="option"><input id="foo_1" name="foo" type="radio" value="1"/> 1</label><label class="option"><input checked="checked" id="foo_2" name="foo" type="radio" value="2"/> 2</label><label class="option"><input id="foo_3" name="foo" type="radio" value="3"/> 3</label>'
+  end
+
+  specify "should create set of checkbox buttons" do
+    @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.should == '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.should == '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
+  end
+
+  specify "should create set of checkbox buttons with options and values" do
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.should == '<label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
+  end
+
+  specify "should create set of checkbox buttons with options and values with hashes" do
+    @f.input(:checkboxset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.should == '<label class="option"><input foo="1" type="checkbox" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="checkbox" value="2"/> b</label><label class="option"><input id="baz" type="checkbox" value="c"/> c</label>'
+  end
+
+  specify "should create set of checkbox buttons with options and values using given method" do
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :selected=>2).to_s.should == '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :text_method=>:last, :value_method=>:first, :selected=>:b).to_s.should == '<label class="option"><input type="checkbox" value="a"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="b"/> 2</label><label class="option"><input type="checkbox" value="c"/> 3</label>'
+  end
+
+  specify "should support :add_blank option for checkboxset inputs" do
+    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.should == '<label class="option"><input type="checkbox" value=""/> </label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
+  end
+
+  specify "should use :add_blank option value as prompt if it is a String" do
+    @f.input(:checkboxset, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.should == '<label class="option"><input type="checkbox" value=""/> Prompt Here</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
+  end
+
+  specify "should respect the :key option for checkbox sets" do
+    @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.should == '<label class="option"><input id="foo_1" name="foo[]" type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" id="foo_2" name="foo[]" type="checkbox" value="2"/> 2</label><label class="option"><input id="foo_3" name="foo[]" type="checkbox" value="3"/> 3</label>'
+  end
+
   specify "radio and checkbox inputs should handle :checked option" do
     @f.input(:radio, :checked=>true).to_s.should == '<input checked="checked" type="radio"/>'
     @f.input(:radio, :checked=>false).to_s.should == '<input type="radio"/>'

@@ -1,5 +1,7 @@
 === HEAD
 
+* Support radioset and checkboxset Input types (jeremyevans)
+
 * Support :key and :key_id options for Inputs, for automatically setting name/id attributes based on current namespace (jeremyevans)
 
 * Move namespace handling from Sequel plugin into the core (jeremyevans)
