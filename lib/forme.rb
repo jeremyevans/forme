@@ -191,6 +191,10 @@ module Forme
     #         of one of the handled types (or nil to not add a tag).
     attr_reader :hidden_tags
 
+    # The namespaces if any for the receiver's inputs.  This can be used to
+    # automatically setup namespaced class and id attributes.
+    attr_accessor :namespaces
+
     # Create a +Form+ instance and yield it to the block,
     # injecting the opening form tag before yielding and
     # the closing form tag after yielding.
@@ -243,9 +247,16 @@ module Forme
         @obj = obj
         @opts = opts
       end
+
+      @namespaces = []
+      if ns = @opts[:namespace]
+        Array(ns).each{|n| push_namespace(n)}
+      end
+
       if @obj && @obj.respond_to?(:forme_config)
         @obj.forme_config(self)
       end
+
       config = CONFIGURATIONS[@opts[:config]||Forme.default_config]
       TRANSFORMER_TYPES.each{|k| instance_variable_set(:"@#{k}", transformer(k, @opts.fetch(k, config[k])))}
       @input_defaults = @opts[:input_defaults] || {}
@@ -445,6 +456,27 @@ module Forme
       serializer.call(tag)
     end
 
+    # Return a unique id attribute for the +field+, based on the current namespaces.
+    def namespaced_id(field)
+      "#{namespaces.join('_')}#{'_' unless namespaces.empty?}#{field}"
+    end
+
+    # Return a unique name attribute for the +field+, based on the current namespaces.
+    # If +multiple+ is true, end the name with [] so that param parsing will treat
+    # the name as part of an array.
+    def namespaced_name(field, multiple=false)
+      if namespaces.empty?
+        if multiple
+          "#{field}[]"
+        else
+          field
+        end
+      else
+        root, *nsps = namespaces
+        "#{root}#{nsps.map{|n| "[#{n}]"}.join}[#{field}]#{'[]' if multiple}"
+      end
+    end
+
     private
 
     # Return array of hidden tags to use for this form,
@@ -494,6 +526,17 @@ module Forme
     ensure
       @nesting.pop
     end
+
+    # Add to the current stack of namespaces.
+    def push_namespace(namespace)
+      @namespaces << namespace
+    end
+
+    # Remove top value from the current stack of namespaces.
+    def pop_namespace
+      @namespaces.pop
+    end
+
   end
 
   # High level abstract tag form, transformed by formatters into the lower
@@ -517,6 +560,10 @@ module Forme
     #          other options that set attributes.
     # :data :: A hash of data-* attributes for the resulting tag.  Keys in this hash
     #          will have attributes created with data- prepended to the attribute name.
+    # :key :: The base to use for the name and id attributes, based on the current
+    #         namespace for the form.
+    # :key_id :: A suffix to add to the id attribute created by the :key option, useful
+    #            when using multiple radio buttons or checkboxes.
     # :name :: The name attribute to use
     # :id :: The id attribute to use
     # :placeholder :: The placeholder attribute to use
@@ -534,6 +581,18 @@ module Forme
     def initialize(form, type, opts={})
       @form, @type = form, type
       @opts = (form.input_defaults[type.to_s] || {}).merge(opts)
+
+      if key = @opts[:key]
+        unless @opts[:name]
+          @opts[:name] = form.namespaced_name(key, @opts[:array] || @opts[:multiple])
+        end
+        unless @opts[:id]
+          @opts[:id] = form.namespaced_id(key)
+          if suffix = @opts[:key_id]
+            @opts[:id] << '_' << suffix.to_s
+          end
+        end
+      end
     end
 
     # Replace the +opts+ by merging the given +hash+ into +opts+,

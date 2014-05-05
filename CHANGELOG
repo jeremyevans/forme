@@ -1,3 +1,9 @@
+=== HEAD
+
+* Support :key and :key_id options for Inputs, for automatically setting name/id attributes based on current namespace (jeremyevans)
+
+* Move namespace handling from Sequel plugin into the core (jeremyevans)
+
 === 0.9.2 (2014-04-10)
 
 * Make association_select_options compatible with Sequel 4.10+ (jeremyevans)

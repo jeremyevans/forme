@@ -22,11 +22,6 @@ module Sequel # :nodoc:
         # stack is set as the current +obj+.
         attr_accessor :nested_associations
 
-        # The namespaces that should be added to the id and name
-        # attributes for the receiver's inputs.  Used as a stack
-        # by +subform+.
-        attr_accessor :namespaces
-
         # Use the post method by default for Sequel forms, unless
         # overridden with the :method attribute.
         def form(attr={}, &block)
@@ -67,8 +62,8 @@ module Sequel # :nodoc:
           Array(nested_obj).each do |no|
             begin
               nested_associations << obj
-              namespaces << "#{association}_attributes"
-              namespaces << (i+=1) if multiple
+              push_namespace("#{association}_attributes")
+              push_namespace(i+=1) if multiple
               @obj = no
               emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil)) unless no.new?
               if ins
@@ -90,25 +85,11 @@ module Sequel # :nodoc:
               end
             ensure
               @obj = nested_associations.pop
-              namespaces.pop if multiple
-              namespaces.pop
+              pop_namespace if multiple
+              pop_namespace
             end
           end
           nil
-        end
-
-        # Return a unique id attribute for the +field+, handling
-        # nested attributes use.
-        def namespaced_id(field)
-          "#{namespaces.join('_')}_#{field}"
-        end
-
-        # Return a unique name attribute for the +field+, handling nested
-        # attribute use.  If +multiple+ is true, end the name
-        # with [] so that param parsing will treat the name as part of an array.
-        def namespaced_name(field, multiple=false)
-          root, *nsps = namespaces
-          "#{root}#{nsps.map{|n| "[#{n}]"}.join}[#{field}]#{'[]' if multiple}"
         end
       end
 
@@ -157,8 +138,7 @@ module Sequel # :nodoc:
           type = opts[:type]
           if !type && (sch = obj.db_schema[field])
             meth = :"input_#{sch[:type]}"
-            opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
-            opts[:name] = form.namespaced_name(field) unless opts.has_key?(:name)
+            opts[:key] = field unless opts.has_key?(:key)
             opts[:required] = true if !opts.has_key?(:required) && sch[:allow_null] == false && sch[:type] != :boolean
             handle_label(field)
 
@@ -183,8 +163,7 @@ module Sequel # :nodoc:
             raise(Error, "Unrecognized field used: #{field}") unless rt || type
             meth = :"input_#{type}"
             opts[:value] = nil unless rt || opts.has_key?(:value)
-            opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
-            opts[:name] = form.namespaced_name(field, opts[:multiple]) unless opts.has_key?(:name)
+            opts[:key] = field unless opts.has_key?(:key)
             handle_label(field)
             if respond_to?(meth, true)
               opts.delete(:type)
@@ -296,7 +275,7 @@ module Sequel # :nodoc:
         def association_many_to_one(ref)
           key = ref[:key]
           handle_errors(key)
-          opts[:name] = form.namespaced_name(key) unless opts.has_key?(:name)
+          opts[:key] = key unless opts.has_key?(:key)
           opts[:value] = obj.send(key) unless opts.has_key?(:value)
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
           if opts.delete(:as) == :radio
@@ -304,11 +283,10 @@ module Sequel # :nodoc:
             label = opts.delete(:label)
             val = opts.delete(:value)
             wrapper, tag_wrapper = get_wrappers
-            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :id=>"#{form.namespaced_id(key)}_#{pk}", :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>(pk == val)))}
+            radios = opts.delete(:options).map{|l, pk| _input(:radio, opts.merge(:value=>pk, :key_id=>pk, :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>(pk == val)))}
             add_label(label, radios)
             wrapper ? wrapper.call(radios, _input(:radio, opts)) : radios
           else
-            opts[:id] = form.namespaced_id(key) unless opts.has_key?(:id)
             opts[:required] = true if !opts.has_key?(:required) && (sch = obj.model.db_schema[key]) && !sch[:allow_null]
             opts[:add_blank] = true if !opts.has_key?(:add_blank) && !(opts[:required] && opts[:value])
             handle_label(field)
@@ -327,7 +305,10 @@ module Sequel # :nodoc:
           klass = ref.associated_class
           pk = klass.primary_key
           field = "#{klass.send(:singularize, ref[:name])}_pks"
-          opts[:name] = form.namespaced_name(field, :multiple) unless opts.has_key?(:name)
+          unless opts.has_key?(:key)
+            opts[:array] = true unless opts.has_key?(:array)
+            opts[:key] = field
+          end
           opts[:value] = obj.send(ref[:name]).map{|x| x.send(pk)} unless opts.has_key?(:value)
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
           handle_label(field)
@@ -335,11 +316,10 @@ module Sequel # :nodoc:
             label = opts.delete(:label)
             val = opts.delete(:value)
             wrapper, tag_wrapper = get_wrappers
-            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :id=>"#{form.namespaced_id(field)}_#{pk}", :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>val.include?(pk), :no_hidden=>true))}
+            cbs = opts.delete(:options).map{|l, pk| _input(:checkbox, opts.merge(:value=>pk, :key_id=>pk, :wrapper=>tag_wrapper, :label=>l, :label_attr=>{:class=>:option}, :checked=>val.include?(pk), :no_hidden=>true))}
             add_label(label, cbs)
             wrapper ? wrapper.call(cbs, _input(:checkbox, opts)) : cbs
           else
-            opts[:id] = form.namespaced_id(field) unless opts.has_key?(:id)
             opts[:multiple] = true unless opts.has_key?(:multiple)
             _input(:select, opts)
           end
@@ -386,12 +366,8 @@ module Sequel # :nodoc:
           case opts[:as]
           when :radio
             wrapper, tag_wrapper = get_wrappers
-            true_opts = opts.merge(:value=>opts[:true_value]||'t', :label=>opts[:true_label]||'Yes', :label_attr=>{:class=>:option}, :error=>nil, :wrapper=>tag_wrapper, :wrapper_attr=>{})
-            false_opts = opts.merge(:value=>opts[:false_value]||'f', :label=>opts[:false_label]||'No', :label_attr=>{:class=>:option}, :wrapper=>tag_wrapper, :wrapper_attr=>{})
-            if i = opts[:id]
-              true_opts[:id] = "#{i}_yes"
-              false_opts[:id] = "#{i}_no"
-            end
+            true_opts = opts.merge(:value=>opts[:true_value]||'t', :label=>opts[:true_label]||'Yes', :label_attr=>{:class=>:option}, :error=>nil, :wrapper=>tag_wrapper, :wrapper_attr=>{}, :key_id=>'yes')
+            false_opts = opts.merge(:value=>opts[:false_value]||'f', :label=>opts[:false_label]||'No', :label_attr=>{:class=>:option}, :wrapper=>tag_wrapper, :wrapper_attr=>{}, :key_id=>'no')
             v = opts.has_key?(:value) ? opts[:value] : obj.send(field)
             unless v.nil?
               (v ? true_opts : false_opts)[:checked] = true
@@ -488,7 +464,7 @@ module Sequel # :nodoc:
         def forme_config(form)
           form.extend(SequelForm)
           form.nested_associations = []
-          form.namespaces = [model.send(:underscore, model.name)]
+          form.send(:push_namespace, model.send(:underscore, model.name))
           form.extend(SinatraSequelForm) if defined?(::Forme::Sinatra::Form) && form.is_a?(::Forme::Sinatra::Form)
         end
 

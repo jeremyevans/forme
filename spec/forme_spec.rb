@@ -45,6 +45,26 @@ describe "Forme plain forms" do
     @f.input(:text, :style=>"foo").to_s.should == '<input style="foo" type="text"/>'
   end
 
+  specify "should use :key option as name and id attributes" do
+    @f.input(:text, :key=>"foo").to_s.should == '<input id="foo" name="foo" type="text"/>'
+  end
+
+  specify "should use :key_id option as suffix for :key option id attributes" do
+    @f.input(:text, :key=>"foo", :key_id=>'bar').to_s.should == '<input id="foo_bar" name="foo" type="text"/>'
+  end
+
+  specify "should have :key option respect :multiple option" do
+    @f.input(:text, :key=>"foo", :multiple=>true).to_s.should == '<input id="foo" name="foo[]" type="text"/>'
+  end
+
+  specify "should use :key option respect form's current namespace" do
+    @f.send(:push_namespace, 'bar')
+    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
+    @f.input(:text, :key=>"foo", :multiple=>true).to_s.should == '<input id="bar_foo" name="bar[foo][]" type="text"/>'
+    @f.send(:push_namespace, 'baz')
+    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_baz_foo" name="bar[baz][foo]" type="text"/>'
+  end
+
   specify "should allow arbitrary attributes using the :attr option" do
     @f.input(:text, :attr=>{:bar=>"foo"}).to_s.should == '<input bar="foo" type="text"/>'
   end
