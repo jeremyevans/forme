@@ -145,7 +145,7 @@ module Forme
     # instead to directly representing input types.
     attr_reader :obj
 
-    # A hash of options for the receiver. Currently, the following are recognized by
+    # A hash of options for the Form. Currently, the following are recognized by
     # default:
     # :obj :: Sets the +obj+ attribute
     # :error_handler :: Sets the +error_handler+ for the form
@@ -156,6 +156,8 @@ module Forme
     # :labeler :: Sets the +labeler+ for the form
     # :wrapper :: Sets the +wrapper+ for the form
     # :serializer :: Sets the +serializer+ for the form
+    # :values :: The values from a previous form submission, used to set default
+    #            values for inputs when the inputs use the :key option.
     attr_reader :opts
 
     # The +formatter+ determines how the +Input+s created are transformed into
@@ -563,6 +565,9 @@ module Forme
       if key = @opts[:key]
         unless @opts[:name]
           @opts[:name] = form.namespaced_name(key, @opts[:array] || @opts[:multiple])
+          if !@opts.has_key?(:value) && (values = @form.opts[:values])
+            set_value_from_namespaced_values(form.namespaces, values, key)
+          end
         end
         unless @opts[:id]
           @opts[:id] = form.namespaced_id(key)
@@ -594,6 +599,20 @@ module Forme
     # of them).
     def format
       form.format(self)
+    end
+
+    private
+
+    # Set the values option based on the (possibly nested) values
+    # hash given, array of namespaces, and key.
+    def set_value_from_namespaced_values(namespaces, values, key)
+      namespaces.each do |ns|
+        v = values[ns] || values[ns.to_s]
+        return unless v
+        values = v
+      end
+
+      @opts[:value] = values.fetch(key){values.fetch(key.to_s){return}}
     end
   end
 

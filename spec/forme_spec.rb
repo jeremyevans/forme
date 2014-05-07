@@ -65,6 +65,39 @@ describe "Forme plain forms" do
     @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_baz_foo" name="bar[baz][foo]" type="text"/>'
   end
 
+  specify "should consider form's :values hash for default values based on the :key option if :value is not present" do
+    @f.opts[:values] = {'foo'=>'baz'}
+    @f.input(:text, :key=>"foo").to_s.should == '<input id="foo" name="foo" type="text" value="baz"/>'
+    @f.input(:text, :key=>"foo", :value=>'x').to_s.should == '<input id="foo" name="foo" type="text" value="x"/>'
+
+    @f.input(:text, :key=>:foo).to_s.should == '<input id="foo" name="foo" type="text" value="baz"/>'
+    @f.opts[:values] = {:foo=>'baz'}
+    @f.input(:text, :key=>:foo).to_s.should == '<input id="foo" name="foo" type="text" value="baz"/>'
+  end
+
+  specify "should consider form's :values hash for default values based on the :key option when using namespaces" do
+    @f.opts[:values] = {'bar'=>{'foo'=>'baz'}}
+    @f.send(:push_namespace, 'bar')
+    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+    @f.input(:text, :key=>"foo", :value=>'x').to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="x"/>'
+    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+
+    @f.send(:pop_namespace)
+    @f.send(:push_namespace, :bar)
+    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+
+    @f.opts[:values] = {:bar=>{:foo=>'baz'}}
+    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+    @f.opts[:values] = {:bar=>{}}
+    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
+    @f.opts[:values] = {}
+    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
+
+    @f.opts[:values] = {'bar'=>{'quux'=>{'foo'=>'baz'}}}
+    @f.send(:push_namespace, 'quux')
+    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_quux_foo" name="bar[quux][foo]" type="text" value="baz"/>'
+  end
+
   specify "should allow arbitrary attributes using the :attr option" do
     @f.input(:text, :attr=>{:bar=>"foo"}).to_s.should == '<input bar="foo" type="text"/>'
   end
