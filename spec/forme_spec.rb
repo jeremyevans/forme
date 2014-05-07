@@ -177,6 +177,15 @@ describe "Forme plain forms" do
     @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.should == '<select><option value=""></option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
   end
 
+  specify "should use Forme.default_add_blank_prompt value if :add_blank option is true" do
+    begin
+      Forme.default_add_blank_prompt = 'foo'
+      @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :value=>2).to_s.should == '<select><option value="">foo</option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
+    ensure
+      Forme.default_add_blank_prompt = nil
+    end
+  end
+
   specify "should use :add_blank option value as prompt if it is a String" do
     @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.should == '<select><option value="">Prompt Here</option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
   end

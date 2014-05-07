@@ -1,5 +1,7 @@
 === HEAD
 
+* Add Forme.default_add_blank_prompt for setting default prompt used for :add_blank option (jeremyevans)
+
 * Support radioset and checkboxset Input types (jeremyevans)
 
 * Support :key and :key_id options for Inputs, for automatically setting name/id attributes based on current namespace (jeremyevans)

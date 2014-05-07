@@ -67,12 +67,16 @@ module Forme
   # Exception class for exceptions raised by Forme.
   class Error < StandardError
   end
-  
+
+  @default_add_blank_prompt = nil
   @default_config = :default
   class << self
     # Set the default configuration to use if none is explicitly
     # specified (default: :default).
     attr_accessor :default_config
+
+    # The default prompt to use for the :add_blank option (default: nil).
+    attr_accessor :default_add_blank_prompt
   end
 
   # Array of all supported transformer types.
@@ -958,7 +962,10 @@ module Forme
         end
 
         if prompt = @opts[:add_blank]
-          os.unshift([(prompt if prompt.is_a?(String)), '', false, {}])
+          unless prompt.is_a?(String)
+            prompt = Forme.default_add_blank_prompt
+          end
+          os.unshift([prompt, '', false, {}])
         end
 
         os
