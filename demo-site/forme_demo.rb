@@ -20,7 +20,7 @@ class FormeDemo < Sinatra::Base
 
     def form_opts
       return @form_opts if @form_opts
-      @form_opts = @form_opts_str ? eval(@form_opts_str, binding, __FILE__, __LINE__) : {}
+      @form_opts = @form_opts_base || {}
       @form_opts[:one] ||= {}
       @form_opts[:many] ||= {}
       @form_opts[:date] ||= {}
@@ -47,7 +47,7 @@ class FormeDemo < Sinatra::Base
 
   get '/album/basic/explicit' do
     @page_title = 'Album Basic - Explicit Labels'
-    @form_opts_str = '{:labeler=>:explicit, :wrapper=>:div}'
+    @form_opts_base = {:labeler=>:explicit, :wrapper=>:div}
     @css = <<-END
 label, input, select { display: block; float: left }
 label { min-width: 150px; }
@@ -58,40 +58,40 @@ END
 
   get '/album/basic/table' do
     @page_title = 'Album Basic - Table'
-    @form_opts_str = '{:labeler=>:explicit, :wrapper=>:trtd, :inputs_wrapper=>:table}'
+    @form_opts_base = {:labeler=>:explicit, :wrapper=>:trtd, :inputs_wrapper=>:table}
     demo :album_basic
   end
 
   get '/album/basic/list' do
     @page_title = 'Album Basic - List'
-    @form_opts_str = '{:wrapper=>:li, :inputs_wrapper=>:ol}'
+    @form_opts_base = {:wrapper=>:li, :inputs_wrapper=>:ol}
     @css = "ol, li {list-style-type: none;}"
     demo :album_basic
   end
 
   get '/album/basic/date' do
     @page_title = 'Album Basic - Date Multiple Select Boxes'
-    @form_opts_str = '{:date=>{:as=>:select}, :labeler=>:explicit, :wrapper=>:trtd, :inputs_wrapper=>:table}'
+    @form_opts_base = {:date=>{:as=>:select}, :labeler=>:explicit, :wrapper=>:trtd, :inputs_wrapper=>:table}
     demo :album_basic
   end
 
   get '/album/basic/alt_assoc' do
     @page_title = 'Album Basic - Association Radios/Checkboxes'
-    @form_opts_str = "{:wrapper=>:li, :inputs_wrapper=>:ol, :many=>{:as=>:checkbox}, :one=>{:as=>:radio}}"
+    @form_opts_base = {:wrapper=>:li, :inputs_wrapper=>:ol, :many=>{:as=>:checkbox}, :one=>{:as=>:radio}}
     @css = "ol, li {list-style-type: none;}"
     demo :album_basic
   end
 
   get '/album/basic/readonly' do
     @page_title = 'Album Basic - Read Only'
-    @form_opts_str = "{:wrapper=>:li, :inputs_wrapper=>:ol, :formatter=>:readonly}"
+    @form_opts_base = {:wrapper=>:li, :inputs_wrapper=>:ol, :formatter=>:readonly}
     @css = "ol, li {list-style-type: none;}"
     demo :album_basic
   end
 
   get '/album/basic/text' do
     @page_title = 'Album Basic - Plain Text'
-    @form_opts_str = "{:serializer=>:text}"
+    @form_opts_base = {:serializer=>:text}
     content_type 'text/plain'
     demo :album_basic, :layout=>false
   end
@@ -110,12 +110,12 @@ END
 
   unless ENV['DATABASE_URL']
     post '/album' do
-      Album[1].update(params[:album])
+      Album.last.update(params[:album])
       redirect back
     end
 
     post '/artist' do
-      Artist[1].update(params[:artist])
+      Artist.last.update(params[:artist])
       redirect back
     end
   end

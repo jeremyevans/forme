@@ -36,20 +36,19 @@
   <%= yield %>
 
   <br />
-  <% if @form_opts_str %>
-    <h2>Form Options</h2>
-    <pre><%= @form_opts_str %></pre>
-  <% end %>
-
-  <% if @css %>
-    <style type="text/css"><%= @css %></style>
-    <h2>Custom CSS</h2>
-    <pre><%= @css %></pre>
-  <% end %>
-
   <% if @templ %>
+    <h2>Settings</h2>
+    <pre>form_attr = <%= form_attr.inspect %>
+form_opts = <%= form_opts.inspect %></pre>
+
+    <% if @css %>
+      <style type="text/css"><%= @css %></style>
+      <h2>Custom CSS</h2>
+      <pre><%= @css %></pre>
+    <% end %>
+
     <h2>Template Code</h2>
-   <pre><%= File.read("views/#{@templ}.erb") %></pre>
+    <pre><%= File.read("views/#{@templ}.erb") %></pre>
   <% end %>
 </div>
 
