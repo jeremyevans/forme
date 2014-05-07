@@ -379,7 +379,7 @@ module Forme
     end
 
     # Creates a tag using the +inputs_wrapper+ (a fieldset by default), calls
-    # input on each element of +inputs+, and yields to if given a block.
+    # input on each element of +inputs+, and yields if given a block.
     # You can use array arguments if you want inputs to be created with specific
     # options:
     #
@@ -389,6 +389,14 @@ module Forme
     # The given +opts+ are passed to the +inputs_wrapper+, and the default
     # +inputs_wrapper+ supports a <tt>:legend</tt> option that is used to
     # set the legend for the fieldset.
+    #
+    # This can also be called with a single hash argument to just use an options hash:
+    #
+    #   inputs(:legend=>'Foo'){...}
+    #
+    # or even without any arguments:
+    #
+    #   inputs{...}
     def inputs(inputs=[], opts={}, &block)
       _inputs(inputs, opts, &block)
     end
