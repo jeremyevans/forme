@@ -389,8 +389,8 @@ module Forme
     # The given +opts+ are passed to the +inputs_wrapper+, and the default
     # +inputs_wrapper+ supports a <tt>:legend</tt> option that is used to
     # set the legend for the fieldset.
-    def inputs(*a, &block)
-      _inputs(*a, &block)
+    def inputs(inputs=[], opts={}, &block)
+      _inputs(inputs, opts, &block)
     end
     
     # Internals of #inputs, should be used internally by the library, where #inputs
