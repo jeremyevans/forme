@@ -257,6 +257,11 @@ describe "Forme plain forms" do
     @f.input(:checkbox, :checked=>false).to_s.should == '<input type="checkbox"/>'
   end
 
+  specify "inputs should handle :autofocus option" do
+    @f.input(:text, :autofocus=>true).to_s.should == '<input autofocus="autofocus" type="text"/>'
+    @f.input(:text, :autofocus=>false).to_s.should == '<input type="text"/>'
+  end
+
   specify "inputs should handle :required option" do
     @f.input(:text, :required=>true).to_s.should == '<input required="required" type="text"/>'
     @f.input(:text, :required=>false).to_s.should == '<input type="text"/>'

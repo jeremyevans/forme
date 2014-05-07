@@ -98,6 +98,7 @@ These options are supported by all of the input types:
           for textarea tags, or the selected option(s) for select tags.
 :class :: A class to use.  Unlike other options, this is combined with the
           classes set in the :attr hash.
+:autofocus :: Set the autofocus attribute if true
 :disabled :: Set the disabled attribute if true
 :required :: Set the required attribute if true
 :error :: Set an error message, invoking the error_handler

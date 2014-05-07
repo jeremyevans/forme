@@ -1,5 +1,7 @@
 === HEAD
 
+* Support :autofocus option for setting autofocus attribute, similar to :required and :disabled (jeremyevans)
+
 * Add Forme.default_add_blank_prompt for setting default prompt used for :add_blank option (jeremyevans)
 
 * Support radioset and checkboxset Input types (jeremyevans)

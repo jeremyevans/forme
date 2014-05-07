@@ -691,6 +691,11 @@ module Forme
     # the :attr option version takes precedence.
     ATTRIBUTE_OPTIONS = [:name, :id, :placeholder, :value, :style]
 
+    # Options copied from the options hash into the attributes hash,
+    # where a true value in the options hash sets the attribute
+    # value to the same name as the key.
+    ATTRIBUTE_BOOLEAN_OPTIONS = [:autofocus, :required, :disabled]
+
     # Create a new instance and call it
     def self.call(input)
       new.call(input)
@@ -897,10 +902,22 @@ module Forme
       end
     end
 
-    def copy_options_to_attributes(attributes)
-      attributes.each do |k|
+    # Copy option values for given keys to the attributes unless the
+    # attributes already have a value for the key.
+    def copy_options_to_attributes(keys)
+      keys.each do |k|
         if @opts.has_key?(k) && !@attr.has_key?(k)
           @attr[k] = @opts[k]
+        end
+      end
+    end
+
+    # Set attribute values for given keys to be the same as the key
+    # unless the attributes already have a value for the key.
+    def copy_boolean_options_to_attributes(keys)
+      keys.each do |k|
+        if @opts[k] && !@attr.has_key?(k)
+          @attr[k] = k
         end
       end
     end
@@ -910,6 +927,7 @@ module Forme
     # :disabled :: Sets the +disabled+ attribute on the resulting tag if true.
     def normalize_options
       copy_options_to_attributes(ATTRIBUTE_OPTIONS)
+      copy_boolean_options_to_attributes(ATTRIBUTE_BOOLEAN_OPTIONS)
 
       Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
       Forme.attr_classes(@attr, 'error') if @opts[:error]
@@ -920,9 +938,6 @@ module Forme
           @attr[sym] = v unless @attr.has_key?(sym)
         end
       end
-
-      @attr[:required] = :required if @opts[:required] && !@attr.has_key?(:required)
-      @attr[:disabled] = :disabled if @opts[:disabled] && !@attr.has_key?(:disabled)
     end
 
     # Returns an array of arrays, where each array entry contains the label, value,
