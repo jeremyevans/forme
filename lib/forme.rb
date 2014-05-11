@@ -177,7 +177,7 @@ module Forme
     attr_reader :wrapper
 
     # Set the default options for inputs by type.  This should be a hash with
-    # input type string keys and values that are hashes of input options.
+    # input type keys and values that are hashes of input options.
     attr_reader :input_defaults
 
     # The +inputs_wrapper+ determines how calls to +inputs+ are wrapped.  Must
@@ -568,7 +568,8 @@ module Forme
     # Set the +form+, +type+, and +opts+.
     def initialize(form, type, opts={})
       @form, @type = form, type
-      @opts = (form.input_defaults[type.to_s] || {}).merge(opts)
+      defaults = form.input_defaults
+      @opts = (defaults.fetch(type){defaults[type.to_s]} || {}).merge(opts)
 
       if key = @opts[:key]
         unless @opts[:name]

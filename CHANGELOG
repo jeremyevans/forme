@@ -1,5 +1,7 @@
 === HEAD
 
+* Allow input_defaults to work with symbol keys for inputs that use symbol types (jeremyevans)
+
 * Support Form :values option, for automatically setting value attributes for inputs from submitted params (jeremyevans)
 
 * Support :autofocus option for setting autofocus attribute, similar to :required and :disabled (jeremyevans)

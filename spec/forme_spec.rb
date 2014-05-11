@@ -503,6 +503,12 @@ describe "Forme plain forms" do
     f.input(:textarea, :name=>"foo").to_s.should == '<textarea cols="80" name="foo" rows="6"></textarea>'
   end
 
+  specify "should work with input_defaults with symbol keys using using inputs with symbol keys" do
+    f = Forme::Form.new(:input_defaults=>{:text=>{:size=>20}, 'text'=>{:size=>30}})
+    f.input(:text, :name=>"foo").to_s.should == '<input name="foo" size="20" type="text"/>'
+    f.input('text', :name=>"foo").to_s.should == '<input name="foo" size="30" type="text"/>'
+  end
+
   specify "invalid custom transformers should raise an Error" do
     proc{Forme::Form.new(:wrapper=>Object.new)}.should raise_error(Forme::Error)
     proc{@f.input(:textarea, :wrapper=>Object.new).to_s}.should raise_error(Forme::Error)
