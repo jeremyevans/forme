@@ -656,6 +656,14 @@ describe "Forme built-in custom" do
     Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea], :attr=>{:foo=>1}).to_s.should == '<table foo="1"><tr><td><textarea></textarea></td><td></td></tr></table>'
   end
 
+  specify "inputs_wrapper: table accepts a :legend option" do
+   Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea], :legend=>'Inputs').to_s.should == '<table><caption>Inputs</caption><tr><td><textarea></textarea></td><td></td></tr></table>'
+  end
+
+  specify "inputs_wrapper: table accepts a :legend_attr option" do
+    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea], :legend=>'Inputs', :legend_attr=>{:class=>'foo'}).to_s.should == '<table><caption class="foo">Inputs</caption><tr><td><textarea></textarea></td><td></td></tr></table>'
+  end
+
   specify "serializer: html_usa formats dates and datetimes in American format without timezones" do
     Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>Date.new(2011, 6, 5)).to_s.should == '<div foo="06/05/2011"></div>'
     Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>DateTime.new(2011, 6, 5, 16, 3, 2)).to_s.should == '<div foo="06/05/2011 04:03:02PM"></div>'
