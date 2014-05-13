@@ -1,5 +1,7 @@
 === HEAD
 
+* ol, div, and table inputs_wrappers now respect the :attr option (jeremyevans)
+
 * Make subform always use the inputs_wrapper, even if :inputs is not given (jeremyevans)
 
 * Allow input_defaults to work with symbol keys for inputs that use symbol types (jeremyevans)

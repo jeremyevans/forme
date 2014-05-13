@@ -1237,7 +1237,7 @@ module Forme
 
     # Wrap the inputs in an ol tag
     def call(form, opts, &block)
-      form.tag(:ol, &block)
+      form.tag(:ol, opts[:attr], &block)
     end
   end
 
@@ -1249,7 +1249,7 @@ module Forme
 
     # Wrap the inputs in an ol tag
     def call(form, opts, &block)
-      form.tag(:div, &block)
+      form.tag(:div, opts[:attr], &block)
     end
   end
 
@@ -1261,7 +1261,7 @@ module Forme
 
     # Wrap the inputs in a table tag.
     def call(form, opts, &block)
-      form.tag(:table, &block)
+      form.tag(:table, opts[:attr], &block)
     end
   end
 
