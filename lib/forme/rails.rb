@@ -53,8 +53,8 @@ module Forme
       
       # If a block is not given, emit the inputs into the current output
       # buffer.
-      def _inputs(*)
-        if block_given?
+      def _inputs(inputs=[], opts={})
+        if block_given? && !opts[:subform]
           super
         else
           emit(super)

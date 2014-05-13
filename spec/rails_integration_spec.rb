@@ -88,6 +88,32 @@ END
 END
   end
 
+  def nest_inputs
+    @nest = <<END
+  n1
+  <%= f.inputs do %>
+    n2
+    <%= f.input(:first) %>
+    <%= f.input(:last) %>
+    n3
+  <% end %>
+  n4
+  <%= f.inputs([:first, :last], :legend=>'Foo') %>
+  n5
+END
+    render :inline => <<END
+0
+<%= forme([:foo, :bar], :action=>'/baz') do |f| %>
+  1
+  <%= f.tag(:p, {}, 'FBB') %>
+  2
+  <%= render(:inline =>@nest, :locals=>{:f=>f}) %>
+  3
+<% end %>
+4
+END
+  end
+
   def nest_seq
     @album = Album.load(:name=>'N', :copies_sold=>2, :id=>1)
     @album.associations[:artist] = Artist.load(:name=>'A', :id=>2)
@@ -179,8 +205,12 @@ describe "Forme Rails integration" do
     sin_get('/nest_sep').should == "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <div> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </div> n4 <fieldset class=\"inputs\"><legend>Foo</legend><input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/><input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/></fieldset> n5 3 </form>4"
   end
 
+  specify "#form should correctly handle situation where multiple templates are used with same form object" do
+    sin_get('/nest_inputs').should == "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <fieldset class=\"inputs\"> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </fieldset> n4 <fieldset class=\"inputs\"><legend>Foo</legend><input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/><input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/></fieldset> n5 3 </form>4"
+  end
+
   specify "#form should correctly handle situation Sequel integration with subforms where multiple templates are used with same form object" do
-    sin_get('/nest_seq').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").should == "0 <form action=\"/baz\" class=\"forme album\" method=\"post\"><input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/> 1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Foo</legend><label>Name: <input id=\"album_artist_attributes_name\" name=\"album[artist_attributes][name]\" type=\"text\" value=\"A\"/></label></fieldset> 2 n1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/> n2 <label>Name2: <input id=\"album_artist_attributes_name2\" name=\"album[artist_attributes][name2]\" type=\"text\" value=\"A2\"/></label> n3 n4 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Bar</legend><label>Name3: <input id=\"album_artist_attributes_name3\" name=\"album[artist_attributes][name3]\" type=\"text\" value=\"A3\"/></label></fieldset> n5 3 </form>4"
+    sin_get('/nest_seq').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").should == "0 <form action=\"/baz\" class=\"forme album\" method=\"post\"><input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/> 1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Foo</legend><label>Name: <input id=\"album_artist_attributes_name\" name=\"album[artist_attributes][name]\" type=\"text\" value=\"A\"/></label></fieldset> 2 n1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Artist</legend> n2 <label>Name2: <input id=\"album_artist_attributes_name2\" name=\"album[artist_attributes][name2]\" type=\"text\" value=\"A2\"/></label> n3 </fieldset> n4 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Bar</legend><label>Name3: <input id=\"album_artist_attributes_name3\" name=\"album[artist_attributes][name3]\" type=\"text\" value=\"A3\"/></label></fieldset> n5 3 </form>4"
   end
 
   specify "#form should accept two hashes instead of requiring obj as first argument" do

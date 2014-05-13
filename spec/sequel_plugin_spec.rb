@@ -318,7 +318,7 @@ describe "Forme Sequel::Model forms" do
   end
   
   specify "should use allow nested forms with many_to_one associations" do
-    Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Artist</legend><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></fieldset></form>'
   end
   
   specify "should have #subform respect an :inputs option" do
@@ -339,19 +339,19 @@ describe "Forme Sequel::Model forms" do
   
   specify "should not add hidden primary key field for new many_to_one associated objects" do
     @ab.associations[:artist] = Artist.new(:name=>'a')
-    Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:artist){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><fieldset class="inputs"><legend>Artist</legend><label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></label></fieldset></form>'
   end
   
   specify "should use allow nested forms with one_to_one associations" do
-    Forme.form(@ab){|f| f.subform(:album_info, :obj=>AlbumInfo.new(:info=>'a')){f.input(:info)}}.to_s.should == '<form class="forme album" method="post"><label>Info: <input id="album_album_info_attributes_info" name="album[album_info_attributes][info]" type="text" value="a"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:album_info, :obj=>AlbumInfo.new(:info=>'a')){f.input(:info)}}.to_s.should == '<form class="forme album" method="post"><fieldset class="inputs"><legend>Album info</legend><label>Info: <input id="album_album_info_attributes_info" name="album[album_info_attributes][info]" type="text" value="a"/></label></fieldset></form>'
   end
   
   specify "should use allow nested forms with one_to_many associations" do
-    Forme.form(@ab){|f| f.subform(:tracks){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:tracks){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track #1</legend><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track #2</legend><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></fieldset></form>'
   end
   
   specify "should support :obj option for *_to_many associations" do
-    Forme.form(@ab){|f| f.subform(:tracks, :obj=>[Track.new(:name=>'x'), Track.load(:id=>5, :name=>'y')]){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="x"/></label><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="5"/><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="y"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:tracks, :obj=>[Track.new(:name=>'x'), Track.load(:id=>5, :name=>'y')]){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><fieldset class="inputs"><legend>Track #1</legend><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="x"/></label></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="5"/><fieldset class="inputs"><legend>Track #2</legend><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="y"/></label></fieldset></form>'
   end
   
   specify "should auto number legends when using subform with inputs for *_to_many associations" do
@@ -362,22 +362,22 @@ describe "Forme Sequel::Model forms" do
     Forme.form(@ab){|f| f.subform(:tracks, :inputs=>[:name], :legend=>proc{|o, i| "Track #{i} (#{o.name})"})}.to_s.should == '<form class="forme album" method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track 0 (m)</legend><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track 1 (n)</legend><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></fieldset></form>'
   end
   
-  specify "should not add hidden primary key field for nested forms with one_to_many associations" do
+  specify "should not add hidden primary key field for nested forms with one_to_many associations with new objects" do
     @ab.associations[:tracks] = [Track.new(:name=>'m'), Track.new(:name=>'n')]
-    Forme.form(@ab){|f| f.subform(:tracks){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:tracks){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><fieldset class="inputs"><legend>Track #1</legend><label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></label></fieldset><fieldset class="inputs"><legend>Track #2</legend><label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></label></fieldset></form>'
   end
   
   specify "should use allow nested forms with many_to_many associations" do
-    Forme.form(@ab){|f| f.subform(:tags){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><input id="album_tags_attributes_0_id" name="album[tags_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></label><input id="album_tags_attributes_1_id" name="album[tags_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:tags){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><input id="album_tags_attributes_0_id" name="album[tags_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Tag #1</legend><label>Name: <input id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></label></fieldset><input id="album_tags_attributes_1_id" name="album[tags_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Tag #2</legend><label>Name: <input id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></label></fieldset></form>'
   end
   
-  specify "should not add hidden primary key field for nested forms with many_to_many associations" do
+  specify "should not add hidden primary key field for nested forms with many_to_many associations with new objects" do
     @ab.associations[:tags] = [Tag.new(:name=>'s'), Tag.new(:name=>'t')]
-    Forme.form(@ab){|f| f.subform(:tags){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><label>Name: <input id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></label><label>Name: <input id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></label></form>'
+    Forme.form(@ab){|f| f.subform(:tags){f.input(:name)}}.to_s.should == '<form class="forme album" method="post"><fieldset class="inputs"><legend>Tag #1</legend><label>Name: <input id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></label></fieldset><fieldset class="inputs"><legend>Tag #2</legend><label>Name: <input id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></label></fieldset></form>'
   end
 
   specify "should handle multiple nested levels" do
-    Forme.form(Artist[1]){|f| f.subform(:albums){f.input(:name); f.subform(:tracks){f.input(:name)}}}.to_s.to_s.should == '<form class="forme artist" method="post"><input id="artist_albums_attributes_0_id" name="artist[albums_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="artist_albums_attributes_0_name" name="artist[albums_attributes][0][name]" type="text" value="b"/></label><input id="artist_albums_attributes_0_tracks_attributes_0_id" name="artist[albums_attributes][0][tracks_attributes][0][id]" type="hidden" value="1"/><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_0_name" name="artist[albums_attributes][0][tracks_attributes][0][name]" type="text" value="m"/></label><input id="artist_albums_attributes_0_tracks_attributes_1_id" name="artist[albums_attributes][0][tracks_attributes][1][id]" type="hidden" value="2"/><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_1_name" name="artist[albums_attributes][0][tracks_attributes][1][name]" type="text" value="n"/></label></form>'
+    Forme.form(Artist[1]){|f| f.subform(:albums){f.input(:name); f.subform(:tracks){f.input(:name)}}}.to_s.to_s.should == '<form class="forme artist" method="post"><input id="artist_albums_attributes_0_id" name="artist[albums_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Album #1</legend><label>Name: <input id="artist_albums_attributes_0_name" name="artist[albums_attributes][0][name]" type="text" value="b"/></label><input id="artist_albums_attributes_0_tracks_attributes_0_id" name="artist[albums_attributes][0][tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track #1</legend><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_0_name" name="artist[albums_attributes][0][tracks_attributes][0][name]" type="text" value="m"/></label></fieldset><input id="artist_albums_attributes_0_tracks_attributes_1_id" name="artist[albums_attributes][0][tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track #2</legend><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_1_name" name="artist[albums_attributes][0][tracks_attributes][1][name]" type="text" value="n"/></label></fieldset></fieldset></form>'
   end
 end
 

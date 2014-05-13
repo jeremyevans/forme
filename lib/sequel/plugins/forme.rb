@@ -58,7 +58,6 @@ module Sequel # :nodoc:
           ref = obj.class.association_reflection(association)
           multiple = ref.returns_array?
           i = -1
-          ins = opts[:inputs]
           Array(nested_obj).each do |no|
             begin
               nested_associations << obj
@@ -66,23 +65,20 @@ module Sequel # :nodoc:
               push_namespace(i+=1) if multiple
               @obj = no
               emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil)) unless no.new?
-              if ins
-                options = opts.dup
-                if options.has_key?(:legend)
-                  if options[:legend].respond_to?(:call)
-                    options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
-                  end
-                else
-                  if multiple
-                    options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
-                  else
-                    options[:legend] = humanize(association)
-                  end
+              options = opts.dup
+              if options.has_key?(:legend)
+                if options[:legend].respond_to?(:call)
+                  options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
                 end
-                _inputs(ins, options, &block)  
               else
-                yield
+                if multiple
+                  options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
+                else
+                  options[:legend] = humanize(association)
+                end
               end
+              options[:subform] = true
+              _inputs(options[:inputs]||[], options, &block)
             ensure
               @obj = nested_associations.pop
               pop_namespace if multiple
