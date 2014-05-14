@@ -254,10 +254,7 @@ module Forme
         @opts = opts
       end
 
-      @namespaces = []
-      if ns = @opts[:namespace]
-        Array(ns).each{|n| push_namespace(n)}
-      end
+      @namespaces = Array(@opts[:namespace])
 
       if @obj && @obj.respond_to?(:forme_config)
         @obj.forme_config(self)
@@ -470,27 +467,6 @@ module Forme
       serializer.call(tag)
     end
 
-    # Return a unique id attribute for the +field+, based on the current namespaces.
-    def namespaced_id(field)
-      "#{namespaces.join('_')}#{'_' unless namespaces.empty?}#{field}"
-    end
-
-    # Return a unique name attribute for the +field+, based on the current namespaces.
-    # If +multiple+ is true, end the name with [] so that param parsing will treat
-    # the name as part of an array.
-    def namespaced_name(field, multiple=false)
-      if namespaces.empty?
-        if multiple
-          "#{field}[]"
-        else
-          field
-        end
-      else
-        root, *nsps = namespaces
-        "#{root}#{nsps.map{|n| "[#{n}]"}.join}[#{field}]#{'[]' if multiple}"
-      end
-    end
-
     private
 
     # Return array of hidden tags to use for this form,
@@ -543,14 +519,13 @@ module Forme
 
     # Add to the current stack of namespaces.
     def push_namespace(namespace)
-      @namespaces << namespace
+      @namespaces += [namespace]
     end
 
     # Remove top value from the current stack of namespaces.
     def pop_namespace
-      @namespaces.pop
+      @namespaces = @namespaces[0...-1]
     end
-
   end
 
   # High level abstract tag form, transformed by formatters into the lower
@@ -570,21 +545,7 @@ module Forme
       @form, @type = form, type
       defaults = form.input_defaults
       @opts = (defaults.fetch(type){defaults[type.to_s]} || {}).merge(opts)
-
-      if key = @opts[:key]
-        unless @opts[:name]
-          @opts[:name] = form.namespaced_name(key, @opts[:array] || @opts[:multiple])
-          if !@opts.has_key?(:value) && (values = @form.opts[:values])
-            set_value_from_namespaced_values(form.namespaces, values, key)
-          end
-        end
-        unless @opts[:id]
-          @opts[:id] = form.namespaced_id(key)
-          if suffix = @opts[:key_id]
-            @opts[:id] << '_' << suffix.to_s
-          end
-        end
-      end
+      @opts[:namespaces] = @form.namespaces if @opts[:key]
     end
 
     # Replace the +opts+ by merging the given +hash+ into +opts+,
@@ -608,20 +569,6 @@ module Forme
     # of them).
     def format
       form.format(self)
-    end
-
-    private
-
-    # Set the values option based on the (possibly nested) values
-    # hash given, array of namespaces, and key.
-    def set_value_from_namespaced_values(namespaces, values, key)
-      namespaces.each do |ns|
-        v = values[ns] || values[ns.to_s]
-        return unless v
-        values = v
-      end
-
-      @opts[:value] = values.fetch(key){values.fetch(key.to_s){return}}
     end
   end
 
@@ -950,12 +897,11 @@ module Forme
       end
     end
 
-    # Normalize the options used for all input types.  Handles:
-    # :required :: Sets the +required+ attribute on the resulting tag if true.
-    # :disabled :: Sets the +disabled+ attribute on the resulting tag if true.
+    # Normalize the options used for all input types.
     def normalize_options
       copy_options_to_attributes(ATTRIBUTE_OPTIONS)
       copy_boolean_options_to_attributes(ATTRIBUTE_BOOLEAN_OPTIONS)
+      handle_key_option
 
       Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
       Forme.attr_classes(@attr, 'error') if @opts[:error]
@@ -966,6 +912,63 @@ module Forme
           @attr[sym] = v unless @attr.has_key?(sym)
         end
       end
+    end
+
+    # Have the :key option possibly set the name, id, and/or value attributes if not already set.
+    def handle_key_option
+      if key = @opts[:key]
+        unless @attr[:name] || @attr['name']
+          @attr[:name] = namespaced_name(key, @opts[:array] || @opts[:multiple])
+          if !@attr.has_key?(:value) && !@attr.has_key?('value') && (values = @form.opts[:values])
+            set_value_from_namespaced_values(namespaces, values, key)
+          end
+        end
+        unless @attr[:id] || @attr['id']
+          id = namespaced_id(key)
+          if suffix = @opts[:key_id]
+            id << '_' << suffix.to_s
+          end
+          @attr[:id] = id
+        end
+      end
+    end
+
+    # Array of namespaces to use for the input
+    def namespaces
+      opts[:namespaces]
+    end
+
+    # Return a unique id attribute for the +field+, based on the current namespaces.
+    def namespaced_id(field)
+      "#{namespaces.join('_')}#{'_' unless namespaces.empty?}#{field}"
+    end
+
+    # Return a unique name attribute for the +field+, based on the current namespaces.
+    # If +multiple+ is true, end the name with [] so that param parsing will treat
+    # the name as part of an array.
+    def namespaced_name(field, multiple=false)
+      if namespaces.empty?
+        if multiple
+          "#{field}[]"
+        else
+          field
+        end
+      else
+        root, *nsps = namespaces
+        "#{root}#{nsps.map{|n| "[#{n}]"}.join}[#{field}]#{'[]' if multiple}"
+      end
+    end
+
+    # Set the values option based on the (possibly nested) values
+    # hash given, array of namespaces, and key.
+    def set_value_from_namespaced_values(namespaces, values, key)
+      namespaces.each do |ns|
+        v = values[ns] || values[ns.to_s]
+        return unless v
+        values = v
+      end
+
+      @attr[:value] = values.fetch(key){values.fetch(key.to_s){return}}
     end
 
     # Returns an array of arrays, where each array entry contains the label, value,

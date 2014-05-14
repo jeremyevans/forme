@@ -548,11 +548,11 @@ end
 
 describe "Forme custom" do
   specify "formatters can be specified as a proc" do
-    Forme::Form.new(:formatter=>proc{|i| i.form._tag(:textarea, i.opts.map{|k,v| [v.upcase, k.to_s.downcase]})}).input(:text, :name=>'foo').to_s.should == '<textarea FOO="name"></textarea>'
+    Forme::Form.new(:formatter=>proc{|i| i.form._tag(:textarea, i.opts[:name]=>:name)}).input(:text, :name=>'foo').to_s.should == '<textarea foo="name"></textarea>'
   end
 
   specify "serializers can be specified as a proc" do
-    Forme::Form.new(:serializer=>proc{|t| "#{t.type} = #{t.opts.inspect}"}).input(:textarea, :name=>'foo').to_s.should == 'textarea = {:name=>"foo"}'
+    Forme::Form.new(:serializer=>proc{|t| "#{t.type} = #{t.opts[:name]}"}).input(:textarea, :name=>'foo').to_s.should == 'textarea = foo'
   end
 
   specify "labelers can be specified as a proc" do
