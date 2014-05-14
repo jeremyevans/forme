@@ -135,6 +135,54 @@ module Forme
     classes.compact.join(' ')
   end
 
+  # If there is a related transformer, call it with the given +args+ and +block+.
+  # Otherwise, attempt to return the initial input without modifying it.
+  def self.transform(type, trans_name, default_opts, *args, &block)
+    if trans = transformer(type, trans_name, default_opts)
+      trans.call(*args, &block)
+    else
+      case type
+      when :inputs_wrapper
+        yield
+      when :labeler, :error_handler, :wrapper
+        args.first
+      else
+        raise Error, "No matching #{type}: #{trans_name.inspect}"
+      end
+    end
+  end
+
+  # Get the related transformer for the given transformer type.  Output depends on the type
+  # of +trans+:
+  # +Symbol+ :: Assume a request for a registered transformer, so look it up in the +TRANSFORRMERS+ hash.
+  # +Hash+ :: If +type+ is also a key in +trans+, return the related value from +trans+, unless the related
+  #           value is +nil+, in which case, return +nil+.  If +type+ is not a key in +trans+, use the
+  #           default transformer for the receiver.
+  # +nil+ :: Assume the default transformer for this receiver.
+  # otherwise :: return +trans+ directly if it responds to +call+, and raise an +Error+ if not.
+  def self.transformer(type, trans, default_opts)
+    case trans
+    when Symbol
+      TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.map{|k| k.inspect}.join(', ')})")
+    when Hash
+      if trans.has_key?(type)
+        if v = trans[type]
+          transformer(type, v, default_opts)
+        end
+      else
+        transformer(type, nil, default_opts)
+      end
+    when nil
+      transformer(type, default_opts[type], nil) if default_opts
+    else
+      if trans.respond_to?(:call)
+        trans
+      else
+        raise Error, "#{type} #{trans.inspect} must respond to #call"
+      end
+    end
+  end
+
   # The +Form+ class is the main entry point to the library.  
   # Using the +form+, +input+, +tag+, and +inputs+ methods, one can easily build 
   # an abstract syntax tree of +Tag+ and +Input+ instances, which can be serialized
@@ -160,33 +208,9 @@ module Forme
     #            values for inputs when the inputs use the :key option.
     attr_reader :opts
 
-    # The +formatter+ determines how the +Input+s created are transformed into
-    # +Tag+ objects. Must respond to +call+ or be a registered symbol.
-    attr_reader :formatter
-
-    # The +error_handler+ determines how to to mark tags as containing errors.
-    # Must respond to +call+ or be a registered symbol.
-    attr_reader :error_handler
-
-    # The +labeler+ determines how to label tags.  Must respond to +call+ or be
-    # a registered symbol.
-    attr_reader :labeler
-
-    # The +wrapper+ determines how (potentially labeled) tags are wrapped.  Must
-    # respond to +call+ or be a registered symbol.
-    attr_reader :wrapper
-
     # Set the default options for inputs by type.  This should be a hash with
     # input type keys and values that are hashes of input options.
     attr_reader :input_defaults
-
-    # The +inputs_wrapper+ determines how calls to +inputs+ are wrapped.  Must
-    # respond to +call+ or be a registered symbol.
-    attr_reader :inputs_wrapper
-
-    # The +serializer+ determines how +Tag+ objects are transformed into strings.
-    # Must respond to +call+ or be a registered symbol.
-    attr_reader :serializer
 
     # The hidden tags to automatically add to the form.  If set, this should be an
     # array, where elements are one of the following types:
@@ -200,6 +224,10 @@ module Forme
     # The namespaces if any for the receiver's inputs.  This can be used to
     # automatically setup namespaced class and id attributes.
     attr_accessor :namespaces
+
+    # The +serializer+ determines how +Tag+ objects are transformed into strings.
+    # Must respond to +call+ or be a registered symbol.
+    attr_reader :serializer
 
     # Create a +Form+ instance and yield it to the block,
     # injecting the opening form tag before yielding and
@@ -251,7 +279,7 @@ module Forme
         @obj = @opts.delete(:obj)
       else
         @obj = obj
-        @opts = opts
+        @opts = opts.dup
       end
 
       @namespaces = Array(@opts[:namespace])
@@ -261,68 +289,24 @@ module Forme
       end
 
       config = CONFIGURATIONS[@opts[:config]||Forme.default_config]
-      TRANSFORMER_TYPES.each{|k| instance_variable_set(:"@#{k}", transformer(k, @opts.fetch(k, config[k])))}
+      TRANSFORMER_TYPES.each do |t|
+        case @opts[t]
+        when Symbol
+          @opts[t] = Forme.transformer(t, @opts[t], @opts)
+        when nil
+          @opts[t] = Forme.transformer(t, config, @opts)
+        end
+      end
+
+      @serializer = @opts[:serializer]
       @input_defaults = @opts[:input_defaults] || {}
       @hidden_tags = @opts[:hidden_tags]
       @nesting = []
     end
 
-    # If there is a related transformer, call it with the given +args+ and +block+.
-    # Otherwise, attempt to return the initial input without modifying it.
-    def transform(type, trans_name, *args, &block)
-      if trans = transformer(type, trans_name)
-        trans.call(*args, &block)
-      else
-        case type
-        when :inputs_wrapper
-          yield
-        when :labeler, :error_handler, :wrapper
-          args.first
-        else
-          raise Error, "No matching #{type}: #{trans_name.inspect}"
-        end
-      end
-    end
-
-    # Get the related transformer for the given transformer type.  Output depends on the type
-    # of +trans+:
-    # +Symbol+ :: Assume a request for a registered transformer, so look it up in the +TRANSFORRMERS+ hash.
-    # +Hash+ :: If +type+ is also a key in +trans+, return the related value from +trans+, unless the related
-    #           value is +nil+, in which case, return +nil+.  If +type+ is not a key in +trans+, use the
-    #           default transformer for the receiver.
-    # +nil+ :: Assume the default transformer for this receiver.
-    # otherwise :: return +trans+ directly if it responds to +call+, and raise an +Error+ if not.
-    def transformer(type, trans)
-      case trans
-      when Symbol
-        TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.map{|k| k.inspect}.join(', ')})")
-      when Hash
-        if trans.has_key?(type)
-          if v = trans[type]
-            transformer(type, v)
-          end
-        else
-          transformer(type, nil)
-        end
-      when nil
-        send(type)
-      else
-        if trans.respond_to?(:call)
-          trans
-        else
-          raise Error, "#{type} #{trans.inspect} must respond to #call"
-        end
-      end
-    end
-
     # Create a form tag with the given attributes.
     def form(attr={}, &block)
       tag(:form, attr, method(:hidden_form_tags), &block)
-    end
-
-    # Formats the +input+ using the +formatter+.
-    def format(input)
-      transform(:formatter, input.opts, input)
     end
 
     # Empty method designed to ease integration with other libraries where
@@ -404,7 +388,7 @@ module Forme
         opts = inputs.merge(opts)
         inputs = []
       end
-      transform(:inputs_wrapper, opts, self, opts) do
+      Forme.transform(:inputs_wrapper, opts, @opts, self, opts) do
         inputs.each do |i|
           emit(input(*i))
         end
@@ -461,9 +445,15 @@ module Forme
       end
     end
 
-    # Serializes the +tag+ using the +serializer+.
-    def serialize(tag)
-      serializer.call(tag)
+    # Temporarily override the opts for the form for the duration of the block.
+    # This merges the given opts with the form's current opts, restoring
+    # the previous opts before returning.
+    def with_opts(opts)
+      orig_opts = @opts
+      @opts = orig_opts.merge(opts)
+      yield
+    ensure
+      @opts = orig_opts if orig_opts
     end
 
     private
@@ -530,12 +520,16 @@ module Forme
     # The options hash for the Input.
     attr_reader :opts
 
+    # The options hash in use by the form at the time of the Input's instantiation.
+    attr_reader :form_opts
+
     # Set the +form+, +type+, and +opts+.
     def initialize(form, type, opts={})
       @form, @type = form, type
       defaults = form.input_defaults
       @opts = (defaults.fetch(type){defaults[type.to_s]} || {}).merge(opts)
       @opts[:namespaces] = @form.namespaces if @opts[:key]
+      @form_opts = form.opts
     end
 
     # Replace the +opts+ by merging the given +hash+ into +opts+,
@@ -552,13 +546,13 @@ module Forme
 
     # Return a string containing the serialized content of the receiver.
     def to_s
-      form.serialize(self)
+      Forme.transform(:serializer, @opts, @form_opts, self)
     end
 
     # Transform the receiver into a lower level +Tag+ form (or an array
     # of them).
     def format
-      form.format(self)
+      Forme.transform(:formatter, @opts, @form_opts, self)
     end
   end
 
@@ -601,7 +595,7 @@ module Forme
 
     # Return a string containing the serialized content of the receiver.
     def to_s
-      form.serialize(self)
+      Forme.transform(:serializer, @opts, @form.opts, self)
     end
 
     private
@@ -819,7 +813,7 @@ module Forme
         @opts[:set_label] = @opts.delete(:label)
       end
       tag_wrapper = @opts.delete(:tag_wrapper) || :default
-      wrapper = form.transformer(:wrapper, @opts)
+      wrapper = Forme.transformer(:wrapper, @opts, @input.form_opts)
 
       tags = process_select_options(os).map do |label, value, sel, attrs|
         value ||= label
@@ -1003,17 +997,17 @@ module Forme
     
     # Wrap the tag with the form's +wrapper+.
     def wrap_tag(tag)
-      form.transform(:wrapper, @opts, tag, input)
+      Forme.transform(:wrapper, @opts, input.form_opts, tag, input)
     end
 
     # Wrap the tag with the form's +error_handler+.
     def wrap_tag_with_error(tag)
-      form.transform(:error_handler, @opts, tag, input)
+      Forme.transform(:error_handler, @opts, input.form_opts, tag, input)
     end
 
     # Wrap the tag with the form's +labeler+.
     def wrap_tag_with_label(tag)
-      form.transform(:labeler, @opts, tag, input)
+      Forme.transform(:labeler, @opts, input.form_opts, tag, input)
     end
   end
 

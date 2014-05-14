@@ -98,6 +98,30 @@ describe "Forme plain forms" do
     @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_quux_foo" name="bar[quux][foo]" type="text" value="baz"/>'
   end
 
+  specify "should allow overriding form inputs on a per-block basis" do
+    @f.input(:text).to_s.should == '<input type="text"/>'
+    @f.with_opts(:wrapper=>:div){@f.input(:text).to_s}.should == '<div><input type="text"/></div>'
+    @f.with_opts(:wrapper=>:div){@f.input(:text).to_s.should == '<div><input type="text"/></div>'}
+    @f.with_opts(:wrapper=>:div) do
+      @f.input(:text).to_s.should == '<div><input type="text"/></div>'
+      @f.with_opts(:wrapper=>:li){@f.input(:text).to_s.should == '<li><input type="text"/></li>'}
+      @f.input(:text).to_s.should == '<div><input type="text"/></div>'
+    end
+    @f.input(:text).to_s.should == '<input type="text"/>'
+  end
+
+  specify "should handle delayed formatting when overriding form inputs on a per-block basis" do
+    @f.form do
+      @f.input(:text)
+      @f.with_opts(:wrapper=>:div) do
+        @f.input(:text)
+        @f.with_opts(:wrapper=>:li){@f.input(:text)}
+        @f.input(:text)
+      end
+      @f.input(:text)
+    end.to_s.should == '<form><input type="text"/><div><input type="text"/></div><li><input type="text"/></li><div><input type="text"/></div><input type="text"/></form>'
+  end
+
   specify "should allow arbitrary attributes using the :attr option" do
     @f.input(:text, :attr=>{:bar=>"foo"}).to_s.should == '<input bar="foo" type="text"/>'
   end
@@ -510,7 +534,7 @@ describe "Forme plain forms" do
   end
 
   specify "invalid custom transformers should raise an Error" do
-    proc{Forme::Form.new(:wrapper=>Object.new)}.should raise_error(Forme::Error)
+    proc{Forme::Form.new(:wrapper=>Object.new).input(:text).to_s}.should raise_error(Forme::Error)
     proc{@f.input(:textarea, :wrapper=>Object.new).to_s}.should raise_error(Forme::Error)
     proc{@f.input(:textarea, :formatter=>nil).to_s}.should raise_error(Forme::Error)
   end
@@ -574,7 +598,7 @@ end
 
 describe "Forme built-in custom" do
   specify "transformers should raise if the there is no matching transformer" do
-    proc{Forme::Form.new(:formatter=>:foo)}.should raise_error(Forme::Error)
+    proc{Forme::Form.new(:formatter=>:foo).input(:text).to_s}.should raise_error(Forme::Error)
   end
 
   specify "formatter: disabled disables all inputs unless :disabled=>false option" do

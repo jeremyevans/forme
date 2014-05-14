@@ -1,5 +1,11 @@
 === HEAD
 
+* Remove Form#format and Form#serialize (jeremyevans)
+
+* Remove Form#{formatter,labeler,error_handler,wrapper,inputs_wrapper} accessors (jeremyevans)
+
+* Add Form.with_opts method to override opts for the given block (jeremyevans)
+
 * Remove Form#use_serializer and Serializer module (jeremyevans)
 
 * table inputs_wrapper now respects the :legend and :legend_attr options, using a caption (jeremyevans)
