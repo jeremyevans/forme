@@ -364,7 +364,6 @@ module Forme
       else
         _input(field, opts)
       end
-      use_serializer(input) if input.is_a?(Array)
       self << input
       input
     end
@@ -498,15 +497,6 @@ module Forme
       end
     end
 
-    # Extend +obj+ with +Serialized+ and associate it with the receiver, such
-    # that calling +to_s+ on the object will use the receiver's serializer
-    # to generate the resulting string.
-    def use_serializer(obj)
-      obj.extend(Serialized)
-      obj._form = self
-      obj
-    end
-
     # Make the given tag the currently open tag, and yield.  After the
     # block returns, make the previously open tag the currently open
     # tag.
@@ -628,19 +618,6 @@ module Forme
       else
         [children]
       end
-    end
-  end
-
-  # Module that can extend objects associating them with a specific
-  # +Form+ instance.  Calling +to_s+ on the object will then use the
-  # form's serializer to return a string.
-  module Serialized
-    # The +Form+ instance related to the receiver.
-    attr_accessor :_form
-
-    # Return a string containing the serialized content of the receiver.
-    def to_s
-      _form.serialize(self)
     end
   end
 

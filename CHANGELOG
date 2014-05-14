@@ -1,5 +1,7 @@
 === HEAD
 
+* Remove Form#use_serializer and Serializer module (jeremyevans)
+
 * table inputs_wrapper now respects the :legend and :legend_attr options, using a caption (jeremyevans)
 
 * ol, div, and table inputs_wrappers now respect the :attr option (jeremyevans)
