@@ -434,6 +434,10 @@ describe "Forme plain forms" do
     @f.inputs([[:textarea, {:name=>'foo'}], [:text, {:id=>'bar'}]]).to_s.should == '<fieldset class="inputs"><textarea name="foo"></textarea><input id="bar" type="text"/></fieldset>'
   end
 
+  specify "should have #inputs accept transformer options to modify the options inside the inputs" do
+    @f.inputs([:textarea, :text], :wrapper=>:div).to_s.should == '<fieldset class="inputs"><div><textarea></textarea></div><div><input type="text"/></div></fieldset>'
+  end
+
   specify "should escape tag content" do
     @f.tag(:div, {}, ['<p></p>']).to_s.should == '<div>&lt;p&gt;&lt;/p&gt;</div>'
   end

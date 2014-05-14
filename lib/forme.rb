@@ -388,11 +388,17 @@ module Forme
         opts = inputs.merge(opts)
         inputs = []
       end
+
+      form_opts = {}
+      TRANSFORMER_TYPES.each{|t| form_opts[t] = opts[t] if opts.has_key?(t)}
+
       Forme.transform(:inputs_wrapper, opts, @opts, self, opts) do
-        inputs.each do |i|
-          emit(input(*i))
+        with_opts(form_opts) do
+          inputs.each do |i|
+            emit(input(*i))
+          end
+          yield if block_given?
         end
-        yield if block_given?
       end
     end
 

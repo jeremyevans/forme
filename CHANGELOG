@@ -1,5 +1,7 @@
 === HEAD
 
+* Form#inputs now accepts transformer options (e.g :wrapper) and automatically calls with_opts (jeremyevans)
+
 * Remove Form#format and Form#serialize (jeremyevans)
 
 * Remove Form#{formatter,labeler,error_handler,wrapper,inputs_wrapper} accessors (jeremyevans)
