@@ -192,16 +192,6 @@ module Sequel # :nodoc:
           opts[:label] = [opts[:label], form._tag(:abbr, {:title=>'required'}, '*')] if opts[:required]
         end
 
-        # Unset the wrapper and tag_wrapper options and return a
-        # array with the wrapper and tag_wrapper to use.  The tag_wrapper
-        # is for wrapping each individual tag.
-        def get_wrappers
-          tag_wrapper = opts.delete(:tag_wrapper) || :default
-          wrapper = form.transformer(:wrapper, opts)
-          opts.delete(:wrapper)
-          [wrapper, tag_wrapper]
-        end
-
         # Update the attributes and options for any recognized validations
         def handle_validations(f)
           m = obj.model
