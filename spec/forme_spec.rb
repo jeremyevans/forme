@@ -438,6 +438,10 @@ describe "Forme plain forms" do
     @f.inputs([:textarea, :text], :wrapper=>:div).to_s.should == '<fieldset class="inputs"><div><textarea></textarea></div><div><input type="text"/></div></fieldset>'
   end
 
+  specify "should have #inputs accept :nested_inputs_wrapper options to modify the :input_wrapper option inside the inputs" do
+    @f.inputs(:nested_inputs_wrapper=>:div){@f.inputs([:textarea, :text])}.to_s.should == '<fieldset class="inputs"><div><textarea></textarea><input type="text"/></div></fieldset>'
+  end
+
   specify "should escape tag content" do
     @f.tag(:div, {}, ['<p></p>']).to_s.should == '<div>&lt;p&gt;&lt;/p&gt;</div>'
   end

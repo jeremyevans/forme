@@ -370,6 +370,12 @@ module Forme
     # +inputs_wrapper+ supports a <tt>:legend</tt> option that is used to
     # set the legend for the fieldset.
     #
+    # +opts+ can also include transformer options itself (e.g. :wrapper), which
+    # override the form's current transformer options for the duration of the block.
+    # The exception is the :inputs_wrapper transformer option, which affects the
+    # wrapper to use for this inputs call.  You can use the :nested_inputs_wrapper
+    # option to set the default :inputs_wrapper option for the duration of the block.
+    #
     # This can also be called with a single hash argument to just use an options hash:
     #
     #   inputs(:legend=>'Foo'){...}
@@ -390,7 +396,12 @@ module Forme
       end
 
       form_opts = {}
-      TRANSFORMER_TYPES.each{|t| form_opts[t] = opts[t] if opts.has_key?(t)}
+      form_opts[:inputs_wrapper] = opts[:nested_inputs_wrapper] if opts[:nested_inputs_wrapper]
+      TRANSFORMER_TYPES.each do |t|
+        if opts.has_key?(t) && t != :inputs_wrapper
+          form_opts[t] = opts[t]
+        end
+      end
 
       Forme.transform(:inputs_wrapper, opts, @opts, self, opts) do
         with_opts(form_opts) do

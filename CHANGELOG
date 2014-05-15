@@ -1,5 +1,7 @@
 === HEAD
 
+* Form#inputs now accepts a :nested_inputs_wrapper option to set default inputs_wrapper transformer inside the block (jeremyevans)
+
 * Add tr inputs_wrapper and td wrapper, for horizontal layout of inputs inside a table (jeremyevans)
 
 * Form#inputs now accepts transformer options (e.g :wrapper) and automatically calls with_opts (jeremyevans)
