@@ -50,7 +50,7 @@ form_opts = <%= form_opts.inspect %><%= "\nsubform_opts = #{subform_opts.inspect
     <% end %>
 
     <h2>Template Code</h2>
-    <pre><%= File.read("views/#{@templ}.erb") %></pre>
+    <pre><%=h File.read("views/#{@templ}.erb") %></pre>
   <% end %>
 </div>
 
