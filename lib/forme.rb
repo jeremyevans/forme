@@ -1265,13 +1265,16 @@ module Forme
     # Wrap the inputs in a table tag.
     def call(form, opts, &block)
       attr = opts[:attr] ? opts[:attr].dup : {}
-      if legend = opts[:legend]
-        form.tag(:table, attr) do
+      form.tag(:table, attr) do
+        if legend = opts[:legend]
           form.emit(form.tag(:caption, opts[:legend_attr], legend))
-          yield
         end
-      else
-        form.tag(:table, attr, &Proc.new)
+
+        if labels = opts[:labels]
+          form.emit(form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)}))
+        end
+
+        yield
       end
     end
   end
