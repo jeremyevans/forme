@@ -1153,12 +1153,13 @@ module Forme
     def call(tag, input)
       if [:radio, :checkbox].include?(input.type)
         t = [tag, input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]])]
-        p = :before
+        pos = :before
       else
         t = [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
-        p = :after
+        pos = :after
       end
-      if input.opts[:label_position] == p
+
+      if input.opts[:label_position] == pos
         t.reverse
       else
         t
