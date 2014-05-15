@@ -82,6 +82,9 @@ module Forme
   # Array of all supported transformer types.
   TRANSFORMER_TYPES = [:formatter, :serializer, :wrapper, :error_handler, :labeler, :inputs_wrapper]
 
+  # Transformer symbols shared by wrapper and inputs_wrapper
+  SHARED_WRAPPERS = [:tr, :table, :ol, :fieldset_ol]
+
   # Hash storing all configurations.  Configurations are groups of related transformers,
   # so that you can specify a single :config option when creating a +Form+ and have
   # all of the transformers set from that.
@@ -289,6 +292,8 @@ module Forme
       end
 
       config = CONFIGURATIONS[@opts[:config]||Forme.default_config]
+      copy_inputs_wrapper_from_wrapper(@opts)
+
       TRANSFORMER_TYPES.each do |t|
         case @opts[t]
         when Symbol
@@ -468,12 +473,21 @@ module Forme
     def with_opts(opts)
       orig_opts = @opts
       @opts = orig_opts.merge(opts)
+      copy_inputs_wrapper_from_wrapper(opts, @opts)
       yield
     ensure
       @opts = orig_opts if orig_opts
     end
 
     private
+
+    # Copy the :wrapper option to :inputs_wrapper in output_opts if only :wrapper
+    # is present in input_opts and the :wrapper option value is a shared wrapper.
+    def copy_inputs_wrapper_from_wrapper(input_opts, output_opts=input_opts)
+      if input_opts[:wrapper] && !input_opts[:inputs_wrapper] && SHARED_WRAPPERS.include?(input_opts[:wrapper])
+        output_opts[:inputs_wrapper] = output_opts[:wrapper]
+      end
+    end
 
     # Return array of hidden tags to use for this form,
     # or nil if the form does not have hidden tags added automatically.
@@ -1184,6 +1198,9 @@ module Forme
       ltd = a
     end
     input.tag(:tr, input.opts[:wrapper_attr], [input.tag(:td, {}, ltd), input.tag(:td, {}, rtd)])
+  end
+  {:tr=>:td, :table=>:trtd, :ol=>:li, :fieldset_ol=>:li}.each do |k, v|
+    Forme.register_transformer(:wrapper, k, TRANSFORMERS[:wrapper][v])
   end
 
   # Default inputs_wrapper used by the library, uses a fieldset.

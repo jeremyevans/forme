@@ -253,6 +253,10 @@ Forme ships with a bunch of built-in transformers that you can use:
 :td :: wraps tag in a td tag
 :trtd :: wraps tag in a tr tag with a td for the label and a td for the tag, useful for lining up
          inputs with the :explicit labeler without CSS
+:ol :: same as :li, but also sets +inputs_wrapper+ to :ol
+:fieldset_ol :: same as :li, but also sets +inputs_wrapper+ to :fieldset_ol
+:table :: same as :trtd, but also sets +inputs_wrapper+ to :table
+:tr :: same as :td, but also sets +inputs_wrapper+ to :tr
 
 === +inputs_wrapper+
 

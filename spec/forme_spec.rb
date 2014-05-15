@@ -674,6 +674,36 @@ describe "Forme built-in custom" do
     Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:checkbox, :id=>'foo', :name=>'foo', :label=>'Foo').to_s.should == '<tr><td><label for="foo">Foo</label></td><td><input id="foo_hidden" name="foo" type="hidden" value="0"/><input id="foo" name="foo" type="checkbox"/></td></tr>'
   end
 
+  specify "wrapper: tr should use a td wrapper and tr inputs_wrapper" do
+    Forme::Form.new(:wrapper=>:tr).inputs([:textarea]).to_s.should == '<tr><td><textarea></textarea></td></tr>'
+    f = Forme::Form.new
+    f.with_opts(:wrapper=>:tr){f.inputs([:textarea])}.to_s.should == '<tr><td><textarea></textarea></td></tr>'
+  end
+
+  specify "wrapper: table should use a trtd wrapper and table inputs_wrapper" do
+    Forme::Form.new(:wrapper=>:table).inputs([:textarea]).to_s.should == '<table><tr><td><textarea></textarea></td><td></td></tr></table>'
+    f = Forme::Form.new
+    f.with_opts(:wrapper=>:table){f.inputs([:textarea])}.to_s.should == '<table><tr><td><textarea></textarea></td><td></td></tr></table>'
+  end
+
+  specify "wrapper: ol should use an li wrapper and ol inputs_wrapper" do
+    Forme::Form.new(:wrapper=>:ol).inputs([:textarea]).to_s.should == '<ol><li><textarea></textarea></li></ol>'
+    f = Forme::Form.new
+    f.with_opts(:wrapper=>:ol){f.inputs([:textarea])}.to_s.should == '<ol><li><textarea></textarea></li></ol>'
+  end
+
+  specify "wrapper: fieldset_ol should use an li wrapper and fieldset_ol inputs_wrapper" do
+    Forme::Form.new(:wrapper=>:fieldset_ol).inputs([:textarea]).to_s.should == '<fieldset class="inputs"><ol><li><textarea></textarea></li></ol></fieldset>'
+    f = Forme::Form.new
+    f.with_opts(:wrapper=>:fieldset_ol){f.inputs([:textarea])}.to_s.should == '<fieldset class="inputs"><ol><li><textarea></textarea></li></ol></fieldset>'
+  end
+
+  specify "wrapper should not override inputs_wrapper if both given" do
+    Forme::Form.new(:wrapper=>:tr, :inputs_wrapper=>:div).inputs([:textarea]).to_s.should == '<div><td><textarea></textarea></td></div>'
+    f = Forme::Form.new
+    f.with_opts(:wrapper=>:tr, :inputs_wrapper=>:div){f.inputs([:textarea])}.to_s.should == '<div><td><textarea></textarea></td></div>'
+  end
+
   specify "inputs_wrapper: ol wraps tags in an ol" do
     Forme::Form.new(:inputs_wrapper=>:ol, :wrapper=>:li).inputs([:textarea]).to_s.should == '<ol><li><textarea></textarea></li></ol>'
     Forme::Form.new(:inputs_wrapper=>:ol, :wrapper=>:li).inputs([:textarea], :attr=>{:foo=>1}).to_s.should == '<ol foo="1"><li><textarea></textarea></li></ol>'

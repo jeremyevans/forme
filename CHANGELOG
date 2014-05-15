@@ -1,5 +1,7 @@
 === HEAD
 
+* Add :table, :tr, :ol, and :fieldset_ol wrappers, which automatically set wrapper and inputs_wrapper appropriately (jeremyevans)
+
 * Add subform :grid option in Sequel plugin, for more compact editing of nested *_to_many associations (jeremyevans)
 
 * Make table inputs_wrapper accept a :labels option and automatically set up th tags with the labels for each column (jeremyevans)
