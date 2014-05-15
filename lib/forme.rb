@@ -1156,7 +1156,7 @@ module Forme
   end
 
   Forme.register_transformer(:wrapper, :default){|tag, input| tag}
-  [:li, :p, :div, :span].each do |x|
+  [:li, :p, :div, :span, :td].each do |x|
     Forme.register_transformer(:wrapper, x){|tag, input| input.tag(x, input.opts[:wrapper_attr], Array(tag))}
   end
   Forme.register_transformer(:wrapper, :trtd) do |tag, input|
@@ -1230,6 +1230,18 @@ module Forme
     # Wrap the inputs in an ol tag
     def call(form, opts, &block)
       form.tag(:div, opts[:attr], &block)
+    end
+  end
+
+  # Use a tr tag to wrap the inputs.
+  #
+  # Registered as :tr.
+  class InputsWrapper::TR
+    Forme.register_transformer(:inputs_wrapper, :tr, new)
+
+    # Wrap the inputs in an ol tag
+    def call(form, opts, &block)
+      form.tag(:tr, opts[:attr], &block)
     end
   end
 

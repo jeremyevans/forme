@@ -630,22 +630,32 @@ describe "Forme built-in custom" do
 
   specify "wrapper: li wraps tag in an li" do
     Forme::Form.new(:wrapper=>:li).input(:textarea, :id=>'foo').to_s.should == '<li><textarea id="foo"></textarea></li>'
+    Forme::Form.new(:wrapper=>:li).input(:textarea, :id=>'foo', :wrapper_attr=>{:id=>'bar'}).to_s.should == '<li id="bar"><textarea id="foo"></textarea></li>'
   end
 
   specify "wrapper: p wraps tag in an p" do
     Forme::Form.new(:wrapper=>:p).input(:textarea, :id=>'foo').to_s.should == '<p><textarea id="foo"></textarea></p>'
+    Forme::Form.new(:wrapper=>:p).input(:textarea, :id=>'foo', :wrapper_attr=>{:id=>'bar'}).to_s.should == '<p id="bar"><textarea id="foo"></textarea></p>'
   end
 
   specify "wrapper: div wraps tag in an div" do
     Forme::Form.new(:wrapper=>:div).input(:textarea, :id=>'foo').to_s.should == '<div><textarea id="foo"></textarea></div>'
+    Forme::Form.new(:wrapper=>:div).input(:textarea, :id=>'foo', :wrapper_attr=>{:id=>'bar'}).to_s.should == '<div id="bar"><textarea id="foo"></textarea></div>'
   end
 
   specify "wrapper: span wraps tag in an span" do
     Forme::Form.new(:wrapper=>:span).input(:textarea, :id=>'foo').to_s.should == '<span><textarea id="foo"></textarea></span>'
+    Forme::Form.new(:wrapper=>:span).input(:textarea, :id=>'foo', :wrapper_attr=>{:id=>'bar'}).to_s.should == '<span id="bar"><textarea id="foo"></textarea></span>'
+  end
+
+  specify "wrapper: td wraps tag in an td" do
+    Forme::Form.new(:wrapper=>:td).input(:textarea, :id=>'foo').to_s.should == '<td><textarea id="foo"></textarea></td>'
+    Forme::Form.new(:wrapper=>:td).input(:textarea, :id=>'foo', :wrapper_attr=>{:id=>'bar'}).to_s.should == '<td id="bar"><textarea id="foo"></textarea></td>'
   end
 
   specify "wrapper: trtd wraps tag in an tr/td" do
     Forme::Form.new(:wrapper=>:trtd).input(:textarea, :id=>'foo').to_s.should == '<tr><td><textarea id="foo"></textarea></td><td></td></tr>'
+    Forme::Form.new(:wrapper=>:trtd).input(:textarea, :id=>'foo', :wrapper_attr=>{:id=>'bar'}).to_s.should == '<tr id="bar"><td><textarea id="foo"></textarea></td><td></td></tr>'
   end
 
   specify "wrapper: trtd supports multiple tags in separate tds" do
@@ -677,6 +687,11 @@ describe "Forme built-in custom" do
   specify "inputs_wrapper: div wraps tags in a div" do
     Forme::Form.new(:inputs_wrapper=>:div, :wrapper=>:span).inputs([:textarea]).to_s.should == '<div><span><textarea></textarea></span></div>'
     Forme::Form.new(:inputs_wrapper=>:div, :wrapper=>:span).inputs([:textarea], :attr=>{:foo=>1}).to_s.should == '<div foo="1"><span><textarea></textarea></span></div>'
+  end
+
+  specify "inputs_wrapper: tr wraps tags in an tr" do
+    Forme::Form.new(:inputs_wrapper=>:tr, :wrapper=>:td).inputs([:textarea]).to_s.should == '<tr><td><textarea></textarea></td></tr>'
+    Forme::Form.new(:inputs_wrapper=>:tr, :wrapper=>:td).inputs([:textarea], :attr=>{:foo=>1}).to_s.should == '<tr foo="1"><td><textarea></textarea></td></tr>'
   end
 
   specify "inputs_wrapper: table wraps tags in an table" do

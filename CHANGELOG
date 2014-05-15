@@ -1,5 +1,7 @@
 === HEAD
 
+* Add tr inputs_wrapper and td wrapper, for horizontal layout of inputs inside a table (jeremyevans)
+
 * Form#inputs now accepts transformer options (e.g :wrapper) and automatically calls with_opts (jeremyevans)
 
 * Remove Form#format and Form#serialize (jeremyevans)

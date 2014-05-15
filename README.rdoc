@@ -250,6 +250,7 @@ Forme ships with a bunch of built-in transformers that you can use:
 :p :: wraps tag in p tag
 :div :: wraps tag in div tag
 :span :: wraps tag in span tag
+:td :: wraps tag in a td tag
 :trtd :: wraps tag in a tr tag with a td for the label and a td for the tag, useful for lining up
          inputs with the :explicit labeler without CSS
 
@@ -259,6 +260,7 @@ Forme ships with a bunch of built-in transformers that you can use:
 :ol :: uses an ol tag to wrap inputs, useful with :li wrapper
 :div :: uses a div tag to wrap inputs
 :fieldset_ol :: use both a fieldset and an ol tag to wrap inputs
+:tr :: uses a tr tag to wrap inputs, useful with :td wrapper
 :table :: uses a table tag to wrap inputs, useful with :trtd wrapper
 
 == Configurations
