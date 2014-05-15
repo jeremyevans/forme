@@ -29,3 +29,4 @@ abbr[title="required"] {
 }
 input, select, textarea { width: auto }
 fieldset {margin-left: 10px}
+table caption {font-size: 20px; margin-bottom: 10px;}

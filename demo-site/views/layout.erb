@@ -23,8 +23,10 @@
         <li><a href="/album/basic/alt_assoc">Association</a></li>
         <li><a href="/album/basic/readonly">Read Only</a></li>
         <li><a href="/album/basic/text">Text</a></li>
-        <li><a href="/album/nested">Nested</a></li>
+        <li><a href="/album/nested">Nested 1</a></li>
         <li><a href="/artist/nested">Nested 2</a></li>
+        <li><a href="/album/grid">Grid 1</a></li>
+        <li><a href="/artist/grid">Grid 2</a></li>
       </ul>
     </div>
   </div>
@@ -39,7 +41,7 @@
   <% if @templ %>
     <h2>Settings</h2>
     <pre>form_attr = <%= form_attr.inspect %>
-form_opts = <%= form_opts.inspect %></pre>
+form_opts = <%= form_opts.inspect %><%= "\nsubform_opts = #{subform_opts.inspect}" if @subform_opts %></pre>
 
     <% if @css %>
       <style type="text/css"><%= @css %></style>

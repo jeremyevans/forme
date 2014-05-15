@@ -13,6 +13,7 @@ class FormeDemo < Sinatra::Base
   helpers Forme::Sinatra::ERB
   helpers do
     attr_reader :form_attr
+    attr_reader :subform_opts
 
     def h(s)
       Rack::Utils.escape_html(s.to_s)
@@ -99,13 +100,28 @@ END
   get '/album/nested' do
     @page_title = 'Single Level Nesting'
     @css = "form label { display: block; }"
+    @subform_opts = {}
     demo :album_nested
   end
 
   get '/artist/nested' do
     @page_title = 'Multiple Level Nesting'
     @css = "form label { display: block; }"
+    @subform_opts = {}
     demo :artist_nested
+  end
+
+  get '/album/grid' do
+    @page_title = 'Single Level Grid'
+    @subform_opts = {:grid=>true}
+    demo :album_nested
+  end
+
+  get '/artist/grid' do
+    @page_title = 'Multiple Level Grid'
+    @css = '.integer input, .float input {width: 40px;}'
+    @subform_opts = {:grid=>true}
+    demo :artist_grid
   end
 
   unless ENV['DATABASE_URL']

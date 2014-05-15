@@ -379,6 +379,15 @@ describe "Forme Sequel::Model forms" do
   specify "should handle multiple nested levels" do
     Forme.form(Artist[1]){|f| f.subform(:albums){f.input(:name); f.subform(:tracks){f.input(:name)}}}.to_s.to_s.should == '<form class="forme artist" method="post"><input id="artist_albums_attributes_0_id" name="artist[albums_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Album #1</legend><label>Name: <input id="artist_albums_attributes_0_name" name="artist[albums_attributes][0][name]" type="text" value="b"/></label><input id="artist_albums_attributes_0_tracks_attributes_0_id" name="artist[albums_attributes][0][tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track #1</legend><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_0_name" name="artist[albums_attributes][0][tracks_attributes][0][name]" type="text" value="m"/></label></fieldset><input id="artist_albums_attributes_0_tracks_attributes_1_id" name="artist[albums_attributes][0][tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track #2</legend><label>Name: <input id="artist_albums_attributes_0_tracks_attributes_1_name" name="artist[albums_attributes][0][tracks_attributes][1][name]" type="text" value="n"/></label></fieldset></fieldset></form>'
   end
+
+  specify "should have #subform :grid option create a grid" do
+    Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :grid=>true)}.to_s.should == '<form class="forme album" method="post"><table><caption>Artist</caption><tr><th>Name</th></tr><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
+  end
+  
+  specify "should have #subform :grid option handle :legend and :labels options" do
+    Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>'Foo', :labels=>%w'Bar')}.to_s.should == '<form class="forme album" method="post"><table><caption>Foo</caption><tr><th>Bar</th></tr><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
+  end
+  
 end
 
 describe "Forme Sequel plugin default input types based on column names" do

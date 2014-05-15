@@ -1,0 +1,11 @@
+<% form(Artist.last, form_attr, form_opts) do |f| %>
+  <% f.inputs([:name], :legend=>:Artist) do %>
+    <% f.subform(:albums, {:inputs=>[:name, :release_date, :copies_sold, :debut_album, :out_of_print],
+                           :labels=>['Name', 'Release Date', 'Copies Sold', 'Debut Album',
+                                     'Out of Print', 'Tracks', 'Tags']}.merge(subform_opts)) do %>
+      <td><%= f.subform(:tracks, {:inputs=>[:number, :name, :length], :legend=>nil}.merge(subform_opts)) %></td>
+      <td><%= f.subform(:tags, {:inputs=>[:name], :legend=>nil}.merge(subform_opts)) %></td>
+    <% end %>
+  <% end %>
+  <%= f.button(:value=>'Update Artist') %>
+<% end %>

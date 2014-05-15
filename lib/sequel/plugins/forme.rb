@@ -48,42 +48,68 @@ module Sequel # :nodoc:
         # :inputs :: Automatically call +inputs+ with the given values.  Using
         #            this, it is not required to pass a block to the method,
         #            though it will still work if you do.
-        # :legend :: If :inputs is also used, this is passed to it to override
-        #            the default :legend used.  You can also use a proc as the value,
+        # :legend :: Overrides the default :legend used (which is based on the
+        #            association name).  You can also use a proc as the value,
         #            which will called with each associated object (and the position
         #            in the associated object already for *_to_many associations),
         #            and should return the legend string to use for that object.
+        # :grid :: Sets up a table with one row per associated object, and
+        #          one column per field.
+        # :labels :: When using the :grid option, override the labels that would
+        #            be created via the :inputs option.  If you are not providing
+        #            an :inputs option or are using a block with additional inputs,
+        #            you should specify this option.
         def subform(association, opts={}, &block)
           nested_obj = opts.has_key?(:obj) ? opts[:obj] : obj.send(association)
           ref = obj.class.association_reflection(association)
           multiple = ref.returns_array?
           i = -1
-          Array(nested_obj).each do |no|
-            begin
-              nested_associations << obj
-              push_namespace("#{association}_attributes")
-              push_namespace(i+=1) if multiple
-              @obj = no
-              emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil)) unless no.new?
-              options = opts.dup
-              if options.has_key?(:legend)
-                if options[:legend].respond_to?(:call)
-                  options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
-                end
-              else
-                if multiple
-                  options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
+          grid = opts[:grid]
+
+          contents = proc do
+            Array(nested_obj).each do |no|
+              begin
+                nested_associations << obj
+                push_namespace("#{association}_attributes")
+                push_namespace(i+=1) if multiple
+                @obj = no
+                emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new?
+                options = opts.dup
+                if grid
+                  options.delete(:legend)
                 else
-                  options[:legend] = humanize(association)
+                  if options.has_key?(:legend)
+                    if options[:legend].respond_to?(:call)
+                      options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
+                    end
+                  else
+                    if multiple
+                      options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
+                    else
+                      options[:legend] = humanize(association)
+                    end
+                  end
                 end
+                options[:subform] = true
+                _inputs(options[:inputs]||[], options, &block)
+              ensure
+                @obj = nested_associations.pop
+                pop_namespace if multiple
+                pop_namespace
               end
-              options[:subform] = true
-              _inputs(options[:inputs]||[], options, &block)
-            ensure
-              @obj = nested_associations.pop
-              pop_namespace if multiple
-              pop_namespace
             end
+          end
+          
+          if grid
+            unless labels = opts[:labels]
+              if labels = opts[:inputs]
+                labels = labels.map{|l, *| humanize(l)}
+              end
+            end
+            legend = opts.fetch(:legend){humanize(association)}
+            inputs({:inputs_wrapper=>:table, :nested_inputs_wrapper=>:tr, :wrapper=>:td, :labeler=>nil, :labels=>labels, :legend=>legend}, &contents)
+          else
+            contents.call
           end
           nil
         end
