@@ -81,6 +81,9 @@ You can even do everything in a single method call:
 
 = Supported Input Types and Options
 
+These are the types and options supported by Forme::Input objects, usually
+created via Forme::Form#input:
+
 == General Options
 
 These options are supported by all of the input types:
@@ -183,6 +186,41 @@ as text and password, as well as newer HTML5 inputs such as number or email. Opt
 :size :: Uses the size attribute on the tag
 :maxlength :: Use the maxlength attribute on the tag
 
+== Form options
+
+These are the options supported by Forme::Form object, mostly used to set
+the defaults for Inputs created via the form:
+
+:obj :: Sets the default +obj+ for the form's inputs.
+:config :: The configuration to use, which automatically sets defaults
+           for the transformers to use.
+:error_handler :: Sets the default error_handler for the form's inputs
+:formatter :: Sets the default formatter for the form's inputs
+:hidden_tags :: Sets the hidden tags to automatically add to this form.
+:input_defaults :: Sets the default options for each input type
+:inputs_wrapper :: Sets the default inputs_wrapper for the form
+:labeler :: Sets the default labeler for the form's inputs
+:namespace :: Sets the default namespace(s) to use for the form
+:wrapper :: Sets the default wrapper for the form's inputs
+:serializer :: Sets the serializer for the form
+:values :: The values from a previous form submission, used to set default
+           values for inputs when the inputs use the :key option.
+
+=== :hidden_tags
+
+This should be an array, where elements are one of the following types:
+
+String, Array, Forme::Tag :: Added directly as a child of the form tag.
+Hash :: Adds a hidden tag for each entry, with keys as the name of the hidden
+        tag and values as the value of the hidden tag.
+Proc :: Will be called with the form tag object, and should return an instance
+        of one of the handled types (or nil to not add a tag).
+
+=== :input_defaults
+
+This should be a hash with input type keys, where the values are the hash of
+default options to use for the input type. 
+
 = Basic Design
 
 Internally, Forme builds an abstract syntax tree of objects that
@@ -243,6 +281,11 @@ Forme ships with a bunch of built-in transformers that you can use:
 :default :: uses implicit labels, where the tag is a child of the label tag
 :explicit :: uses explicit labels with the for attribute, where tag is a sibling of the label tag
 
+Both of these respect the following options:
+
+:label_position :: Can be set to :before or :after to place the label before or after the the input.
+:label_attr :: A hash of attributes to use for the label tag
+
 === +wrapper+
 
 :default :: returns tag without wrapping
@@ -258,6 +301,10 @@ Forme ships with a bunch of built-in transformers that you can use:
 :table :: same as :trtd, but also sets +inputs_wrapper+ to :table
 :tr :: same as :td, but also sets +inputs_wrapper+ to :tr
 
+All of these except for :default respect the following options:
+
+:wrapper_attr :: A hash of attributes to use for the wrapping tag.
+
 === +inputs_wrapper+
 
 :default :: uses a fieldset to wrap inputs
@@ -266,6 +313,20 @@ Forme ships with a bunch of built-in transformers that you can use:
 :fieldset_ol :: use both a fieldset and an ol tag to wrap inputs
 :tr :: uses a tr tag to wrap inputs, useful with :td wrapper
 :table :: uses a table tag to wrap inputs, useful with :trtd wrapper
+
+All of these support the following options:
+
+:attr :: A hash of attributes to use for the wrapping tag.
+
+The :default, :fieldset_ol, and :table inputs_wrappers support the following options:
+
+:legend :: A text description for the inputs, using the legend tag for fieldsets and
+           the caption tag for a table.
+:legend_attr :: A hash of attributes for the legend/caption tag.
+
+The :table inputs_wrapper also supports the following options:
+
+:labels :: An array of labels, used to setup a row of table headers with the labels.
 
 == Configurations
 

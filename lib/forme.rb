@@ -33,11 +33,11 @@ require 'forme/version'
 #   takes the formatted tag and marks it as having the error.
 # * +Labeler+: If the <tt>Forme::Input</tt> instance has a label,
 #   takes the formatted output and labels it.
-# * +Wrapper+: Takes the output of the labeler (or formatter if
-#   no label), and wraps it in another tag (or just returns it
-#   directly).
-# * +Serializer+: converts a <tt>Forme::Tag</tt> instance into a
-#   string.
+# * +Wrapper+: Takes the output of the formatter, labeler, and
+#   error_handler transformers, and wraps it in another tag (or just
+#   returns it unmodified).
+# * +Serializer+: converts a <tt>Forme::Tag</tt> instance into an
+#   html string.
 #
 # Technically, only the +Serializer+ is necessary.  The +input+
 # and +tag+ methods return +Input+ and +Tag+ objects.  These objects
@@ -196,32 +196,14 @@ module Forme
     # instead to directly representing input types.
     attr_reader :obj
 
-    # A hash of options for the Form. Currently, the following are recognized by
-    # default:
-    # :obj :: Sets the +obj+ attribute
-    # :error_handler :: Sets the +error_handler+ for the form
-    # :formatter :: Sets the +formatter+ for the form
-    # :hidden_tags :: Sets the hidden tags to automatically add to this form.
-    # :input_defaults :: Sets the default options for each input type
-    # :inputs_wrapper :: Sets the +inputs_wrapper+ for the form
-    # :labeler :: Sets the +labeler+ for the form
-    # :wrapper :: Sets the +wrapper+ for the form
-    # :serializer :: Sets the +serializer+ for the form
-    # :values :: The values from a previous form submission, used to set default
-    #            values for inputs when the inputs use the :key option.
+    # A hash of options for the form.
     attr_reader :opts
 
     # Set the default options for inputs by type.  This should be a hash with
     # input type keys and values that are hashes of input options.
     attr_reader :input_defaults
 
-    # The hidden tags to automatically add to the form.  If set, this should be an
-    # array, where elements are one of the following types:
-    # String, Array, Forme::Tag :: Added directly as a child of the form tag.
-    # Hash :: Adds a hidden tag for each entry, with keys as the name of the hidden
-    #         tag and values as the value of the hidden tag.
-    # Proc :: Will be called with the form tag object, and should return an instance
-    #         of one of the handled types (or nil to not add a tag).
+    # The hidden tags to automatically add to the form.
     attr_reader :hidden_tags
 
     # The namespaces if any for the receiver's inputs.  This can be used to
@@ -274,8 +256,7 @@ module Forme
     # Creates a +Form+ object. Arguments:
     # obj :: Sets the obj for the form.  If a hash, is merged with the +opts+ argument
     #        to set the opts.
-    # opts :: A hash of options for the form, see +opts+ attribute for details on
-    #         available options.
+    # opts :: A hash of options for the form
     def initialize(obj=nil, opts={})
       if obj.is_a?(Hash)
         @opts = obj.merge(opts)
