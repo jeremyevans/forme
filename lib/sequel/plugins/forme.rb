@@ -101,11 +101,7 @@ module Sequel # :nodoc:
           end
           
           if grid
-            unless labels = opts[:labels]
-              if labels = opts[:inputs]
-                labels = labels.map{|l, *| humanize(l)}
-              end
-            end
+            labels = opts.fetch(:labels){opts[:inputs].map{|l, *| humanize(l)} if opts[:inputs]}
             legend = opts.fetch(:legend){humanize(association)}
             inputs({:inputs_wrapper=>:table, :nested_inputs_wrapper=>:tr, :wrapper=>:td, :labeler=>nil, :labels=>labels, :legend=>legend}, &contents)
           else
