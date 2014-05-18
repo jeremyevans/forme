@@ -1269,7 +1269,7 @@ module Forme
           form.emit(form.tag(:caption, opts[:legend_attr], legend))
         end
 
-        if labels = opts[:labels]
+        if (labels = opts[:labels]) && !labels.empty?
           form.emit(form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)}))
         end
 

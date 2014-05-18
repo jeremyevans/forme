@@ -745,6 +745,10 @@ describe "Forme built-in custom" do
     Forme::Form.new(:inputs_wrapper=>:table).inputs(:labels=>%w'A B C').to_s.should == '<table><tr><th>A</th><th>B</th><th>C</th></tr></table>'
   end
 
+  specify "inputs_wrapper: table doesn't add empty header row for :labels=>[]" do
+    Forme::Form.new(:inputs_wrapper=>:table).inputs(:labels=>[]).to_s.should == '<table></table>'
+  end
+
   specify "serializer: html_usa formats dates and datetimes in American format without timezones" do
     Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>Date.new(2011, 6, 5)).to_s.should == '<div foo="06/05/2011"></div>'
     Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>DateTime.new(2011, 6, 5, 16, 3, 2)).to_s.should == '<div foo="06/05/2011 04:03:02PM"></div>'
