@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <title>Forme::Sinatra::Erubis</title>
-    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
@@ -34,19 +34,14 @@
             <a target="docwin" href="../../../files/lib/forme/sinatra_rb.html">lib/forme/sinatra.rb</a>
           </li>
         </ol>
-        <div class='parent'>
-          Parent:
-          <strong><a target="docwin" href="../Sinatra.html">Sinatra</a></strong>
-        </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             
             <p>This is the module used to add the <a href="../../Forme.html">Forme</a>
-            integration to <a href="../Sinatra.html">Sinatra</a>.  It should be enabled
-            in <a href="../Sinatra.html">Sinatra</a> with the following code in your
-            <code>Sinatra::Base</code> subclass:</p>
+            integration to Sinatra.  It should be enabled in Sinatra with the following
+            code in your <code>Sinatra::Base</code> subclass:</p>
             
             <pre>helpers Forme::Sinatra::ERB</pre>
           </div>
@@ -99,7 +94,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-form-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-form-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 110</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">h</span> = {<span class="ruby-value">:output=</span><span class="ruby-operator">&gt;</span><span class="ruby-ivar">@_out_buf</span>, <span class="ruby-value">:hidden_tags=</span><span class="ruby-operator">&gt;</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Sinatra</span><span class="ruby-operator">::</span><span class="ruby-constant">HIDDEN_TAGS</span>, <span class="ruby-value">:env=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">env</span>}&#x000A;    (<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>))&#x000A;    <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-form-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 110</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">h</span> = {<span class="ruby-value">:output=</span><span class="ruby-operator">&gt;</span><span class="ruby-ivar">@_out_buf</span>, <span class="ruby-value">:hidden_tags=</span><span class="ruby-operator">&gt;</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Sinatra</span><span class="ruby-operator">::</span><span class="ruby-constant">HIDDEN_TAGS</span>, <span class="ruby-value">:env=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">env</span>}&#x000A;    (<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>))&#x000A;    <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <title>README.rdoc</title>
-    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
@@ -31,14 +31,14 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2013-12-13 13:05:14 -0800</span>
+          <span class='datetime'>2014-06-17 20:54:53 -0700</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             
-            <h1 id="label-Forme"><a href="../classes/Forme.html">Forme</a></h1>
+            <h1 id="label-Forme"><a href="../classes/Forme.html">Forme</a><span><a href="#label-Forme">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p><a href="../classes/Forme.html">Forme</a> is a HTML forms library for ruby
             with the following goals:</p>
@@ -52,26 +52,26 @@
             <p>Allow compiling down to different types of output</p>
             </li></ol>
             
-            <h1 id="label-Installation">Installation</h1>
+            <h1 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <pre>sudo gem install forme</pre>
             
-            <h1 id="label-Demo+Site">Demo Site</h1>
+            <h1 id="label-Demo+Site">Demo Site<span><a href="#label-Demo+Site">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p>A demo site is available at <a
             href="http://forme-demo.jeremyevans.net">forme-demo.jeremyevans.net</a></p>
             
-            <h1 id="label-Documentation+Site">Documentation Site</h1>
+            <h1 id="label-Documentation+Site">Documentation Site<span><a href="#label-Documentation+Site">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p>RDoc Documentation is available at <a
             href="http://forme.jeremyevans.net">forme.jeremyevans.net</a></p>
             
-            <h1 id="label-Source+Code">Source Code</h1>
+            <h1 id="label-Source+Code">Source Code<span><a href="#label-Source+Code">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p>Source code is available on GitHub at <a
             href="https://github.com/jeremyevans/forme">github.com/jeremyevans/forme</a></p>
             
-            <h1 id="label-Basic+Usage">Basic Usage</h1>
+            <h1 id="label-Basic+Usage">Basic Usage<span><a href="#label-Basic+Usage">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p>Without an object, <a href="../classes/Forme.html">Forme</a> is a simple
             form builder:</p>
@@ -93,7 +93,7 @@
             
             <pre>f = Forme::Form.new([:foo])&#x000A;f.input(:first) # &#39;&lt;input id=&quot;first&quot; name=&quot;first&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</pre>
             
-            <h1 id="label-DSL">DSL</h1>
+            <h1 id="label-DSL">DSL<span><a href="#label-DSL">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p><a href="../classes/Forme.html">Forme</a> comes with a DSL:</p>
             
@@ -107,7 +107,7 @@
             
             <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>({:<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>},&#x000A;  :<span class="ruby-identifier">inputs=</span><span class="ruby-operator">&gt;</span>[[:<span class="ruby-identifier">text</span>, {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span>}], [:<span class="ruby-identifier">textarea</span>, {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;baz&#39;</span>}]])</pre>
             
-            <h1 id="label-Basic+Design">Basic Design</h1>
+            <h1 id="label-Basic+Design">Basic Design<span><a href="#label-Basic+Design">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p>Internally, <a href="../classes/Forme.html">Forme</a> builds an abstract
             syntax tree of objects that represent the form.  The abstract syntax tree
@@ -132,7 +132,7 @@
             style, and all use a <code>call</code>-based API, so you can use a
             <code>Proc</code> for any custom transformer.</p>
             
-            <h2 id="label-Transformer+Types">Transformer Types</h2>
+            <h2 id="label-Transformer+Types">Transformer Types<span><a href="#label-Transformer+Types">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
             <dl class="rdoc-list note-list"><dt><code>serializer</code> 
             <dd>
             <p>tags input/tag, returns string</p>
@@ -168,12 +168,12 @@
             <code>Forme::Form#inputs</code> and serves to wrap a bunch of related
             inputs.</p>
             
-            <h2 id="label-Built-in+Transformers">Built-in Transformers</h2>
+            <h2 id="label-Built-in+Transformers">Built-in Transformers<span><a href="#label-Built-in+Transformers">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
             
             <p><a href="../classes/Forme.html">Forme</a> ships with a bunch of built-in
             transformers that you can use:</p>
             
-            <h3 id="label-serializer"><code>serializer</code></h3>
+            <h3 id="label-serializer"><code>serializer</code><span><a href="#label-serializer">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
             <dl class="rdoc-list note-list"><dt>:default 
             <dd>
             <p>returns HTML strings</p>
@@ -186,7 +186,7 @@
             <p>returns plain text strings</p>
             </dd></dl>
             
-            <h3 id="label-formatter"><code>formatter</code></h3>
+            <h3 id="label-formatter"><code>formatter</code><span><a href="#label-formatter">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
             <dl class="rdoc-list note-list"><dt>:default 
             <dd>
             <p>turns Inputs into Tags</p>
@@ -199,13 +199,13 @@
             forms</p>
             </dd></dl>
             
-            <h3 id="label-error_handler"><code>error_handler</code></h3>
+            <h3 id="label-error_handler"><code>error_handler</code><span><a href="#label-error_handler">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
             <dl class="rdoc-list note-list"><dt>:default 
             <dd>
             <p>modifies tag to add an error class and adds a span with the error message</p>
             </dd></dl>
             
-            <h3 id="label-labeler"><code>labeler</code></h3>
+            <h3 id="label-labeler"><code>labeler</code><span><a href="#label-labeler">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
             <dl class="rdoc-list note-list"><dt>:default 
             <dd>
             <p>uses implicit labels, where the tag is a child of the label tag</p>
@@ -215,7 +215,7 @@
             label tag</p>
             </dd></dl>
             
-            <h3 id="label-wrapper"><code>wrapper</code></h3>
+            <h3 id="label-wrapper"><code>wrapper</code><span><a href="#label-wrapper">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
             <dl class="rdoc-list note-list"><dt>:default 
             <dd>
             <p>returns tag without wrapping</p>
@@ -237,7 +237,7 @@
             for lining up inputs with the :explicit labeler without CSS</p>
             </dd></dl>
             
-            <h3 id="label-inputs_wrapper"><code>inputs_wrapper</code></h3>
+            <h3 id="label-inputs_wrapper"><code>inputs_wrapper</code><span><a href="#label-inputs_wrapper">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
             <dl class="rdoc-list note-list"><dt>:default 
             <dd>
             <p>uses a fieldset to wrap inputs</p>
@@ -255,7 +255,7 @@
             <p>uses a table tag to wrap inputs, useful with :trtd wrapper</p>
             </dd></dl>
             
-            <h2 id="label-Configurations">Configurations</h2>
+            <h2 id="label-Configurations">Configurations<span><a href="#label-Configurations">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
             
             <p>You can associate a group of transformers into a configuration.  This
             allows you to specify a single :config option when creating a
@@ -285,7 +285,7 @@
             
             <pre>Forme.default_config = :mine</pre>
             
-            <h1 id="label-Sequel+Support"><a href="../classes/Sequel.html">Sequel</a> Support</h1>
+            <h1 id="label-Sequel+Support"><a href="../classes/Sequel.html">Sequel</a> Support<span><a href="#label-Sequel+Support">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p><a href="../classes/Forme.html">Forme</a> ships with a <a
             href="../classes/Sequel.html">Sequel</a> plugin (use
@@ -315,7 +315,7 @@
             and <code>maxlength</code> attributes based on the format, numericality,
             and length validations.</p>
             
-            <h1 id="label-Sinatra+Support">Sinatra Support</h1>
+            <h1 id="label-Sinatra+Support">Sinatra Support<span><a href="#label-Sinatra+Support">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p><a href="../classes/Forme.html">Forme</a> ships with a Sinatra extension
             that you can get by <code>require &quot;forme/sinatra&quot;</code> and
@@ -328,7 +328,7 @@
             <p>This example is for ERB/Erubis.  Other Sinatra template libraries work
             differently and probably do not support this integration.</p>
             
-            <h1 id="label-Rails+Support">Rails Support</h1>
+            <h1 id="label-Rails+Support">Rails Support<span><a href="#label-Rails+Support">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p><a href="../classes/Forme.html">Forme</a> ships with a Rails extension that
             you can get by <code>require &quot;forme/rails&quot;</code> and using
@@ -339,7 +339,7 @@
             
             <p>This has been tested on Rails 3.2, but should hopefully work on Rails 3.0+.</p>
             
-            <h1 id="label-Other+Similar+Projects">Other Similar Projects</h1>
+            <h1 id="label-Other+Similar+Projects">Other Similar Projects<span><a href="#label-Other+Similar+Projects">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p>All of these have external dependencies:</p>
             <ol><li>
@@ -355,7 +355,7 @@
             <p>Forme&#39;s API draws a lot of inspiration from both Formtastic and
             simple_form.</p>
             
-            <h1 id="label-Author">Author</h1>
+            <h1 id="label-Author">Author<span><a href="#label-Author">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
             <p>Jeremy Evans &lt;code@jeremyevans.net&gt;</p>
           </div>

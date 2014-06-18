@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <title>Forme::Rails::Form</title>
-    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
@@ -35,8 +35,8 @@
           </li>
         </ol>
         <div class='parent'>
-          Parent:
-          <strong><a target="docwin" href="../Rails.html">Rails</a></strong>
+          Superclass:
+          <strong><a target="docwin" href="../Form.html">Form</a></strong>
         </div>
       </div>
       <div id='content'>
@@ -78,7 +78,7 @@
                     <td class='context-item-value'>[R]</td>
                     <td class='context-item-desc'>
                       
-                      <p>The <a href="../Rails.html">Rails</a> template that created this form.</p>
+                      <p>The Rails template that created this form.</p>
                     </td>
                   </tr>
                 </table>
@@ -100,7 +100,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(*)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-ivar">@template</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:template</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-ivar">@template</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:template</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -118,7 +118,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-_inputs-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-_inputs-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">_inputs</span>(*)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">emit</span>(<span class="ruby-keyword">super</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-_inputs-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">_inputs</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">emit</span>(<span class="ruby-keyword">super</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-button'>
@@ -135,7 +135,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-button-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-button-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 70</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">button</span>(*)&#x000A;  <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-keyword">super</span>.<span class="ruby-identifier">to_s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-button-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 70</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">button</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-keyword">super</span>.<span class="ruby-identifier">to_s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-emit'>
@@ -169,7 +169,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-input-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-input-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 65</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">input</span>(*)&#x000A;  <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-keyword">super</span>.<span class="ruby-identifier">to_s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-input-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 65</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">input</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-keyword">super</span>.<span class="ruby-identifier">to_s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-inputs'>
@@ -187,7 +187,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-inputs-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-inputs-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 46</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inputs</span>(*)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:with_output_buffer</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-inputs-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 46</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inputs</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:with_output_buffer</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-tag'>
@@ -206,7 +206,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 78</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[], &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:with_output_buffer</span>){<span class="ruby-identifier">tag_</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>, &amp;<span class="ruby-identifier">block</span>)}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 78</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:with_output_buffer</span>){<span class="ruby-identifier">tag_</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-tag_'>

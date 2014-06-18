@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <title>Forme::Sinatra::Form</title>
-    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
@@ -35,8 +35,8 @@
           </li>
         </ol>
         <div class='parent'>
-          Parent:
-          <strong><a target="docwin" href="../Sinatra.html">Sinatra</a></strong>
+          Superclass:
+          <strong><a target="docwin" href="../Form.html">Form</a></strong>
         </div>
       </div>
       <div id='content'>
@@ -99,7 +99,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 31</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(*)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-ivar">@output</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:output</span>] <span class="ruby-operator">?</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:output</span>] <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 31</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-ivar">@output</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:output</span>] <span class="ruby-operator">?</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:output</span>] <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -151,7 +151,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-form-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-form-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 53</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">form</span>(*<span class="ruby-identifier">a</span>, &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-form-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 53</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">form</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-inputs'>
@@ -169,7 +169,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-inputs-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-inputs-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 43</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inputs</span>(*<span class="ruby-identifier">a</span>, &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">capture</span>{<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-inputs-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 43</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inputs</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">capture</span>{<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-tag'>
@@ -188,7 +188,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 65</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[], &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">tag</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_open</span>)&#x000A;      <span class="ruby-constant">Array</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">children</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">c</span>)}&#x000A;      <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span>&#x000A;      <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">tag</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_close</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 65</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">tag</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_open</span>)&#x000A;      <span class="ruby-constant">Array</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">children</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">c</span>)}&#x000A;      <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span>&#x000A;      <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">tag</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_close</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

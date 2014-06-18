@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <title>Forme::Sinatra</title>
-    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
@@ -34,10 +34,6 @@
             <a target="docwin" href="../../files/lib/forme/sinatra_rb.html">lib/forme/sinatra.rb</a>
           </li>
         </ol>
-        <div class='parent'>
-          Parent:
-          <strong><a target="docwin" href="../Forme.html">Forme</a></strong>
-        </div>
       </div>
       <div id='content'>
         <div id='text'>
@@ -55,7 +51,8 @@
             <h2>Classes and Modules</h2>
             <ol>
               <li><a target="docwin" href="Sinatra/ERB.html">Forme::Sinatra::ERB</a></li>
-              <li><a target="docwin" href="Sinatra/ERB.html">Forme::Sinatra::Erubis</a></li>
+              <li><a target="docwin" href="Sinatra/Erubis.html">Forme::Sinatra::Erubis</a></li>
+              <li><a target="docwin" href="Sinatra/Rack.html">Forme::Sinatra::Rack</a></li>
               <li><a target="docwin" href="Sinatra/Form.html">Forme::Sinatra::Form</a></li>
             </ol>
           </div>
@@ -64,16 +61,6 @@
               <h2>Constants</h2>
               <div class='name-list'>
                 <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>Erubis</td>
-                    <td>=</td>
-                    <td class='context-item-value'>ERB</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>Alias of <code>Forme::Sinatra::ERB</code></p>
-                    </td>
-                  </tr>
                   <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>HIDDEN_TAGS</td>
                     <td>=</td>
@@ -106,7 +93,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-add_hidden_tag-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-add_hidden_tag-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 11</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_hidden_tag</span>(&amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-constant">HIDDEN_TAGS</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-add_hidden_tag-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 11</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_hidden_tag</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-constant">HIDDEN_TAGS</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

@@ -2,7 +2,7 @@
 <html lang='en'>
   <head>
     <title>Forme::Rails::ERB</title>
-    <meta content='text/html; charset=US-ASCII' http-equiv='Content-Type'>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
@@ -34,10 +34,6 @@
             <a target="docwin" href="../../../files/lib/forme/rails_rb.html">lib/forme/rails.rb</a>
           </li>
         </ol>
-        <div class='parent'>
-          Parent:
-          <strong><a target="docwin" href="../Rails.html">Rails</a></strong>
-        </div>
       </div>
       <div id='content'>
         <div id='text'>
@@ -91,7 +87,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-forme-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-forme-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 113</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">forme</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, &amp;<span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">h</span> = {<span class="ruby-value">:template=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">self</span>, <span class="ruby-value">:hidden_tags=</span><span class="ruby-operator">&gt;</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Rails</span><span class="ruby-operator">::</span><span class="ruby-constant">HIDDEN_TAGS</span>}&#x000A;  (<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>))&#x000A;  <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, &amp;<span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-forme-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 113</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">forme</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">h</span> = {<span class="ruby-value">:template=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">self</span>, <span class="ruby-value">:hidden_tags=</span><span class="ruby-operator">&gt;</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Rails</span><span class="ruby-operator">::</span><span class="ruby-constant">HIDDEN_TAGS</span>}&#x000A;  (<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>))&#x000A;  <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
