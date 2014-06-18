@@ -25,7 +25,6 @@ end
 RDOC_DEFAULT_OPTS = ["--line-numbers", "--inline-source", '--title', 'Forme']
 
 begin
-  gem 'rdoc', '= 3.12.2'
   gem 'hanna-nouveau'
   RDOC_DEFAULT_OPTS.concat(['-f', 'hanna'])
 rescue Gem::LoadError
