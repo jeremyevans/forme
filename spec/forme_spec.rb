@@ -913,6 +913,10 @@ describe "Forme object forms" do
     Forme::Form.new([:foo]).input(:first, :attr=>{:x=>'bar'}).to_s.should ==  '<input id="first" name="first" type="text" value="foo" x="bar"/>'
   end
 
+  specify "should respect current namespace" do
+    Forme::Form.new([:foo], :namespace=>'a').input(:first).to_s.should ==  '<input id="a_first" name="a[first]" type="text" value="foo"/>'
+  end
+
   specify "should handle obj passed in via :obj hash key" do
     Forme::Form.new(:obj=>[:foo]).input(:first).to_s.should ==  '<input id="first" name="first" type="text" value="foo"/>'
   end
