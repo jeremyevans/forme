@@ -58,11 +58,13 @@ describe "Forme plain forms" do
   end
 
   specify "should use :key option respect form's current namespace" do
-    @f.send(:push_namespace, 'bar')
-    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
-    @f.input(:text, :key=>"foo", :multiple=>true).to_s.should == '<input id="bar_foo" name="bar[foo][]" type="text"/>'
-    @f.send(:push_namespace, 'baz')
-    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_baz_foo" name="bar[baz][foo]" type="text"/>'
+    @f.with_opts(:namespace=>['bar']) do
+      @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
+      @f.input(:text, :key=>"foo", :multiple=>true).to_s.should == '<input id="bar_foo" name="bar[foo][]" type="text"/>'
+      @f.with_opts(:namespace=>['bar', 'baz']) do
+        @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_baz_foo" name="bar[baz][foo]" type="text"/>'
+      end
+    end
   end
 
   specify "should consider form's :values hash for default values based on the :key option if :value is not present" do
@@ -77,25 +79,43 @@ describe "Forme plain forms" do
 
   specify "should consider form's :values hash for default values based on the :key option when using namespaces" do
     @f.opts[:values] = {'bar'=>{'foo'=>'baz'}}
-    @f.send(:push_namespace, 'bar')
-    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
-    @f.input(:text, :key=>"foo", :value=>'x').to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="x"/>'
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+    @f.with_opts(:namespace=>['bar']) do
+      @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+      @f.input(:text, :key=>"foo", :value=>'x').to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="x"/>'
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+    end
 
-    @f.send(:pop_namespace)
-    @f.send(:push_namespace, :bar)
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+    @f.with_opts(:namespace=>[:bar]) do
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
 
-    @f.opts[:values] = {:bar=>{:foo=>'baz'}}
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
-    @f.opts[:values] = {:bar=>{}}
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
-    @f.opts[:values] = {}
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
+      @f.opts[:values] = {:bar=>{:foo=>'baz'}}
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+      @f.opts[:values] = {:bar=>{}}
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
+      @f.opts[:values] = {}
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
 
-    @f.opts[:values] = {'bar'=>{'quux'=>{'foo'=>'baz'}}}
-    @f.send(:push_namespace, 'quux')
-    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_quux_foo" name="bar[quux][foo]" type="text" value="baz"/>'
+      @f.opts[:values] = {'bar'=>{'quux'=>{'foo'=>'baz'}}}
+      @f.with_opts(:namespace=>['bar', 'quux']) do
+        @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_quux_foo" name="bar[quux][foo]" type="text" value="baz"/>'
+      end
+    end
+  end
+
+  specify "should support a with_obj method that changes the object and namespace for the given block" do
+    @f.with_obj([:a, :c], 'bar') do
+      @f.input(:first).to_s.should == '<input id="bar_first" name="bar[first]" type="text" value="a"/>'
+      @f.with_obj([:b], 'baz') do
+        @f.input(:first).to_s.should == '<input id="bar_baz_first" name="bar[baz][first]" type="text" value="b"/>'
+      end
+      @f.with_obj([:b], %w'baz quux') do
+        @f.input(:first).to_s.should == '<input id="bar_baz_quux_first" name="bar[baz][quux][first]" type="text" value="b"/>'
+      end
+      @f.with_obj([:b]) do
+        @f.input(:first).to_s.should == '<input id="bar_first" name="bar[first]" type="text" value="b"/>'
+      end
+      @f.input(:last).to_s.should == '<input id="bar_last" name="bar[last]" type="text" value="c"/>'
+    end
   end
 
   specify "should allow overriding form inputs on a per-block basis" do

@@ -254,7 +254,7 @@ module Forme
     # opts :: A hash of options for the form
     def initialize(obj=nil, opts={})
       @opts = opts.merge(obj.is_a?(Hash) ? obj : {:obj=>obj})
-      @namespaces = Array(@opts[:namespace])
+      @opts[:namespace] = Array(@opts[:namespace])
 
       if obj && obj.respond_to?(:forme_config)
         obj.forme_config(self)
@@ -411,6 +411,11 @@ module Forme
       @opts[:obj]
     end
 
+    # The current namespaces for the form, if any.
+    def namespaces
+      @opts[:namespace]
+    end
+
     # Creates a +Tag+ associated to the receiver with the given arguments.
     # Add the tag to the the list of children for the currently open tag.
     # If a block is given, make this tag the currently open tag while inside
@@ -440,6 +445,12 @@ module Forme
       if n = @nesting.last
         n << tag
       end
+    end
+
+    # Temporarily override the given object and namespace for the form.  Any given
+    # namespaces are appended to the form's current namespace.
+    def with_obj(obj, namespace=nil, &block)
+      with_opts(:obj=>obj, :namespace=>@opts[:namespace]+Array(namespace), &block)
     end
 
     # Temporarily override the opts for the form for the duration of the block.
@@ -502,16 +513,6 @@ module Forme
     ensure
       @nesting.pop
     end
-
-    # Add to the current stack of namespaces.
-    def push_namespace(namespace)
-      @namespaces += [namespace]
-    end
-
-    # Remove top value from the current stack of namespaces.
-    def pop_namespace
-      @namespaces = @namespaces[0...-1]
-    end
   end
 
   # High level abstract tag form, transformed by formatters into the lower
@@ -534,7 +535,6 @@ module Forme
       @form, @type = form, type
       defaults = form.input_defaults
       @opts = (defaults.fetch(type){defaults[type.to_s]} || {}).merge(opts)
-      @opts[:namespaces] = @form.namespaces if @opts[:key]
       @form_opts = form.opts
     end
 
@@ -912,7 +912,7 @@ module Forme
 
     # Array of namespaces to use for the input
     def namespaces
-      opts[:namespaces]
+      input.form_opts[:namespace]
     end
 
     # Return a unique id attribute for the +field+, based on the current namespaces.

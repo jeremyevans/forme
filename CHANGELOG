@@ -1,5 +1,9 @@
 === HEAD
 
+* Add Form#with_obj, for changing a Form's object and namespace temporarily (jeremyevans)
+
+* Support changing the namespace for a Form temporarily using with_opts(:namespace=>['ns1', 'ns2']) (jeremyevans)
+
 * Use current namespace for form object inputs if :id/:name/:key is not specified (jeremyevans)
 
 * Remove SequelForm#nested_associations accessor methods, no longer necessary (jeremyevans)

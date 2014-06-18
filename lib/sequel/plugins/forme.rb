@@ -58,36 +58,31 @@ module Sequel # :nodoc:
           multiple = ref.returns_array?
           i = -1
           grid = opts[:grid]
+          ns = "#{association}_attributes"
 
           contents = proc do
             Array(nested_obj).each do |no|
-              begin
-                push_namespace("#{association}_attributes")
-                push_namespace(i+=1) if multiple
-                with_opts(:obj=>no) do 
-                  emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new?
-                  options = opts.dup
-                  if grid
-                    options.delete(:legend)
+              obj_ns = multiple ? [ns, i+=1] : ns
+              with_obj(no, obj_ns) do 
+                emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new?
+                options = opts.dup
+                if grid
+                  options.delete(:legend)
+                else
+                  if options.has_key?(:legend)
+                    if options[:legend].respond_to?(:call)
+                      options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
+                    end
                   else
-                    if options.has_key?(:legend)
-                      if options[:legend].respond_to?(:call)
-                        options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
-                      end
+                    if multiple
+                      options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
                     else
-                      if multiple
-                        options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
-                      else
-                        options[:legend] = humanize(association)
-                      end
+                      options[:legend] = humanize(association)
                     end
                   end
-                  options[:subform] = true
-                  _inputs(options[:inputs]||[], options, &block)
                 end
-              ensure
-                pop_namespace if multiple
-                pop_namespace
+                options[:subform] = true
+                _inputs(options[:inputs]||[], options, &block)
               end
             end
           end
@@ -446,7 +441,7 @@ module Sequel # :nodoc:
         # specific code, such as support for nested attributes.
         def forme_config(form)
           form.extend(SequelForm)
-          form.send(:push_namespace, model.send(:underscore, model.name))
+          form.namespaces << model.send(:underscore, model.name)
           form.extend(SinatraSequelForm) if defined?(::Forme::Sinatra::Form) && form.is_a?(::Forme::Sinatra::Form)
         end
 
