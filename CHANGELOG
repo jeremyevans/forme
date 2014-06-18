@@ -1,5 +1,7 @@
 === HEAD
 
+* Use current namespace for form object inputs if :id/:name/:key is not specified (jeremyevans)
+
 * Remove SequelForm#nested_associations accessor methods, no longer necessary (jeremyevans)
 
 * Support changing the object for a Form temporarily using with_opts(:obj=>new_obj) (jeremyevans)
