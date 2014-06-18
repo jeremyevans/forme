@@ -315,7 +315,13 @@ module Forme
         else
           opts = opts.dup
           opts[:key] = field unless opts.has_key?(:key)
-          opts[:value] = obj.send(field) unless opts.has_key?(:value)
+          unless opts.has_key?(:value)
+            opts[:value] = if obj.is_a?(Hash)
+              obj[field]
+            else
+              obj.send(field)
+            end
+          end
           _input(:text, opts)
         end
       else

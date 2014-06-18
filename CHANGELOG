@@ -1,5 +1,7 @@
 === HEAD
 
+* Use #[] instead of #send to get input value for object forms if object is a hash (jeremyevans)
+
 * Add Form#each_obj, for iterating over an Enumerable of objects, using with_obj for each object (jeremyevans)
 
 * Add Form#with_obj, for changing a Form's object and namespace temporarily (jeremyevans)

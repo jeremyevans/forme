@@ -917,6 +917,10 @@ describe "Forme object forms" do
     Forme::Form.new([:foo], :namespace=>'a').input(:first).to_s.should ==  '<input id="a_first" name="a[first]" type="text" value="foo"/>'
   end
 
+  specify "should get values for hashes using #[]" do
+    Forme::Form.new(:obj=>{:bar=>:foo}, :namespace=>'a').input(:bar).to_s.should ==  '<input id="a_bar" name="a[bar]" type="text" value="foo"/>'
+  end
+
   specify "should handle obj passed in via :obj hash key" do
     Forme::Form.new(:obj=>[:foo]).input(:first).to_s.should ==  '<input id="first" name="first" type="text" value="foo"/>'
   end
