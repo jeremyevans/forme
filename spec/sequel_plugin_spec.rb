@@ -39,6 +39,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:name, :as=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
   end
   
+  specify "should allow :type=>:textarea to use a textarea" do
+    @b.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
+    @c.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
+  end
+  
   specify "should use number inputs for integers" do
     @b.input(:copies_sold).to_s.should == '<label>Copies sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="10"/></label>'
   end
