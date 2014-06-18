@@ -191,11 +191,6 @@ module Forme
   # an abstract syntax tree of +Tag+ and +Input+ instances, which can be serialized
   # to a string using +to_s+.
   class Form
-    # The object related to the receiver, if any.  If the +Form+ has an associated
-    # obj, then calls to +input+ are assumed to be accessing fields of the object
-    # instead to directly representing input types.
-    attr_reader :obj
-
     # A hash of options for the form.
     attr_reader :opts
 
@@ -258,18 +253,11 @@ module Forme
     #        to set the opts.
     # opts :: A hash of options for the form
     def initialize(obj=nil, opts={})
-      if obj.is_a?(Hash)
-        @opts = obj.merge(opts)
-        @obj = @opts.delete(:obj)
-      else
-        @obj = obj
-        @opts = opts.dup
-      end
-
+      @opts = opts.merge(obj.is_a?(Hash) ? obj : {:obj=>obj})
       @namespaces = Array(@opts[:namespace])
 
-      if @obj && @obj.respond_to?(:forme_config)
-        @obj.forme_config(self)
+      if obj && obj.respond_to?(:forme_config)
+        obj.forme_config(self)
       end
 
       config = CONFIGURATIONS[@opts[:config]||Forme.default_config]
@@ -415,6 +403,13 @@ module Forme
     # doing no other processing.
     def _tag(*a, &block)
       tag = Tag.new(self, *a, &block)
+    end
+
+    # The object associated with this form, if any. If the +Form+ has an associated
+    # obj, then calls to +input+ are assumed to be accessing fields of the object
+    # instead to directly representing input types.
+    def obj
+      @opts[:obj]
     end
 
     # Creates a +Tag+ associated to the receiver with the given arguments.

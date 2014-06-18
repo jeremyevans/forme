@@ -122,6 +122,16 @@ describe "Forme plain forms" do
     end.to_s.should == '<form><input type="text"/><div><input type="text"/></div><li><input type="text"/></li><div><input type="text"/></div><input type="text"/></form>'
   end
 
+  specify "should support :obj method to with_opts for changing the obj inside the block" do
+    @f.form do
+      @f.with_opts(:obj=>[:a, :c]) do
+        @f.input(:first)
+        @f.with_opts(:obj=>[:b]){@f.input(:first)}
+        @f.input(:last)
+      end
+    end.to_s.should == '<form><input id="first" name="first" type="text" value="a"/><input id="first" name="first" type="text" value="b"/><input id="last" name="last" type="text" value="c"/></form>'
+  end
+
   specify "should allow arbitrary attributes using the :attr option" do
     @f.input(:text, :attr=>{:bar=>"foo"}).to_s.should == '<input bar="foo" type="text"/>'
   end

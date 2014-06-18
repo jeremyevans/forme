@@ -15,13 +15,6 @@ module Sequel # :nodoc:
       # that use a <tt>Sequel::Model</tt> instance as the form's
       # +obj+.
       module SequelForm
-        # Stack of objects used by subform.  The current +obj+
-        # is added to the top of the stack on a call to +subform+,
-        # the nested associated object is set as the current +obj+ during the
-        # call to +subform+, and when +subform+ returns, the top of the
-        # stack is set as the current +obj+.
-        attr_accessor :nested_associations
-
         # Use the post method by default for Sequel forms, unless
         # overridden with the :method attribute.
         def form(attr={}, &block)
@@ -69,31 +62,30 @@ module Sequel # :nodoc:
           contents = proc do
             Array(nested_obj).each do |no|
               begin
-                nested_associations << obj
                 push_namespace("#{association}_attributes")
                 push_namespace(i+=1) if multiple
-                @obj = no
-                emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new?
-                options = opts.dup
-                if grid
-                  options.delete(:legend)
-                else
-                  if options.has_key?(:legend)
-                    if options[:legend].respond_to?(:call)
-                      options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
-                    end
+                with_opts(:obj=>no) do 
+                  emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new?
+                  options = opts.dup
+                  if grid
+                    options.delete(:legend)
                   else
-                    if multiple
-                      options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
+                    if options.has_key?(:legend)
+                      if options[:legend].respond_to?(:call)
+                        options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
+                      end
                     else
-                      options[:legend] = humanize(association)
+                      if multiple
+                        options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
+                      else
+                        options[:legend] = humanize(association)
+                      end
                     end
                   end
+                  options[:subform] = true
+                  _inputs(options[:inputs]||[], options, &block)
                 end
-                options[:subform] = true
-                _inputs(options[:inputs]||[], options, &block)
               ensure
-                @obj = nested_associations.pop
                 pop_namespace if multiple
                 pop_namespace
               end
@@ -454,7 +446,6 @@ module Sequel # :nodoc:
         # specific code, such as support for nested attributes.
         def forme_config(form)
           form.extend(SequelForm)
-          form.nested_associations = []
           form.send(:push_namespace, model.send(:underscore, model.name))
           form.extend(SinatraSequelForm) if defined?(::Forme::Sinatra::Form) && form.is_a?(::Forme::Sinatra::Form)
         end
