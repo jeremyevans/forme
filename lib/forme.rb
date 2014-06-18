@@ -447,10 +447,22 @@ module Forme
       end
     end
 
+    # Calls the block for each object in objs, using with_obj with the given namespace
+    # and an index namespace (starting at 0).
+    def each_obj(objs, namespace=nil)
+      objs.each_with_index do |obj, i|
+        with_obj(obj, Array(namespace) + [i]) do
+          yield obj, i
+        end
+      end
+    end
+
     # Temporarily override the given object and namespace for the form.  Any given
     # namespaces are appended to the form's current namespace.
-    def with_obj(obj, namespace=nil, &block)
-      with_opts(:obj=>obj, :namespace=>@opts[:namespace]+Array(namespace), &block)
+    def with_obj(obj, namespace=nil)
+      with_opts(:obj=>obj, :namespace=>@opts[:namespace]+Array(namespace)) do
+        yield obj
+      end
     end
 
     # Temporarily override the opts for the form for the duration of the block.

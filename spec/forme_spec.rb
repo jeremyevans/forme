@@ -118,6 +118,29 @@ describe "Forme plain forms" do
     end
   end
 
+  specify "should support a each_obj method that changes the object and namespace for multiple objects for the given block" do
+    @f.tag(:form) do
+      @f.each_obj([[:a, :c], [:b, :d]], 'bar') do
+        @f.input(:first)
+        @f.input(:last)
+      end
+    end.to_s.should == '<form><input id="bar_0_first" name="bar[0][first]" type="text" value="a"/><input id="bar_0_last" name="bar[0][last]" type="text" value="c"/><input id="bar_1_first" name="bar[1][first]" type="text" value="b"/><input id="bar_1_last" name="bar[1][last]" type="text" value="d"/></form>'
+
+    @f.tag(:form) do
+      @f.each_obj([[:a, :c], [:b, :d]], %w'bar baz') do
+        @f.input(:first)
+        @f.input(:last)
+      end
+    end.to_s.should == '<form><input id="bar_baz_0_first" name="bar[baz][0][first]" type="text" value="a"/><input id="bar_baz_0_last" name="bar[baz][0][last]" type="text" value="c"/><input id="bar_baz_1_first" name="bar[baz][1][first]" type="text" value="b"/><input id="bar_baz_1_last" name="bar[baz][1][last]" type="text" value="d"/></form>'
+
+    @f.tag(:form) do
+      @f.each_obj([[:a, :c], [:b, :d]]) do
+        @f.input(:first)
+        @f.input(:last)
+      end
+    end.to_s.should == '<form><input id="0_first" name="0[first]" type="text" value="a"/><input id="0_last" name="0[last]" type="text" value="c"/><input id="1_first" name="1[first]" type="text" value="b"/><input id="1_last" name="1[last]" type="text" value="d"/></form>'
+  end
+
   specify "should allow overriding form inputs on a per-block basis" do
     @f.input(:text).to_s.should == '<input type="text"/>'
     @f.with_opts(:wrapper=>:div){@f.input(:text).to_s}.should == '<div><input type="text"/></div>'

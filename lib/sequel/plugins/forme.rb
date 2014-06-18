@@ -56,34 +56,30 @@ module Sequel # :nodoc:
           nested_obj = opts.has_key?(:obj) ? opts[:obj] : obj.send(association)
           ref = obj.class.association_reflection(association)
           multiple = ref.returns_array?
-          i = -1
           grid = opts[:grid]
           ns = "#{association}_attributes"
 
           contents = proc do
-            Array(nested_obj).each do |no|
-              obj_ns = multiple ? [ns, i+=1] : ns
-              with_obj(no, obj_ns) do 
-                emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new?
-                options = opts.dup
-                if grid
-                  options.delete(:legend)
+            send(multiple ? :each_obj : :with_obj, nested_obj, ns) do |no, i|
+              emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new?
+              options = opts.dup
+              if grid
+                options.delete(:legend)
+              else
+                if options.has_key?(:legend)
+                  if options[:legend].respond_to?(:call)
+                    options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
+                  end
                 else
-                  if options.has_key?(:legend)
-                    if options[:legend].respond_to?(:call)
-                      options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
-                    end
+                  if multiple
+                    options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
                   else
-                    if multiple
-                      options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
-                    else
-                      options[:legend] = humanize(association)
-                    end
+                    options[:legend] = humanize(association)
                   end
                 end
-                options[:subform] = true
-                _inputs(options[:inputs]||[], options, &block)
               end
+              options[:subform] = true
+              _inputs(options[:inputs]||[], options, &block)
             end
           end
           
