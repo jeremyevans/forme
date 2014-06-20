@@ -58,11 +58,13 @@ describe "Forme plain forms" do
   end
 
   specify "should use :key option respect form's current namespace" do
-    @f.send(:push_namespace, 'bar')
-    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
-    @f.input(:text, :key=>"foo", :multiple=>true).to_s.should == '<input id="bar_foo" name="bar[foo][]" type="text"/>'
-    @f.send(:push_namespace, 'baz')
-    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_baz_foo" name="bar[baz][foo]" type="text"/>'
+    @f.with_opts(:namespace=>['bar']) do
+      @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
+      @f.input(:text, :key=>"foo", :multiple=>true).to_s.should == '<input id="bar_foo" name="bar[foo][]" type="text"/>'
+      @f.with_opts(:namespace=>['bar', 'baz']) do
+        @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_baz_foo" name="bar[baz][foo]" type="text"/>'
+      end
+    end
   end
 
   specify "should consider form's :values hash for default values based on the :key option if :value is not present" do
@@ -77,25 +79,66 @@ describe "Forme plain forms" do
 
   specify "should consider form's :values hash for default values based on the :key option when using namespaces" do
     @f.opts[:values] = {'bar'=>{'foo'=>'baz'}}
-    @f.send(:push_namespace, 'bar')
-    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
-    @f.input(:text, :key=>"foo", :value=>'x').to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="x"/>'
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+    @f.with_opts(:namespace=>['bar']) do
+      @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+      @f.input(:text, :key=>"foo", :value=>'x').to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="x"/>'
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+    end
 
-    @f.send(:pop_namespace)
-    @f.send(:push_namespace, :bar)
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+    @f.with_opts(:namespace=>[:bar]) do
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
 
-    @f.opts[:values] = {:bar=>{:foo=>'baz'}}
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
-    @f.opts[:values] = {:bar=>{}}
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
-    @f.opts[:values] = {}
-    @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
+      @f.opts[:values] = {:bar=>{:foo=>'baz'}}
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text" value="baz"/>'
+      @f.opts[:values] = {:bar=>{}}
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
+      @f.opts[:values] = {}
+      @f.input(:text, :key=>:foo).to_s.should == '<input id="bar_foo" name="bar[foo]" type="text"/>'
 
-    @f.opts[:values] = {'bar'=>{'quux'=>{'foo'=>'baz'}}}
-    @f.send(:push_namespace, 'quux')
-    @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_quux_foo" name="bar[quux][foo]" type="text" value="baz"/>'
+      @f.opts[:values] = {'bar'=>{'quux'=>{'foo'=>'baz'}}}
+      @f.with_opts(:namespace=>['bar', 'quux']) do
+        @f.input(:text, :key=>"foo").to_s.should == '<input id="bar_quux_foo" name="bar[quux][foo]" type="text" value="baz"/>'
+      end
+    end
+  end
+
+  specify "should support a with_obj method that changes the object and namespace for the given block" do
+    @f.with_obj([:a, :c], 'bar') do
+      @f.input(:first).to_s.should == '<input id="bar_first" name="bar[first]" type="text" value="a"/>'
+      @f.with_obj([:b], 'baz') do
+        @f.input(:first).to_s.should == '<input id="bar_baz_first" name="bar[baz][first]" type="text" value="b"/>'
+      end
+      @f.with_obj([:b], %w'baz quux') do
+        @f.input(:first).to_s.should == '<input id="bar_baz_quux_first" name="bar[baz][quux][first]" type="text" value="b"/>'
+      end
+      @f.with_obj([:b]) do
+        @f.input(:first).to_s.should == '<input id="bar_first" name="bar[first]" type="text" value="b"/>'
+      end
+      @f.input(:last).to_s.should == '<input id="bar_last" name="bar[last]" type="text" value="c"/>'
+    end
+  end
+
+  specify "should support a each_obj method that changes the object and namespace for multiple objects for the given block" do
+    @f.tag(:form) do
+      @f.each_obj([[:a, :c], [:b, :d]], 'bar') do
+        @f.input(:first)
+        @f.input(:last)
+      end
+    end.to_s.should == '<form><input id="bar_0_first" name="bar[0][first]" type="text" value="a"/><input id="bar_0_last" name="bar[0][last]" type="text" value="c"/><input id="bar_1_first" name="bar[1][first]" type="text" value="b"/><input id="bar_1_last" name="bar[1][last]" type="text" value="d"/></form>'
+
+    @f.tag(:form) do
+      @f.each_obj([[:a, :c], [:b, :d]], %w'bar baz') do
+        @f.input(:first)
+        @f.input(:last)
+      end
+    end.to_s.should == '<form><input id="bar_baz_0_first" name="bar[baz][0][first]" type="text" value="a"/><input id="bar_baz_0_last" name="bar[baz][0][last]" type="text" value="c"/><input id="bar_baz_1_first" name="bar[baz][1][first]" type="text" value="b"/><input id="bar_baz_1_last" name="bar[baz][1][last]" type="text" value="d"/></form>'
+
+    @f.tag(:form) do
+      @f.each_obj([[:a, :c], [:b, :d]]) do
+        @f.input(:first)
+        @f.input(:last)
+      end
+    end.to_s.should == '<form><input id="0_first" name="0[first]" type="text" value="a"/><input id="0_last" name="0[last]" type="text" value="c"/><input id="1_first" name="1[first]" type="text" value="b"/><input id="1_last" name="1[last]" type="text" value="d"/></form>'
   end
 
   specify "should allow overriding form inputs on a per-block basis" do
@@ -120,6 +163,16 @@ describe "Forme plain forms" do
       end
       @f.input(:text)
     end.to_s.should == '<form><input type="text"/><div><input type="text"/></div><li><input type="text"/></li><div><input type="text"/></div><input type="text"/></form>'
+  end
+
+  specify "should support :obj method to with_opts for changing the obj inside the block" do
+    @f.form do
+      @f.with_opts(:obj=>[:a, :c]) do
+        @f.input(:first)
+        @f.with_opts(:obj=>[:b]){@f.input(:first)}
+        @f.input(:last)
+      end
+    end.to_s.should == '<form><input id="first" name="first" type="text" value="a"/><input id="first" name="first" type="text" value="b"/><input id="last" name="last" type="text" value="c"/></form>'
   end
 
   specify "should allow arbitrary attributes using the :attr option" do
@@ -745,6 +798,10 @@ describe "Forme built-in custom" do
     Forme::Form.new(:inputs_wrapper=>:table).inputs(:labels=>%w'A B C').to_s.should == '<table><tr><th>A</th><th>B</th><th>C</th></tr></table>'
   end
 
+  specify "inputs_wrapper: table doesn't add empty header row for :labels=>[]" do
+    Forme::Form.new(:inputs_wrapper=>:table).inputs(:labels=>[]).to_s.should == '<table></table>'
+  end
+
   specify "serializer: html_usa formats dates and datetimes in American format without timezones" do
     Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>Date.new(2011, 6, 5)).to_s.should == '<div foo="06/05/2011"></div>'
     Forme::Form.new(:serializer=>:html_usa).tag(:div, :foo=>DateTime.new(2011, 6, 5, 16, 3, 2)).to_s.should == '<div foo="06/05/2011 04:03:02PM"></div>'
@@ -854,6 +911,14 @@ describe "Forme object forms" do
     Forme::Form.new([:foo]).input(:first, :id=>'bar').to_s.should ==  '<input id="bar" name="first" type="text" value="foo"/>'
     Forme::Form.new([:foo]).input(:first, :value=>'bar').to_s.should ==  '<input id="first" name="first" type="text" value="bar"/>'
     Forme::Form.new([:foo]).input(:first, :attr=>{:x=>'bar'}).to_s.should ==  '<input id="first" name="first" type="text" value="foo" x="bar"/>'
+  end
+
+  specify "should respect current namespace" do
+    Forme::Form.new([:foo], :namespace=>'a').input(:first).to_s.should ==  '<input id="a_first" name="a[first]" type="text" value="foo"/>'
+  end
+
+  specify "should get values for hashes using #[]" do
+    Forme::Form.new(:obj=>{:bar=>:foo}, :namespace=>'a').input(:bar).to_s.should ==  '<input id="a_bar" name="a[bar]" type="text" value="foo"/>'
   end
 
   specify "should handle obj passed in via :obj hash key" do

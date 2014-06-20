@@ -1,5 +1,19 @@
 === HEAD
 
+* Use #[] instead of #send to get input value for object forms if object is a hash (jeremyevans)
+
+* Add Form#each_obj, for iterating over an Enumerable of objects, using with_obj for each object (jeremyevans)
+
+* Add Form#with_obj, for changing a Form's object and namespace temporarily (jeremyevans)
+
+* Support changing the namespace for a Form temporarily using with_opts(:namespace=>['ns1', 'ns2']) (jeremyevans)
+
+* Use current namespace for form object inputs if :id/:name/:key is not specified (jeremyevans)
+
+* Remove SequelForm#nested_associations accessor methods, no longer necessary (jeremyevans)
+
+* Support changing the object for a Form temporarily using with_opts(:obj=>new_obj) (jeremyevans)
+
 * Add :table, :tr, :ol, and :fieldset_ol wrappers, which automatically set wrapper and inputs_wrapper appropriately (jeremyevans)
 
 * Add subform :grid option in Sequel plugin, for more compact editing of nested *_to_many associations (jeremyevans)

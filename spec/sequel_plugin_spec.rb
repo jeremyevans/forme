@@ -39,6 +39,11 @@ describe "Forme Sequel::Model forms" do
     @c.input(:name, :as=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
   end
   
+  specify "should allow :type=>:textarea to use a textarea" do
+    @b.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
+    @c.input(:name, :type=>:textarea).to_s.should == '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
+  end
+  
   specify "should use number inputs for integers" do
     @b.input(:copies_sold).to_s.should == '<label>Copies sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="10"/></label>'
   end
@@ -388,6 +393,9 @@ describe "Forme Sequel::Model forms" do
     Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>'Foo', :labels=>%w'Bar')}.to_s.should == '<form class="forme album" method="post"><table><caption>Foo</caption><tr><th>Bar</th></tr><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
   end
   
+  specify "should have #subform :grid option handle :legend and :labels nil values" do
+    Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>nil, :labels=>nil)}.to_s.should == '<form class="forme album" method="post"><table><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
+  end
 end
 
 describe "Forme Sequel plugin default input types based on column names" do

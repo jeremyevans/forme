@@ -191,11 +191,6 @@ module Forme
   # an abstract syntax tree of +Tag+ and +Input+ instances, which can be serialized
   # to a string using +to_s+.
   class Form
-    # The object related to the receiver, if any.  If the +Form+ has an associated
-    # obj, then calls to +input+ are assumed to be accessing fields of the object
-    # instead to directly representing input types.
-    attr_reader :obj
-
     # A hash of options for the form.
     attr_reader :opts
 
@@ -258,18 +253,11 @@ module Forme
     #        to set the opts.
     # opts :: A hash of options for the form
     def initialize(obj=nil, opts={})
-      if obj.is_a?(Hash)
-        @opts = obj.merge(opts)
-        @obj = @opts.delete(:obj)
-      else
-        @obj = obj
-        @opts = opts.dup
-      end
+      @opts = opts.merge(obj.is_a?(Hash) ? obj : {:obj=>obj})
+      @opts[:namespace] = Array(@opts[:namespace])
 
-      @namespaces = Array(@opts[:namespace])
-
-      if @obj && @obj.respond_to?(:forme_config)
-        @obj.forme_config(self)
+      if obj && obj.respond_to?(:forme_config)
+        obj.forme_config(self)
       end
 
       config = CONFIGURATIONS[@opts[:config]||Forme.default_config]
@@ -326,9 +314,14 @@ module Forme
           obj.forme_input(self, field, opts.dup)
         else
           opts = opts.dup
-          opts[:name] = field unless opts.has_key?(:name)
-          opts[:id] = field unless opts.has_key?(:id)
-          opts[:value] = obj.send(field) unless opts.has_key?(:value)
+          opts[:key] = field unless opts.has_key?(:key)
+          unless opts.has_key?(:value)
+            opts[:value] = if obj.is_a?(Hash)
+              obj[field]
+            else
+              obj.send(field)
+            end
+          end
           _input(:text, opts)
         end
       else
@@ -417,6 +410,18 @@ module Forme
       tag = Tag.new(self, *a, &block)
     end
 
+    # The object associated with this form, if any. If the +Form+ has an associated
+    # obj, then calls to +input+ are assumed to be accessing fields of the object
+    # instead to directly representing input types.
+    def obj
+      @opts[:obj]
+    end
+
+    # The current namespaces for the form, if any.
+    def namespaces
+      @opts[:namespace]
+    end
+
     # Creates a +Tag+ associated to the receiver with the given arguments.
     # Add the tag to the the list of children for the currently open tag.
     # If a block is given, make this tag the currently open tag while inside
@@ -445,6 +450,24 @@ module Forme
     def <<(tag)
       if n = @nesting.last
         n << tag
+      end
+    end
+
+    # Calls the block for each object in objs, using with_obj with the given namespace
+    # and an index namespace (starting at 0).
+    def each_obj(objs, namespace=nil)
+      objs.each_with_index do |obj, i|
+        with_obj(obj, Array(namespace) + [i]) do
+          yield obj, i
+        end
+      end
+    end
+
+    # Temporarily override the given object and namespace for the form.  Any given
+    # namespaces are appended to the form's current namespace.
+    def with_obj(obj, namespace=nil)
+      with_opts(:obj=>obj, :namespace=>@opts[:namespace]+Array(namespace)) do
+        yield obj
       end
     end
 
@@ -508,16 +531,6 @@ module Forme
     ensure
       @nesting.pop
     end
-
-    # Add to the current stack of namespaces.
-    def push_namespace(namespace)
-      @namespaces += [namespace]
-    end
-
-    # Remove top value from the current stack of namespaces.
-    def pop_namespace
-      @namespaces = @namespaces[0...-1]
-    end
   end
 
   # High level abstract tag form, transformed by formatters into the lower
@@ -540,7 +553,6 @@ module Forme
       @form, @type = form, type
       defaults = form.input_defaults
       @opts = (defaults.fetch(type){defaults[type.to_s]} || {}).merge(opts)
-      @opts[:namespaces] = @form.namespaces if @opts[:key]
       @form_opts = form.opts
     end
 
@@ -918,7 +930,7 @@ module Forme
 
     # Array of namespaces to use for the input
     def namespaces
-      opts[:namespaces]
+      input.form_opts[:namespace]
     end
 
     # Return a unique id attribute for the +field+, based on the current namespaces.
@@ -1269,7 +1281,7 @@ module Forme
           form.emit(form.tag(:caption, opts[:legend_attr], legend))
         end
 
-        if labels = opts[:labels]
+        if (labels = opts[:labels]) && !labels.empty?
           form.emit(form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)}))
         end
 
