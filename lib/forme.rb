@@ -830,6 +830,7 @@ module Forme
       raise Error, "can't have radioset with no options" unless os = @opts[:options]
       key = @opts[:key]
       name = @opts[:name]
+      id = @opts[:id]
       if @opts[:error]
         @opts[:set_error] = @opts.delete(:error)
       end
@@ -845,11 +846,15 @@ module Forme
         r_opts[:value] ||= value if value
         r_opts[:checked] ||= :checked if sel
 
+        if name
+          r_opts[:name] ||= name
+        end
+        if id
+          r_opts[:id] ||= "#{id}_#{value}"
+        end
         if key
           r_opts[:key] ||= key
           r_opts[:key_id] ||= value
-        else
-          r_opts[:name] ||= name
         end
 
         form._input(type, r_opts)
