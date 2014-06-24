@@ -1167,11 +1167,20 @@ module Forme
     # :label_for option is used, the label created will not be
     # associated with an input.
     def call(tag, input)
+      unless id = input.opts[:id]
+        if key = input.opts[:key]
+          namespaces = input.form_opts[:namespace]
+          id = "#{namespaces.join('_')}#{'_' unless namespaces.empty?}#{key}"
+          if key_id = input.opts[:key_id]
+            id << "_#{key_id.to_s}"
+          end
+        end
+      end
       if [:radio, :checkbox].include?(input.type)
-        t = [tag, input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]])]
+        t = [tag, input.tag(:label, {:for=>input.opts.fetch(:label_for, id)}.merge(input.opts[:label_attr]||{}), [input.opts[:label]])]
         pos = :before
       else
-        t = [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
+        t = [input.tag(:label, {:for=>input.opts.fetch(:label_for, id)}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
         pos = :after
       end
 

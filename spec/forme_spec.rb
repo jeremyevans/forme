@@ -697,6 +697,10 @@ describe "Forme built-in custom" do
     Forme::Form.new(:labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').to_s.should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
   end
 
+  specify "labeler: explicit handles the key option correctly" do
+    Forme::Form.new(:labeler=>:explicit, :namespace=>:baz).input(:textarea, :key=>'foo', :label=>'bar').to_s.should == '<label for="baz_foo">bar</label><textarea id="baz_foo" name="baz[foo]"></textarea>'
+  end
+
   specify "labeler: explicit should handle tags with errors" do
     Forme::Form.new(:labeler=>:explicit).input(:text, :error=>'Bad Stuff!', :value=>'f', :id=>'foo', :label=>'bar').to_s.should == '<label for="foo">bar</label><input class="error" id="foo" type="text" value="f"/><span class="error_message">Bad Stuff!</span>'
   end
