@@ -360,6 +360,14 @@ describe "Forme plain forms" do
     @f.input(:checkboxset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.should == '<label class="option"><input id="foo_1" name="foo[]" type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" id="foo_2" name="foo[]" type="checkbox" value="2"/> 2</label><label class="option"><input id="foo_3" name="foo[]" type="checkbox" value="3"/> 3</label>'
   end
 
+  specify "should respect the :error option for checkbox sets" do
+    @f.input(:checkboxset, :options=>[1, 2, 3], :error=>'foo', :value=>2).to_s.should == '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input class="error" type="checkbox" value="3"/> 3</label><span class="error_message">foo</span>'
+  end
+
+  specify "should raise an Error for empty checkbox sets" do
+    @f.input(:checkboxset, :options=>[], :error=>'foo', :value=>2).to_s.should == '<span class="error_message">foo</span>'
+  end
+
   specify "radio and checkbox inputs should handle :checked option" do
     @f.input(:radio, :checked=>true).to_s.should == '<input checked="checked" type="radio"/>'
     @f.input(:radio, :checked=>false).to_s.should == '<input type="radio"/>'

@@ -855,7 +855,11 @@ module Forme
         form._input(type, r_opts)
       end
 
-      tags.last.opts[:error] = @opts[:set_error]
+      if (last_input = tags.last) && last_input.is_a?(Input)
+        last_input.opts[:error] = @opts[:set_error]
+      else
+        tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
+      end
       tags.unshift(form._tag(:span, {:class=>:label}, @opts[:set_label])) if @opts[:set_label]
       wrapper.call(tags, form._input(type, opts)) if wrapper
       tags
