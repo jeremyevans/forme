@@ -830,6 +830,7 @@ module Forme
       raise Error, "can't have radioset with no options" unless os = @opts[:options]
       key = @opts[:key]
       name = @opts[:name]
+      id = @opts[:id]
       if @opts[:error]
         @opts[:set_error] = @opts.delete(:error)
       end
@@ -845,17 +846,25 @@ module Forme
         r_opts[:value] ||= value if value
         r_opts[:checked] ||= :checked if sel
 
+        if name
+          r_opts[:name] ||= name
+        end
+        if id
+          r_opts[:id] ||= "#{id}_#{value}"
+        end
         if key
           r_opts[:key] ||= key
           r_opts[:key_id] ||= value
-        else
-          r_opts[:name] ||= name
         end
 
         form._input(type, r_opts)
       end
 
-      tags.last.opts[:error] = @opts[:set_error]
+      if (last_input = tags.last) && last_input.is_a?(Input)
+        last_input.opts[:error] = @opts[:set_error]
+      else
+        tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
+      end
       tags.unshift(form._tag(:span, {:class=>:label}, @opts[:set_label])) if @opts[:set_label]
       wrapper.call(tags, form._input(type, opts)) if wrapper
       tags
@@ -1158,11 +1167,20 @@ module Forme
     # :label_for option is used, the label created will not be
     # associated with an input.
     def call(tag, input)
+      unless id = input.opts[:id]
+        if key = input.opts[:key]
+          namespaces = input.form_opts[:namespace]
+          id = "#{namespaces.join('_')}#{'_' unless namespaces.empty?}#{key}"
+          if key_id = input.opts[:key_id]
+            id << "_#{key_id.to_s}"
+          end
+        end
+      end
       if [:radio, :checkbox].include?(input.type)
-        t = [tag, input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]])]
+        t = [tag, input.tag(:label, {:for=>input.opts.fetch(:label_for, id)}.merge(input.opts[:label_attr]||{}), [input.opts[:label]])]
         pos = :before
       else
-        t = [input.tag(:label, {:for=>input.opts.fetch(:label_for, input.opts[:id])}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
+        t = [input.tag(:label, {:for=>input.opts.fetch(:label_for, id)}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
         pos = :after
       end
 
