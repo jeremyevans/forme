@@ -81,6 +81,357 @@ You can even do everything in a single method call:
   Forme.form({:action=>'/foo'},
     :inputs=>[[:text, {:name=>'bar'}], [:textarea, {:name=>'baz'}]])
 
+= Forme::Form Creation
+
+As shown above, the general way to create Forme::Form instances is via the Forme.form method.
+This method takes up to 3 arguments, and yields the Forme::Form object to the block (if given).
+Here are the argument styles that you can use for Forme.form.
+
+No args :: Creates a +Form+ object with no options and not associated
+           to an +obj+, and with no attributes in the opening tag.
+1 hash arg :: Treated as opening form tag attributes, creating a
+              +Form+ object with no options.
+1 non-hash arg :: Treated as the +Form+'s +obj+, with empty options
+                  and no attributes in the opening tag.
+2 hash args :: First hash is opening attributes, second hash is +Form+
+               options.
+1 non-hash arg, 1-2 hash args :: First argument is +Form+'s obj, second is
+                                 opening attributes, third if provided is
+                                 +Form+'s options.
+
+Examples:
+
+  # No arguments
+  Forme.form 
+
+  # 1 hash argument (attributes)
+  Forme.form(:action=>'/foo')
+
+  # 1 non-hash argument (a reference object used when building the form)
+  Forme.form(Album[1])
+
+  # 2 hash arguments (attributes, and options)
+  Forme.form({:action=>'/foo'}, :values=>params)
+
+  # 1 non-hash argument, 1-2 hash arguments (ref obj, attributes, options)
+  Forme.form(Album[1], :action=>'/foo')
+  Forme.form(Album[1], {:action=>'/foo'}, :values=>params)
+
+If you want a Forme::Form instance where the reference object is a Hash, then you need to pass the hash object using the :obj option:
+
+  Forme.form({:action=>'/foo'}, :obj=>{:foo=>'bar'})
+
+You can also create Forme::Form objects the normal ruby way using Forme::Form#new.  The
+difference between Forme::Form#new and Forme.form is that Forme.form includes the enclosing
+<form> tag, where Forme::Form#new does not.  Because of this, Forme::Form does not accept
+a hash of <form> tag attributes, so it has the following API:
+
+  # No arguments
+  Forme::Form.new
+
+  # 1 hash argument 
+  Forme::Form.new(:values=>params)
+
+  # 1 non-hash argument 
+  Forme::Form.new(Album[1])
+
+  # 1 non-hash argument, 1-2 hash arguments
+  Forme::Form.new(Album[1], :values=>params)
+
+= Other Forme::Form Methods
+
+In addition to the input and inputs methods discussed above, Forme::Form instances also
+support the following methods.
+
+== form
+
+If you create a Form via Forme::Forme#new, you can use the form method to create a form tag:
+
+  Forme::Form.new.form(:action=>'/foo')
+
+This is what Forme.form uses internally to create the <form> tag
+
+== tag
+
+This adds a tag to the form.  If a block is given, yields to the block, and tags and inputs
+inside the block are placed inside the tag. The first argument is the type of tag to create,
+and the second argument if given should be a hash of tag attributes. This allows you to nest
+inputs inside tags:
+
+  Forme.form do |f|
+    f.tag(:span, :class="foo") do
+      f.input(:text)
+    end
+  end
+
+Which results in a form similar to the following:
+
+  <form>
+    <span class="foo">
+      <input type="text"/>
+    </span>
+  </form>
+
+== button
+
+This adds a submit input to the form:
+
+  f.button
+  # <input type="submit"/>
+
+It can be called with a string to provide a value for the button:
+
+  f.button('Search')
+  # <input type="submit" value="Search"/>
+
+It can be called with a hash to provide options for the submit input:
+
+  f.button(:value=>'Search', :class=>'btn')
+  # <input class="btn" type="submit" value="Search"/>
+
+== with_opts
+
+This requires a block, and modifies the Form's options inside the block,
+restoring the options when the block returns:
+
+  f.input(:text)
+  # <input type="text"/>
+  f.with_opts(:wrapper=>:li) do
+    f.input(:text)
+  end
+  # <li><input type="text"/></li>
+
+This supports most options you can provide to the Form, but not all.
+
+== with_obj
+
+This uses with_opts to change the Form's object temporarily, but it
+yields the object to the block, and also supports appending to the
+existing namespaces:
+
+  Forme.form([:foo], :namespace=>'a') do |f|
+    f.input(:first)
+    # <input id="a_first" name="a[first]" type="text" value="foo"/>
+    f.with_obj(['foobar'], 'b') do |o|
+      f.input(:first, :size=>o.first.size)
+      # <input id="a_b_first" name="a[b][first]" size="6" type="text" value="foobar"/>
+    end
+  end
+
+== each_obj
+
+This allows you to provide an object-yielding enumerable. Forme will call with_obj with
+each object in the enumerable.  It yields each object as well as the index of the
+object in the enumerable, and includes the index in the namespace:
+
+  objectlist = ['foobar', ['good']]
+  Forme.form([:foo], :namespace=>'a') do |f|
+    f.each_obj(objectlist, 'b') do |o, i|
+      f.input(:first, :size=>10+i)
+    end
+    # <input id="a_b_0_first" name="a[b][0][first]" size="10" type="text" value="foobar"/>
+    # <input id="a_b_1_first" name="a[b][1][first]" size="11" type="text" value="good"/>
+  end
+
+= Sequel Support
+
+Forme ships with a Sequel plugin (use <tt>Sequel::Model.plugin :forme</tt> to enable), that makes
+Sequel::Model instances support the +forme_config+ and +forme_input+ methods and return customized inputs.
+
+== Basics
+
+The Sequel support handles inputs based on database columns, and automatically handles labels and errors.
+
+  Forme.form(Album[1], :action=>'/foo') do |f|
+    f.input :name
+    f.input :copies_sold
+  end
+
+This will create a form similar to:
+
+  <form action="/foo" method="post">
+    <label>Name: <input id="album_name" name="album[name]" type="text" value="Rising Force"/></label>
+    <label>Copies Sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="100000"/></label>
+  </form>
+
+The Forme Sequel plugin also integerates with Sequel's validation reflection support with the
++validation_class_methods+ plugin that ships with Sequel.  It will add +pattern+ and +maxlength+ attributes
+based on the format, numericality, and length validations.
+
+== specialized input options
+
+In addition to the default Forme options, the Sequel support includes, for specific column types, 
+these additional options to the #input method:
+.
+
+=== boolean
+
+:as :: Can be set to :select, :radio, or :checkbox.  :select will use a select input with three
+       options, a blank option, a true option, and a false option.  :radio will use two radio
+       inputs, one for true and one for false.  :checkbox will use a single checkbox input.
+       By default, uses :select if NULL values are allowed and the option is not required, and
+       :checkbox otherwise.
+:false_label :: The value to use for the false label, 'No' by default.
+:false_value :: The value to use for the false input, 'f' by default.
+:true_label :: The value to use for the true label, 'Yes' by default.
+:true_value :: The value to use for the true input, 't' by default.
+
+== string
+
+:as :: Can be set to :textarea to use a textarea input. You can use the usual attributes hash or a stylesheet to 
+control the size of the textarea.
+
+== associations
+
+The Sequel support also handles associations, allowing you to change which objects are associated
+to the current object.
+
+  Forme.form(Album[1], :action=>'/foo') do |f|
+    f.input :name
+    f.input :artist
+    f.input :tags, :as=>:checkbox
+  end
+
+This will create a form similar to:
+
+  <form action="/foo" method="post">
+    <label>Name: <input id="album_name" name="album[name]" type="text" value="Blue Hawaii"/></label>
+    <label>Artist: <select id="album_artist_id" name="album[artist_id]">
+      <option selected="selected" value="1">Elvis Presley</option>
+      <option value="2">The Beatles</option>
+      <option value="3">The Monkeys</option>
+    </select></label>
+    <span class="label">Tags:
+      <label><input checked="checked" id="album_tag_pks_1" name="album[tag_pks][]" type="checkbox" value="1"/> Rock and Roll</label>
+      <label><input id="album_tag_pks_2" name="album[tag_pks][]" type="checkbox" value="2"/> Blues</label>
+      <label><input id="album_tag_pks_3" name="album[tag_pks][]" type="checkbox" value="3"/> Country</label>
+    </span>
+  </form>
+
+For one_to_many and many_to_many associations, you will probably want to use the
++association_pks+ plugin that ships with Sequel.
+
+association input options:
+
+:as :: For many_to_one associations, set to :radio to use a series of radio buttons instead
+       a select input.  For one_to_many and many_to_many associations, set to :checkbox to
+       use a series of checkboxes instead of a multiple select input.
+:dataset :: If a Dataset, uses the dataset to retrieve the options.  If a Proc or Method,
+            calls the proc or method with the default dataset, and should return a modified
+            dataset to use.
+:options :: Specify the options to use for the input(s), instead of querying the database.
+:name_method :: If a String or Symbol, treats it as a method name and calls it on each object
+                returned by the dataset to get the text to use for the option. If not given,
+                tries the following method names in order: :forme_name, :name, :title, :number.
+                If given and not a String or Symbol, a callable object is assumed, and the value
+                is called with each object and should return the text to use for the option.
+
+== subform
+
+The Sequel support includes a method called subform, which can handle nested_attributes:
+
+  Forme.form(Album[1], :action=>'/foo') do |f|
+  
+    f.input :name
+  
+    f.subform :artist do
+      f.input :name
+    end
+  
+    f.subform :tracks do
+      f.input :number
+      f.input :name
+    end
+  
+  end
+
+This adds an input for editing the artist's name after the album's inputs, as well as
+inputs for editing the number and name for all of the tracks in the album, creating a
+form similar to:
+
+  <form action="/foo" method="post">
+  
+    <label>Name: <input id="album_name" name="album[name]" type="text" value="Blue Hawaii"/></label>
+  
+    <input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/>
+    <fieldset class="inputs"><legend>Artist</legend>
+      <label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="Elvis Presley"/></label>
+    </fieldset>
+  
+    <input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/>
+    <fieldset class="inputs"><legend>Track #1</legend>
+      <label>Number: <input id="album_tracks_attributes_0_number" name="album[tracks_attributes][0][number]" type="number" value="1"/></label>
+      <label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="Blue Hawaii"/></label>
+    </fieldset>
+    <input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/>
+    <fieldset class="inputs"><legend>Track #2</legend>
+      <label>Number: <input id="album_tracks_attributes_1_number" name="album[tracks_attributes][1][number]" type="number" value="2"/></label>
+      <label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="Almost Always True"/></label>
+    </fieldset>
+  
+  </form>
+  
+<em>Note: blank lines added for clarity; they would not appear in the actual output</em>
+
+subform options:
+
+:inputs :: Automatically call +inputs+ with the given values.  Using
+           this, it is not required to pass a block to the method,
+           though it will still work if you do.
+:legend :: Overrides the default :legend used (which is based on the
+           association name).  You can also use a proc as the value,
+           which will called with each associated object (and the position
+           in the associated object already for *_to_many associations),
+           and should return the legend string to use for that object.
+:grid :: Sets up a table with one row per associated object, and
+         one column per field.
+:labels :: When using the :grid option, override the labels that would
+           be created via the :inputs option.  If you are not providing
+           an :inputs option or are using a block with additional inputs,
+           you should specify this option.
+
+= Sinatra Support
+
+Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
+<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra::Base subclass.  It allows you to use the
+following API in your Sinatra ERB forms:
+
+  <% form(@obj, :action=>'/foo') do |f| %>
+    <%= f.input(:field) %>
+    <% f.tag(:fieldset) do %>
+      <%= f.input(:field_two) %>
+    <% end %>
+  <% end %>
+
+This example is for ERB/Erubis.  Other Sinatra template libraries work differently and
+do not support this integration.
+
+= Rails Support
+
+Forme ships with a Rails extension that you can get by <tt>require "forme/rails"</tt> and using
+<tt>helpers Forme::Rails::ERB</tt> in your controller.  If allows you to use the following API
+in your Rails forms:
+
+  <%= forme(@obj, :action=>'/foo') do |f| %>
+    <%= f.input(:field) %>
+    <%= f.tag(:fieldset) do %>
+      <%= f.input(:field_two) %>
+    <% end %>
+  <% end %>
+
+This has been tested on Rails 3.2-4.1, but should hopefully work on Rails 3.0+.
+
+= Other Similar Projects
+
+All of these have external dependencies:
+
+1. Rails built-in helpers
+2. Formtastic
+3. simple_form
+4. padrino-helpers
+
+Forme's DSL draws a lot of inspiration from both Formtastic and simple_form.
+
 = Supported Input Types and Options
 
 These are the types and options supported by Forme::Input objects, usually
@@ -359,344 +710,6 @@ You can mark a configuration as the default using:
 
   Forme.default_config = :mine
 
-= Forme::Form Creation
-
-As shown above, the general way to create Forme::Form instances is via the Forme.form method.
-This method takes up to 3 arguments, and yields the Forme::Form object to the block (if given).
-Here are the argument styles that you can use for Forme.form.
-
-No args :: Creates a +Form+ object with no options and not associated
-           to an +obj+, and with no attributes in the opening tag.
-1 hash arg :: Treated as opening form tag attributes, creating a
-              +Form+ object with no options.
-1 non-hash arg :: Treated as the +Form+'s +obj+, with empty options
-                  and no attributes in the opening tag.
-2 hash args :: First hash is opening attributes, second hash is +Form+
-               options.
-1 non-hash arg, 1-2 hash args :: First argument is +Form+'s obj, second is
-                                 opening attributes, third if provided is
-                                 +Form+'s options.
-
-Examples:
-
-  # No arguments
-  Forme.form 
-
-  # 1 hash argument
-  Forme.form(:action=>'/foo')
-
-  # 1 non-hash argument
-  Forme.form(Album[1])
-
-  # 2 hash arguments
-  Forme.form({:action=>'/foo'}, :values=>params)
-
-  # 1 non-hash argument, 1-2 hash arguments
-  Forme.form(Album[1], :action=>'/foo')
-  Forme.form(Album[1], {:action=>'/foo'}, :values=>params)
-
-If you want to create a Forme::Form instance related to a Hash object, you need to pass the
-hash object using the :obj option:
-
-  Forme.form({:action=>'/foo'}, :obj=>{:foo=>'bar'})
-
-You can also create Forme::Form objects the normal ruby way using Forme::Form#new.  The
-difference between Forme::Form#new and Forme.form is that Forme.form includes the wrapping
-<form> tag, where Forme::Form#new does not.  Because of this, Forme::Form does not accept
-a hash of <form> tag attributes, so it has the following API:
-
-  # No arguments
-  Forme::Form.new
-
-  # 1 hash argument
-  Forme::Form.new(:values=>params)
-
-  # 1 non-hash argument
-  Forme::Form.new(Album[1])
-
-  # 1 non-hash argument, 1-2 hash arguments
-  Forme::Form.new(Album[1], :values=>params)
-
-= Other Forme::Form Methods
-
-In addition to the input and inputs methods discussed above, Forme::Form instances also
-support the following methods.
-
-== form
-
-If you create a Form via Forme::Forme#new, you can use the form method to create a form tag:
-
-  Forme::Form.new.form(:action=>'/foo')
-
-This is what Forme.form uses internally to create the <form> tag
-
-== tag
-
-This adds a tag to the form.  If a block is given, yields to the block, and tags and inputs
-inside the block are placed inside the tag. The first argument is the type of tag to create,
-and the second argument if given should be a hash of tag attributes. This allows you to nest
-inputs inside tags:
-
-  Forme.form do |f|
-    f.tag(:span, :class="foo") do
-      f.input(:text)
-    end
-  end
-
-Which uses a form similar to the following:
-
-  <form>
-    <span class="foo">
-      <input type="text"/>
-    </span>
-  </form>
-
-== button
-
-This adds a submit input to the form:
-
-  f.button
-  # <input type="submit"/>
-
-It can be called with a string to provide a value for the button:
-
-  f.button('Search')
-  # <input type="submit" value="Search"/>
-
-It can be called with a hash to provide options for the submit input:
-
-  f.button(:value=>'Search', :class=>'btn')
-  # <input class="btn" type="submit" value="Search"/>
-
-== with_opts
-
-This requires a block, and modifies the Form's options inside the block,
-restoring the options when the block returns:
-
-  f.input(:text)
-  # <input type="text"/>
-  f.with_opts(:wrapper=>:li) do
-    f.input(:text)
-  end
-  # <li><input type="text"/></li>
-
-This supports most options you can provide to the Form, but not all.
-
-== with_obj
-
-This uses with_opts to change the Form's object temporarily, but it
-yields the object to the block, and also supports appending to the
-existing namespaces:
-
-  Forme.form([:foo], :namespace=>'a') do |f|
-    f.input(:first)
-    # <input id="a_first" name="a[first]" type="text" value="foo"/>
-    f.with_obj(['foobar'], 'b') do |o|
-      f.input(:first, :size=>o.first.size)
-      # <input id="a_b_first" name="a[b][first]" size="6" type="text" value="foobar"/>
-    end
-  end
-
-== each_obj
-
-This allows you to provide an enumerable yielding objects, and calls with_obj with
-each object in the enumerable.  It yields each object as well as the index of the
-object in the enumerable, and includes the index in the namespace:
-
-  Forme.form([:foo], :namespace=>'a') do |f|
-    f.each_obj([['foobar'], ['good']], 'b') do |o, i|
-      f.input(:first, :size=>10+i)
-    end
-    # <input id="a_b_0_first" name="a[b][0][first]" size="10" type="text" value="foobar"/>
-    # <input id="a_b_1_first" name="a[b][1][first]" size="11" type="text" value="good"/>
-  end
-
-= Sequel Support
-
-Forme ships with a Sequel plugin (use <tt>Sequel::Model.plugin :forme</tt> to enable), that makes
-Sequel::Model instances support the +forme_config+ and +forme_input+ methods and return customized inputs.
-
-== Basics
-
-The Sequel support handles inputs based on database columns, and automatically handles labels and errors.
-
-  Forme.form(Album[1], :action=>'/foo') do |f|
-    f.input :name
-    f.input :copies_sold
-  end
-
-This will create a form similar to:
-
-  <form action="/foo" method="post">
-    <label>Name: <input id="album_name" name="album[name]" type="text" value="Rising Force"/></label>
-    <label>Copies Sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="100000"/></label>
-  </form>
-
-The Forme Sequel plugin also integerates with Sequel's validation reflection support with the
-+validation_class_methods+ plugin that ships with Sequel.  It will add +pattern+ and +maxlength+ attributes
-based on the format, numericality, and length validations.
-
-== specialized input options
-
-In addition to the default Forme options, the Sequel support includes these additional options
-for specific column types.
-
-=== boolean
-
-:as :: Can be set to :select, :radio, or :checkbox.  :select will use a select input with three
-       options, a blank option, and true option, and a false option.  :radio will use two radio
-       inputs, one for true and one for false.  :checkbox will use a single checkbox input.
-       By default, uses :select if NULL values are allowed and the option is not required, and
-       :checkbox otherwise.
-:false_label :: The value to use for the false label, 'No' by default.
-:false_value :: The value to use for the false input, 'f' by default.
-:true_label :: The value to use for the true label, 'Yes' by default.
-:true_value :: The value to use for the true input, 't' by default.
-
-== string
-
-:as :: Can be set to :textarea to use a textarea input.
-
-== associations
-
-The Sequel support also handles associations, allowing you to change which objects are associated
-to the current object.
-
-  Forme.form(Album[1], :action=>'/foo') do |f|
-    f.input :name
-    f.input :artist
-    f.input :tags, :as=>:checkbox
-  end
-
-This will create a form similar to:
-
-  <form action="/foo" method="post">
-    <label>Name: <input id="album_name" name="album[name]" type="text" value="Blue Hawaii"/></label>
-    <label>Artist: <select id="album_artist_id" name="album[artist_id]">
-      <option selected="selected" value="1">Elvis Presley</option>
-      <option value="2">The Beatles</option>
-      <option value="3">The Monkeys</option>
-    </select></label>
-    <span class="label">Tags:
-      <label><input checked="checked" id="album_tag_pks_1" name="album[tag_pks][]" type="checkbox" value="1"/> Rock and Roll</label>
-      <label><input id="album_tag_pks_2" name="album[tag_pks][]" type="checkbox" value="2"/> Blues</label>
-      <label><input id="album_tag_pks_3" name="album[tag_pks][]" type="checkbox" value="3"/> Country</label>
-    </span>
-  </form>
-
-For one_to_many and many_to_many associations, you will probably want to use the
-+association_pks+ plugin that ships with Sequel.
-
-association input options:
-
-:as :: For many_to_one associations, set to :radio to use a series of radio buttons instead
-       a select input.  For one_to_many and many_to_many associations, set to :checkbox to
-       use a series of checkboxes instead of a multiple select input.
-:dataset :: If a Dataset, uses the dataset to retrieve the options.  If a Proc or Method,
-            calls the proc or method with the default dataset, and should return a modified
-            dataset to use.
-:options :: Specify the options to use for the input(s), instead of querying the database.
-:name_method :: If a String or Symbol, treats it as a method name and calls it on each object
-                returned by the dataset to get the text to use for the option. If not given,
-                tries the following method names in order: :forme_name, :name, :title, :number.
-                If given and not a String or Symbol, a callable object is assumed, and the value
-                is called with each object and should return the text to use for the option.
-
-== subform
-
-The Sequel support includes a method called subform, which can handles nested_attributes:
-
-  Forme.form(Album[1], :action=>'/foo') do |f|
-    f.input :name
-    f.subform :artist do
-      f.input :name
-    end
-    f.subform :tracks do
-      f.input :number
-      f.input :name
-    end
-  end
-
-This adds an input for editing the artist's name after the album's inputs, as well as
-inputs for editing the number and name for all of the tracks in the album, creating a
-form similar to:
-
-  <form action="/foo" method="post">
-    <label>Name: <input id="album_name" name="album[name]" type="text" value="Blue Hawaii"/></label>
-    <input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/>
-    <fieldset class="inputs"><legend>Artist</legend>
-      <label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="Elvis Presley"/></label>
-    </fieldset>
-    <input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/>
-    <fieldset class="inputs"><legend>Track #1</legend>
-      <label>Number: <input id="album_tracks_attributes_0_number" name="album[tracks_attributes][0][number]" type="number" value="1"/></label>
-      <label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="Blue Hawaii"/></label>
-    </fieldset>
-    <input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/>
-    <fieldset class="inputs"><legend>Track #2</legend>
-      <label>Number: <input id="album_tracks_attributes_1_number" name="album[tracks_attributes][1][number]" type="number" value="2"/></label>
-      <label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="Almost Always True"/></label>
-    </fieldset>
-  </form>
-
-subform options:
-
-:inputs :: Automatically call +inputs+ with the given values.  Using
-           this, it is not required to pass a block to the method,
-           though it will still work if you do.
-:legend :: Overrides the default :legend used (which is based on the
-           association name).  You can also use a proc as the value,
-           which will called with each associated object (and the position
-           in the associated object already for *_to_many associations),
-           and should return the legend string to use for that object.
-:grid :: Sets up a table with one row per associated object, and
-         one column per field.
-:labels :: When using the :grid option, override the labels that would
-           be created via the :inputs option.  If you are not providing
-           an :inputs option or are using a block with additional inputs,
-           you should specify this option.
-
-= Sinatra Support
-
-Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
-<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra::Base subclass.  It allows you to use the
-following API in your Sinatra ERB forms:
-
-  <% form(@obj, :action=>'/foo') do |f| %>
-    <%= f.input(:field) %>
-    <% f.tag(:fieldset) do %>
-      <%= f.input(:field_two) %>
-    <% end %>
-  <% end %>
-
-This example is for ERB/Erubis.  Other Sinatra template libraries work differently and
-do not support this integration.
-
-= Rails Support
-
-Forme ships with a Rails extension that you can get by <tt>require "forme/rails"</tt> and using
-<tt>helpers Forme::Rails::ERB</tt> in your controller.  If allows you to use the following API
-in your Rails forms:
-
-  <%= forme(@obj, :action=>'/foo') do |f| %>
-    <%= f.input(:field) %>
-    <%= f.tag(:fieldset) do %>
-      <%= f.input(:field_two) %>
-    <% end %>
-  <% end %>
-
-This has been tested on Rails 3.2-4.1, but should hopefully work on Rails 3.0+.
-
-= Other Similar Projects
-
-All of these have external dependencies:
-
-1. Rails built-in helpers
-2. Formtastic
-3. simple_form
-4. padrino-helpers
-
-Forme's DSL draws a lot of inspiration from both Formtastic and simple_form.
 
 = Author
 
