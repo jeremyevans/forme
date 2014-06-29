@@ -149,7 +149,15 @@ module Sequel # :nodoc:
             if respond_to?(meth, true)
               send(meth, sch)
             else
-              input_other(sch)
+              if DB.database_type == :postgres and !sch[:type] and dbtype = sch[:db_type] then 
+            	choices = DB[:pg_enum].filter(:enumtypid => DB[:pg_type].filter(:typname => "_#{dbtype}").map(:typelem).first).map(:enumlabel)
+            	opts[:value] = opts[:value] || obj.send(field)
+            	opts[:add_blank] = true if !opts.has_key?(:add_blank) && !(opts[:required] && opts[:value]) && sch[:allow_null]
+            	opts[:options] = choices.zip(choices)
+            	_input(:select, opts)
+              else
+	            input_other(sch)
+	          end
             end
           elsif !type && (ref = obj.model.association_reflection(field))
             ::Forme.attr_classes(opts[:wrapper_attr], ref[:type])
