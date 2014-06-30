@@ -2,67 +2,7 @@ require 'date'
 require 'bigdecimal'
 require 'forme/version'
 
-# Forme is designed to make creating HTML forms easier.  Flexibility and
-# simplicity are primary objectives.  The basic usage involves creating
-# a <tt>Forme::Form</tt> instance, and calling +input+ and +tag+ methods
-# to return html strings for widgets, but it could also be used for
-# serializing to other formats, or even as a DSL for a GUI application.
-#
-# In order to be flexible, Forme stores tags in abstract form until
-# output is requested.  There are two separate abstract <i>forms</i> that Forme
-# uses.  One is <tt>Forme::Input</tt>, and the other is <tt>Forme::Tag</tt>.
-# <tt>Forme::Input</tt> is a high level abstract form, while <tt>Forme::Tag</tt>
-# is a low level abstract form.
-#
-# The difference between <tt>Forme::Input</tt> and <tt>Forme::Tag</tt> 
-# is that <tt>Forme::Tag</tt> directly represents the underlying html
-# tag, containing a type, optional attributes, and children, while the
-# <tt>Forme::Input</tt> is more abstract and attempts to be user friendly.
-# For example, these both compile by default to the same select tag:
-# 
-#   f.input(:select, :options=>[['foo', 1]])
-#   # or
-#   f.tag(:select, {}, [f.tag(:option, {:value=>1}, ['foo'])])
-#
-# The processing of high level <tt>Forme::Input</tt>s into raw html
-# data is broken down to the following steps (called transformers):
-#
-# * +Formatter+: converts a <tt>Forme::Input</tt> instance into a
-#   <tt>Forme::Tag</tt> instance (or array of them).
-# * +ErrorHandler+: If the <tt>Forme::Input</tt> instance has a error,
-#   takes the formatted tag and marks it as having the error.
-# * +Labeler+: If the <tt>Forme::Input</tt> instance has a label,
-#   takes the formatted output and labels it.
-# * +Wrapper+: Takes the output of the formatter, labeler, and
-#   error_handler transformers, and wraps it in another tag (or just
-#   returns it unmodified).
-# * +Serializer+: converts a <tt>Forme::Tag</tt> instance into an
-#   html string.
-#
-# Technically, only the +Serializer+ is necessary.  The +input+
-# and +tag+ methods return +Input+ and +Tag+ objects.  These objects
-# both have +to_s+ defined to call the appropriate +Serializer+ with
-# themselves.  The +Serializer+ calls the appropriate +Formatter+ if
-# it encounters an +Input+ instance, and attempts to serialize the
-# output of that (which is usually a +Tag+ instance).  It is up to
-# the +Formatter+ to call the +Labeler+ and/or +ErrorHandler+ (if
-# necessary) and the +Wrapper+.
-# 
-# There is also an +InputsWrapper+ transformer, that is called by
-# <tt>Forme::Form#inputs</tt>.  It's used to wrap up a group of
-# related options (in a fieldset by default).
-#
-# The <tt>Forme::Form</tt> object takes the 6 transformers as options (:formatter,
-# :labeler, :error_handler, :wrapper, :inputs_wrapper, and :serializer), all of which
-# should be objects responding to +call+ (so you can use +Proc+s) or be symbols
-# registered with the library using <tt>Forme.register_transformer</tt>:
-#
-#   Forme.register_transformer(:wrapper, :p){|t| t.tag(:p, {}, t)}
-#
-# Most of the transformers can be overridden on a per instance basis by
-# passing the appopriate option to +input+ or +inputs+:
-#
-#   f.input(:name, :wrapper=>:p)
+
 module Forme
   # Exception class for exceptions raised by Forme.
   class Error < StandardError
@@ -331,6 +271,7 @@ module Forme
       input
     end
 
+	# :category: Internal
     # Create a new +Input+ associated with the receiver with the given
     # arguments, doing no other processing.
     def _input(*a)
@@ -366,6 +307,7 @@ module Forme
       _inputs(inputs, opts, &block)
     end
     
+	# :category: Internal
     # Internals of #inputs, should be used internally by the library, where #inputs
     # is designed for external use.
     def _inputs(inputs=[], opts={})
@@ -404,6 +346,7 @@ module Forme
       serializer.serialize_close(_tag(:form)) if serializer.respond_to?(:serialize_close)
     end
 
+	# :category: Internal
     # Create a +Tag+ associated to the receiver with the given arguments and block,
     # doing no other processing.
     def _tag(*a, &block)
@@ -433,6 +376,7 @@ module Forme
       tag
     end
 
+	# :category: Internal
     def tag_(*a, &block)
       tag(*a, &block)
     end
@@ -687,8 +631,8 @@ module Forme
     attr_reader :opts
 
     # Used to specify the value of the hidden input created for checkboxes.
-    # Since the default for an unspecified checkbox value is 1, the default is
-    # 0. If the checkbox value is 't', the hidden value is 'f', since that is
+    # Since the default for an unspecified checkbox value is 1, the default is 0. 
+    # If the checkbox value is 't', the hidden value is 'f', since that is
     # common usage for boolean values.
     CHECKBOX_MAP = Hash.new(0)
     CHECKBOX_MAP['t'] = 'f'
@@ -1243,7 +1187,7 @@ module Forme
   class InputsWrapper::FieldSetOL < InputsWrapper
     Forme.register_transformer(:inputs_wrapper, :fieldset_ol, new)
 
-    # Wrap the inputs in an ol tag
+    # Wrap the inputs in an <ol> tag
     def call(form, opts)
       super(form, opts){form.tag_(:ol){yield}}
     end
@@ -1255,7 +1199,7 @@ module Forme
   class InputsWrapper::OL
     Forme.register_transformer(:inputs_wrapper, :ol, new)
 
-    # Wrap the inputs in an ol tag
+    # Wrap the inputs in an <ol> tag
     def call(form, opts, &block)
       form.tag(:ol, opts[:attr], &block)
     end
@@ -1267,7 +1211,7 @@ module Forme
   class InputsWrapper::Div
     Forme.register_transformer(:inputs_wrapper, :div, new)
 
-    # Wrap the inputs in an ol tag
+    # Enclose the inputs in a <div> tag
     def call(form, opts, &block)
       form.tag(:div, opts[:attr], &block)
     end
@@ -1279,7 +1223,7 @@ module Forme
   class InputsWrapper::TR
     Forme.register_transformer(:inputs_wrapper, :tr, new)
 
-    # Wrap the inputs in an ol tag
+    # Enclose the inputs in a <tr> tag
     def call(form, opts, &block)
       form.tag(:tr, opts[:attr], &block)
     end
@@ -1291,7 +1235,7 @@ module Forme
   class InputsWrapper::Table
     Forme.register_transformer(:inputs_wrapper, :table, new)
 
-    # Wrap the inputs in a table tag.
+    # Wrap the inputs in a <table> tag.
     def call(form, opts, &block)
       attr = opts[:attr] ? opts[:attr].dup : {}
       form.tag(:table, attr) do
