@@ -51,6 +51,7 @@ module Forme
         end
       end
       
+      # :category: Internal
       # If a block is not given, emit the inputs into the current output
       # buffer.
       def _inputs(inputs=[], opts={})

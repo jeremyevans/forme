@@ -22,7 +22,7 @@ end
 
 ### RDoc
 
-RDOC_DEFAULT_OPTS = ["--line-numbers", "--inline-source", '--title', 'Forme']
+RDOC_DEFAULT_OPTS = ["--line-numbers", '--title', 'Forme']
 
 begin
   gem 'hanna-nouveau'

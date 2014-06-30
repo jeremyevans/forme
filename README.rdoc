@@ -7,6 +7,71 @@ Forme is a HTML forms library for ruby with the following goals:
 3. Support forms both with and without related objects
 4. Allow compiling down to different types of output
 
+= Introduction
+
+Forme is designed to make creating HTML forms easier.  Flexibility and
+simplicity are primary objectives.  The basic usage involves creating
+a <tt>Forme::Form</tt> instance, and calling +input+ and +tag+ methods
+to return html strings for widgets, but it could also be used for
+serializing to other formats, or even as a DSL for a GUI application.
+#
+In order to be flexible, Forme stores tags in abstract form until
+output is requested.  There are two separate abstract <i>forms</i> that Forme
+uses.  One is <tt>Forme::Input</tt>, and the other is <tt>Forme::Tag</tt>.
+<tt>Forme::Input</tt> is a high level abstract form, while <tt>Forme::Tag</tt>
+is a low level abstract form.
+#
+The difference between <tt>Forme::Input</tt> and <tt>Forme::Tag</tt> 
+is that <tt>Forme::Tag</tt> directly represents the underlying html
+tag, containing a type, optional attributes, and children, while the
+<tt>Forme::Input</tt> is more abstract and attempts to be user friendly.
+For example, these both compile by default to the same select tag:
+
+  f.input(:select, :options=>[['foo', 1]])
+  # or
+  f.tag(:select, {}, [f.tag(:option, {:value=>1}, ['foo'])])
+#
+The processing of high level <tt>Forme::Input</tt>s into raw html
+data is broken down to the following steps (called transformers):
+#
+* +Formatter+: converts a <tt>Forme::Input</tt> instance into a
+  <tt>Forme::Tag</tt> instance (or array of them).
+* +ErrorHandler+: If the <tt>Forme::Input</tt> instance has a error,
+  takes the formatted tag and marks it as having the error.
+* +Labeler+: If the <tt>Forme::Input</tt> instance has a label,
+  takes the formatted output and labels it.
+* +Wrapper+: Takes the output of the formatter, labeler, and
+  error_handler transformers, and wraps it in another tag (or just
+  returns it unmodified).
+* +Serializer+: converts a <tt>Forme::Tag</tt> instance into an
+  html string.
+#
+Technically, only the +Serializer+ is necessary.  The +input+
+and +tag+ methods return +Input+ and +Tag+ objects.  These objects
+both have +to_s+ defined to call the appropriate +Serializer+ with
+themselves.  The +Serializer+ calls the appropriate +Formatter+ if
+it encounters an +Input+ instance, and attempts to serialize the
+output of that (which is usually a +Tag+ instance).  It is up to
+the +Formatter+ to call the +Labeler+ and/or +ErrorHandler+ (if
+necessary) and the +Wrapper+.
+
+There is also an +InputsWrapper+ transformer, that is called by
+<tt>Forme::Form#inputs</tt>.  It's used to wrap up a group of
+related options (in a fieldset by default).
+#
+The <tt>Forme::Form</tt> object takes the 6 transformers as options (:formatter,
+:labeler, :error_handler, :wrapper, :inputs_wrapper, and :serializer), all of which
+should be objects responding to +call+ (so you can use +Proc+s) or be symbols
+registered with the library using <tt>Forme.register_transformer</tt>:
+#
+  Forme.register_transformer(:wrapper, :p){|t| t.tag(:p, {}, t)}
+#
+Most of the transformers can be overridden on a per instance basis by
+passing the appopriate option to +input+ or +inputs+:
+#
+  f.input(:name, :wrapper=>:p)
+
+
 = Installation
 
   gem install forme
@@ -138,39 +203,18 @@ a hash of <form> tag attributes, so it has the following API:
   # 1 non-hash argument, 1-2 hash arguments
   Forme::Form.new(Album[1], :values=>params)
 
-= Forme::Form Methods
+= Other Forme::Form Methods
+
+In addition to the input and inputs methods discussed above, Forme::Form instances also
+support the following methods.
 
 == form
 
 If you create a Form via Forme::Forme#new, you can use the form method to create a form tag:
 
-  f = Forme::Form.new
-  f.form(:action=>'/foo')
+  Forme::Form.new.form(:action=>'/foo')
 
 This is what Forme.form uses internally to create the <form> tag
-
-== input
-
-This adds an input to the form.  If the form has an associated object, and that
-object responds to +forme_input+, calls forme_input with the argument and options:
-
-  f = Forme::Form.new(obj)
-  f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo"/>'
-
-If the form has an associated object, and that object does not respond to +forme_iuput+,
-calls the method on the object (or uses [] if the object is a hash), and uses the result
-as the value:
-
-  f = Forme::Form.new([:foo])
-  f.input(:first) # '<input id="first" name="first" type="text" value="foo"/>'
-  
-If the form does not have an assocaited object, uses the first argument as the input
-type:
-
-  f = Forme::Form.new
-  f.input(:text) # '<input type="text" />'
-  
-The second argument is an options hash.  See below for the supported input types and options.
 
 == tag
 
@@ -192,33 +236,6 @@ Which results in a form similar to the following:
       <input type="text"/>
     </span>
   </form>
-
-== inputs
-
-This wraps multiple inputs in a tag (it uses the inputs_wrapper transformer discussed below,
-so it uses a fieldset by default). You can give the inputs to add as an enumerable argument:
-
-  f.inputs([:textarea, [:text, :value=>'a']])
-  # <fieldset>
-  #   <textarea></textarea>
-  #   <input type="text" value="a"/>
-  # </fieldset>
-
-You can also provide a block:
-
-  f.inputs([:textarea]) do
-    f.input(:text, :value=>'a')
-  end
-
-Any options given are passed to the inputs_wrapper (so you can use options such as :legend
-to set a legend for the fieldset), and also to the the with_opts (so you can use options
-such as :wrapper to modify the default wrapper transformer for inputs inside the block).
-There is also one option specific to the inputs method:
-
-:nested_inputs_wrapper :: Sets the default inputs_wrapper to use for calls to inputs inside
-                          the block.  The reason for this option is that :inputs_wrapper
-                          option affects the current call to inputs, so if you want to
-                          use a different inputs_wrapper for nested calls, you need this option.
 
 == button
 
@@ -469,7 +486,18 @@ in your Rails forms:
 
 This has been tested on Rails 3.2-4.1, but should hopefully work on Rails 3.0+.
 
-= Input Types and Options
+= Other Similar Projects
+
+All of these have external dependencies:
+
+1. Rails built-in helpers
+2. Formtastic
+3. simple_form
+4. padrino-helpers
+
+Forme's DSL draws a lot of inspiration from both Formtastic and simple_form.
+
+= Supported Input Types and Options
 
 These are the types and options supported by Forme::Input objects, usually
 created via Forme::Form#input:
@@ -747,20 +775,6 @@ You can mark a configuration as the default using:
 
   Forme.default_config = :mine
 
-= Other Similar Projects
-
-All of these have external dependencies:
-
-1. Rails built-in helpers
-2. Formtastic
-3. simple_form
-4. padrino-helpers
-
-Forme's DSL draws a lot of inspiration from both Formtastic and simple_form.
-
-= License
-
-MIT
 
 = Author
 
