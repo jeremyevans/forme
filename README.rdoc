@@ -147,7 +147,6 @@ You can even do everything in a single method call:
     :inputs=>[[:text, {:name=>'bar'}], [:textarea, {:name=>'baz'}]])
 
 = Forme::Form Creation
-<<<<<<< HEAD
 
 As shown above, the general way to create Forme::Form instances is via the Forme.form method.
 This method takes up to 3 arguments, and yields the Forme::Form object to the block (if given).
