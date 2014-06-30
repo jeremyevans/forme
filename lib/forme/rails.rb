@@ -53,7 +53,7 @@ module Forme
       
       # If a block is not given, emit the inputs into the current output
       # buffer.
-      def _inputs(inputs=[], opts={})
+      def _inputs(inputs=[], opts={}) # :nodoc:
         if block_given? && !opts[:subform]
           super
         else
@@ -83,8 +83,8 @@ module Forme
           template.raw(tag.to_s)
         end
       end
-
-      def tag_(type, attr={}, children=[])
+      
+      def tag_(type, attr={}, children=[]) # :nodoc:
         tag = _tag(type, attr, children)
         emit(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
         Array(tag.children).each{|c| emit(c)}

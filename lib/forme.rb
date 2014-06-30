@@ -306,8 +306,8 @@ module Forme
     end
     
     # Internals of #inputs, should be used internally by the library, where #inputs
-    # is designed for external use.
-    def _inputs(inputs=[], opts={})
+    # is designed for external use. 
+    def _inputs(inputs=[], opts={}) # :nodoc:
       if inputs.is_a?(Hash)
         opts = inputs.merge(opts)
         inputs = []
@@ -372,7 +372,8 @@ module Forme
       tag
     end
 
-    def tag_(*a, &block)
+    # Aliased for tag.  Workaround for issue with rails plugin.
+    def tag_(*a, &block) # :nodoc:
       tag(*a, &block)
     end
 
