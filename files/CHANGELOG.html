@@ -31,12 +31,95 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2014-06-17 20:54:53 -0700</span>
+          <span class='datetime'>2014-07-01 08:22:56 -0700</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            
+            <h3 id="label-0.10.0+%282014-07-01%29">0.10.0 (2014-07-01)<span><a href="#label-0.10.0+%282014-07-01%29">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <ul><li>
+            <p>Use [] instead of send to get input value for object forms if object is a
+            hash (jeremyevans)</p>
+            </li><li>
+            <p>Add Form#each_obj, for iterating over an Enumerable of objects, using
+            with_obj for each object (jeremyevans)</p>
+            </li><li>
+            <p>Add Form#with_obj, for changing a Form&#39;s object and namespace
+            temporarily (jeremyevans)</p>
+            </li><li>
+            <p>Support changing the namespace for a Form temporarily using
+            with_opts(:namespace=&gt;[&#39;ns1&#39;, &#39;ns2&#39;]) (jeremyevans)</p>
+            </li><li>
+            <p>Use current namespace for form object inputs if :id/:name/:key is not
+            specified (jeremyevans)</p>
+            </li><li>
+            <p>Remove SequelForm#nested_associations accessor methods, no longer necessary
+            (jeremyevans)</p>
+            </li><li>
+            <p>Support changing the object for a Form temporarily using
+            with_opts(:obj=&gt;new_obj) (jeremyevans)</p>
+            </li><li>
+            <p>Add :table, :tr, :ol, and :fieldset_ol wrappers, which automatically set
+            wrapper and inputs_wrapper appropriately (jeremyevans)</p>
+            </li><li>
+            <p>Add subform :grid option in <a href="../classes/Sequel.html">Sequel</a>
+            plugin, for more compact editing of nested *_to_many associations
+            (jeremyevans)</p>
+            </li><li>
+            <p>Make table inputs_wrapper accept a :labels option and automatically set up
+            th tags with the labels for each column (jeremyevans)</p>
+            </li><li>
+            <p>Form#inputs now accepts a :nested_inputs_wrapper option to set default
+            inputs_wrapper transformer inside the block (jeremyevans)</p>
+            </li><li>
+            <p>Add tr inputs_wrapper and td wrapper, for horizontal layout of inputs
+            inside a table (jeremyevans)</p>
+            </li><li>
+            <p>Form#inputs now accepts transformer options (e.g :wrapper) and
+            automatically calls with_opts (jeremyevans)</p>
+            </li><li>
+            <p>Remove Form#format and Form#serialize (jeremyevans)</p>
+            </li><li>
+            <p>Remove Form#{formatter,labeler,error_handler,wrapper,inputs_wrapper}
+            accessors (jeremyevans)</p>
+            </li><li>
+            <p>Add Form.with_opts method to override opts for the given block
+            (jeremyevans)</p>
+            </li><li>
+            <p>Remove Form#use_serializer and Serializer module (jeremyevans)</p>
+            </li><li>
+            <p>table inputs_wrapper now respects the :legend and :legend_attr options,
+            using a caption (jeremyevans)</p>
+            </li><li>
+            <p>ol, div, and table inputs_wrappers now respect the :attr option
+            (jeremyevans)</p>
+            </li><li>
+            <p>Make subform always use the inputs_wrapper, even if :inputs is not given
+            (jeremyevans)</p>
+            </li><li>
+            <p>Allow input_defaults to work with symbol keys for inputs that use symbol
+            types (jeremyevans)</p>
+            </li><li>
+            <p>Support Form :values option, for automatically setting value attributes for
+            inputs from submitted params (jeremyevans)</p>
+            </li><li>
+            <p>Support :autofocus option for setting autofocus attribute, similar to
+            :required and :disabled (jeremyevans)</p>
+            </li><li>
+            <p>Add <a
+            href="../classes/Forme.html#attribute-c-default_add_blank_prompt">Forme.default_add_blank_prompt</a>
+            for setting default prompt used for :add_blank option (jeremyevans)</p>
+            </li><li>
+            <p>Support radioset and checkboxset Input types (jeremyevans)</p>
+            </li><li>
+            <p>Support :key and :key_id options for Inputs, for automatically setting
+            name/id attributes based on current namespace (jeremyevans)</p>
+            </li><li>
+            <p>Move namespace handling from <a href="../classes/Sequel.html">Sequel</a>
+            plugin into the core (jeremyevans)</p>
+            </li></ul>
             
             <h3 id="label-0.9.2+%282014-04-10%29">0.9.2 (2014-04-10)<span><a href="#label-0.9.2+%282014-04-10%29">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
             <ul><li>

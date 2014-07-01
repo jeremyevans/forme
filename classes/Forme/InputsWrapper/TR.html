@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Sequel::Plugins::Forme::SinatraSequelForm</title>
+    <title>Forme::InputsWrapper::TR</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
         function popupCode(url) {
@@ -26,27 +26,32 @@
     <div class='class' id='wrapper'>
       <div class='header'>
         <h1 class='name'>
-          <span class='type'>module</span>
-          Sequel::Plugins::Forme::SinatraSequelForm
+          <span class='type'>class</span>
+          Forme::InputsWrapper::TR
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/sequel/plugins/forme_rb.html">lib/sequel/plugins/forme.rb</a>
+            <a target="docwin" href="../../../files/lib/forme_rb.html">lib/forme.rb</a>
           </li>
         </ol>
+        <div class='parent'>
+          Superclass:
+          <strong>Object</strong>
+        </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             
-            <p>Helper module used for Sequel/Sinatra forms.  Necessary for proper subform
-            handling when using such forms with partials.</p>
+            <p>Use a &lt;tr&gt; tag to wrap the inputs.</p>
+            
+            <p>Registered as :tr.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-subform">subform</a></li>
+              <li><a target="docwin" href="#method-i-call">call</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -54,22 +59,21 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-subform'>
-                <a name='method-i-subform'></a>
+              <div class='method public-instance' id='method-method-i-call'>
+                <a name='method-i-call'></a>
                 <div class='synopsis'>
-                  <span class='name'>subform</span>
-                  <span class='arguments'>(*, &block)</span>
+                  <span class='name'>call</span>
+                  <span class='arguments'>(form, opts, &block)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Capture the inside of the inputs, injecting it into the template if a block
-                  is given, or returning it as a string if not.</p>
+                  <p>Wrap the inputs in an &lt;tr&gt; tag</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-subform-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-subform-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 426</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">subform</span>(<span class="ruby-operator">*</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">capture</span>{<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme.rb, line 1223</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:tr</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

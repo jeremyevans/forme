@@ -54,13 +54,11 @@
             </ol>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-_inputs">_inputs</a></li>
               <li><a target="docwin" href="#method-i-button">button</a></li>
               <li><a target="docwin" href="#method-i-emit">emit</a></li>
               <li><a target="docwin" href="#method-i-input">input</a></li>
               <li><a target="docwin" href="#method-i-inputs">inputs</a></li>
               <li><a target="docwin" href="#method-i-tag">tag</a></li>
-              <li><a target="docwin" href="#method-i-tag_">tag_</a></li>
               <li><a target="docwin" href="#attribute-i-template">template</a></li>
             </ol>
           </div>
@@ -104,23 +102,6 @@
                 </div>
               </div>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-_inputs'>
-                <a name='method-i-_inputs'></a>
-                <div class='synopsis'>
-                  <span class='name'>_inputs</span>
-                  <span class='arguments'>(*)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>If a block is not given, emit the inputs into the current output buffer.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-_inputs-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-_inputs-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">_inputs</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">emit</span>(<span class="ruby-keyword">super</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
               <div class='method public-instance' id='method-method-i-button'>
                 <a name='method-i-button'></a>
                 <div class='synopsis'>
@@ -207,22 +188,6 @@
                     [show source]
                   </a>
                   <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 78</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:with_output_buffer</span>){<span class="ruby-identifier">tag_</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;    <span class="ruby-identifier">template</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-tag_'>
-                <a name='method-i-tag_'></a>
-                <div class='synopsis'>
-                  <span class='name'>tag_</span>
-                  <span class='arguments'>(type, attr={}, children=[])</span>
-                </div>
-                <div class='description'>
-                  
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag_-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-tag_-source'><span class="ruby-comment"># File lib/forme/rails.rb, line 87</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag_</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[])&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;  <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">tag</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_open</span>)&#x000A;  <span class="ruby-constant">Array</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">children</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">c</span>)}&#x000A;  <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;  <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">tag</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_close</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

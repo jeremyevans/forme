@@ -55,6 +55,7 @@
             <h3>Public Instance</h3>
             <ol>
               <li><a target="docwin" href="#attribute-i-form">form</a></li>
+              <li><a target="docwin" href="#attribute-i-form_opts">form_opts</a></li>
               <li><a target="docwin" href="#method-i-format">format</a></li>
               <li><a target="docwin" href="#method-i-merge_opts">merge_opts</a></li>
               <li><a target="docwin" href="#attribute-i-opts">opts</a></li>
@@ -82,63 +83,23 @@
                   </tr>
                   <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>
+                      <a name='attribute-i-form_opts'>form_opts</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The options hash in use by the form at the time of the Input&#39;s
+                      instantiation.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
                       <a name='attribute-i-opts'>opts</a>
                     </td>
                     <td class='context-item-value'>[R]</td>
                     <td class='context-item-desc'>
                       
-                      <p>The options hash for the receiver.  Here are some of the supported options
-                      used by the built-in formatter transformers:</p>
-                      <dl class="rdoc-list note-list"><dt>:error 
-                      <dd>
-                      <p>Set an error message, invoking the error_handler</p>
-                      </dd><dt>:label 
-                      <dd>
-                      <p>Set a label, invoking the labeler</p>
-                      </dd><dt>:wrapper 
-                      <dd>
-                      <p>Set a custom wrapper, overriding the form&#39;s default</p>
-                      </dd><dt>:labeler 
-                      <dd>
-                      <p>Set a custom labeler, overriding the form&#39;s default</p>
-                      </dd><dt>:error_handler 
-                      <dd>
-                      <p>Set a custom error_handler, overriding the form&#39;s default</p>
-                      </dd><dt>:attr 
-                      <dd>
-                      <p>The attributes hash to use for the given tag, takes precedence over other
-                      options that set attributes.</p>
-                      </dd><dt>:data 
-                      <dd>
-                      <p>A hash of data-* attributes for the resulting tag.  Keys in this hash will
-                      have attributes created with data- prepended to the attribute name.</p>
-                      </dd><dt>:name 
-                      <dd>
-                      <p>The name attribute to use</p>
-                      </dd><dt>:id 
-                      <dd>
-                      <p>The id attribute to use</p>
-                      </dd><dt>:placeholder 
-                      <dd>
-                      <p>The placeholder attribute to use</p>
-                      </dd><dt>:value 
-                      <dd>
-                      <p>The value attribute to use for input tags, the content of the textarea for
-                      textarea tags, or the selected option(s) for select tags.</p>
-                      </dd><dt>:class 
-                      <dd>
-                      <p>A class to use.  Unlike other options, this is combined with the classes
-                      set in the :attr hash.</p>
-                      </dd><dt>:disabled 
-                      <dd>
-                      <p>Set the disabled attribute if true</p>
-                      </dd><dt>:required 
-                      <dd>
-                      <p>Set the required attribute if true</p>
-                      </dd></dl>
-                      
-                      <p>For other supported options, see the private methods in
-                      <code>Formatter</code>.</p>
+                      <p>The options hash for the <a href="Input.html">Input</a>.</p>
                     </td>
                   </tr>
                   <tr class='top-aligned-row context-row'>
@@ -170,7 +131,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme.rb, line 534</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-ivar">@opts</span> = (<span class="ruby-identifier">form</span>.<span class="ruby-identifier">input_defaults</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme.rb, line 492</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-identifier">defaults</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">input_defaults</span>&#x000A;  <span class="ruby-ivar">@opts</span> = (<span class="ruby-identifier">defaults</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">type</span>){<span class="ruby-identifier">defaults</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>]} <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-ivar">@form_opts</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -189,7 +150,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-format-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-format-source'><span class="ruby-comment"># File lib/forme.rb, line 558</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">format</span>&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">format</span>(<span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-format-source'><span class="ruby-comment"># File lib/forme.rb, line 518</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">format</span>&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:formatter</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-merge_opts'>
@@ -207,7 +168,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-merge_opts-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-merge_opts-source'><span class="ruby-comment"># File lib/forme.rb, line 541</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">merge_opts</span>(<span class="ruby-identifier">hash</span>)&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">hash</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-merge_opts-source'><span class="ruby-comment"># File lib/forme.rb, line 501</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">merge_opts</span>(<span class="ruby-identifier">hash</span>)&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">hash</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-tag'>
@@ -225,7 +186,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme.rb, line 547</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme.rb, line 507</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-to_s'>
@@ -242,7 +203,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-to_s-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/forme.rb, line 552</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">serialize</span>(<span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/forme.rb, line 512</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:serializer</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

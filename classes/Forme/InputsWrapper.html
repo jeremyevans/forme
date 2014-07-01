@@ -43,7 +43,7 @@
         <div id='text'>
           <div id='description'>
             
-            <p>Default inputs_wrapper used by the library, uses a fieldset.</p>
+            <p>Default inputs_wrapper used by the library, uses a &lt;fieldset&gt;.</p>
             
             <p>Registered as :default.</p>
           </div>
@@ -62,6 +62,7 @@
               <li><a target="docwin" href="InputsWrapper/Div.html">Forme::InputsWrapper::Div</a></li>
               <li><a target="docwin" href="InputsWrapper/FieldSetOL.html">Forme::InputsWrapper::FieldSetOL</a></li>
               <li><a target="docwin" href="InputsWrapper/OL.html">Forme::InputsWrapper::OL</a></li>
+              <li><a target="docwin" href="InputsWrapper/TR.html">Forme::InputsWrapper::TR</a></li>
               <li><a target="docwin" href="InputsWrapper/Table.html">Forme::InputsWrapper::Table</a></li>
             </ol>
           </div>
@@ -76,14 +77,14 @@
                 </div>
                 <div class='description'>
                   
-                  <p>Wrap the inputs in a fieldset.  If the :legend option is given, add a
-                  <code>legend</code> tag as the first child of the fieldset.</p>
+                  <p>Wrap the inputs in a &lt;fieldset&gt;.  If the :legend option is given, add
+                  a &lt;legend&gt; tag as the first child of the fieldset.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme.rb, line 1084</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>].<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;inputs&#39;</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">legend</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend</span>]&#x000A;    <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">attr</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">form</span>.<span class="ruby-identifier">emit</span>(<span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:legend</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend_attr</span>], <span class="ruby-identifier">legend</span>))&#x000A;      <span class="ruby-keyword">yield</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme.rb, line 1166</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>].<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;inputs&#39;</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">legend</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend</span>]&#x000A;    <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">attr</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">form</span>.<span class="ruby-identifier">emit</span>(<span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:legend</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend_attr</span>], <span class="ruby-identifier">legend</span>))&#x000A;      <span class="ruby-keyword">yield</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
