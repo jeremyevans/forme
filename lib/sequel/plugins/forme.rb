@@ -1,4 +1,5 @@
 require 'forme'
+require 'thread'
 
 module Sequel # :nodoc:
   module Plugins # :nodoc:
@@ -432,13 +433,29 @@ module Sequel # :nodoc:
         end
       end
 
+      class Form < ::Forme::Form
+        include SequelForm
+      end
+
       module InstanceMethods
+        MUTEX = Mutex.new
+        FORM_CLASSES = {::Forme::Form=>Form}
+
         # Configure the +form+ with support for <tt>Sequel::Model</tt>
         # specific code, such as support for nested attributes.
         def forme_config(form)
-          form.extend(SequelForm)
           form.namespaces << model.send(:underscore, model.name)
-          form.extend(SinatraSequelForm) if defined?(::Forme::Sinatra::Form) && form.is_a?(::Forme::Sinatra::Form)
+        end
+
+        # Return subclass of base form that includes the necessary Sequel form methods.
+        def forme_form_class(base)
+          unless klass = MUTEX.synchronize{FORM_CLASSES[base]}
+            klass = Class.new(base)
+            klass.send(:include, SequelForm)
+            klass.send(:include, SinatraSequelForm) if defined?(::Forme::Sinatra::Form) && base == ::Forme::Sinatra::Form
+            MUTEX.synchronize{FORM_CLASSES[base] = klass}
+          end
+          klass
         end
 
         # Return <tt>Forme::Input</tt> instance based on the given arguments.

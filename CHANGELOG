@@ -1,3 +1,7 @@
+=== HEAD
+
+* Do not extend objects at runtime when using the Sequel support (jeremyevans)
+
 === 0.10.0 (2014-07-01)
 
 * Use #[] instead of #send to get input value for object forms if object is a hash (jeremyevans)

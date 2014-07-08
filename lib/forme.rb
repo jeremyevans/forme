@@ -148,6 +148,16 @@ module Forme
     # Must respond to +call+ or be a registered symbol.
     attr_reader :serializer
 
+    # Use appropriate Form subclass for object based on the current class, if the
+    # object responds to +forme_form_class+.
+    def self.new(obj=nil, opts={})
+      if obj && obj.respond_to?(:forme_form_class) && !opts[:_forme_form_class_set]
+        obj.forme_form_class(self).new(obj, opts.merge(:_forme_form_class_set=>true))
+      else
+        super
+      end
+    end
+
     # Create a +Form+ instance and yield it to the block,
     # injecting the opening form tag before yielding and
     # the closing form tag after yielding.
