@@ -478,6 +478,16 @@ module Forme
     ensure
       @nesting.pop
     end
+
+    # Return a serialized opening tag for the given tag.
+    def serialize_open(tag)
+      raw_output(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
+    end
+
+    # Return a serialized closing tag for the given tag.
+    def serialize_close(tag)
+      raw_output(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
+    end
   end
 
   # High level abstract tag form, transformed by formatters into the lower

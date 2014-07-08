@@ -90,10 +90,10 @@ module Forme
       
       def tag_(type, attr={}, children=[]) # :nodoc:
         tag = _tag(type, attr, children)
-        emit(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
+        emit(serialize_open(tag))
         Array(tag.children).each{|c| emit(c)}
         yield self if block_given?
-        emit(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
+        emit(serialize_close(tag))
       end
     end
 
