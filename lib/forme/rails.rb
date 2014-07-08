@@ -94,22 +94,8 @@ module Forme
     end
 
     module ERB
-      # Create a +Form+ object and yield it to the block,
-      # injecting the opening form tag before yielding and
-      # the closing form tag after yielding.
-      #
-      # Argument Handling:
-      # No args :: Creates a +Form+ object with no options and not associated
-      #            to an +obj+, and with no attributes in the opening tag.
-      # 1 hash arg :: Treated as opening form tag attributes, creating a
-      #               +Form+ object with no options.
-      # 1 non-hash arg :: Treated as the +Form+'s +obj+, with empty options
-      #                   and no attributes in the opening tag.
-      # 2 hash args :: First hash is opening attributes, second hash is +Form+
-      #                options.
-      # 1 non-hash arg, 1-2 hash args :: First argument is +Form+'s obj, second is
-      #                                  opening attributes, third if provided is
-      #                                  +Form+'s options.
+      # Create a +Form+ object tied to the current template, and using the standard
+      # Rails hidden tags.
       def forme(obj=nil, attr={}, opts={}, &block)
         h = {:template=>self, :hidden_tags=>Forme::Rails::HIDDEN_TAGS}
         (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
