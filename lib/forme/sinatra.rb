@@ -76,7 +76,7 @@ module Forme
         end
       end
 
-      def capture(block='')
+      def capture(block='') # :nodoc:
         buf_was, @output = @output, block.is_a?(Proc) ? (eval("@_out_buf", block.binding) || @output) : block
         yield
         ret = @output
