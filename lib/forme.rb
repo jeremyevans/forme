@@ -403,6 +403,13 @@ module Forme
       end
     end
 
+    # Marks the string as containing already escaped output.  Returns string given
+    # by default, but subclasses for specific web frameworks can handle automatic
+    # html escaping by overriding this.
+    def raw_output(s)
+      s
+    end
+
     # Temporarily override the given object and namespace for the form.  Any given
     # namespaces are appended to the form's current namespace.
     def with_obj(obj, namespace=nil)
@@ -510,7 +517,7 @@ module Forme
 
     # Return a string containing the serialized content of the receiver.
     def to_s
-      Forme.transform(:serializer, @opts, @form_opts, self)
+      form.raw_output(Forme.transform(:serializer, @opts, @form_opts, self))
     end
 
     # Transform the receiver into a lower level +Tag+ form (or an array
@@ -559,7 +566,7 @@ module Forme
 
     # Return a string containing the serialized content of the receiver.
     def to_s
-      Forme.transform(:serializer, @opts, @form.opts, self)
+      form.raw_output(Forme.transform(:serializer, @opts, @form.opts, self))
     end
 
     private

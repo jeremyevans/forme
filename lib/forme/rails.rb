@@ -38,7 +38,7 @@ module Forme
       # Serialize and mark as already escaped the string version of
       # the input.
       def emit(tag)
-        template.output_buffer << template.raw(tag.to_s)
+        template.output_buffer << tag.to_s
       end
 
       # Capture the inputs into a new output buffer, and return
@@ -63,12 +63,17 @@ module Forme
 
       # Return a string version of the input that is already marked as safe.
       def input(*)
-        template.raw(super.to_s)
+        super.to_s
       end
 
       # Return a string version of the button that is already marked as safe.
       def button(*)
-        template.raw(super.to_s)
+        super.to_s
+      end
+
+      # Use the template's raw method to mark the given string as html safe.
+      def raw_output(s)
+        template.raw(s)
       end
 
       # If a block is given, create a new output buffer and make sure all the
@@ -79,8 +84,7 @@ module Forme
         if block_given?
           template.send(:with_output_buffer){tag_(type, attr, children, &block)}
         else
-          tag = _tag(type, attr, children)
-          template.raw(tag.to_s)
+          _tag(type, attr, children).to_s
         end
       end
       
