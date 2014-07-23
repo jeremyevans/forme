@@ -419,9 +419,9 @@ module Sequel # :nodoc:
         end
       end
 
-      # Helper module used for Sequel/Sinatra forms.  Necessary for
+      # Helper module used for Sequel forms using ERB template integration.  Necessary for
       # proper subform handling when using such forms with partials.
-      module SinatraSequelForm
+      module ERBSequelForm
         # Capture the inside of the inputs, injecting it into the template
         # if a block is given, or returning it as a string if not.
         def subform(*, &block)
@@ -432,6 +432,7 @@ module Sequel # :nodoc:
           end
         end
       end
+      SinatraSequelForm = ERBSequelForm
 
       class Form < ::Forme::Form
         include SequelForm
@@ -452,7 +453,7 @@ module Sequel # :nodoc:
           unless klass = MUTEX.synchronize{FORM_CLASSES[base]}
             klass = Class.new(base)
             klass.send(:include, SequelForm)
-            klass.send(:include, SinatraSequelForm) if defined?(::Forme::Sinatra::Form) && base == ::Forme::Sinatra::Form
+            klass.send(:include, ERBSequelForm) if defined?(::Forme::ERB::Form) && base == ::Forme::ERB::Form
             MUTEX.synchronize{FORM_CLASSES[base] = klass}
           end
           klass
