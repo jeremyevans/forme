@@ -2,7 +2,11 @@ require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
 require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_helper.rb')
 
 require 'rubygems'
+begin
 require 'action_controller/railtie'
+rescue LoadError
+  warn "unable to load rails, skipping rails spec"
+else
 require 'forme/rails'
 
 class FormeRails < Rails::Application
@@ -232,4 +236,5 @@ describe "Forme Rails integration" do
   specify "#form should handle Rails SafeBuffers" do
     sin_get('/safe_buffer').should == '<form action="/baz"><fieldset class="inputs"><legend><b>foo</b></legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
   end
+end
 end

@@ -2,11 +2,14 @@ require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
 require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_helper.rb')
 
 require 'rubygems'
+begin
 require 'sinatra/base'
-require 'forme/sinatra'
 require(ENV['ERUBIS'] ? 'erubis' : 'erb')
 require 'rack/csrf'
-
+rescue LoadError
+  warn "unable to load sinatra or rack/csrf, skipping sinatra spec"
+else
+require 'forme/sinatra'
 class FormeSinatraTest < Sinatra::Base
   helpers(Forme::Sinatra::ERB)
   disable :show_exceptions
@@ -194,4 +197,5 @@ describe "Forme Sinatra ERB integration" do
   specify "#form with an empty form should work" do
     sin_get('/noblock_empty').should == '<form action="/baz"></form>'
   end
+end
 end
