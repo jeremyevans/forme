@@ -4,31 +4,30 @@ require File.join(File.dirname(File.expand_path(__FILE__)), 'erb_helper.rb')
 
 require 'rubygems'
 begin
-require 'sinatra/base'
+require 'roda'
 require(ENV['ERUBIS'] ? 'erubis' : 'erb')
 require 'rack/csrf'
 rescue LoadError
-  warn "unable to load sinatra or rack/csrf, skipping sinatra spec"
+  warn "unable to load roda or rack/csrf, skipping roda spec"
 else
-require 'forme/sinatra'
-class FormeSinatraTest < Sinatra::Base
-  helpers(Forme::Sinatra::ERB)
-  disable :show_exceptions
-  enable :raise_errors
-  enable :sessions
+class FormeRodaTest < Roda
+  plugin :forme
+  use Rack::Session::Cookie, :secret => "__a_very_long_string__"
   use Rack::Csrf
 
-  def self.get(path, &block)
-    super("/#{path}", &block)
+  def erb(s, opts={})
+    render(opts.merge(:inline=>s))
   end
 
-  instance_exec(self, &ERB_BLOCK)
+  route do |r|
+    instance_exec(r, &ERB_BLOCK)
+  end
 end
 
-describe "Forme Sinatra ERB integration" do
+describe "Forme Roda ERB integration" do
   def sin_get(path)
     s = ''
-    FormeSinatraTest.new.call(@rack.merge('PATH_INFO'=>path))[2].each{|str| s << str}
+    FormeRodaTest.app.call(@rack.merge('PATH_INFO'=>path))[2].each{|str| s << str}
     s.gsub(/\s+/, ' ').strip
   end
 
