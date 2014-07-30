@@ -1,6 +1,8 @@
 source "https://rubygems.org"
 
 gem 'sequel'
-gem 'sinatra'
+gem 'roda'
+gem 'tilt'
+gem 'rack-protection'
 gem 'pg'
 gem 'unicorn'
