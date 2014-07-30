@@ -31,7 +31,7 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../files/lib/forme/sinatra_rb.html">lib/forme/sinatra.rb</a>
+            <a target="docwin" href="../../../files/lib/forme/erb_rb.html">lib/forme/erb.rb</a>
           </li>
         </ol>
       </div>
@@ -39,11 +39,8 @@
         <div id='text'>
           <div id='description'>
             
-            <p>This is the module used to add the Forme integration to Sinatra.  It should
-            be enabled in Sinatra with the following code in your
-            <code>Sinatra::Base</code> subclass:</p>
-            
-            <pre>helpers Forme::Sinatra::ERB</pre>
+            <p>This is the module used to add the Forme integration to <a
+            href="Helper.html">ERB</a>.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -65,36 +62,14 @@
                 </div>
                 <div class='description'>
                   
-                  <p>Create a <code>Form</code> object and yield it to the block, injecting the
-                  opening form tag before yielding and the closing form tag after yielding.</p>
-                  
-                  <p>Argument Handling:</p>
-                  <dl class="rdoc-list note-list"><dt>No args 
-                  <dd>
-                  <p>Creates a <code>Form</code> object with no options and not associated to an
-                  <code>obj</code>, and with no attributes in the opening tag.</p>
-                  </dd><dt>1 hash arg 
-                  <dd>
-                  <p>Treated as opening form tag attributes, creating a <code>Form</code> object
-                  with no options.</p>
-                  </dd><dt>1 non-hash arg 
-                  <dd>
-                  <p>Treated as the <code>Form</code>&#39;s <code>obj</code>, with empty options
-                  and no attributes in the opening tag.</p>
-                  </dd><dt>2 hash args 
-                  <dd>
-                  <p>First hash is opening attributes, second hash is <code>Form</code> options.</p>
-                  </dd><dt>1 non-hash arg, 1-2 hash args 
-                  <dd>
-                  <p>First argument is <code>Form</code>&#39;s obj, second is opening
-                  attributes, third if provided is <code>Form</code>&#39;s options.</p>
-                  </dd></dl>
+                  <p>Create a <code>Form</code> object tied to the current output buffer, using
+                  the standard ERB hidden tags.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-form-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-form-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 110</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">h</span> = {<span class="ruby-value">:output=</span><span class="ruby-operator">&gt;</span><span class="ruby-ivar">@_out_buf</span>, <span class="ruby-value">:hidden_tags=</span><span class="ruby-operator">&gt;</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Sinatra</span><span class="ruby-operator">::</span><span class="ruby-constant">HIDDEN_TAGS</span>, <span class="ruby-value">:env=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">env</span>}&#x000A;    (<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>))&#x000A;    <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-form-source'><span class="ruby-comment"># File lib/forme/erb.rb, line 93</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">h</span> = {<span class="ruby-value">:output=</span><span class="ruby-operator">&gt;</span><span class="ruby-ivar">@_out_buf</span>, <span class="ruby-value">:hidden_tags=</span><span class="ruby-operator">&gt;</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">HIDDEN_TAGS</span>, <span class="ruby-value">:env=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">env</span>}&#x000A;    (<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>))&#x000A;    <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

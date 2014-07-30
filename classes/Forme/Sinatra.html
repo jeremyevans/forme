@@ -37,23 +37,22 @@
       </div>
       <div id='content'>
         <div id='text'>
-          <div id='description'></div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Class</h3>
-            <ol>
-              <li><a target="docwin" href="#method-c-add_hidden_tag">add_hidden_tag</a></li>
-            </ol>
+          <div id='description'>
+            
+            <p>For backwards compatibility only.  New code should require
+            &#39;forme/erb&#39; and include the <a
+            href="ERB/Helper.html">Forme::ERB::Helper</a> class:</p>
+            
+            <pre>helpers Forme::ERB::Helper</pre>
           </div>
           <div id='context'>
           </div>
           <div id='class-list'>
             <h2>Classes and Modules</h2>
             <ol>
-              <li><a target="docwin" href="Sinatra/ERB.html">Forme::Sinatra::ERB</a></li>
-              <li><a target="docwin" href="Sinatra/Erubis.html">Forme::Sinatra::Erubis</a></li>
-              <li><a target="docwin" href="Sinatra/Rack.html">Forme::Sinatra::Rack</a></li>
-              <li><a target="docwin" href="Sinatra/Form.html">Forme::Sinatra::Form</a></li>
+              <li><a target="docwin" href="ERB/Helper.html">Forme::Sinatra::ERB</a></li>
+              <li><a target="docwin" href="ERB/ERB.html">Forme::Sinatra::Erubis</a></li>
+              <li><a target="docwin" href="ERB/Form.html">Forme::Sinatra::Form</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -62,39 +61,47 @@
               <div class='name-list'>
                 <table summary='Constants'>
                   <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ERB</td>
+                    <td>=</td>
+                    <td class='context-item-value'>Forme::ERB::Helper</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>This is the module used to add the Forme integration to <a
+                      href="ERB/Helper.html">ERB</a>.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>Erubis</td>
+                    <td>=</td>
+                    <td class='context-item-value'>ERB</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>This is the module used to add the Forme integration to <a
+                      href="ERB/Helper.html">ERB</a>.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>Form</td>
+                    <td>=</td>
+                    <td class='context-item-value'>Forme::ERB::Form</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>Subclass used when using Forme <a href="ERB/Helper.html">ERB</a>
+                      integration. Handles integrating into the view template so that methods
+                      with blocks can inject strings into the output.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>HIDDEN_TAGS</td>
                     <td>=</td>
-                    <td class='context-item-value'>[]</td>
+                    <td class='context-item-value'>Forme::ERB::HIDDEN_TAGS</td>
                     <td>&nbsp;</td>
                     <td class='context-item-desc'></td>
                   </tr>
                 </table>
-              </div>
-            </div>
-            <div id='methods'>
-              <h2>Public Class methods</h2>
-              <div class='method public-class' id='method-method-c-add_hidden_tag'>
-                <a name='method-c-add_hidden_tag'></a>
-                <div class='synopsis'>
-                  <span class='name'>add_hidden_tag</span>
-                  <span class='arguments'>(&block)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Add a hidden tag proc that will be used for all forms created via <a
-                  href="Sinatra/ERB.html#method-i-form">Forme::Sinatra::ERB#form</a>. The
-                  block is yielded the <a href="Tag.html">Forme::Tag</a> object for the form
-                  tag. The block should return either nil if hidden tag should be added, or a
-                  <a href="Tag.html">Forme::Tag</a> object (or an array of them), or a hash
-                  with keys specifying the name of the tags and the values specifying the
-                  values of the tags .</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-add_hidden_tag-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-add_hidden_tag-source'><span class="ruby-comment"># File lib/forme/sinatra.rb, line 11</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_hidden_tag</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-constant">HIDDEN_TAGS</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
               </div>
             </div>
           </div>
