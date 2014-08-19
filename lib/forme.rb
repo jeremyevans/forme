@@ -291,8 +291,8 @@ module Forme
     # You can use array arguments if you want inputs to be created with specific
     # options:
     #
-    #   inputs([:field1, :field2])
-    #   inputs([[:field1, {:name=>'foo'}], :field2])
+    #   f.inputs([:field1, :field2])
+    #   f.inputs([[:field1, {:name=>'foo'}], :field2])
     #
     # The given +opts+ are passed to the +inputs_wrapper+, and the default
     # +inputs_wrapper+ supports a <tt>:legend</tt> option that is used to
@@ -306,11 +306,15 @@ module Forme
     #
     # This can also be called with a single hash argument to just use an options hash:
     #
-    #   inputs(:legend=>'Foo'){...}
+    #   f.inputs(:legend=>'Foo') do
+    #     # ...
+    #   end
     #
     # or even without any arguments:
     #
-    #   inputs{...}
+    #   f.inputs do
+    #     # ...
+    #   end
     def inputs(inputs=[], opts={}, &block)
       _inputs(inputs, opts, &block)
     end

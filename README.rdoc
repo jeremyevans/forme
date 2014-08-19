@@ -34,17 +34,17 @@ For example, these both compile by default to the same select tag:
 The processing of high level <tt>Forme::Input</tt>s into raw html
 data is broken down to the following steps (called transformers):
 
-* +Formatter+: converts a <tt>Forme::Input</tt> instance into a
-  <tt>Forme::Tag</tt> instance (or array of them).
-* +ErrorHandler+: If the <tt>Forme::Input</tt> instance has a error,
-  takes the formatted tag and marks it as having the error.
-* +Labeler+: If the <tt>Forme::Input</tt> instance has a label,
-  takes the formatted output and labels it.
-* +Wrapper+: Takes the output of the formatter, labeler, and
-  error_handler transformers, and wraps it in another tag (or just
-  returns it unmodified).
-* +Serializer+: converts a <tt>Forme::Tag</tt> instance into an
-  html string.
++Formatter+ :: converts a <tt>Forme::Input</tt> instance into a
+               <tt>Forme::Tag</tt> instance (or array of them).
++ErrorHandler+ :: If the <tt>Forme::Input</tt> instance has a error,
+                  takes the formatted tag and marks it as having the error.
++Labeler+ :: If the <tt>Forme::Input</tt> instance has a label,
+             takes the formatted output and labels it.
++Wrapper+ :: Takes the output of the formatter, labeler, and
+             error_handler transformers, and wraps it in another tag (or just
+             returns it unmodified).
++Serializer+ :: converts a <tt>Forme::Tag</tt> instance into an
+                html string.
 
 Technically, only the +Serializer+ is necessary.  The +input+
 and +tag+ methods return +Input+ and +Tag+ objects.  These objects
@@ -245,7 +245,7 @@ and the second argument if given should be a hash of tag attributes. This allows
 inputs inside tags:
 
   Forme.form do |f|
-    f.tag(:span, :class="foo") do
+    f.tag(:span, :class=>"foo") do
       f.input(:text)
     end
   end
@@ -503,11 +503,12 @@ subform options:
            an :inputs option or are using a block with additional inputs,
            you should specify this option.
 
-= Sinatra Support
+= ERB Support
 
-Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
-<tt>helpers Forme::Sinatra::ERB</tt> in your Sinatra::Base subclass.  It allows you to use the
-following API in your Sinatra ERB forms:
+Forme ships with a ERB extension that you can get by <tt>require "forme/erb"</tt> and using
+<tt>including Forme::ERB::Helper</tt>.  This is tested to support ERB templates in both the
+Sinatra and Roda web frameworks.  It allows you to use the following API in your erb
+templates:
 
   <% form(@obj, :action=>'/foo') do |f| %>
     <%= f.input(:field) %>
@@ -515,9 +516,6 @@ following API in your Sinatra ERB forms:
       <%= f.input(:field_two) %>
     <% end %>
   <% end %>
-
-This example is for ERB/Erubis.  Other Sinatra template libraries work differently and
-do not support this integration.
 
 = Rails Support
 
