@@ -110,28 +110,24 @@
                   plugin.</p>
                   
                   <p>The following options are currently supported:</p>
-                  <dl class="rdoc-list note-list"><dt>:inputs 
-                  <dd>
+                  <table class="rdoc-list note-list"><tbody><tr><td class='label'>:inputs </td><td>
                   <p>Automatically call <code>inputs</code> with the given values.  Using this,
                   it is not required to pass a block to the method, though it will still work
                   if you do.</p>
-                  </dd><dt>:legend 
-                  <dd>
+                  </td></tr><tr><td class='label'>:legend </td><td>
                   <p>Overrides the default :legend used (which is based on the association
                   name).  You can also use a proc as the value, which will called with each
                   associated object (and the position in the associated object already for
                   *_to_many associations), and should return the legend string to use for
                   that object.</p>
-                  </dd><dt>:grid 
-                  <dd>
+                  </td></tr><tr><td class='label'>:grid </td><td>
                   <p>Sets up a table with one row per associated object, and one column per
                   field.</p>
-                  </dd><dt>:labels 
-                  <dd>
+                  </td></tr><tr><td class='label'>:labels </td><td>
                   <p>When using the :grid option, override the labels that would be created via
                   the :inputs option.  If you are not providing an :inputs option or are
                   using a block with additional inputs, you should specify this option.</p>
-                  </dd></dl>
+                  </td></tr></tbody></table>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-subform-source'); return false">

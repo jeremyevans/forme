@@ -162,26 +162,21 @@
                   yielding.</p>
                   
                   <p>Argument Handling:</p>
-                  <dl class="rdoc-list note-list"><dt>No args 
-                  <dd>
+                  <table class="rdoc-list note-list"><tbody><tr><td class='label'>No args </td><td>
                   <p>Creates a <code>Form</code> object with no options and not associated to an
                   <code>obj</code>, and with no attributes in the opening tag.</p>
-                  </dd><dt>1 hash arg 
-                  <dd>
+                  </td></tr><tr><td class='label'>1 hash arg </td><td>
                   <p>Treated as opening form tag attributes, creating a <code>Form</code> object
                   with no options.</p>
-                  </dd><dt>1 non-hash arg 
-                  <dd>
+                  </td></tr><tr><td class='label'>1 non-hash arg </td><td>
                   <p>Treated as the <code>Form</code>&#39;s <code>obj</code>, with empty options
                   and no attributes in the opening tag.</p>
-                  </dd><dt>2 hash args 
-                  <dd>
+                  </td></tr><tr><td class='label'>2 hash args </td><td>
                   <p>First hash is opening attributes, second hash is <code>Form</code> options.</p>
-                  </dd><dt>1 non-hash arg, 1-2 hash args 
-                  <dd>
+                  </td></tr><tr><td class='label'>1 non-hash arg, 1-2 hash args </td><td>
                   <p>First argument is <code>Form</code>&#39;s obj, second is opening
                   attributes, third if provided is <code>Form</code>&#39;s options.</p>
-                  </dd></dl>
+                  </td></tr></tbody></table>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-form-source'); return false">
@@ -217,14 +212,12 @@
                 <div class='description'>
                   
                   <p>Creates a <code>Form</code> object. Arguments:</p>
-                  <dl class="rdoc-list note-list"><dt>obj 
-                  <dd>
+                  <table class="rdoc-list note-list"><tbody><tr><td class='label'>obj </td><td>
                   <p>Sets the obj for the form.  If a hash, is merged with the <code>opts</code>
                   argument to set the opts.</p>
-                  </dd><dt>opts 
-                  <dd>
+                  </td></tr><tr><td class='label'>opts </td><td>
                   <p>A hash of options for the form</p>
-                  </dd></dl>
+                  </td></tr></tbody></table>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
@@ -249,7 +242,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-3C-3C-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-3C-3C-source'><span class="ruby-comment"># File lib/forme.rb, line 400</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span> = <span class="ruby-ivar">@nesting</span>.<span class="ruby-identifier">last</span>&#x000A;    <span class="ruby-identifier">n</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-3C-3C-source'><span class="ruby-comment"># File lib/forme.rb, line 404</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span> = <span class="ruby-ivar">@nesting</span>.<span class="ruby-identifier">last</span>&#x000A;    <span class="ruby-identifier">n</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-_input'>
@@ -285,7 +278,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-_tag-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-_tag-source'><span class="ruby-comment"># File lib/forme.rb, line 358</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-_tag-source'><span class="ruby-comment"># File lib/forme.rb, line 362</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-button'>
@@ -303,7 +296,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-button-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-button-source'><span class="ruby-comment"># File lib/forme.rb, line 392</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">button</span>(<span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">opts</span> = {<span class="ruby-value">:value=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">opts</span>} <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;  <span class="ruby-identifier">input</span> = <span class="ruby-identifier">_input</span>(<span class="ruby-value">:submit</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">input</span>&#x000A;  <span class="ruby-identifier">input</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-button-source'><span class="ruby-comment"># File lib/forme.rb, line 396</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">button</span>(<span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">opts</span> = {<span class="ruby-value">:value=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">opts</span>} <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;  <span class="ruby-identifier">input</span> = <span class="ruby-identifier">_input</span>(<span class="ruby-value">:submit</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">input</span>&#x000A;  <span class="ruby-identifier">input</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-close'>
@@ -321,7 +314,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-close-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-close-source'><span class="ruby-comment"># File lib/forme.rb, line 352</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">close</span>&#x000A;  <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">_tag</span>(<span class="ruby-value">:form</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_close</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-close-source'><span class="ruby-comment"># File lib/forme.rb, line 356</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">close</span>&#x000A;  <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">_tag</span>(<span class="ruby-value">:form</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_close</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-each_obj'>
@@ -340,7 +333,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-each_obj-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-each_obj-source'><span class="ruby-comment"># File lib/forme.rb, line 408</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">each_obj</span>(<span class="ruby-identifier">objs</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">objs</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">with_obj</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-constant">Array</span>(<span class="ruby-identifier">namespace</span>) <span class="ruby-operator">+</span> [<span class="ruby-identifier">i</span>]) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-keyword">yield</span> <span class="ruby-identifier">obj</span>, <span class="ruby-identifier">i</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-each_obj-source'><span class="ruby-comment"># File lib/forme.rb, line 412</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">each_obj</span>(<span class="ruby-identifier">objs</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">objs</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">with_obj</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-constant">Array</span>(<span class="ruby-identifier">namespace</span>) <span class="ruby-operator">+</span> [<span class="ruby-identifier">i</span>]) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-keyword">yield</span> <span class="ruby-identifier">obj</span>, <span class="ruby-identifier">i</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-emit'>
@@ -423,7 +416,7 @@
                   given a block. You can use array arguments if you want inputs to be created
                   with specific options:</p>
                   
-                  <pre class="ruby"><span class="ruby-identifier">inputs</span>([:<span class="ruby-identifier">field1</span>, :<span class="ruby-identifier">field2</span>])&#x000A;<span class="ruby-identifier">inputs</span>([[:<span class="ruby-identifier">field1</span>, {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;foo&#39;</span>}], :<span class="ruby-identifier">field2</span>])</pre>
+                  <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>([:<span class="ruby-identifier">field1</span>, :<span class="ruby-identifier">field2</span>])&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>([[:<span class="ruby-identifier">field1</span>, {:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;foo&#39;</span>}], :<span class="ruby-identifier">field2</span>])</pre>
                   
                   <p>The given <code>opts</code> are passed to the <code>inputs_wrapper</code>,
                   and the default <code>inputs_wrapper</code> supports a <code>:legend</code>
@@ -439,17 +432,17 @@
                   <p>This can also be called with a single hash argument to just use an options
                   hash:</p>
                   
-                  <pre class="ruby"><span class="ruby-identifier">inputs</span>(:<span class="ruby-identifier">legend=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;Foo&#39;</span>){<span class="ruby-operator">...</span>}</pre>
+                  <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>(:<span class="ruby-identifier">legend=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;Foo&#39;</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                   
                   <p>or even without any arguments:</p>
                   
-                  <pre>inputs{...}</pre>
+                  <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-inputs-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-inputs-source'><span class="ruby-comment"># File lib/forme.rb, line 314</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inputs</span>(<span class="ruby-identifier">inputs</span>=[], <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">_inputs</span>(<span class="ruby-identifier">inputs</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-inputs-source'><span class="ruby-comment"># File lib/forme.rb, line 318</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inputs</span>(<span class="ruby-identifier">inputs</span>=[], <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">_inputs</span>(<span class="ruby-identifier">inputs</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-obj'>
@@ -469,7 +462,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-obj-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-obj-source'><span class="ruby-comment"># File lib/forme.rb, line 365</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">obj</span>&#x000A;  <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:obj</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-obj-source'><span class="ruby-comment"># File lib/forme.rb, line 369</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">obj</span>&#x000A;  <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:obj</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-open'>
@@ -487,7 +480,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-open-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-open-source'><span class="ruby-comment"># File lib/forme.rb, line 346</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">attr</span>)&#x000A;  <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">_tag</span>(<span class="ruby-value">:form</span>, <span class="ruby-identifier">attr</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_open</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-open-source'><span class="ruby-comment"># File lib/forme.rb, line 350</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">attr</span>)&#x000A;  <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">_tag</span>(<span class="ruby-value">:form</span>, <span class="ruby-identifier">attr</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_open</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-raw_output'>
@@ -506,7 +499,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-raw_output-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-raw_output-source'><span class="ruby-comment"># File lib/forme.rb, line 419</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">raw_output</span>(<span class="ruby-identifier">s</span>)&#x000A;  <span class="ruby-identifier">s</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-raw_output-source'><span class="ruby-comment"># File lib/forme.rb, line 423</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">raw_output</span>(<span class="ruby-identifier">s</span>)&#x000A;  <span class="ruby-identifier">s</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-tag'>
@@ -526,7 +519,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme.rb, line 378</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>)&#x000A;  <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-identifier">nest</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-identifier">tag</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme.rb, line 382</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>)&#x000A;  <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-identifier">nest</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-identifier">tag</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-with_obj'>
@@ -544,7 +537,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-with_obj-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-with_obj-source'><span class="ruby-comment"># File lib/forme.rb, line 425</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_obj</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">with_opts</span>(<span class="ruby-value">:obj=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">obj</span>, <span class="ruby-value">:namespace=</span><span class="ruby-operator">&gt;</span><span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>]<span class="ruby-operator">+</span><span class="ruby-constant">Array</span>(<span class="ruby-identifier">namespace</span>)) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">yield</span> <span class="ruby-identifier">obj</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-with_obj-source'><span class="ruby-comment"># File lib/forme.rb, line 429</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_obj</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">with_opts</span>(<span class="ruby-value">:obj=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">obj</span>, <span class="ruby-value">:namespace=</span><span class="ruby-operator">&gt;</span><span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>]<span class="ruby-operator">+</span><span class="ruby-constant">Array</span>(<span class="ruby-identifier">namespace</span>)) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">yield</span> <span class="ruby-identifier">obj</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-with_opts'>
@@ -563,7 +556,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-with_opts-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-with_opts-source'><span class="ruby-comment"># File lib/forme.rb, line 434</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_opts</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">orig_opts</span> = <span class="ruby-ivar">@opts</span>&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">copy_inputs_wrapper_from_wrapper</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-ivar">@opts</span>)&#x000A;  <span class="ruby-keyword">yield</span>&#x000A;<span class="ruby-keyword">ensure</span>&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">orig_opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-with_opts-source'><span class="ruby-comment"># File lib/forme.rb, line 438</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_opts</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">orig_opts</span> = <span class="ruby-ivar">@opts</span>&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">copy_inputs_wrapper_from_wrapper</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-ivar">@opts</span>)&#x000A;  <span class="ruby-keyword">yield</span>&#x000A;<span class="ruby-keyword">ensure</span>&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">orig_opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
