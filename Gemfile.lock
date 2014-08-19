@@ -7,9 +7,9 @@ GEM
     rack-protection (1.5.3)
       rack
     raindrops (0.10.0)
-    roda (0.9.0)
+    roda (1.0.0)
       rack
-    sequel (4.12.0)
+    sequel (4.13.0)
     tilt (1.4.1)
     unicorn (4.8.0)
       kgio (~> 2.6)
@@ -22,7 +22,7 @@ PLATFORMS
 DEPENDENCIES
   pg
   rack-protection
-  roda
+  roda (>= 1.0.0)
   sequel
   tilt
   unicorn
