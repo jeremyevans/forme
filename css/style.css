@@ -325,11 +325,14 @@ div.header {
   #content .method .source pre .ruby-identifier, #content pre.ruby .ruby-identifier, #methods .method .description pre.ruby .ruby-identifier {
     color: #ffdead;
     background: transparent; }
+  #content .method .source pre .ruby-string, #content pre.ruby .ruby-string, #methods .method .description pre.ruby .ruby-string {
+    color: #ffaaaa;
+    background: transparent; }
   #content .method .source pre .ruby-node, #content pre.ruby .ruby-node, #methods .method .description pre.ruby .ruby-node {
     color: #ffa07a;
     background: transparent; }
   #content .method .source pre .ruby-comment, #content pre.ruby .ruby-comment, #methods .method .description pre.ruby .ruby-comment {
-    color: #b22222;
+    color: #ffddff;
     font-weight: bold;
     background: transparent; }
   #content .method .source pre .ruby-regexp, #content pre.ruby .ruby-regexp, #methods .method .description pre.ruby .ruby-regexp {
