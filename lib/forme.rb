@@ -217,7 +217,9 @@ module Forme
         when Symbol
           @opts[t] = Forme.transformer(t, @opts[t], @opts)
         when nil
-          @opts[t] = Forme.transformer(t, config, @opts)
+          unless @opts.has_key?(t)
+            @opts[t] = Forme.transformer(t, config, @opts)
+          end
         end
       end
 

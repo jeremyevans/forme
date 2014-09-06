@@ -1,3 +1,7 @@
+=== HEAD
+
+* Allow using nil as explicit transformer value when creating a Form, to disable default transformer (jeremyevans)
+
 === 1.0.0 (2014-07-30)
 
 * Add roda plugin for forme (jeremyevans)

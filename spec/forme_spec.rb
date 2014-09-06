@@ -671,6 +671,10 @@ describe "Forme custom" do
   specify "inputs_wrappers can be specified as a proc" do
     Forme::Form.new(:inputs_wrapper=>proc{|f, opts, &block| f.tag(:div, &block)}).inputs([:textarea]).to_s.should == '<div><textarea></textarea></div>'
   end
+
+  specify "can use nil as value to disable default transformer" do
+    Forme::Form.new(:labeler=>nil).input(:textarea, :label=>'foo').to_s.should == '<textarea></textarea>'
+  end
 end
 
 describe "Forme built-in custom" do
