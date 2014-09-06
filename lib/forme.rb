@@ -77,6 +77,12 @@ module Forme
     classes.compact.join(' ')
   end
 
+  # Create a RawString using the given string, which will disable automatic
+  # escaping for that string.
+  def self.raw(s)
+    RawString.new(s)
+  end
+
   # If there is a related transformer, call it with the given +args+ and +block+.
   # Otherwise, attempt to return the initial input without modifying it.
   def self.transform(type, trans_name, default_opts, *args, &block)
@@ -615,6 +621,12 @@ module Forme
   # Empty module for marking objects as "raw", where they will no longer
   # html escaped by the default serializer.
   module Raw
+  end
+
+  # A String subclass that includes Raw, which will cause the default
+  # serializer to no longer html escape the string.
+  class RawString < ::String
+    include Raw
   end
 
   # The default formatter used by the library.  Any custom formatters should

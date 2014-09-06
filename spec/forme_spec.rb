@@ -515,8 +515,12 @@ describe "Forme plain forms" do
     @f.tag(:div, {}, ['<p></p>']).to_s.should == '<div>&lt;p&gt;&lt;/p&gt;</div>'
   end
 
-  specify "should not escape raw tag content" do
+  specify "should not escape raw tag content using Forme::Raw" do
     @f.tag(:div, {}, ['<p></p>'.extend(Forme::Raw)]).to_s.should == '<div><p></p></div>'
+  end
+
+  specify "should not escape raw tag content using Forme.raw" do
+    @f.tag(:div, {}, [Forme.raw('<p></p>')]).to_s.should == '<div><p></p></div>'
   end
 
   specify "should escape tag content in attribute values" do
