@@ -425,6 +425,11 @@ module Forme
       end
     end
 
+    # Return a new string that will not be html escaped by the default serializer.
+    def raw(s)
+      Forme.raw(s)
+    end
+
     # Marks the string as containing already escaped output.  Returns string given
     # by default, but subclasses for specific web frameworks can handle automatic
     # html escaping by overriding this.

@@ -1,6 +1,6 @@
 === HEAD
 
-* Add Forme::RawString class and Forme.raw for creating raw strings, so you don't need to use extend(Forme::Raw) (jeremyevans)
+* Add Forme::RawString class, Forme.raw, and Form#raw for creating raw strings, so you don't need to use extend(Forme::Raw) (jeremyevans)
 
 * Allow using nil as explicit transformer value when creating a Form, to disable default transformer (jeremyevans)
 
