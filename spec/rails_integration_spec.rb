@@ -172,6 +172,10 @@ END
     render :inline => "<%= forme([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') %>"
   end
 
+  def noblock_post
+    render :inline => "<%= forme({:method=>'post'}, :button=>'xyz') %>"
+  end
+
   def safe_buffer
     render :inline => "<%= forme([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'<b>foo</b>'.html_safe) %>"
   end
@@ -231,6 +235,10 @@ describe "Forme Rails integration" do
 
   specify "#form should work without a block" do
     sin_get('/noblock').should == '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
+  end
+
+  specify "#form should work without a block with hidden tags" do
+    sin_get('/noblock_post').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").should == '<form method="post"><input name="authenticity_token" type="hidden" value="csrf"/><input type="submit" value="xyz"/></form>'
   end
 
   specify "#form should handle Rails SafeBuffers" do

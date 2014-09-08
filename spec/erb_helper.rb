@@ -119,6 +119,10 @@ END
     erb "<%= form([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') %>"
   end
 
+  r.get 'noblock_post' do
+    erb "<%= form({:method=>:post}, :button=>'xyz') %>"
+  end
+
   r.get 'noblock_empty' do
     erb "<%= form(:action=>'/baz') %>"
   end
@@ -169,6 +173,10 @@ shared_examples_for "erb integration" do
 
   specify "#form should work without a block" do
     sin_get('/noblock').should == '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
+  end
+
+  specify "#form should work without a block and still have hidden tags emitted" do
+    sin_get('/noblock_post').sub(%r{<input name=\"_csrf\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"_csrf\" type=\"hidden\" value=\"csrf\"/>").should == '<form method="post"><input name="_csrf" type="hidden" value="csrf"/><input type="submit" value="xyz"/></form>'
   end
 
   specify "#form with an empty form should work" do

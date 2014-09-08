@@ -91,13 +91,10 @@ module Forme
       # Create a +Form+ object tied to the current output buffer,
       # using the standard ERB hidden tags.
       def form(obj=nil, attr={}, opts={}, &block)
-        if block
-          h = {:output=>@_out_buf, :hidden_tags=>Forme::ERB::HIDDEN_TAGS, :env=>env}
-          (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
-          Form.form(obj, attr, opts, &block)
-        else
-          Form.form(obj, attr, opts)
-        end
+        h = {:hidden_tags=>Forme::ERB::HIDDEN_TAGS, :env=>env}
+        h[:output] = @_out_buf if block
+        (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
+        Form.form(obj, attr, opts, &block)
       end
     end 
   end

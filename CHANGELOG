@@ -1,5 +1,7 @@
 === HEAD
 
+* Make form without a block in the ERB integration still use hidden tags if method is post (jeremyevans)
+
 * Add Forme::RawString class, Forme.raw, and Form#raw for creating raw strings, so you don't need to use extend(Forme::Raw) (jeremyevans)
 
 * Allow using nil as explicit transformer value when creating a Form, to disable default transformer (jeremyevans)
