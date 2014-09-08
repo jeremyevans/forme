@@ -517,6 +517,9 @@ templates:
     <% end %>
   <% end %>
 
+In order to this to work transparently, the ERB outvar needs to be <tt>@_out_buf</tt>.  If that
+is not the case, use the :output option to +form+ to specify the outvar.
+
 = Rails Support
 
 Forme ships with a Rails extension that you can get by <tt>require "forme/rails"</tt> and using
