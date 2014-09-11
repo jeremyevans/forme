@@ -792,9 +792,10 @@ module Forme
     # Takes a select input and turns it into a select tag with (possibly) option
     # children tags.
     def format_select
-      if os = process_select_options(@opts[:options])
-        @attr[:multiple] = :multiple if @opts[:multiple]
+      @attr[:multiple] = :multiple if @opts[:multiple]
+      copy_options_to_attributes([:size])
 
+      if os = process_select_options(@opts[:options])
         os = os.map do |label, value, sel, attrs|
           if value || sel
             attrs = attrs.dup

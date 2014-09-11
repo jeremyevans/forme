@@ -239,6 +239,10 @@ describe "Forme plain forms" do
     @f.input(:select).to_s.should == '<select></select>'
   end
 
+  specify "should respect multiple and size options in select tag" do
+    @f.input(:select, :multiple=>true, :size=>10).to_s.should == '<select multiple="multiple" size="10"></select>'
+  end
+
   specify "should create date tag" do
     @f.input(:date).to_s.should == '<input type="date"/>'
   end

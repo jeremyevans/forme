@@ -611,6 +611,7 @@ Creates a select tag, containing option tags specified by the :options option.  
 :selected :: The value that should be selected.  Any options that are equal to
              this value (or included in this value if a multiple select box),
              are set to selected.
+:size :: Uses the size attribute on the tag
 :text_method :: If set, each entry in the array has this option called on
                 it to get the text of the object.
 :value :: Same as :selected, but has lower priority.
