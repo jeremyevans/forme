@@ -1,4 +1,4 @@
-=== HEAD
+=== 1.2.0 (2014-11-06)
 
 * Support pg_array_to_many associations in the Sequel plugin, treating them similarly to other *_to_many associations (jeremyevans)
 
