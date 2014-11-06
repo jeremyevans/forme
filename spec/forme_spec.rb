@@ -443,6 +443,10 @@ describe "Forme plain forms" do
     @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo').to_s.should == '<input class="bar error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
   end
 
+  specify "should respect :error_attr option for setting the attributes for the error message span" do
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.should == '<input class="error" type="text" value="foo"/><span class="foo error_message">Bad Stuff!</span>'
+  end
+
   specify "#open should return an opening tag" do
     @f.open(:action=>'foo', :method=>'post').to_s.should == '<form action="foo" method="post">'
   end

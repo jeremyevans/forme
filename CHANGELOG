@@ -1,5 +1,7 @@
 === HEAD
 
+* Support :error_attr option for inputs, for setting attributes to use for error message span (jeremyevans)
+
 * Make explicit labeler use label-before and label-after classes specifying the label position (jeremyevans)
 
 * Support :size option for select inputs (jeremyevans)
