@@ -1,5 +1,7 @@
 === HEAD
 
+* Support pg_array_to_many associations in the Sequel plugin, treating them similarly to other *_to_many associations (jeremyevans)
+
 * When using :grid option to subform in the Sequel plugin, :inputs_opts can be used to pass options to the InputsWrapper (jeremyevans)
 
 * Support :error_attr option for inputs, for setting attributes to use for error message span (jeremyevans)

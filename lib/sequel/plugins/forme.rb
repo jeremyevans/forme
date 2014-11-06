@@ -286,14 +286,21 @@ module Sequel # :nodoc:
           key = ref[:key]
           klass = ref.associated_class
           pk = klass.primary_key
-          field = "#{klass.send(:singularize, ref[:name])}_pks"
+          label = klass.send(:singularize, ref[:name])
+
+          field = if ref[:type] == :pg_array_to_many
+            ref[:key]
+          else
+            "#{label}_pks"
+          end
+
           unless opts.has_key?(:key)
             opts[:array] = true unless opts.has_key?(:array)
             opts[:key] = field
           end
           opts[:value] = obj.send(ref[:name]).map{|x| x.send(pk)} unless opts.has_key?(:value)
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
-          handle_label(field)
+          handle_label(label)
           if opts.delete(:as) == :checkbox
             _input(:checkboxset, opts)
           else
@@ -302,6 +309,7 @@ module Sequel # :nodoc:
           end
         end
         alias association_many_to_many association_one_to_many
+        alias association_pg_array_to_many association_one_to_many
 
         # Return an array of two element arrays representing the
         # select options that should be created.

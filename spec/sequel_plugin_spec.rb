@@ -234,6 +234,12 @@ describe "Forme Sequel::Model forms" do
     @c.input(:tags).to_s.should == '<label>Tags: <select id="album_tag_pks" multiple="multiple" name="album[tag_pks][]"><option value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label>'
   end
 
+  specify "should use a multiple select box for pg_array_to_many associations" do
+    @b.input(:atags).to_s.should == '<label>Atags: <select id="album_atag_ids" multiple="multiple" name="album[atag_ids][]"><option selected="selected" value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label>'
+    @c.obj.atag_ids.delete(1)
+    @c.input(:atags).to_s.should == '<label>Atags: <select id="album_atag_ids" multiple="multiple" name="album[atag_ids][]"><option value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label>'
+  end
+
   specify "should use a regular select box for *_to_many associations if multiple if false" do
     @b.input(:tracks, :multiple=>false).to_s.should == '<label>Tracks: <select id="album_track_pks" name="album[track_pks][]"><option value="1">m</option><option value="2">n</option><option value="3">o</option></select></label>'
     @c.input(:tags, :multiple=>false).to_s.should == '<label>Tags: <select id="album_tag_pks" name="album[tag_pks][]"><option value="1">s</option><option value="2">t</option><option value="3">u</option></select></label>'

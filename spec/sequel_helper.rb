@@ -55,6 +55,13 @@ class Album < Sequel::Model
   one_to_many :tracks
   many_to_many :tags
 
+  plugin :pg_array_associations
+  pg_array_to_many :atags, :class=>:Tag
+
+  def atag_ids
+    @atag_ids ||= [1,2]
+  end
+
   def artist_name
     artist.name if artist
   end
