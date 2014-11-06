@@ -87,7 +87,8 @@ module Sequel # :nodoc:
           if grid
             labels = opts.fetch(:labels){opts[:inputs].map{|l, *| humanize(l)} if opts[:inputs]}
             legend = opts.fetch(:legend){humanize(association)}
-            inputs({:inputs_wrapper=>:table, :nested_inputs_wrapper=>:tr, :wrapper=>:td, :labeler=>nil, :labels=>labels, :legend=>legend}, &contents)
+            inputs_opts = opts[:inputs_opts] || {}
+            inputs(inputs_opts.merge(:inputs_wrapper=>:table, :nested_inputs_wrapper=>:tr, :wrapper=>:td, :labeler=>nil, :labels=>labels, :legend=>legend), &contents)
           else
             contents.call
           end

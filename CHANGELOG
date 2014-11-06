@@ -1,5 +1,7 @@
 === HEAD
 
+* When using :grid option to subform in the Sequel plugin, :inputs_opts can be used to pass options to the InputsWrapper (jeremyevans)
+
 * Support :error_attr option for inputs, for setting attributes to use for error message span (jeremyevans)
 
 * Make explicit labeler use label-before and label-after classes specifying the label position (jeremyevans)
