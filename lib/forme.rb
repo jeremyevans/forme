@@ -1167,19 +1167,22 @@ module Forme
           end
         end
       end
-      if [:radio, :checkbox].include?(input.type)
-        t = [tag, input.tag(:label, {:for=>input.opts.fetch(:label_for, id)}.merge(input.opts[:label_attr]||{}), [input.opts[:label]])]
-        pos = :before
+
+      label_attr = input.opts[:label_attr]
+      label_attr = label_attr ? label_attr.dup : {}
+      label_attr[:for] ||= input.opts.fetch(:label_for, id)
+      lpos = input.opts[:label_position] || ([:radio, :checkbox].include?(input.type) ? :after : :before)
+
+      Forme.attr_classes(label_attr, "label-#{lpos}")
+      label = input.tag(:label, label_attr, [input.opts[:label]])
+
+      t = if lpos == :before
+        [label, tag]
       else
-        t = [input.tag(:label, {:for=>input.opts.fetch(:label_for, id)}.merge(input.opts[:label_attr]||{}), [input.opts[:label]]), tag]
-        pos = :after
+        [tag, label]
       end
 
-      if input.opts[:label_position] == pos
-        t.reverse
-      else
-        t
-      end
+      t
     end
   end
 

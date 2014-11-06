@@ -256,7 +256,7 @@ describe "Forme plain forms" do
   end
 
   specify "should have explicit labeler and trtd wrapper work with multiple select boxes for dates" do
-    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :wrapper=>:trtd, :labeler=>:explicit, :label=>'Baz').to_s.should == %{<tr><td><label for="bar_year">Baz</label></td><td><select id="bar_year" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select></td></tr>}
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :wrapper=>:trtd, :labeler=>:explicit, :label=>'Baz').to_s.should == %{<tr><td><label class="label-before" for="bar_year">Baz</label></td><td><select id="bar_year" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select></td></tr>}
   end
 
   specify "should use multiple select boxes for datetimes if the :as=>:select option is given" do
@@ -563,19 +563,19 @@ describe "Forme plain forms" do
   end
 
   specify "inputs should accept a :labeler option to use a custom labeler" do
-    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo).to_s.should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
+    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo).to_s.should == '<label class="label-before" for="foo">bar</label><textarea id="foo"></textarea>'
   end
 
   specify "inputs handle explicit labels with :label_position=>:after" do
-    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo, :label_position=>:after).to_s.should == '<textarea id="foo"></textarea><label for="foo">bar</label>'
+    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo, :label_position=>:after).to_s.should == '<textarea id="foo"></textarea><label class="label-after" for="foo">bar</label>'
   end
 
   specify "should handle explicit labels with checkboxes" do
-    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar').to_s.should == '<input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/><label for="bar">Foo</label>'
+    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar').to_s.should == '<input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/><label class="label-after" for="bar">Foo</label>'
   end
 
   specify "should handle explicit labels with checkboxes with :label_position=>:before" do
-    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar', :label_position=>:before).to_s.should == '<label for="bar">Foo</label><input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/>'
+    @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar', :label_position=>:before).to_s.should == '<label class="label-before" for="bar">Foo</label><input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/>'
   end
 
   specify "inputs handle implicit labels or checkboxes without hidden fields with :label_position=>:before" do
@@ -710,15 +710,15 @@ describe "Forme built-in custom" do
   end
 
   specify "labeler: explicit uses an explicit label with for attribute" do
-    Forme::Form.new(:labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').to_s.should == '<label for="foo">bar</label><textarea id="foo"></textarea>'
+    Forme::Form.new(:labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').to_s.should == '<label class="label-before" for="foo">bar</label><textarea id="foo"></textarea>'
   end
 
   specify "labeler: explicit handles the key option correctly" do
-    Forme::Form.new(:labeler=>:explicit, :namespace=>:baz).input(:textarea, :key=>'foo', :label=>'bar').to_s.should == '<label for="baz_foo">bar</label><textarea id="baz_foo" name="baz[foo]"></textarea>'
+    Forme::Form.new(:labeler=>:explicit, :namespace=>:baz).input(:textarea, :key=>'foo', :label=>'bar').to_s.should == '<label class="label-before" for="baz_foo">bar</label><textarea id="baz_foo" name="baz[foo]"></textarea>'
   end
 
   specify "labeler: explicit should handle tags with errors" do
-    Forme::Form.new(:labeler=>:explicit).input(:text, :error=>'Bad Stuff!', :value=>'f', :id=>'foo', :label=>'bar').to_s.should == '<label for="foo">bar</label><input class="error" id="foo" type="text" value="f"/><span class="error_message">Bad Stuff!</span>'
+    Forme::Form.new(:labeler=>:explicit).input(:text, :error=>'Bad Stuff!', :value=>'f', :id=>'foo', :label=>'bar').to_s.should == '<label class="label-before" for="foo">bar</label><input class="error" id="foo" type="text" value="f"/><span class="error_message">Bad Stuff!</span>'
   end
 
   specify "wrapper: li wraps tag in an li" do
@@ -752,15 +752,15 @@ describe "Forme built-in custom" do
   end
 
   specify "wrapper: trtd supports multiple tags in separate tds" do
-    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo').to_s.should == '<tr><td><label for="foo">Foo</label></td><td><textarea id="foo"></textarea></td></tr>'
+    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo').to_s.should == '<tr><td><label class="label-before" for="foo">Foo</label></td><td><textarea id="foo"></textarea></td></tr>'
   end
 
   specify "wrapper: trtd should use at most 2 td tags" do
-    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo', :error=>'Bar').to_s.should == '<tr><td><label for="foo">Foo</label></td><td><textarea class="error" id="foo"></textarea><span class="error_message">Bar</span></td></tr>'
+    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo', :error=>'Bar').to_s.should == '<tr><td><label class="label-before" for="foo">Foo</label></td><td><textarea class="error" id="foo"></textarea><span class="error_message">Bar</span></td></tr>'
   end
 
   specify "wrapper: trtd should handle inputs with label after" do
-    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:checkbox, :id=>'foo', :name=>'foo', :label=>'Foo').to_s.should == '<tr><td><label for="foo">Foo</label></td><td><input id="foo_hidden" name="foo" type="hidden" value="0"/><input id="foo" name="foo" type="checkbox"/></td></tr>'
+    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:checkbox, :id=>'foo', :name=>'foo', :label=>'Foo').to_s.should == '<tr><td><label class="label-after" for="foo">Foo</label></td><td><input id="foo_hidden" name="foo" type="hidden" value="0"/><input id="foo" name="foo" type="checkbox"/></td></tr>'
   end
 
   specify "wrapper: tr should use a td wrapper and tr inputs_wrapper" do
@@ -888,17 +888,17 @@ describe "Forme configurations" do
   end
 
   specify "config: :formastic uses fieldset_ol inputs_wrapper and li wrapper, and explicit labeler" do
-    Forme::Form.new(:config=>:formtastic).inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset class="inputs"><ol><li><label for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
+    Forme::Form.new(:config=>:formtastic).inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset class="inputs"><ol><li><label class="label-before" for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
   end
 
   specify "should be able to set a default configuration with Forme.default_config=" do
     Forme.default_config = :formtastic
-    Forme::Form.new.inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset class="inputs"><ol><li><label for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
+    Forme::Form.new.inputs([[:textarea, {:id=>:foo, :label=>'Foo'}]]).to_s.should == '<fieldset class="inputs"><ol><li><label class="label-before" for="foo">Foo</label><textarea id="foo"></textarea></li></ol></fieldset>'
   end
 
   specify "should have #register_config register a configuration for later use" do
     Forme.register_config(:foo, :wrapper=>:li, :labeler=>:explicit)
-    Forme::Form.new(:config=>:foo).input(:textarea, :id=>:foo, :label=>'Foo').to_s.should == '<li><label for="foo">Foo</label><textarea id="foo"></textarea></li>'
+    Forme::Form.new(:config=>:foo).input(:textarea, :id=>:foo, :label=>'Foo').to_s.should == '<li><label class="label-before" for="foo">Foo</label><textarea id="foo"></textarea></li>'
   end
 
   specify "should have #register_config support a :base option to base it on an existing config" do

@@ -1,5 +1,7 @@
 === HEAD
 
+* Make explicit labeler use label-before and label-after classes specifying the label position (jeremyevans)
+
 * Support :size option for select inputs (jeremyevans)
 
 === 1.1.0 (2014-09-07)
