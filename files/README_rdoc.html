@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2014-08-18 19:55:53 -0700</span>
+          <span class='datetime'>2014-11-06 13:19:18 -0800</span>
         </div>
       </div>
       <div id='content'>
@@ -409,12 +409,15 @@
             use the <code>association_pks</code> plugin that ships with <a
             href="../classes/Sequel.html">Sequel</a>.</p>
             
+            <p>This supports the pg_array_to_many association type that comes with
+            Sequel&#39;s <code>pg_array_association</code> plugin.</p>
+            
             <p>association input options:</p>
             <table class="rdoc-list note-list"><tbody><tr><td class='label'>:as </td><td>
             <p>For many_to_one associations, set to :radio to use a series of radio
-            buttons instead a select input.  For one_to_many and many_to_many
-            associations, set to :checkbox to use a series of checkboxes instead of a
-            multiple select input.</p>
+            buttons instead a select input.  For one_to_many, many_to_many, and
+            pg_array_to_many associations, set to :checkbox to use a series of
+            checkboxes instead of a multiple select input.</p>
             </td></tr><tr><td class='label'>:dataset </td><td>
             <p>If a Dataset, uses the dataset to retrieve the options.  If a Proc or
             Method, calls the proc or method with the default dataset, and should
@@ -465,6 +468,9 @@
             <p>When using the :grid option, override the labels that would be created via
             the :inputs option.  If you are not providing an :inputs option or are
             using a block with additional inputs, you should specify this option.</p>
+            </td></tr><tr><td class='label'>:inputs_opts </td><td>
+            <p>When using the :grid option, this allows you to specify options to pass to
+            the table InputsWrapper.</p>
             </td></tr></tbody></table>
             
             <h1 id="label-ERB+Support">ERB Support<span><a href="#label-ERB+Support">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
@@ -474,6 +480,10 @@
             allows you to use the following API in your erb templates:</p>
             
             <pre>&lt;% form(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;% f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
+            
+            <p>In order to this to work transparently, the ERB outvar needs to be
+            <code>@_out_buf</code>.  If that is not the case, use the :output option to
+            <code>form</code> to specify the outvar.</p>
             
             <h1 id="label-Rails+Support">Rails Support<span><a href="#label-Rails+Support">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             
@@ -592,6 +602,8 @@
             <p>The value that should be selected.  Any options that are equal to this
             value (or included in this value if a multiple select box), are set to
             selected.</p>
+            </td></tr><tr><td class='label'>:size </td><td>
+            <p>Uses the size attribute on the tag</p>
             </td></tr><tr><td class='label'>:text_method </td><td>
             <p>If set, each entry in the array has this option called on it to get the
             text of the object.</p>
@@ -771,6 +783,11 @@
             <h3 id="label-error_handler"><code>error_handler</code><span><a href="#label-error_handler">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
             <table class="rdoc-list note-list"><tbody><tr><td class='label'>:default </td><td>
             <p>modifies tag to add an error class and adds a span with the error message</p>
+            </td></tr></tbody></table>
+            
+            <p>This supports the following options:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:error_attr </td><td>
+            <p>A hash of attributes to use for the span with the error message</p>
             </td></tr></tbody></table>
             
             <h3 id="label-labeler"><code>labeler</code><span><a href="#label-labeler">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
