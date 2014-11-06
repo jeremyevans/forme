@@ -424,11 +424,14 @@ This will create a form similar to:
 For one_to_many and many_to_many associations, you will probably want to use the
 +association_pks+ plugin that ships with Sequel.
 
+This supports the pg_array_to_many association type that comes with Sequel's
++pg_array_association+ plugin.
+
 association input options:
 
 :as :: For many_to_one associations, set to :radio to use a series of radio buttons instead
-       a select input.  For one_to_many and many_to_many associations, set to :checkbox to
-       use a series of checkboxes instead of a multiple select input.
+       a select input.  For one_to_many, many_to_many, and pg_array_to_many associations, set
+       to :checkbox to use a series of checkboxes instead of a multiple select input.
 :dataset :: If a Dataset, uses the dataset to retrieve the options.  If a Proc or Method,
             calls the proc or method with the default dataset, and should return a modified
             dataset to use.
@@ -502,6 +505,8 @@ subform options:
            be created via the :inputs option.  If you are not providing
            an :inputs option or are using a block with additional inputs,
            you should specify this option.
+:inputs_opts :: When using the :grid option, this allows you to specify options
+                to pass to the table InputsWrapper.
 
 = ERB Support
 
@@ -737,6 +742,10 @@ Forme ships with a bunch of built-in transformers that you can use:
 === +error_handler+
 
 :default :: modifies tag to add an error class and adds a span with the error message
+
+This supports the following options:
+
+:error_attr :: A hash of attributes to use for the span with the error message
 
 === +labeler+
 
