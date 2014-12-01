@@ -528,7 +528,7 @@ is not the case, use the :output option to +form+ to specify the outvar.
 = Rails Support
 
 Forme ships with a Rails extension that you can get by <tt>require "forme/rails"</tt> and using
-<tt>helpers Forme::Rails::ERB</tt> in your controller.  If allows you to use the following API
+<tt>helper Forme::Rails::ERB</tt> in your controller.  If allows you to use the following API
 in your Rails forms:
 
   <%= forme(@obj, :action=>'/foo') do |f| %>
