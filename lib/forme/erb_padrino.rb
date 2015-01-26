@@ -1,4 +1,4 @@
-require 'forme'
+require 'forme/erb'
 
 module Forme
   module ERB_Padrino
