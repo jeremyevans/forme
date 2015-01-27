@@ -143,4 +143,6 @@ class FormeDemo < Roda
       end
     end
   end
+
+  freeze
 end
