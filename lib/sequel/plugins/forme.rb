@@ -289,7 +289,8 @@ module Sequel # :nodoc:
           label = klass.send(:singularize, ref[:name])
 
           field = if ref[:type] == :pg_array_to_many
-            ref[:key]
+            handle_errors(key)
+            key
           else
             "#{label}_pks"
           end
