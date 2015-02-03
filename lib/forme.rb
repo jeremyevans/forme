@@ -777,7 +777,7 @@ module Forme
         input.merge_opts(:label_for=>"#{id}_year")
         [:year, '-', :month, '-', :day, ' ', :hour, ':', :minute, ':', :second].map{|x| x.is_a?(String) ? x : form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [sprintf("%02i", x), x]})).format}
       else
-        _format_input(:datetime)
+        _format_input('datetime-local')
       end
     end
 
@@ -1404,7 +1404,7 @@ module Forme
     def call(tag)
       case tag
       when Tag
-        if tag.type.to_s == 'input' && %w'date datetime'.include?((tag.attr[:type] || tag.attr['type']).to_s)
+        if tag.type.to_s == 'input' && %w'date datetime datetime-local'.include?((tag.attr[:type] || tag.attr['type']).to_s)
           attr = tag.attr.dup
           attr.delete(:type)
           attr.delete('type')

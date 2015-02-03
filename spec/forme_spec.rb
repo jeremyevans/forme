@@ -247,6 +247,10 @@ describe "Forme plain forms" do
     @f.input(:date).to_s.should == '<input type="date"/>'
   end
 
+  specify "should create datetime-local tag" do
+    @f.input(:datetime).to_s.should == '<input type="datetime-local"/>'
+  end
+
   specify "should not error for input type :input" do
     @f.input(:input).to_s.should == '<input type="input"/>'
   end

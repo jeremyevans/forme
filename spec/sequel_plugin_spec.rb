@@ -53,12 +53,12 @@ describe "Forme Sequel::Model forms" do
   end
   
   specify "should use datetime inputs for Time" do
-    @b.input(:created_at).to_s.should =~ %r{<label>Created at: <input id="album_created_at" name="album\[created_at\]" type="datetime" value="2011-06-05 00:00:00(GMT|UTC)"/></label>}
+    @b.input(:created_at).to_s.should =~ %r{<label>Created at: <input id="album_created_at" name="album\[created_at\]" type="datetime-local" value="2011-06-05 00:00:00(GMT|UTC)"/></label>}
   end
   
   specify "should use datetime inputs for DateTimes" do
     @ab.values[:created_at] = DateTime.new(2011, 6, 5)
-    @b.input(:created_at).to_s.should == '<label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime" value="2011-06-05 00:00:00+00:00"/></label>'
+    @b.input(:created_at).to_s.should == '<label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05 00:00:00+00:00"/></label>'
   end
 
   specify "should include type as wrapper class" do
@@ -66,7 +66,7 @@ describe "Forme Sequel::Model forms" do
     f = Forme::Form.new(@ab, :wrapper=>:li)
     f.input(:name).to_s.should == '<li class="string"><label>Name: <input id="album_name" name="album[name]" type="text" value="b"/></label></li>'
     f.input(:release_date).to_s.should == '<li class="date"><label>Release date: <input id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></label></li>'
-    f.input(:created_at).to_s.should == '<li class="datetime"><label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime" value="2011-06-05 00:00:00+00:00"/></label></li>'
+    f.input(:created_at).to_s.should == '<li class="datetime"><label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05 00:00:00+00:00"/></label></li>'
   end
   
   specify "should include required * in label if required" do
