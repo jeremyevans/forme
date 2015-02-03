@@ -392,7 +392,7 @@ these additional options to the #input method:
 == string
 
 :as :: Can be set to :textarea to use a textarea input. You can use the usual attributes hash or a stylesheet to 
-control the size of the textarea.
+       control the size of the textarea.
 
 == associations
 
