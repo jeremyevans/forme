@@ -11,7 +11,6 @@ class FormeDemo < Roda
 
   plugin :forme
   plugin :h
-  plugin :static_path_info
 
   attr_reader :form_attr
   attr_reader :subform_opts
