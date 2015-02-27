@@ -1,5 +1,7 @@
 === HEAD
 
+* Respect existing :add_blank option when using select tags for boolean fields in the Sequel plugin (jeremyevans)
+
 * Use type=datetime-local for datetime types (jeremyevans)
 
 * Handle error messages on the underlying column in pg_array_to_many associations (jeremyevans)

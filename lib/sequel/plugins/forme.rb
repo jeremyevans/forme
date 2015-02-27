@@ -362,7 +362,7 @@ module Sequel # :nodoc:
           when :select
             v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?
-            opts[:add_blank] = true
+            opts[:add_blank] = true unless opts.has_key?(:add_blank)
             opts[:options] = [[opts[:true_label]||'True', opts[:true_value]||'t'], [opts[:false_label]||'False', opts[:false_value]||'f']]
             _input(:select, opts)
           else

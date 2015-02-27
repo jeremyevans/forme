@@ -95,6 +95,10 @@ describe "Forme Sequel::Model forms" do
     @b.input(:gold, :true_value=>"Foo", :false_value=>"Bar").to_s.should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="Foo">True</option><option value="Bar">False</option></select></label>'
   end
   
+  specify "should respect :add_blank option for tri-valued boolean fields" do
+    @b.input(:gold, :add_blank=>'NULL').to_s.should == '<label>Gold: <select id="album_gold" name="album[gold]"><option value="">NULL</option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
+  end
+  
   specify "should use a select box for dual-valued boolean fields where :required => false" do
     @b.input(:platinum, :required=>false).to_s.should == '<label>Platinum: <select id="album_platinum" name="album[platinum]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
     @c.input(:platinum, :required=>false).to_s.should == '<label>Platinum: <select id="album_platinum" name="album[platinum]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
