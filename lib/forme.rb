@@ -1370,7 +1370,7 @@ module Forme
 
     # Return a string in ISO format representing the +Time+ or +DateTime+ instance.
     def format_time(time)
-      time.is_a?(Time) ? (time.strftime('%Y-%m-%dT%H:%M:%S') + sprintf(".%06d", time.usec)) : time.strftime('%Y-%m-%dT%H:%M:%S.%6N')
+      time.is_a?(Time) ? (time.strftime('%Y-%m-%dT%H:%M:%S') + sprintf(".%06d", time.usec)) : (time.strftime('%Y-%m-%dT%H:%M:%S.') + time.strftime('%N')[0...6])
     end
 
     # Escape ampersands, brackets and quotes to their HTML/XML entities.
