@@ -1,5 +1,7 @@
 === HEAD
 
+* Support :blank_attr option for select/radioset/checkboxset inputs (jeremyevans)
+
 * Support :blank_position=>:after option for select/radioset/checkboxset inputs (jeremyevans)
 
 * Respect existing :add_blank option when using select tags for boolean fields in the Sequel plugin (jeremyevans)

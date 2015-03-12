@@ -1006,7 +1006,8 @@ module Forme
           unless prompt.is_a?(String)
             prompt = Forme.default_add_blank_prompt
           end
-          os.send(@opts[:blank_position] == :after ? :push : :unshift, [prompt, '', false, {}])
+          blank_attr = @opts[:blank_attr] || {}
+          os.send(@opts[:blank_position] == :after ? :push : :unshift, [prompt, '', false, blank_attr])
         end
 
         os
