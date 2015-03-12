@@ -308,6 +308,10 @@ describe "Forme plain forms" do
     @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>"Prompt Here", :value=>2).to_s.should == '<select><option value="">Prompt Here</option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
   end
 
+  specify "should support :add_blank option with :blank_position :after for select inputs" do
+    @f.input(:select, :options=>[[:b, 2], [:c, 3]], :add_blank=>true, :blank_position=>:after, :value=>2).to_s.should == '<select><option selected="selected" value="2">b</option><option value="3">c</option><option value=""></option></select>'
+  end
+
   specify "should create set of radio buttons" do
     @f.input(:radioset, :options=>[1, 2, 3], :selected=>2).to_s.should == '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'
     @f.input(:radioset, :options=>[1, 2, 3], :value=>2).to_s.should == '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'

@@ -608,6 +608,8 @@ Creates a select tag, containing option tags specified by the :options option.  
 :add_blank :: Add a blank option if true.  If the value is a string,
               use it as the text content of the blank option.  The default value can be
               set with Forme.default_add_blank_prompt, and defaults to the empty string.
+:blank_position :: If :add_blank is set, can be set to :after to add the prompt after
+                   the inputs, instead of before (which is the default).
 :multiple :: Creates a multiple select box.
 :options :: an array of options used for creating option tags.
             If the :text_method and :value_method are not given and the entry is an 
