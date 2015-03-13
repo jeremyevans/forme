@@ -7,9 +7,9 @@ GEM
     rack-protection (1.5.3)
       rack
     raindrops (0.10.0)
-    roda (2.0.0)
+    roda (2.1.0)
       rack
-    sequel (4.19.0)
+    sequel (4.20.0)
     tilt (2.0.1)
     unicorn (4.8.0)
       kgio (~> 2.6)
