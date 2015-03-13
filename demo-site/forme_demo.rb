@@ -3,11 +3,9 @@ require 'rubygems'
 require 'erb'
 require 'roda'
 require 'models'
-require 'rack/protection'
 
 class FormeDemo < Roda
-  use Rack::Static, :urls=>%w'/css', :root=>'public'
-  use Rack::Protection, :except=>[:remote_token, :session_hijacking]
+  plugin :static, %w'/css'
 
   plugin :forme
   plugin :h

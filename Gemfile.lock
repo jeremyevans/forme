@@ -4,8 +4,6 @@ GEM
     kgio (2.9.2)
     pg (0.18.0)
     rack (1.6.0)
-    rack-protection (1.5.3)
-      rack
     raindrops (0.10.0)
     roda (2.1.0)
       rack
@@ -21,7 +19,6 @@ PLATFORMS
 
 DEPENDENCIES
   pg
-  rack-protection
   roda (>= 1.2.0)
   sequel
   tilt
