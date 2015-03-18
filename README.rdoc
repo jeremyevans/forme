@@ -580,12 +580,14 @@ Creates an input tag with type checkbox, as well as a hidden input tag. Options:
 :checked :: Mark the checkbox as checked.
 :hidden_value :: The value to use for the hidden input tag.
 :no_hidden :: Don't create a hidden input tag.
+:tag_wrapper :: Wrap each checkbox with a tag.
 
 === :radio
 
 Creates an input tag with type radio. Options:
 
 :checked :: Mark the radio button as checked.
+:tag_wrapper :: Wrap each radio button with a tag.
 
 === :date
 
