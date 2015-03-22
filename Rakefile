@@ -50,15 +50,15 @@ end
 
 begin
   begin
+    # RSpec 2+
+    require "rspec/core/rake_task"
+    spec_class = RSpec::Core::RakeTask
+    spec_files_meth = :pattern=
+  rescue LoadError
     # RSpec 1
     require "spec/rake/spectask"
     spec_class = Spec::Rake::SpecTask
     spec_files_meth = :spec_files=
-  rescue LoadError
-    # RSpec 2
-    require "rspec/core/rake_task"
-    spec_class = RSpec::Core::RakeTask
-    spec_files_meth = :pattern=
   end
 
   spec = lambda do |name, files, d|
