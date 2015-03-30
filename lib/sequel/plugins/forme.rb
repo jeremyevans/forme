@@ -53,6 +53,8 @@ module Sequel # :nodoc:
         #            be created via the :inputs option.  If you are not providing
         #            an :inputs option or are using a block with additional inputs,
         #            you should specify this option.
+        # :skip_primary_key :: Skip adding a hidden primary key field for existing
+        #                      objects.
         def subform(association, opts={}, &block)
           nested_obj = opts.has_key?(:obj) ? opts[:obj] : obj.send(association)
           ref = obj.class.association_reflection(association)
@@ -62,7 +64,7 @@ module Sequel # :nodoc:
 
           contents = proc do
             send(multiple ? :each_obj : :with_obj, nested_obj, ns) do |no, i|
-              emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new?
+              emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new? || opts[:skip_primary_key]
               options = opts.dup
               if grid
                 options.delete(:legend)

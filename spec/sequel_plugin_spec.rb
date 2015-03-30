@@ -416,6 +416,11 @@ describe "Forme Sequel::Model forms" do
   specify "should have #subform :grid option handle :legend and :labels nil values" do
     Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>nil, :labels=>nil)}.to_s.should == '<form class="forme album" method="post"><table><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
   end
+
+  specify "should have #subform :grid option handle :skip_primary_key option" do
+    Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :skip_primary_key=>true)}.to_s.should == '<form class="forme album" method="post"><table><caption>Artist</caption><tr><th>Name</th></tr><tr><td class="string"><input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
+  end
+  
 end
 
 describe "Forme Sequel plugin default input types based on column names" do

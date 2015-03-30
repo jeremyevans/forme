@@ -1,5 +1,7 @@
 === HEAD
 
+* Support :skip_primary_key option to not add hidden primary key fields for existing associated objects in subform in the Sequel plugin (jeremyevans)
+
 * Support :blank_attr option for select/radioset/checkboxset inputs (jeremyevans)
 
 * Support :blank_position=>:after option for select/radioset/checkboxset inputs (jeremyevans)
