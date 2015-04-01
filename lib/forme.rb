@@ -111,7 +111,7 @@ module Forme
   def self.transformer(type, trans, default_opts)
     case trans
     when Symbol
-      TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.map{|k| k.inspect}.join(', ')})")
+      TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.map(&:inspect).join(', ')})")
     when Hash
       if trans.has_key?(type)
         if v = trans[type]
@@ -1086,7 +1086,7 @@ module Forme
     # Use a span with text of the selected values instead of a select box.
     def format_select
       t = super
-      children = [t.children.select{|o| o.attr[:selected]}.map{|o| o.children}.join(', ')] if t.children
+      children = [t.children.select{|o| o.attr[:selected]}.map(&:children).join(', ')] if t.children
       tag(:span, {}, children)
     end
 

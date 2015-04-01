@@ -247,7 +247,7 @@ module Sequel # :nodoc:
           if meth = opts.delete(:name_method)
             meth
           else
-            meths = FORME_NAME_METHODS & ref.associated_class.instance_methods.map{|s| s.to_sym}
+            meths = FORME_NAME_METHODS & ref.associated_class.instance_methods.map(&:to_sym)
             if meths.empty?
               raise Error, "No suitable name method found for association #{ref[:name]}"
             else
