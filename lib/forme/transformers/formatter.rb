@@ -384,20 +384,25 @@ module Forme
     def tag(type, attr=@attr, children=nil)
       form._tag(type, attr, children)
     end
-    
+
+    # Wrap the tag for the given transformer type.
+    def wrap(type, tag)
+      Forme.transform(type, @opts, input.form_opts, tag, input)
+    end
+
     # Wrap the tag with the form's +wrapper+.
     def wrap_tag(tag)
-      Forme.transform(:wrapper, @opts, input.form_opts, tag, input)
+      wrap(:wrapper, tag)
     end
 
     # Wrap the tag with the form's +error_handler+.
     def wrap_tag_with_error(tag)
-      Forme.transform(:error_handler, @opts, input.form_opts, tag, input)
+      wrap(:error_handler, tag)
     end
 
     # Wrap the tag with the form's +labeler+.
     def wrap_tag_with_label(tag)
-      Forme.transform(:labeler, @opts, input.form_opts, tag, input)
+      wrap(:labeler, tag)
     end
   end
 
