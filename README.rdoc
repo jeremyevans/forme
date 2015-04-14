@@ -38,6 +38,8 @@ data is broken down to the following steps (called transformers):
                <tt>Forme::Tag</tt> instance (or array of them).
 +ErrorHandler+ :: If the <tt>Forme::Input</tt> instance has a error,
                   takes the formatted tag and marks it as having the error.
++Helper+ :: If the <tt>Forme::Input</tt> instance has any help text,
+            adds the help text in a separate tag.
 +Labeler+ :: If the <tt>Forme::Input</tt> instance has a label,
              takes the formatted output and labels it.
 +Wrapper+ :: Takes the output of the formatter, labeler, and
@@ -60,7 +62,7 @@ There is also an +InputsWrapper+ transformer, that is called by
 related options (in a fieldset by default).
 
 The <tt>Forme::Form</tt> object takes the 6 transformers as options (:formatter,
-:labeler, :error_handler, :wrapper, :inputs_wrapper, and :serializer), all of which
+:labeler, :error_handler, :helper, :wrapper, :inputs_wrapper, and :serializer), all of which
 should be objects responding to +call+ (so you can use +Proc+s) or be symbols
 registered with the library using <tt>Forme.register_transformer</tt>:
 
@@ -559,6 +561,7 @@ These options are supported by all of the input types:
 :disabled :: Set the disabled attribute if true
 :error :: Set an error message, invoking the error_handler
 :error_handler :: Set a custom error_handler, overriding the form's default
+:helper :: Set a custom helper, overriding the form's default
 :id :: The id attribute to use
 :key :: The base to use for the name and id attributes, based on the current
         namespace for the form.
@@ -659,6 +662,7 @@ the defaults for Inputs created via the form:
 :config :: The configuration to use, which automatically sets defaults
            for the transformers to use.
 :error_handler :: Sets the default error_handler for the form's inputs
+:helper :: Sets the default helper for the form's inputs
 :formatter :: Sets the default formatter for the form's inputs
 :hidden_tags :: Sets the hidden tags to automatically add to this form, see below.
 :input_defaults :: Sets the default options for each input type.  This should
@@ -713,15 +717,16 @@ API, so you can use a +Proc+ for any custom transformer.
 +serializer+ :: tags input/tag, returns string
 +formatter+ :: takes input, returns tag
 +error_handler+ :: takes tag and input, returns version of tag with errors noted
++helper+ :: takes tag and input, returns version of tag with help added
 +labeler+ :: takes tag and input, returns labeled version of tag
 +wrapper+ :: takes tag and input, returns wrapped version of tag
 +inputs_wrapper+ :: takes form, options hash, and block, wrapping block in a tag
 
 The +serializer+ is the base of the transformations.  It turns +Tag+ instances into strings.  If it comes across
 an +Input+, it calls the +formatter+ on the +Input+ to turn it into a +Tag+, and then serializes
-that +Tag+.  The +formatter+ first converts the +Input+ to a +Tag+, and then calls the
-+error_handler+ if the <tt>:error</tt> option is set and the +labeler+  if the <tt>:label</tt>
-option is set.  Finally, it calls the +wrapper+ to wrap the resulting tag before returning it.
+that +Tag+.  The +formatter+ first converts the +Input+ to a +Tag+, and then calls the +labeler+  if the <tt>:label</tt>
+option is set, the +error_handler+ if the <tt>:error</tt> option is set, and the +helper+ if the <tt>:help</tt> option
+is set .  Finally, it calls the +wrapper+ to wrap the resulting tag before returning it.
 
 The +inputs_wrapper+ is called by <tt>Forme::Form#inputs</tt> and serves to wrap a bunch
 of related inputs.
@@ -749,6 +754,14 @@ Forme ships with a bunch of built-in transformers that you can use:
 This supports the following options:
 
 :error_attr :: A hash of attributes to use for the span with the error message
+
+=== +helper+
+
+:default :: adds a span with the help text
+
+This supports the following options:
+
+:helper_attr :: A hash of attributes to use for the span with the help message
 
 === +labeler+
 

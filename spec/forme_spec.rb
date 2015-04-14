@@ -573,6 +573,18 @@ describe "Forme plain forms" do
     @f.input(:text, :wrapper=>:li, :wrapper_attr=>{:class=>"foo"}).to_s.should == '<li class="foo"><input type="text"/></li>'
   end
 
+  specify "inputs should accept a :help option to use custom helper text" do
+    @f.input(:text, :help=>"List type of foo").to_s.should == '<input type="text"/><span class="helper">List type of foo</span>'
+  end
+
+  specify "inputs should accept a :helper_attr option for custom helper attributes" do
+    @f.input(:text, :help=>"List type of foo", :helper_attr=>{:class=>'foo'}).to_s.should == '<input type="text"/><span class="foo helper">List type of foo</span>'
+  end
+
+  specify "inputs should have helper displayed inside wrapper, after error" do
+    @f.input(:text, :help=>"List type of foo", :error=>'bad', :wrapper=>:li).to_s.should == '<li><input class="error" type="text"/><span class="error_message">bad</span><span class="helper">List type of foo</span></li>'
+  end
+
   specify "inputs should accept a :formatter option to use a custom formatter" do
     @f.input(:text, :formatter=>:readonly, :value=>'1', :label=>'Foo').to_s.should == '<label>Foo: <span>1</span></label>'
     @f.input(:text, :formatter=>:default, :value=>'1', :label=>'Foo').to_s.should == '<label>Foo: <input type="text" value="1"/></label>'

@@ -63,6 +63,7 @@ module Forme
       tag = convert_to_tag(input.type)
       tag = wrap_tag_with_label(tag) if input.opts[:label]
       tag = wrap_tag_with_error(tag) if input.opts[:error]
+      tag = wrap(:helper, tag) if input.opts[:help]
       wrap_tag(tag)
     end
 

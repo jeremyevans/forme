@@ -18,7 +18,7 @@ module Forme
   end
 
   # Array of all supported transformer types.
-  TRANSFORMER_TYPES = [:formatter, :serializer, :wrapper, :error_handler, :labeler, :inputs_wrapper]
+  TRANSFORMER_TYPES = [:formatter, :serializer, :wrapper, :error_handler, :helper, :labeler, :inputs_wrapper]
 
   # Transformer symbols shared by wrapper and inputs_wrapper
   SHARED_WRAPPERS = [:tr, :table, :ol, :fieldset_ol]
@@ -91,7 +91,7 @@ module Forme
       case type
       when :inputs_wrapper
         yield
-      when :labeler, :error_handler, :wrapper
+      when :labeler, :error_handler, :wrapper, :helper
         args.first
       else
         raise Error, "No matching #{type}: #{trans_name.inspect}"
@@ -132,4 +132,4 @@ module Forme
 end
 
 %w'form input tag raw version'.each{|f| require File.expand_path("../forme/#{f}", __FILE__)}
-%w'error_handler formatter inputs_wrapper labeler serializer wrapper'.each{|f| require File.expand_path("../forme/transformers/#{f}", __FILE__)}
+%w'error_handler formatter helper inputs_wrapper labeler serializer wrapper'.each{|f| require File.expand_path("../forme/transformers/#{f}", __FILE__)}

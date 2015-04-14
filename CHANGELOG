@@ -1,5 +1,7 @@
 === HEAD
 
+* Add helper transformer type, for adding help text next to fields (jeremyevans)
+
 * Support :skip_primary_key option to not add hidden primary key fields for existing associated objects in subform in the Sequel plugin (jeremyevans)
 
 * Support :blank_attr option for select/radioset/checkboxset inputs (jeremyevans)
