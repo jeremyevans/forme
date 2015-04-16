@@ -109,43 +109,52 @@ module Forme
       tag(:input)
     end
 
+    DEFAULT_DATE_ORDER = [:year, '-'.freeze, :month, '-'.freeze, :day].freeze
     # Use a date input by default.  If the :as=>:select option is given,
     # use a multiple select box for the options.
     def format_date
       if @opts[:as] == :select
-        name = @attr[:name]
-        id = @attr[:id]
-        v = @attr[:value]
-        if v
+        values = {}
+        if v = @attr[:value]
           v = Date.parse(v) unless v.is_a?(Date)
-          values = {}
           values[:year], values[:month], values[:day] = v.year, v.month, v.day
         end
-        ops = {:year=>1900..2050, :month=>1..12, :day=>1..31}
-        order = @opts[:order] || [:year, '-', :month, '-', :day]
-        input.merge_opts(:label_for=>"#{id}_year")
-        order.map{|x| x.is_a?(String) ? x : form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [sprintf("%02i", x), x]})).format}
+        _format_date_select(values, @opts[:order] || DEFAULT_DATE_ORDER)
       else
         _format_input(:date)
       end
     end
 
+    DEFAULT_DATETIME_ORDER = [:year, '-'.freeze, :month, '-'.freeze, :day, ' '.freeze, :hour, ':'.freeze, :minute, ':'.freeze, :second].freeze
     # Use a datetime input by default.  If the :as=>:select option is given,
     # use a multiple select box for the options.
     def format_datetime
       if @opts[:as] == :select
-        name = @attr[:name]
-        id = @attr[:id]
-        v = @attr[:value]
-        v = DateTime.parse(v) unless v.is_a?(Time) || v.is_a?(DateTime)
         values = {}
-        values[:year], values[:month], values[:day], values[:hour], values[:minute], values[:second] = v.year, v.month, v.day, v.hour, v.min, v.sec
-        ops = {:year=>1900..2050, :month=>1..12, :day=>1..31, :hour=>0..23, :minute=>0..59, :second=>0..59}
-        order = @opts[:order] || [:year, '-', :month, '-', :day, ' ', :hour, ':', :minute, ':', :second]
-        input.merge_opts(:label_for=>"#{id}_year")
-        order.map{|x| x.is_a?(String) ? x : form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [sprintf("%02i", x), x]})).format}
+        if v = @attr[:value]
+          v = DateTime.parse(v) unless v.is_a?(Time) || v.is_a?(DateTime)
+          values[:year], values[:month], values[:day], values[:hour], values[:minute], values[:second] = v.year, v.month, v.day, v.hour, v.min, v.sec
+        end
+        _format_date_select(values, @opts[:order] || DEFAULT_DATETIME_ORDER)
       else
         _format_input('datetime-local')
+      end
+    end
+
+    # Shared code for formatting dates/times as select boxes
+    def _format_date_select(values, order)
+      name = @attr[:name]
+      id = @attr[:id]
+      ops = {:year=>1900..2050, :month=>1..12, :day=>1..31, :hour=>0..23, :minute=>0..59, :second=>0..59}
+      first_input = true
+      order.map do |x|
+        next x if x.is_a?(String)
+        opts = @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [sprintf("%02i", x), x]})
+        if first_input
+          opts[:id] = id
+          first_input = false
+        end
+        form._input(:select, opts).format
       end
     end
 

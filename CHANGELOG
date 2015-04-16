@@ -1,5 +1,7 @@
 === HEAD
 
+* The id for first select input for date/datetime :as=>:select is now the same as the :id option/attribute (jeremyevans)
+
 * Support :order option for date/datetime :as=>:select inputs, so you can order select boxes day/month/year or month/day/year (jeremyevans)
 
 * Add helper transformer type, for adding help text next to fields (jeremyevans)
