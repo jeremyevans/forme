@@ -267,6 +267,10 @@ describe "Forme plain forms" do
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :order=>[:month, :year]).to_s.should == %{<select id="bar" name="foo[month]">#{sel(1..12, 6)}</select><select id="bar_year" name="foo[year]">#{sel(1900..2050, 2011)}</select>}
   end
 
+  specify "should support :select_options for dates when :as=>:select is given" do
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :select_options=>{:year=>1970..2020}).to_s.should == %{<select id="bar" name="foo[year]">#{sel(1970..2020, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
+  end
+
   specify "should have explicit labeler and trtd wrapper work with multiple select boxes for dates" do
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :wrapper=>:trtd, :labeler=>:explicit, :label=>'Baz').to_s.should == %{<tr><td><label class="label-before" for="bar">Baz</label></td><td><select id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select></td></tr>}
   end
@@ -277,6 +281,10 @@ describe "Forme plain forms" do
 
   specify "should allow ordering select boxes for datetimes via :order" do
     @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 4, 3, 2), :order=>[:day, '/', :month, 'T', :hour, ':', :minute]).to_s.should == %{<select id="bar" name="foo[day]">#{sel(1..31, 5)}</select>/<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>T<select id="bar_hour" name="foo[hour]">#{sel(0..23, 4)}</select>:<select id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select>}
+  end
+
+  specify "should support :select_options for datetimes when :as=>:select option is given" do
+    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 10, 3, 2), :select_options=>{:year=>1970..2020, :hour=>9..17}).to_s.should == %{<select id="bar" name="foo[year]">#{sel(1970..2020, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select> <select id="bar_hour" name="foo[hour]">#{sel(9..17, 10)}</select>:<select id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select>:<select id="bar_second" name="foo[second]">#{sel(0..59, 2)}</select>}
   end
 
   specify "should create select tag with options" do

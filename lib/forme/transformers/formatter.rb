@@ -141,11 +141,13 @@ module Forme
       end
     end
 
+    DEFAULT_DATE_SELECT_OPS = {:year=>1900..2050, :month=>1..12, :day=>1..31, :hour=>0..23, :minute=>0..59, :second=>0..59}.freeze
     # Shared code for formatting dates/times as select boxes
     def _format_date_select(values, order)
       name = @attr[:name]
       id = @attr[:id]
-      ops = {:year=>1900..2050, :month=>1..12, :day=>1..31, :hour=>0..23, :minute=>0..59, :second=>0..59}
+      ops = DEFAULT_DATE_SELECT_OPS
+      ops = ops.merge(@opts[:select_options]) if @opts[:select_options]
       first_input = true
       order.map do |x|
         next x if x.is_a?(String)
