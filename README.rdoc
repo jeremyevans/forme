@@ -596,6 +596,9 @@ By default, creates an input tag with type date.  With the :as=>:select option, 
 3 select boxes, one for the year, month, and day. Options:
 
 :as :: When value is :select, uses 3 select boxes.
+:order :: The order of select boxes when using :as=>:select.  Entries should be a symbol
+          for the select field and string to use a string
+          (default: <tt>[:year, '-', :month, '-', :day]</tt>)
 
 === :datetime
 
@@ -603,6 +606,9 @@ By default, creates an input tag with type datetime.  With the :as=>:select opti
 6 select boxes, one for the year, month, day, hour, minute, and second. Options:
 
 :as :: When value is :select, uses 6 select boxes.
+:order :: The order of select boxes when using :as=>:select.  Entries should be a symbol
+          for the select field and string to use a string
+          (default: <tt>[:year, '-', :month, '-', :day, ' ', :hour, ':', :minute, ':', :second]</tt>)
 
 === :select
 

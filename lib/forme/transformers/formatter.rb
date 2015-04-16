@@ -122,8 +122,9 @@ module Forme
           values[:year], values[:month], values[:day] = v.year, v.month, v.day
         end
         ops = {:year=>1900..2050, :month=>1..12, :day=>1..31}
+        order = @opts[:order] || [:year, '-', :month, '-', :day]
         input.merge_opts(:label_for=>"#{id}_year")
-        [:year, '-', :month, '-', :day].map{|x| x.is_a?(String) ? x : form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [sprintf("%02i", x), x]})).format}
+        order.map{|x| x.is_a?(String) ? x : form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [sprintf("%02i", x), x]})).format}
       else
         _format_input(:date)
       end
@@ -140,8 +141,9 @@ module Forme
         values = {}
         values[:year], values[:month], values[:day], values[:hour], values[:minute], values[:second] = v.year, v.month, v.day, v.hour, v.min, v.sec
         ops = {:year=>1900..2050, :month=>1..12, :day=>1..31, :hour=>0..23, :minute=>0..59, :second=>0..59}
+        order = @opts[:order] || [:year, '-', :month, '-', :day, ' ', :hour, ':', :minute, ':', :second]
         input.merge_opts(:label_for=>"#{id}_year")
-        [:year, '-', :month, '-', :day, ' ', :hour, ':', :minute, ':', :second].map{|x| x.is_a?(String) ? x : form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [sprintf("%02i", x), x]})).format}
+        order.map{|x| x.is_a?(String) ? x : form._input(:select, @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :id=>"#{id}_#{x}", :value=>values[x], :options=>ops[x].map{|x| [sprintf("%02i", x), x]})).format}
       else
         _format_input('datetime-local')
       end
