@@ -296,6 +296,14 @@ describe "Forme plain forms" do
     @f.input(:select, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.should == '<select><option value="1">a</option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
   end
 
+  specify "should create select tag with option groups" do
+    @f.input(:select, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.should == '<select><optgroup label="d"><option value="1">a</option><option selected="selected" value="2">b</option></optgroup><optgroup label="e"><option value="3">c</option></optgroup></select>'
+  end
+
+  specify "should create select tag with option groups with attributes" do
+    @f.input(:select, :optgroups=>[[{:label=>'d', :class=>'f'}, [[:a, 1], [:b, 2]]], [{:label=>'e', :class=>'g'}, [[:c, 3]]]], :selected=>2).to_s.should == '<select><optgroup class="f" label="d"><option value="1">a</option><option selected="selected" value="2">b</option></optgroup><optgroup class="g" label="e"><option value="3">c</option></optgroup></select>'
+  end
+
   specify "should create select tag with options and values with hashes" do
     @f.input(:select, :options=>[[:a, {:foo=>1}], [:b, {:bar=>4, :value=>2}], [:c, {:baz=>3}]], :selected=>2).to_s.should == '<select><option foo="1">a</option><option bar="4" selected="selected" value="2">b</option><option baz="3">c</option></select>'
   end
@@ -366,6 +374,10 @@ describe "Forme plain forms" do
     @f.input(:radioset, :options=>[1, 2, 3], :key=>:foo, :value=>2).to_s.should == '<label class="option"><input id="foo_1" name="foo" type="radio" value="1"/> 1</label><label class="option"><input checked="checked" id="foo_2" name="foo" type="radio" value="2"/> 2</label><label class="option"><input id="foo_3" name="foo" type="radio" value="3"/> 3</label>'
   end
 
+  specify "should create set of radio buttons with fieldsets and legends for :optgroups" do
+    @f.input(:radioset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.should == '<fieldset><legend>d</legend><label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="radio" value="3"/> c</label></fieldset>'
+  end
+
   specify "should create set of checkbox buttons" do
     @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.should == '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
     @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.should == '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
@@ -406,6 +418,10 @@ describe "Forme plain forms" do
 
   specify "should respect the :error option for checkbox sets" do
     @f.input(:checkboxset, :options=>[1, 2, 3], :error=>'foo', :value=>2).to_s.should == '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input class="error" type="checkbox" value="3"/> 3</label><span class="error_message">foo</span>'
+  end
+
+  specify "should create set of checkbox buttons with fieldsets and legends for optgroups" do
+    @f.input(:checkboxset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.should == '<fieldset><legend>d</legend><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="checkbox" value="3"/> c</label></fieldset>'
   end
 
   specify "should raise an Error for empty checkbox sets" do

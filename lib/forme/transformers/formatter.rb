@@ -178,17 +178,26 @@ module Forme
       @attr[:multiple] = :multiple if @opts[:multiple]
       copy_options_to_attributes([:size])
 
-      if os = process_select_options(@opts[:options])
-        os = os.map do |label, value, sel, attrs|
-          if value || sel
-            attrs = attrs.dup
-            attrs[:value] = value if value
-            attrs[:selected] = :selected if sel
-          end
-          tag(:option, attrs, [label])
+      os = process_select_optgroups(:_format_select_optgroup) do |label, value, sel, attrs|
+        if value || sel
+         attrs = attrs.dup
+          attrs[:value] = value if value
+          attrs[:selected] = :selected if sel
         end
+        tag(:option, attrs, [label])
       end
       tag(:select, @attr, os)
+    end
+
+    # Use an optgroup around related options in a select tag.
+    def _format_select_optgroup(group, options)
+      group = {:label=>group} unless group.is_a?(Hash)
+      tag(:optgroup, group, options)
+    end
+
+    # Use a fieldset/legend around related options in a checkbox or radio button set.
+    def _format_set_optgroup(group, options)
+      tag(:fieldset, {}, [tag(:legend, {}, [group])] + options)
     end
 
     def format_checkboxset
@@ -201,7 +210,7 @@ module Forme
     end
 
     def _format_set(type, tag_attrs={})
-      raise Error, "can't have radioset with no options" unless os = @opts[:options]
+      raise Error, "can't have radioset with no options" unless @opts[:optgroups] || @opts[:options]
       key = @opts[:key]
       name = @opts[:name]
       id = @opts[:id]
@@ -214,7 +223,7 @@ module Forme
       tag_wrapper = @opts.delete(:tag_wrapper) || :default
       wrapper = Forme.transformer(:wrapper, @opts, @input.form_opts)
 
-      tags = process_select_options(os).map do |label, value, sel, attrs|
+      tags = process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
         value ||= label
         r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>{:class=>:option}, :wrapper=>tag_wrapper)
         r_opts[:value] ||= value if value
@@ -234,10 +243,12 @@ module Forme
         form._input(type, r_opts)
       end
 
-      if (last_input = tags.last) && last_input.is_a?(Input)
-        last_input.opts[:error] = @opts[:set_error]
-      else
-        tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
+      if @opts[:set_error]
+        if (last_input = tags.last) && last_input.is_a?(Input)
+          last_input.opts[:error] = @opts[:set_error]
+        else
+          tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
+        end
       end
       tags.unshift(form._tag(:span, {:class=>:label}, @opts[:set_label])) if @opts[:set_label]
       wrapper.call(tags, form._input(type, opts)) if wrapper
@@ -349,8 +360,32 @@ module Forme
       @attr[:value] = values.fetch(key){values.fetch(key.to_s){return}}
     end
 
-    # Returns an array of arrays, where each array entry contains the label, value,
-    # currently selected flag, and attributes for that tag.
+    # If :optgroups option is present, iterate over each of the groups
+    # inside of it and create options for each group.  Otherwise, if
+    # :options option present, iterate over it and create options.
+    def process_select_optgroups(grouper, &block)
+      os = if groups = @opts[:optgroups]
+        groups.map do |group, options|
+          send(grouper, group, process_select_options(options, &block))
+        end
+      else
+        return unless @opts[:options]
+        process_select_options(@opts[:options], &block)
+      end
+
+      if prompt = @opts[:add_blank]
+        unless prompt.is_a?(String)
+          prompt = Forme.default_add_blank_prompt
+        end
+        blank_attr = @opts[:blank_attr] || {}
+        os.send(@opts[:blank_position] == :after ? :push : :unshift, yield([prompt, '', false, blank_attr]))
+      end
+
+      os
+    end
+
+    # Iterate over the given options, yielding the option text, value, whether it is selected, and any attributes.
+    # The block should return an appropriate tag object.
     def process_select_options(os)
       if os
         vm = @opts[:value_method]
@@ -364,7 +399,7 @@ module Forme
           cmp = lambda{|v| v == sel}
         end
 
-        os = os.map do |x|
+        os.map do |x|
           attr = {}
           if tm
             text = x.send(tm)
@@ -382,18 +417,8 @@ module Forme
             text = x
           end
 
-          [text, val, val ? cmp.call(val) : cmp.call(text), attr]
+          yield [text, val, val ? cmp.call(val) : cmp.call(text), attr]
         end
-
-        if prompt = @opts[:add_blank]
-          unless prompt.is_a?(String)
-            prompt = Forme.default_add_blank_prompt
-          end
-          blank_attr = @opts[:blank_attr] || {}
-          os.send(@opts[:blank_position] == :after ? :push : :unshift, [prompt, '', false, blank_attr])
-        end
-
-        os
       end
     end
 

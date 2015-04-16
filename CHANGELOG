@@ -1,5 +1,7 @@
 === HEAD
 
+* Support option groups in select, checkboxset, and radioset inputs via :optgroups option (jeremyevans)
+
 * Support :select_options option for date/datetime :as=>:select, for setting specific options in each select field (jeremyevans)
 
 * The id for first select input for date/datetime :as=>:select is now the same as the :id option/attribute (jeremyevans)

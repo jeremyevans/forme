@@ -614,7 +614,11 @@ Creates a select tag, containing option tags specified by the :options option.  
 :blank_position :: If :add_blank is set, can be set to :after to add the prompt after
                    the inputs, instead of before (which is the default).
 :multiple :: Creates a multiple select box.
-:options :: an array of options used for creating option tags.
+:optgroups :: An enumerable of pairs with the first element being option group labels or
+              a hash of option group attributes, and values being enumerables of options
+              (as described by :options below).  Creates optgroup tags around the
+              appropriate options. This overrides any options specified via :options.
+:options :: An enumerable of options used for creating option tags.
             If the :text_method and :value_method are not given and the entry is an 
             array, uses the first entry of the array as the text of the option, and
             the second entry of the array as the value of the option.
