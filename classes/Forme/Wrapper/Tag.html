@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Forme::InputsWrapper::FieldSetOL</title>
+    <title>Forme::Wrapper::Tag</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,28 +27,30 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>class</span>
-          Forme::InputsWrapper::FieldSetOL
+          Forme::Wrapper::Tag
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../files/lib/forme/transformers/inputs_wrapper_rb.html">lib/forme/transformers/inputs_wrapper.rb</a>
+            <a target="docwin" href="../../../files/lib/forme/transformers/wrapper_rb.html">lib/forme/transformers/wrapper.rb</a>
           </li>
         </ol>
         <div class='parent'>
           Superclass:
-          <strong><a target="docwin" href="../InputsWrapper.html">InputsWrapper</a></strong>
+          <strong><a target="docwin" href="../Wrapper.html">Wrapper</a></strong>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             
-            <p>Use a &lt;fieldset&gt; and an &lt;ol&gt; tag to wrap the inputs.</p>
-            
-            <p>Registered as :fieldset_ol.</p>
+            <p>Wraps inputs using the given tag type.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-new">new</a></li>
+            </ol>
             <h3>Public Instance</h3>
             <ol>
               <li><a target="docwin" href="#method-i-call">call</a></li>
@@ -58,22 +60,40 @@
           </div>
           <div id='section'>
             <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-new'>
+                <a name='method-c-new'></a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(type)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Set the tag type to use.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/transformers/wrapper.rb, line 15</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">type</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
               <h2>Public Instance methods</h2>
               <div class='method public-instance' id='method-method-i-call'>
                 <a name='method-i-call'></a>
                 <div class='synopsis'>
                   <span class='name'>call</span>
-                  <span class='arguments'>(form, opts)</span>
+                  <span class='arguments'>(tag, input)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Wrap the inputs in a &lt;fieldset&gt; and a &lt;ol&gt; tag.</p>
+                  <p>Wrap the input in the tag of the given type.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/inputs_wrapper.rb, line 32</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">opts</span>){<span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag_</span>(<span class="ruby-value">:ol</span>){<span class="ruby-keyword">yield</span>}}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/wrapper.rb, line 20</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-ivar">@type</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:wrapper_attr</span>], <span class="ruby-keyword">super</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

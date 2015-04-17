@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Forme::InputsWrapper::FieldSetOL</title>
+    <title>Forme::Wrapper</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
       //<![CDATA[
         function popupCode(url) {
@@ -27,25 +27,23 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>class</span>
-          Forme::InputsWrapper::FieldSetOL
+          Forme::Wrapper
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../files/lib/forme/transformers/inputs_wrapper_rb.html">lib/forme/transformers/inputs_wrapper.rb</a>
+            <a target="docwin" href="../../files/lib/forme/transformers/wrapper_rb.html">lib/forme/transformers/wrapper.rb</a>
           </li>
         </ol>
         <div class='parent'>
           Superclass:
-          <strong><a target="docwin" href="../InputsWrapper.html">InputsWrapper</a></strong>
+          <strong>Object</strong>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             
-            <p>Use a &lt;fieldset&gt; and an &lt;ol&gt; tag to wrap the inputs.</p>
-            
-            <p>Registered as :fieldset_ol.</p>
+            <p>Default wrapper doesn&#39;t wrap input in any tag</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -56,6 +54,13 @@
           </div>
           <div id='context'>
           </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="Wrapper/TableRow.html">Forme::Wrapper::TableRow</a></li>
+              <li><a target="docwin" href="Wrapper/Tag.html">Forme::Wrapper::Tag</a></li>
+            </ol>
+          </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
@@ -63,17 +68,17 @@
                 <a name='method-i-call'></a>
                 <div class='synopsis'>
                   <span class='name'>call</span>
-                  <span class='arguments'>(form, opts)</span>
+                  <span class='arguments'>(tag, input)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Wrap the inputs in a &lt;fieldset&gt; and a &lt;ol&gt; tag.</p>
+                  <p>Return an array containing the tag</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/inputs_wrapper.rb, line 32</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">opts</span>){<span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag_</span>(<span class="ruby-value">:ol</span>){<span class="ruby-keyword">yield</span>}}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/wrapper.rb, line 5</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-constant">Array</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

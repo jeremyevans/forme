@@ -31,7 +31,7 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../files/lib/forme_rb.html">lib/forme.rb</a>
+            <a target="docwin" href="../../files/lib/forme/transformers/formatter_rb.html">lib/forme/transformers/formatter.rb</a>
           </li>
         </ol>
         <div class='parent'>
@@ -123,6 +123,34 @@
                       <p>common usage for boolean values.</p>
                     </td>
                   </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>DATE_SELECT_FORMAT</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'%02i'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>DEFAULT_DATETIME_ORDER</td>
+                    <td>=</td>
+                    <td class='context-item-value'>[:year, '-'.freeze, :month, '-'.freeze, :day, ' '.freeze, :hour, ':'.freeze, :minute, ':'.freeze, :second].freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>DEFAULT_DATE_ORDER</td>
+                    <td>=</td>
+                    <td class='context-item-value'>[:year, '-'.freeze, :month, '-'.freeze, :day].freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>DEFAULT_DATE_SELECT_OPS</td>
+                    <td>=</td>
+                    <td class='context-item-value'>{:year=>1900..2050, :month=>1..12, :day=>1..31, :hour=>0..23, :minute=>0..59, :second=>0..59}.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
                 </table>
               </div>
             </div>
@@ -194,7 +222,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-call-source'><span class="ruby-comment"># File lib/forme.rb, line 660</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">new</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-call-source'><span class="ruby-comment"># File lib/forme/transformers/formatter.rb, line 25</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">new</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -216,7 +244,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme.rb, line 690</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-ivar">@input</span> = <span class="ruby-identifier">input</span>&#x000A;  <span class="ruby-ivar">@form</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">form</span>&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>]&#x000A;  <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-identifier">normalize_options</span>&#x000A;&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">convert_to_tag</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_label</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>]&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_error</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error</span>]&#x000A;  <span class="ruby-identifier">wrap_tag</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/formatter.rb, line 55</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-ivar">@input</span> = <span class="ruby-identifier">input</span>&#x000A;  <span class="ruby-ivar">@form</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">form</span>&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>]&#x000A;  <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-identifier">normalize_options</span>&#x000A;&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">convert_to_tag</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_label</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>]&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_error</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error</span>]&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap</span>(<span class="ruby-value">:helper</span>, <span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:help</span>]&#x000A;  <span class="ruby-identifier">wrap_tag</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
