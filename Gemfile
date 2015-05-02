@@ -7,5 +7,5 @@ gem 'pg'
 gem 'unicorn'
 
 group :development, :test do
-  gem "rspec", '>= 1.3'
+  gem "minitest"
 end

@@ -32,6 +32,6 @@ describe "Forme Sinatra ERB integration" do
     s.gsub(/\s+/, ' ').strip
   end
 
-  it_should_behave_like "erb integration"
+  include FormeErbSpecs
 end
 end

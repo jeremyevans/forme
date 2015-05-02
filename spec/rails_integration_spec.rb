@@ -193,56 +193,56 @@ describe "Forme Rails integration" do
     @rack = {'rack.input'=>'', 'REQUEST_METHOD'=>'GET', 'rack.errors'=>o}
   end
 
-  specify "#form should add start and end tags and yield Forme::Form instance" do
-    sin_get('/index').should == '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> <input type="submit" value="Save"/> </form>'
+  it "#form should add start and end tags and yield Forme::Form instance" do
+    sin_get('/index').must_equal '<form action="/baz"> <p>FBB</p> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> <input type="submit" value="Save"/> </form>'
   end
 
-  specify "#form should have inputs work with a block" do
-    sin_get('/inputs_block').should == '<form action="/baz"> <fieldset class="inputs"><legend>FBB</legend> <input id="last" name="last" type="text" value="bar"/> </fieldset></form>'
+  it "#form should have inputs work with a block" do
+    sin_get('/inputs_block').must_equal '<form action="/baz"> <fieldset class="inputs"><legend>FBB</legend> <input id="last" name="last" type="text" value="bar"/> </fieldset></form>'
   end
 
-  specify "#form should have inputs with fieldset_ol wrapper work with block" do
-    sin_get('/inputs_block_wrapper').should == '<form action="/baz"> <fieldset class="inputs"><legend>FBB</legend><ol> <input id="last" name="last" type="text" value="bar"/> </ol></fieldset></form>'
+  it "#form should have inputs with fieldset_ol wrapper work with block" do
+    sin_get('/inputs_block_wrapper').must_equal '<form action="/baz"> <fieldset class="inputs"><legend>FBB</legend><ol> <input id="last" name="last" type="text" value="bar"/> </ol></fieldset></form>'
   end
 
-  specify "#form should add start and end tags and yield Forme::Form instance" do
-    sin_get('/nest').should == '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
+  it "#form should add start and end tags and yield Forme::Form instance" do
+    sin_get('/nest').must_equal '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
   end
 
-  specify "#form should correctly handle situation where multiple templates are used with same form object" do
-    sin_get('/nest_sep').should == "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <div> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </div> n4 <fieldset class=\"inputs\"><legend>Foo</legend><input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/><input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/></fieldset> n5 3 </form>4"
+  it "#form should correctly handle situation where multiple templates are used with same form object" do
+    sin_get('/nest_sep').must_equal "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <div> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </div> n4 <fieldset class=\"inputs\"><legend>Foo</legend><input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/><input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/></fieldset> n5 3 </form>4"
   end
 
-  specify "#form should correctly handle situation where multiple templates are used with same form object" do
-    sin_get('/nest_inputs').should == "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <fieldset class=\"inputs\"> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </fieldset> n4 <fieldset class=\"inputs\"><legend>Foo</legend><input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/><input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/></fieldset> n5 3 </form>4"
+  it "#form should correctly handle situation where multiple templates are used with same form object" do
+    sin_get('/nest_inputs').must_equal "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <fieldset class=\"inputs\"> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </fieldset> n4 <fieldset class=\"inputs\"><legend>Foo</legend><input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/><input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/></fieldset> n5 3 </form>4"
   end
 
-  specify "#form should correctly handle situation Sequel integration with subforms where multiple templates are used with same form object" do
-    sin_get('/nest_seq').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").should == "0 <form action=\"/baz\" class=\"forme album\" method=\"post\"><input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/> 1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Foo</legend><label>Name: <input id=\"album_artist_attributes_name\" name=\"album[artist_attributes][name]\" type=\"text\" value=\"A\"/></label></fieldset> 2 n1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Artist</legend> n2 <label>Name2: <input id=\"album_artist_attributes_name2\" name=\"album[artist_attributes][name2]\" type=\"text\" value=\"A2\"/></label> n3 </fieldset> n4 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Bar</legend><label>Name3: <input id=\"album_artist_attributes_name3\" name=\"album[artist_attributes][name3]\" type=\"text\" value=\"A3\"/></label></fieldset> n5 3 </form>4"
+  it "#form should correctly handle situation Sequel integration with subforms where multiple templates are used with same form object" do
+    sin_get('/nest_seq').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").must_equal "0 <form action=\"/baz\" class=\"forme album\" method=\"post\"><input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/> 1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Foo</legend><label>Name: <input id=\"album_artist_attributes_name\" name=\"album[artist_attributes][name]\" type=\"text\" value=\"A\"/></label></fieldset> 2 n1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Artist</legend> n2 <label>Name2: <input id=\"album_artist_attributes_name2\" name=\"album[artist_attributes][name2]\" type=\"text\" value=\"A2\"/></label> n3 </fieldset> n4 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Bar</legend><label>Name3: <input id=\"album_artist_attributes_name3\" name=\"album[artist_attributes][name3]\" type=\"text\" value=\"A3\"/></label></fieldset> n5 3 </form>4"
   end
 
-  specify "#form should accept two hashes instead of requiring obj as first argument" do
-    sin_get('/hash').should == '<form action="/baz"> <input id="first" name="first" type="text" value="foo"/> </form>'
+  it "#form should accept two hashes instead of requiring obj as first argument" do
+    sin_get('/hash').must_equal '<form action="/baz"> <input id="first" name="first" type="text" value="foo"/> </form>'
   end
 
-  specify "#form should deal with emitted code" do
-    sin_get('/legend').should == '<form action="/baz"> <p>FBB</p> <fieldset class="inputs"><legend>Foo</legend><input id="first" name="first" type="text" value="foo"/><input id="last" name="last" type="text" value="bar"/></fieldset> <p>FBB2</p> </form>'
+  it "#form should deal with emitted code" do
+    sin_get('/legend').must_equal '<form action="/baz"> <p>FBB</p> <fieldset class="inputs"><legend>Foo</legend><input id="first" name="first" type="text" value="foo"/><input id="last" name="last" type="text" value="bar"/></fieldset> <p>FBB2</p> </form>'
   end
 
-  specify "#form should work with :inputs, :button, and :legend options" do
-    sin_get('/combined').should == '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset> <p>FBB</p> <input id="last" name="last" type="text" value="bar"/> <input type="submit" value="xyz"/></form>'
+  it "#form should work with :inputs, :button, and :legend options" do
+    sin_get('/combined').must_equal '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset> <p>FBB</p> <input id="last" name="last" type="text" value="bar"/> <input type="submit" value="xyz"/></form>'
   end
 
-  specify "#form should work without a block" do
-    sin_get('/noblock').should == '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
+  it "#form should work without a block" do
+    sin_get('/noblock').must_equal '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
   end
 
-  specify "#form should work without a block with hidden tags" do
-    sin_get('/noblock_post').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").should == '<form method="post"><input name="authenticity_token" type="hidden" value="csrf"/><input type="submit" value="xyz"/></form>'
+  it "#form should work without a block with hidden tags" do
+    sin_get('/noblock_post').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").must_equal '<form method="post"><input name="authenticity_token" type="hidden" value="csrf"/><input type="submit" value="xyz"/></form>'
   end
 
-  specify "#form should handle Rails SafeBuffers" do
-    sin_get('/safe_buffer').should == '<form action="/baz"><fieldset class="inputs"><legend><b>foo</b></legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
+  it "#form should handle Rails SafeBuffers" do
+    sin_get('/safe_buffer').must_equal '<form action="/baz"><fieldset class="inputs"><legend><b>foo</b></legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
   end
 end
 end
