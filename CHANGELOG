@@ -1,3 +1,7 @@
+=== HEAD
+
+* Support an :html option in the default formatter to override the HTML created (jeremyevans)
+
 === 1.3.0 (2015-04-17)
 
 * Support option groups in select, checkboxset, and radioset inputs via :optgroups option (jeremyevans)

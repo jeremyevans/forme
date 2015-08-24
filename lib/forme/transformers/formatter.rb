@@ -60,7 +60,12 @@ module Forme
       @opts = input.opts
       normalize_options
 
-      tag = convert_to_tag(input.type)
+      tag = if html = input.opts[:html]
+        html = html.call(input) if html.respond_to?(:call)
+        form.raw(html)
+      else
+        convert_to_tag(input.type)
+      end
       tag = wrap_tag_with_label(tag) if input.opts[:label]
       tag = wrap_tag_with_error(tag) if input.opts[:error]
       tag = wrap(:helper, tag) if input.opts[:help]
