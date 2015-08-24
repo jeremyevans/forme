@@ -5,11 +5,20 @@ require File.join(File.dirname(File.expand_path(__FILE__)), 'erb_helper.rb')
 require 'rubygems'
 begin
 require 'sinatra/base'
-require(ENV['ERUBIS'] ? 'erubis' : 'erb')
 require 'rack/csrf'
 rescue LoadError
   warn "unable to load sinatra or rack/csrf, skipping sinatra spec"
 else
+begin
+  require 'tilt/erubis'
+rescue LoadError
+  require 'tilt/erb'
+  begin
+    require 'erubis'
+  rescue LoadError
+    require 'erb'
+  end
+end
 require 'forme/sinatra'
 class FormeSinatraTest < Sinatra::Base
   helpers(Forme::Sinatra::ERB)
