@@ -1,16 +1,28 @@
 html {
   overflow-y: auto;
 }
+/* add padding for navbar-fixed-top */
+body { padding-top: 70px; }
 
 h1.error {
   color: red;
   text-align: center;
 }
 
-label[for]:after {
-  content: ": "
+.set-label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
 }
 
+/*label[for]:after {
+  content: ": "
+}
+*/
 li label input[type="checkbox"], li label input[type="radio"] {
   margin-left: 0.7em;
 }
@@ -26,7 +38,15 @@ form.forme li.boolean input[type="checkbox"] {
 }
 abbr[title="required"] {
   color: red;
+  border-bottom: none;
 }
 input, select, textarea { width: auto }
 fieldset {margin-left: 10px}
 table caption {font-size: 20px; margin-bottom: 10px;}
+
+
+#footer .copyright {
+  text-align: right;
+  color: #ccc;
+  font-size: 85%;
+}

@@ -5,7 +5,7 @@ require 'roda'
 require 'models'
 
 class FormeDemo < Roda
-  plugin :static, %w'/css'
+  plugin :static, %w'/css /js'
 
   plugin :forme
   plugin :h
@@ -123,7 +123,78 @@ class FormeDemo < Roda
           @subform_opts = {:grid=>true}
           demo :artist_grid
         end
+
       end
+
+      r.on 'bs3' do
+        r.on 'album' do
+          r.on 'basic' do
+            r.is 'default' do
+              @page_title = 'BS3: Album Basic - Default'
+              @form_opts_base = { :config=>:bs3 }
+              @css = ""
+              demo :album_basic
+            end
+
+            r.is 'table' do
+              @page_title = 'BS3: Album Basic - Table'
+              @form_opts_base = { :config=>:bs3, :wrapper=>:trtd, :inputs_wrapper=>:bs3_table }
+              demo :album_basic
+            end
+
+            r.is 'list' do
+              @page_title = 'BS3: Album Basic - List'
+              # TODO: the :wrapper_attr is not passed through. WHY??
+              @form_opts_base = {:config=>:bs3, :wrapper=>:li, :wrapper_attr => { :class => 'list-item' }, :inputs_wrapper=>:ol}
+              @css = "ol, li {list-style-type: none;}"
+              demo :album_basic
+            end
+
+            r.is 'date' do
+              @page_title = 'BS3: Album Basic - Date Multiple Select Boxes'
+              @form_opts_base = {:config=>:bs3, :date=>{:as=>:select}, :wrapper=>:trtd, :inputs_wrapper=>:bs3_table}
+              demo :album_basic
+            end
+
+            r.is 'alt_assoc' do
+              @page_title = 'Album Basic - Association Radios/Checkboxes'
+              @form_opts_base = {:config=>:bs3, :many=>{:as=>:checkbox}, :one=>{:as=>:radio} }
+              @css = ""
+              demo :album_basic
+            end
+
+            r.is 'readonly' do
+              @page_title = 'BS3: Album Basic - Read Only'
+              # @form_opts_base = {:config=>:bs3, :wrapper=>:li, :inputs_wrapper=>:ol, :formatter=>:readonly}
+              @form_opts_base = {:config=>:bs3, :formatter=>:bs3_readonly}
+              @css = "ol, li {list-style-type: none;}"
+              demo :album_basic
+            end
+            
+          end
+          
+          r.is 'nested' do
+            @page_title = 'BS3: Single Level Nesting'
+            @form_opts_base = { :config=>:bs3 }
+            @css = "" #form label { display: block; }"
+            @subform_opts = { :config=>:bs3 }
+            demo :album_nested
+          end
+          
+        end
+        
+        r.on 'artist' do
+          r.is 'nested' do
+            @page_title = 'BS3: - Multiple Level Nesting'
+            @form_opts_base = { :config=>:bs3 }
+            @css = ""
+            @subform_opts = { :config=>:bs3 }
+            demo :artist_nested
+          end
+        end
+        
+      end
+      
     end
 
     unless ENV['DATABASE_URL']

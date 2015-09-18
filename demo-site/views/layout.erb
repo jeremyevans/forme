@@ -1,59 +1,135 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="/css/forme_demo.css" />
-<title>Forme Demo - <%= @page_title %></title>
-</head>
-
-<body>
-
-<div class="navbar">
-  <div class="navbar-inner">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Forme Demo - <%= @page_title %></title>
+    
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/forme_demo.css" />
+  </head>
+  
+  <body>
+    
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Forme Demo</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Defaults <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/album/basic/default">Default</a></li>
+                <li><a href="/album/basic/explicit">Explicit</a></li>
+                <li><a href="/album/basic/table">Table</a></li>
+                <li><a href="/album/basic/list">List</a></li>
+                <li><a href="/album/basic/date">Date</a></li>
+                <li><a href="/album/basic/alt_assoc">Association</a></li>
+                <li><a href="/album/basic/readonly">Read Only</a></li>
+                <li><a href="/album/basic/text">Text</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/album/nested">Nested 1</a></li>
+                <li><a href="/artist/nested">Nested 2</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/album/grid">Grid 1</a></li>
+                <li><a href="/artist/grid">Grid 2</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bootstrap 3 <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/bs3/album/basic/default">BS3 - Defaults</a></li>
+                <li><a href="/bs3/album/basic/alt_assoc">BS3 - Association</a></li>
+                <li><a href="/bs3/album/basic/readonly">BS3 - Read Only</a></li>
+                <li><a href="/bs3/album/basic/table">BS3 - Table</a></li>
+                <li><a href="/bs3/album/basic/list">BS3 - List</a></li>
+                <li><a href="/bs3/album/basic/date">BS-3 Date</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/bs3/album/nested">BS3 - Nested 1</a></li>
+                <li><a href="/bs3/artist/nested">BS3 - Nested 2</a></li>
+              </ul>
+            </li>
+            <li><a href="http://github.com/jeremyevans/forme">Code</a></li>
+            <li><a href="http://github.com/jeremyevans/forme/issues">Issues</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/ruby-forme">Forum</a></li>
+          </ul>
+          
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+    
     <div class="container">
-      <a href="/" class="brand">Forme Demo</a>
-
-      <ul class="nav">
-        <li><a href="/album/basic/default">Default</a></li>
-        <li><a href="/album/basic/explicit">Explicit</a></li>
-        <li><a href="/album/basic/table">Table</a></li>
-        <li><a href="/album/basic/list">List</a></li>
-        <li><a href="/album/basic/date">Date</a></li>
-        <li><a href="/album/basic/alt_assoc">Association</a></li>
-        <li><a href="/album/basic/readonly">Read Only</a></li>
-        <li><a href="/album/basic/text">Text</a></li>
-        <li><a href="/album/nested">Nested 1</a></li>
-        <li><a href="/artist/nested">Nested 2</a></li>
-        <li><a href="/album/grid">Grid 1</a></li>
-        <li><a href="/artist/grid">Grid 2</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <h1><%= @page_title %></h1>
-
-  <%= yield %>
-
-  <br />
-  <% if @templ %>
-    <h2>Settings</h2>
-    <pre>form_attr = <%= form_attr.inspect %>
-form_opts = <%= form_opts.inspect %><%= "\nsubform_opts = #{subform_opts.inspect}" if @subform_opts %></pre>
-
-    <% if @css %>
-      <style type="text/css"><%= @css %></style>
-      <h2>Custom CSS</h2>
-      <pre><%= @css %></pre>
-    <% end %>
-
-    <h2>Template Code</h2>
-    <pre><%=h File.read("views/#{@templ}.erb") %></pre>
-  <% end %>
-</div>
-
-</body>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <h1><%= @page_title %></h1>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <%= yield %>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          
+          <hr>
+          
+          
+          <% if @templ %>
+            <h2>Settings</h2>
+<pre>
+form_attr = <%= form_attr.inspect %>
+form_opts = <%= form_opts.inspect %><%= "\nsubform_opts = #{subform_opts.inspect}" if @subform_opts %>
+</pre>
+          
+              <% if @css %>
+              <style type="text/css"><%= @css %></style>
+              <h2>Custom CSS</h2>
+              <pre><%= @css %></pre>
+              <% end %>
+          
+            <h2>Template Code</h2>
+            <pre><%=h File.read("views/#{@templ}.erb") %></pre>
+         <% end %>
+        </div>
+      </div>
+      
+     </div>
+     
+     <div id="footer" style="border-top: 1px solid #ccc; margin-top: 20px; padding: 15px;">
+       <div class="container-fluid">
+         <div class="row">
+           <div class="col-md-8">
+            <p><a href="https://github.com/jeremyevans/forme">Forme</a> is a HTML forms generator / library for <a href="http://ruby-lang.org/">Ruby</a> with: <br>
+              &mdash; no external dependencies, <br>
+              &mdash; a simple API, <br>
+              &mdash; built-in support for HTML forms both with and without related objects, <br>
+              &mdash; compiling different types of output.
+            </p>
+           </div>
+           <div class="col-md-4">
+            <p class="copyright">&copy; Copyright Jeremy Evans.<br>MIT licensed</p>
+           </div>
+         </div>
+       </div>
+     </div>
+       
+     <script src="/js/jquery.min.js"></script>
+     <script src="/js/bootstrap.min.js"></script>
+     
+  </body>
 </html>
 
