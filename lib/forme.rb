@@ -18,7 +18,7 @@ module Forme
   end
 
   # Array of all supported transformer types.
-  TRANSFORMER_TYPES = [:formatter, :serializer, :wrapper, :error_handler, :helper, :labeler, :inputs_wrapper]
+  TRANSFORMER_TYPES = [:formatter, :serializer, :wrapper, :error_handler, :helper, :labeler, :inputs_wrapper, :tag_wrapper, :set_wrapper]
 
   # Transformer symbols shared by wrapper and inputs_wrapper
   SHARED_WRAPPERS = [:tr, :table, :ol, :fieldset_ol]
@@ -37,6 +37,7 @@ module Forme
     CONFIGURATIONS[:default][t] = :default
     TRANSFORMERS[t] = {}
   end
+  CONFIGURATIONS[:default].delete(:set_wrapper)
 
   # Register a new transformer with this library. Arguments:
   # +type+ :: Transformer type symbol
@@ -60,6 +61,7 @@ module Forme
   end
 
   register_config(:formtastic, :wrapper=>:li, :inputs_wrapper=>:fieldset_ol, :labeler=>:explicit)
+  register_config(:bs3, :formatter=>:bs3, :inputs_wrapper=>:bs3, :wrapper=>:bs3, :error_handler=>:bs3, :serializer=>:bs3, :labeler=>:bs3, :tag_wrapper=>:bs3, :set_wrapper=>:div)
 
   # Call <tt>Forme::Form.form</tt> with the given arguments and block.
   def self.form(*a, &block)
@@ -91,7 +93,7 @@ module Forme
       case type
       when :inputs_wrapper
         yield
-      when :labeler, :error_handler, :wrapper, :helper
+      when :labeler, :error_handler, :wrapper, :helper, :set_wrapper, :tag_wrapper
         args.first
       else
         raise Error, "No matching #{type}: #{trans_name.inspect}"
@@ -107,9 +109,10 @@ module Forme
   #           default transformer for the receiver.
   # +nil+ :: Assume the default transformer for this receiver.
   # otherwise :: return +trans+ directly if it responds to +call+, and raise an +Error+ if not.
-  def self.transformer(type, trans, default_opts)
+  def self.transformer(type, trans, default_opts=nil)
     case trans
     when Symbol
+      type = :wrapper if type == :set_wrapper || type == :tag_wrapper
       TRANSFORMERS[type][trans] || raise(Error, "invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.map(&:inspect).join(', ')})")
     when Hash
       if trans.has_key?(type)
@@ -120,7 +123,7 @@ module Forme
         transformer(type, nil, default_opts)
       end
     when nil
-      transformer(type, default_opts[type], nil) if default_opts
+      transformer(type, default_opts[type]) if default_opts
     else
       if trans.respond_to?(:call)
         trans

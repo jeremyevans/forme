@@ -61,8 +61,8 @@ module Forme
       normalize_options
 
       tag = convert_to_tag(input.type)
-      tag = wrap_tag_with_label(tag) if input.opts[:label]
-      tag = wrap_tag_with_error(tag) if input.opts[:error]
+      tag = wrap_tag_with_label(tag) if @opts[:label]
+      tag = wrap_tag_with_error(tag) if @opts[:error]
       tag = wrap(:helper, tag) if input.opts[:help]
       wrap_tag(tag)
     end
@@ -220,8 +220,10 @@ module Forme
       if @opts[:label]
         @opts[:set_label] = @opts.delete(:label)
       end
-      tag_wrapper = @opts.delete(:tag_wrapper) || :default
-      wrapper = Forme.transformer(:wrapper, @opts, @input.form_opts)
+
+      tag_wrapper = Forme.transformer(:tag_wrapper, @opts.delete(:tag_wrapper), @input.form_opts) || :default
+      wrapper = @opts.fetch(:wrapper){@opts[:wrapper] = @input.form_opts[:set_wrapper] || @input.form_opts[:wrapper]}
+      wrapper = Forme.transformer(:wrapper, wrapper)
 
       tags = process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
         value ||= label
@@ -244,15 +246,20 @@ module Forme
       end
 
       if @opts[:set_error]
-        if (last_input = tags.last) && last_input.is_a?(Input)
-          last_input.opts[:error] = @opts[:set_error]
-        else
-          tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
-        end
+       _add_set_error(tags)
       end
-      tags.unshift(form._tag(:span, {:class=>:label}, @opts[:set_label])) if @opts[:set_label]
-      wrapper.call(tags, form._input(type, opts)) if wrapper
+
+      tags.unshift(form._tag(:span, {:class=>'set-label'}, @opts[:set_label])) if @opts[:set_label]
+
       tags
+    end
+
+    def _add_set_error(tags)
+      if (last_input = tags.last) && last_input.is_a?(Input)
+        last_input.opts[:error] = @opts[:set_error]
+      else
+        tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
+      end
     end
 
     # Formats a textarea.  Respects the following options:
@@ -506,6 +513,135 @@ module Forme
     # Use a span with text instead of a text area.
     def format_textarea
       tag(:span, {}, @attr[:value])
+    end
+  end
+
+  class Formatter::Bs3 < Formatter
+    Forme.register_transformer(:formatter, :bs3, self)
+
+    private
+
+    # Copied to remove .error from class attrs
+    def normalize_options
+      copy_options_to_attributes(ATTRIBUTE_OPTIONS)
+      copy_boolean_options_to_attributes(ATTRIBUTE_BOOLEAN_OPTIONS)
+      handle_key_option
+
+      Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
+      # Forme.attr_classes(@attr, 'error') if @opts[:error]
+
+      if data = opts[:data]
+        data.each do |k, v|
+          sym = :"data-#{k}"
+          @attr[sym] = v unless @attr.has_key?(sym)
+        end
+      end
+    end
+
+    def _add_set_error(tags)
+      tags << input.tag(:span, {:class=>'help-block with-errors'}, @opts[:set_error])
+    end
+
+    def format_radioset
+      @opts[:wrapper_attr] ||= {}
+      klasses = 'radioset'
+      klasses = @opts[:error] || @opts[:set_error] ? "#{klasses} has-error" : klasses
+      Forme.attr_classes(@opts[:wrapper_attr], klasses)
+      super
+    end
+
+    def format_checkboxset
+      @opts[:wrapper_attr] ||= {}
+      klasses = 'checkboxset'
+      klasses = @opts[:error] || @opts[:set_error] ? "#{klasses} has-error" : klasses
+      Forme.attr_classes(@opts[:wrapper_attr], klasses)
+      super
+    end
+    
+    def _format_set(type, tag_attrs={})
+      raise Error, "can't have radioset with no options" unless @opts[:optgroups] || @opts[:options]
+      key = @opts[:key]
+      name = @opts[:name]
+      id = @opts[:id]
+      if @opts[:error]
+        @opts[:set_error] = @opts.delete(:error)
+      end
+      if @opts[:label]
+        @opts[:set_label] = @opts.delete(:label)
+      end
+
+      tag_wrapper = Forme.transformer(:tag_wrapper, @opts.delete(:tag_wrapper), @input.form_opts) || :default
+      wrapper = @opts.fetch(:wrapper){@opts[:wrapper] = @input.form_opts[:set_wrapper] || @input.form_opts[:wrapper]}
+      wrapper = Forme.transformer(:wrapper, wrapper)
+
+      tags = process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
+        value ||= label
+        r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>{:class=>:option}, :wrapper=>tag_wrapper)
+        r_opts[:value] ||= value if value
+        r_opts[:checked] ||= :checked if sel
+
+        if name
+          r_opts[:name] ||= name
+        end
+        if id
+          r_opts[:id] ||= "#{id}_#{value}"
+        end
+        if key
+          r_opts[:key] ||= key
+          r_opts[:key_id] ||= value
+        end
+
+        form._input(type, r_opts)
+      end
+
+      if @opts[:set_error]
+       _add_set_error(tags)
+      end
+
+      tags.unshift(form._tag(:label, {}, @opts[:set_label])) if @opts[:set_label]
+
+      tags
+    end
+    
+  end
+  
+  # Formatter that adds "readonly" for most input types,
+  # and disables select/radio/checkbox inputs.
+  #
+  # Registered as :bs3_readonly.
+  class Formatter::Bs3ReadOnly < Formatter
+    Forme.register_transformer(:formatter, :bs3_readonly, self)
+
+    private
+
+    # Disabled checkbox inputs.
+    def format_checkbox
+      @attr[:disabled] = :disabled
+      super
+    end
+
+    # Use a span with text instead of an input field.
+    def _format_input(type)
+      @attr[:readonly] = :readonly
+      super
+    end
+
+    # Disabled radio button inputs.
+    def format_radio
+      @attr[:disabled] = :disabled
+      super
+    end
+
+    # Use a span with text of the selected values instead of a select box.
+    def format_select
+      @attr[:disabled] = :disabled
+      super
+    end
+
+    # Use a span with text instead of a text area.
+    def format_textarea
+      @attr[:readonly] = :readonly
+      super
     end
   end
 end

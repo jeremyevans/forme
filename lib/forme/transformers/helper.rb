@@ -1,5 +1,5 @@
 module Forme
-  # Default helper used by the library, using a spam with "helper" class
+  # Default helper used by the library, using a span with "helper" class
   #
   # Registered as :default.
   class Helper

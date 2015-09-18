@@ -198,7 +198,7 @@ module Sequel # :nodoc:
         # is required.
         def handle_label(f)
           opts[:label] = humanize(field) unless opts.has_key?(:label)
-          opts[:label] = [opts[:label], form._tag(:abbr, {:title=>'required'}, '*')] if opts[:required]
+          opts[:label] = [opts[:label], ' ', form._tag(:abbr, {:title=>'required'}, '*')] if opts[:required]
         end
 
         # Update the attributes and options for any recognized validations

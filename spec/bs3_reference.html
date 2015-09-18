@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 3 Forms Syntax - For Forme</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/default.min.css"> -->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
+    <!-- Bootstrap -->
+    <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+      
+      <style type="text/css" media="screen">
+      .hilite { background-color: #faffc8; padding: 2px 4px;}
+      </style>
+  </head>
+  <body>
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-md-12">
+          
+          <h1>Bootstrap 3 Forms Syntax - For Forme</h1>
+          
+          <div class="alert alert-info" role="alert">
+            <h4>Bootstrap syntax examples</h4>
+            <p>The following examples present the expected Bootstrap 3 formatting for each type of inputs, and especially for the <code>:checkboxset</code> and <code>:radioset</code>.</p>
+          </div>
+          
+        </div>
+      </div>
+      
+      <form>
+      
+      <!-- input[:text] Default: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+          <h2>Text input - <small><code>&lt;input type=&quot;text&quot;&gt;</code></small></h2>
+          
+          <h4>Default: <small>(without Error)</small></h4>
+          
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input class="form-control" id="name" name="name" type="text"/>
+          </div>
+          
+<pre><code class="html">&lt;div class=&quot;form-group&quot;&gt;
+  &lt;label for=&quot;name&quot;&gt;Name&lt;/label&gt;
+  &lt;input class=&quot;form-control&quot; id=&quot;name&quot; name=&quot;name&quot; type=&quot;text&quot;/&gt;
+&lt;/div&gt;
+</code></pre>
+        </div>
+      </div>
+      
+      
+      <!-- input[:text] Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+          <h4>With Error:<br>
+            <small>
+              - CSS class <code>.has-error</code> added to <code>.form-group</code> wrapper div
+              <br>
+              - error message with CSS class <code>.help-block .with-errors</code> added wrapper div.
+            </small>
+          </h4>
+          
+          <div class="form-group has-error">
+            <label for="name">Name</label> 
+            <input class="form-control error" id="name" name="name" type="text"/>
+            <span class="help-block with-errors">Error for input[:text]</span>
+          </div>
+          
+<pre><code class="html">&lt;div class=&quot;form-group <span class="hilite">has-error</span>&quot;&gt;
+  &lt;label for=&quot;name&quot;&gt;Name&lt;/label&gt; 
+  &lt;input class=&quot;form-control error&quot; id=&quot;name&quot; name=&quot;name&quot; type=&quot;text&quot;/&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for input[:text]&lt;/span&gt;</span>
+&lt;/div&gt;
+</code></pre>
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- input[:password] Default: -->
+      <div class="row">
+        <div class="col-md-12">
+        
+        <h2>Password input - <small><code>&lt;input type=&quot;password&quot;&gt;</code></small></h2>
+        
+        <h4>Default: <small>(without Error)</small></h4>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input class="form-control" id="password" name="password" type="password"/>
+        </div>
+
+<pre><code class="html">&lt;div class=&quot;form-group&quot;&gt;
+ &lt;label for=&quot;password&quot;&gt;Password&lt;/label&gt;
+ &lt;input class=&quot;form-control&quot; id=&quot;password&quot; name=&quot;password&quot; type=&quot;password&quot;/&gt;
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      <!-- input[:password] Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+        <h4>With Error:<br>
+          <small>
+            - CSS class <code>.has-error</code> added to <code>.form-group</code> wrapper div
+            <br>
+            - error message with CSS class <code>.help-block .with-errors</code> added wrapper div.
+          </small>
+        </h4>
+        
+        <div class="form-group has-error">
+          <label for="password">Password</label> 
+          <input class="form-control error" id="password" name="password" type="password"/>
+          <span class="help-block with-errors">Error for input[:password]</span>
+        </div>
+        
+        
+<pre><code class="html">&lt;div class=&quot;form-group <span class="hilite">has-error</span>&quot;&gt;
+  &lt;label for=&quot;password&quot;&gt;Password&lt;/label&gt; 
+  &lt;input class=&quot;form-control error&quot; id=&quot;password&quot; name=&quot;password&quot; type=&quot;password&quot;/&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for input[:password]&lt;/span&gt;</span>
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- input[:email] Default: -->
+      <div class="row">
+        <div class="col-md-12">
+        
+        <h2>Email input - <small><code>&lt;input type=&quot;email&quot;&gt;</code></small></h2>
+        
+        <h4>Default: <small>(without Error)</small></h4>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input class="form-control" id="email" name="email" type="email"/>
+        </div>
+
+<pre><code class="html">&lt;div class=&quot;form-group&quot;&gt;
+ &lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+ &lt;input class=&quot;form-control&quot; id=&quot;email&quot; name=&quot;email&quot; type=&quot;email&quot;/&gt;
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      <!-- input[:email] Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+        <h4>With Error:<br>
+          <small>
+            - CSS class <code>.has-error</code> added to <code>.form-group</code> wrapper div
+            <br>
+            - error message with CSS class <code>.help-block .with-errors</code> added wrapper div.
+          </small>
+        </h4>
+        
+        <div class="form-group has-error">
+          <label for="email">Email</label> 
+          <input class="form-control error" id="email" name="email" type="email"/>
+          <span class="help-block with-errors">Error for input[:email]</span>
+        </div>
+        
+        
+<pre><code class="html">&lt;div class=&quot;form-group <span class="hilite">has-error</span>&quot;&gt;
+  &lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt; 
+  &lt;input class=&quot;form-control error&quot; id=&quot;email&quot; name=&quot;email&quot; type=&quot;email&quot;/&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for input[:email]&lt;/span&gt;</span>
+&lt;/div&gt;
+</code></pre>
+        
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- input[:tel] Default: -->
+      <div class="row">
+        <div class="col-md-12">
+        
+        <h2>Telephone input - <small><code>&lt;input type=&quot;tel&quot;&gt;</code></small></h2>
+        
+        <h4>Default: <small>(without Error)</small></h4>
+        
+        <div class="form-group">
+          <label for="tel">Telephone</label>
+          <input class="form-control" id="tel" name="tel" type="tel"/>
+        </div>
+
+<pre><code class="html">&lt;div class=&quot;form-group&quot;&gt;
+ &lt;label for=&quot;tel&quot;&gt;Telephone&lt;/label&gt;
+ &lt;input class=&quot;form-control&quot; id=&quot;tel&quot; name=&quot;tel&quot; type=&quot;tel&quot;/&gt;
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      <!-- input[:tel] Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+        <h4>With Error:<br>
+          <small>
+            - CSS class <code>.has-error</code> added to <code>.form-group</code> wrapper div
+            <br>
+            - error message with CSS class <code>.help-block .with-errors</code> added wrapper div.
+          </small>
+        </h4>
+        
+        <div class="form-group has-error">
+          <label for="tel">Telephone</label> 
+          <input class="form-control error" id="tel" name="tel" type="tel"/>
+          <span class="help-block with-errors">Error for input[:tel]</span>
+        </div>
+        
+        
+<pre><code class="html">&lt;div class=&quot;form-group <span class="hilite">has-error</span>&quot;&gt;
+  &lt;label for=&quot;tel&quot;&gt;Telephone&lt;/label&gt; 
+  &lt;input class=&quot;form-control error&quot; id=&quot;tel&quot; name=&quot;tel&quot; type=&quot;tel&quot;/&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for input[:tel]&lt;/span&gt;</span>
+&lt;/div&gt;
+</code></pre>
+        
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- input[:color] Default: -->
+      <div class="row">
+        <div class="col-md-12">
+        
+        <h2>Color input - <small><code>&lt;input type=&quot;color&quot;&gt;</code></small></h2>
+        
+        <h4>Default: <small>(without Error)</small></h4>
+        
+        <div class="form-group col-md-4">
+          <label for="color">Color</label>
+          <input class="form-control" id="color" name="color" type="color"/>
+        </div>
+
+<pre><code class="html">&lt;div class=&quot;form-group&quot;&gt;
+ &lt;label for=&quot;color&quot;&gt;Color&lt;/label&gt;
+ &lt;input class=&quot;form-control&quot; id=&quot;color&quot; name=&quot;color&quot; type=&quot;color&quot;/&gt;
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      <!-- input[:color] Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+        <h4>With Error:<br>
+          <small>
+            - CSS class <code>.has-error</code> added to <code>.form-group</code> wrapper div
+            <br>
+            - error message with CSS class <code>.help-block .with-errors</code> added wrapper div.
+          </small>
+        </h4>
+        
+        <div class="form-group has-error col-md-4">
+          <label for="color">Color</label> 
+          <input class="form-control error" id="color" name="color" type="color"/>
+          <span class="help-block with-errors">Error for input[:color]</span>
+        </div>
+        
+        
+<pre><code class="html">&lt;div class=&quot;form-group <span class="hilite">has-error</span>&quot;&gt;
+  &lt;label for=&quot;color&quot;&gt;Color&lt;/label&gt; 
+  &lt;input class=&quot;form-control error&quot; id=&quot;color&quot; name=&quot;color&quot; type=&quot;color&quot;/&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for input[:color]&lt;/span&gt;</span>
+&lt;/div&gt;
+</code></pre>
+        
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- input[:number] Default: -->
+      <div class="row">
+        <div class="col-md-12">
+        
+        <h2>Number input - <small><code>&lt;input type=&quot;number&quot;&gt;</code></small></h2>
+        
+        <h4>Default: <small>(without Error)</small></h4>
+        
+        <div class="form-group">
+          <label for="number">Number</label>
+          <input class="form-control" id="number" name="number" type="number"/>
+        </div>
+
+<pre><code class="html">&lt;div class=&quot;form-group&quot;&gt;
+ &lt;label for=&quot;number&quot;&gt;Number&lt;/label&gt;
+ &lt;input class=&quot;form-control&quot; id=&quot;number&quot; name=&quot;number&quot; type=&quot;number&quot;/&gt;
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      <!-- input[:number] Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+        <h4>With Error:<br>
+          <small>
+            - CSS class <code>.has-error</code> added to <code>.form-group</code> wrapper div
+            <br>
+            - error message with CSS class <code>.help-block .with-errors</code> added wrapper div.
+          </small>
+        </h4>
+        
+        <div class="form-group has-error">
+          <label for="number">Number</label> 
+          <input class="form-control error" id="number" name="number" type="number"/>
+          <span class="help-block with-errors">Error for input[:number]</span>
+        </div>
+        
+        
+<pre><code class="html">&lt;div class=&quot;form-group <span class="hilite">has-error</span>&quot;&gt;
+  &lt;label for=&quot;number&quot;&gt;Number&lt;/label&gt; 
+  &lt;input class=&quot;form-control error&quot; id=&quot;number&quot; name=&quot;number&quot; type=&quot;number&quot;/&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for input[:number]&lt;/span&gt;</span>
+&lt;/div&gt;
+</code></pre>
+        
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      
+      <div class="alert alert-info">
+        <p>All other similar inputs, ie: <code>:number</code> and <code>:url</code> follow the above output formatting.</p>
+        <!-- date
+        datetime
+        datetime-local
+        month
+        range
+        search
+        time
+        week -->
+      </div>
+      
+      
+      <hr>
+        
+      
+      <!-- input[:file] Default: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+          <h2>File input - <small><code>&lt;input type=&quot;file&quot;&gt;</code></small></h2>
+        
+          <h4>Default: <small>(without Error)</small></h4>
+          
+          
+          <div class="form-group">
+            <label for="exampleInputFile">File input</label>
+            <input type="file" id="exampleInputFile">
+          </div>
+          
+          <br>
+          
+<pre><code class="html">&lt;div class=&quot;form-group&quot;&gt;
+  &lt;label for=&quot;exampleInputFile&quot;&gt;File input&lt;/label&gt;
+  &lt;input type=&quot;file&quot; id=&quot;exampleInputFile&quot;&gt;
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      <!-- input[:file] Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+          <h4>With Error:<br>
+            <small>
+              - CSS class <code>.has-error</code> added to <code>.form-group</code> wrapper div
+              <br>
+              - error message with CSS class <code>.help-block .with-errors</code> added wrapper div.
+            </small>
+          </h4>
+          
+          <div class="form-group has-error">
+            <label for="exampleInputFile">File input</label>
+            <input type="file" id="exampleInputFile">
+            <span class="help-block with-errors">Error for input[:file]</span>
+          </div>
+          
+          <br>
+          
+<pre><code class="html">&lt;div class=&quot;form-group <span class="hilite">has-error</span>&quot;&gt;
+  &lt;label for=&quot;exampleInputFile&quot;&gt;File input&lt;/label&gt;
+  &lt;input type=&quot;file&quot; id=&quot;exampleInputFile&quot;&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for input[:file]&lt;/span&gt;</span>
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- textarea Default: -->
+      <div class="row">
+        <div class="col-md-12">
+        <h2>Textarea - <small><code>&lt;textarea...&gt;&lt;/textarea&gt;</code></small></h2>
+        
+        <h4>Default: <small>(without Error)</small></h4>
+        
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea class="form-control" id="bio" name="bio">Bio...</textarea>
+        </div>
+          
+<pre><code class="html">&lt;div class=&quot;form-group&quot;&gt;
+  &lt;label for=&quot;bio&quot;&gt;Bio&lt;/label&gt;
+  &lt;textarea class=&quot;form-control&quot; id=&quot;bio&quot; name=&quot;bio&quot;&gt;Bio...&lt;/textarea&gt;
+&lt;/div&gt;
+</code></pre>
+        </div>
+      </div>
+      
+      <!-- textarea Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+        <h4>With Error:<br>
+          <small>
+            - CSS class <code>.has-error</code> added to <code>.form-group</code> wrapper div
+            <br>
+            - error message with CSS class <code>.help-block .with-errors</code> added wrapper div.
+          </small>
+        </h4>
+        
+        <div class="form-group has-error">
+          <label for="bio">Bio</label>
+          <textarea class="form-control" id="bio" name="bio">Bio...</textarea>
+          <span class="help-block with-errors">Error for textarea</span>
+        </div>
+        
+<pre><code class="html">&lt;div class=&quot;form-group <span class="hilite">has-error</span>&quot;&gt;
+  &lt;label for=&quot;bio&quot;&gt;Bio&lt;/label&gt;
+  &lt;textarea class=&quot;form-control&quot; id=&quot;bio&quot; name=&quot;bio&quot;&gt;Bio...&lt;/textarea&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for textarea&lt;/span&gt;</span>
+&lt;/div&gt;
+</code></pre>
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      <!-- select Default: -->
+      <div class="row">
+        <div class="col-md-12">
+        <h2>Select - <small><code>&lt;select...&gt;&lt;/select&gt;</code></small></h2>
+        
+        <h4>Default: <small>(without Error)</small></h4>
+        
+        <div class="form-group">
+          <label for="level">Level</label>
+          <select class="form-control" id="level" name="level">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+          </select>
+        </div>
+          
+<pre><code class="html">&lt;div class=&quot;form-group&quot;&gt;
+  &lt;label for=&quot;level&quot;&gt;Level&lt;/label&gt;
+  &lt;select class=&quot;form-control&quot; id=&quot;level&quot; name=&quot;level&quot;&gt;
+    &lt;option&gt;1&lt;/option&gt;
+    &lt;option&gt;2&lt;/option&gt;
+    &lt;option&gt;3&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      <!-- select Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+          <h4>With Error:<br>
+            <small>
+              - CSS class <code>.has-error</code> added to <code>.form-group</code> wrapper div
+              <br>
+              - error message with CSS class <code>.help-block .with-errors</code> added wrapper div.
+            </small>
+          </h4>
+          
+          
+          <div class="form-group has-error">
+            <label for="level">Level</label>
+            <select class="form-control" id="level" name="level">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </select>
+            <span class="help-block with-errors">Error for select</span>
+          </div>
+          
+          <br>
+          
+<pre><code class="html">&lt;div class=&quot;form-group <span class="hilite">has-error</span>&quot;&gt;
+  &lt;label for=&quot;level&quot;&gt;Level&lt;/label&gt;
+  &lt;select class=&quot;form-control&quot; id=&quot;level&quot; name=&quot;level&quot;&gt;
+    &lt;option&gt;1&lt;/option&gt;
+    &lt;option&gt;2&lt;/option&gt;
+    &lt;option&gt;3&lt;/option&gt;
+  &lt;/select&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for select&lt;/span&gt;</span>
+&lt;/div&gt;
+</code></pre>
+          
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      <!-- input[:checkbox] Default: -->
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Checkbox - <small><code>&lt;input type=&quot;checkbox&quot;&gt;</code></small></h2>
+          
+          <h4>Default: <small>(without Error)</small></h4>
+          
+          <div class="checkbox">
+            <label for="checkbox_without_error">
+              <input type="checkbox" id="checkbox_without_error" name="remember_me" value="y">
+              Remember me?
+            </label>
+          </div>
+          
+          <br>
+<pre><code class="html">&lt;div class=&quot;checkbox&quot;&gt;
+  &lt;label for=&quot;checkbox_without_error&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; id=&quot;checkbox_without_error&quot; name=&quot;remember_me&quot; value=&quot;y&quot;&gt;
+    Remember me?
+  &lt;/label&gt;
+&lt;/div&gt;
+</code></pre>
+        </div>
+      </div>
+      
+      <br>
+      
+      <!-- input[:checkbox] Error: -->
+      <div class="row">
+        <div class="col-md-12">
+          
+          <h4>With Error: 
+            <br>
+            <small>
+              - the <code>:checkbox</code> is wrapped in a div wrapper with CSS class <code>.has-error</code>,
+            <br>
+            - and the error message is added after the tag within the <code>div.has-error</code> wrapper.
+            </small>
+          </h4>
+          
+          
+          <div class="has-error">
+            <div class="checkbox">
+              <label for="checkbox_with_error">
+                <input type="checkbox" id="checkbox_with_error" name="remember_me" value="y">
+                Remember me?
+              </label>
+            </div>
+            <span class="help-block with-errors">Error for checkbox</span>
+          </div>
+          
+          <br>
+<pre><code class="html"><span class="hilite">&lt;div class=&quot;has-error&quot;&gt;</span>
+  &lt;div class=&quot;checkbox&quot;&gt;
+    &lt;label for=&quot;checkbox_with_error&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; id=&quot;checkbox_with_error&quot; name=&quot;remember_me&quot; value=&quot;y&quot;&gt;
+      Remember me?
+    &lt;/label&gt;
+  &lt;/div&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for checkbox&lt;/span&gt;</span>
+<span class="hilite">&lt;/div&gt;</span>
+</code></pre>
+
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- input[:radio] Default: -->
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Radio - <small><code>&lt;input type=&quot;radio&quot;&gt;</code></small></h2>
+    
+          <div class="alert alert-info" role="alert">
+            <p><strong>Note!</strong> A single radio field is not logical or really used, but is added just for reference.</p>
+          </div>
+    
+    
+          <h4>Default: <small>(without Error)</small></h4>
+    
+          <div class="radio">
+            <label for="radio_without_error">
+              <input type="radio" id="radio_without_error" name="yes" value="y">
+              Yes
+            </label>
+          </div>
+    
+<pre><code class="html">
+&lt;div class=&quot;radio&quot;&gt;
+  &lt;label for=&quot;radio_without_error&quot;&gt;
+    &lt;input type=&quot;radio&quot; id=&quot;radio_without_error&quot; name=&quot;yes&quot; value=&quot;y&quot;&gt;
+    Yes
+  &lt;/label&gt;
+&lt;/div&gt;
+</code></pre>
+        </div>
+      </div>
+
+      <!-- input[:radio] Error: -->
+      <div class="row">
+        <div class="col-md-12">
+    
+          <h4>With Error: <small>(a div wrapper with CSS class <code>.has-error</code> added to tag)</small></h4>          
+    
+          <div class="has-error">
+            <div class="radio">
+              <label for="radio_with_error">
+                <input type="radio" id="radio_with_error" name="yes" value="y">
+                Yes
+              </label>
+            </div>
+            <span class="help-block with-errors">Error for radio</span>
+          </div>
+
+<pre><code class="html">
+<span class="hilite">&lt;div class=&quot;has-error&quot;&gt;</span>
+  &lt;div class=&quot;radio&quot;&gt;
+    &lt;label for=&quot;radio_with_error&quot;&gt;
+      &lt;input type=&quot;radio&quot; id=&quot;radio_with_error&quot; name=&quot;yes&quot; value=&quot;y&quot;&gt;
+      Yes
+    &lt;/label&gt;
+  &lt;/div&gt;
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for radio&lt;/span&gt;</span>
+<span class="hilite">&lt;/div&gt;</span>
+</code></pre>
+
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- input[:submit] Default -->
+      <div class="row">
+        <div class="col-md-12">
+          
+          <h2>Submit input - <small><code>&lt;input type=&quot;submit&quot;&gt;</code></small></h2>
+          
+          <h4>Default: <small>(<strong>Note!</strong> there is no Error output for this tag)</small></h4>
+          
+          <input type="submit" class="btn btn-default" value="Submit"/>
+          
+          <br>
+          <br>
+          
+          <pre><code class="html">&lt;input type=&quot;submit&quot; class=&quot;btn btn-default&quot; value=&quot;Submit&quot;/&gt;</code></pre>
+          
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- input[:reset] Default -->
+      <div class="row">
+        <div class="col-md-12">
+          
+          <h2>Reset Input - <small><code>&lt;input type=&quot;reset&quot;&gt;</code></small></h2>
+          
+          <h4>Default: <small>(<strong>Note!</strong> there is no Error output for this tag)</small></h4>
+          
+          <input type="reset" class="btn btn-default" value="Reset"/>
+          
+          <br>
+          <br>
+          
+          <pre><code class="html">&lt;input type=&quot;reset&quot; class=&quot;btn btn-default&quot; value=&quot;Reset&quot;/&gt;</code></pre>
+          
+        </div>
+      </div>
+      
+      
+      <hr>
+      <br>
+      <br>
+      
+      <h1>Checkbox / Radio Sets</h1>
+      
+      <br>
+      
+      <div class="alert alert-info">
+        <h4>Please Note!</h4>
+        <p>CheckboxSets and RadioSets are Forme options translated into Bootstrap 3 HTML output.</p>
+        
+        <p>Since Bootstrap 3 does not clearly define how to handle <strong>error output</strong> for CheckboxSets / RadioSets, I have presented two output variants below:</p>
+          
+        <p><strong>Alternative A:</strong> <span class=text-muted>(current Forme output)</span><br> presents the individual <tt>:checkbox/:radio</tt> tags without any error formatting and message, and instead adds one error message below the tags within the <tt>div.has-error</tt> wrapper.</p>
+          
+        <p><strong>Alternative B:</strong> <br> presents each individual <tt>:checkbox/:radio</tt> with the same formatting as a single <tt>:checkbox/:radio</tt> would be presented, ie: with a <tt>div.has-error</tt> wrapper and an error message within that wrapper.</p>
+        
+        <p>I believe Alternative A is the correct output, but I am not sure, so your input and opinion is most welcome!</p>
+        
+        <p>(<strong><u>Only one</u> variant should be supported by Forme</strong>)</p>
+      </div>
+      
+      <hr>
+      
+      
+      <!-- :checkboxset Default: -->
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Checkbox Set - <small><code>@f.input(:checkboxset)</code></small></h2>
+          
+          <h4>Default: <small>(without Error)</small></h4>
+          
+           <label>Tags (Primary Keys)</label>
+           <div class="checkbox">
+             <label class="option" for="album_tag_pks_1">
+               <input checked="checked" id="album_tag_pks_1" name="album[tag_pks][]" type="checkbox" value="1"/> 
+               1
+             </label>
+           </div>
+           <div class="checkbox">
+             <label class="option" for="album_tag_pks_2">
+               <input id="album_tag_pks_2" name="album[tag_pks][]" type="checkbox" value="2"/> 
+               2
+             </label>
+           </div>
+           <div class="checkbox">
+             <label class="option" for="album_tag_pks_3">
+               <input id="album_tag_pks_3" name="album[tag_pks][]" type="checkbox" value="3"/> 
+               3
+             </label>
+           </div>
+           
+<pre><code class="html">&lt;label&gt;Tags (Primary Keys)&lt;/label&gt;
+&lt;div class=&quot;checkbox&quot;&gt;
+ &lt;label class=&quot;option&quot; for=&quot;album_tag_pks_1&quot;&gt;
+   &lt;input checked=&quot;checked&quot; id=&quot;album_tag_pks_1&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;1&quot;/&gt; 
+   1
+ &lt;/label&gt;
+&lt;/div&gt;
+&lt;div class=&quot;checkbox&quot;&gt;
+ &lt;label class=&quot;option&quot; for=&quot;album_tag_pks_2&quot;&gt;
+   &lt;input id=&quot;album_tag_pks_2&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;2&quot;/&gt; 
+   2
+ &lt;/label&gt;
+&lt;/div&gt;
+&lt;div class=&quot;checkbox&quot;&gt;
+ &lt;label class=&quot;option&quot; for=&quot;album_tag_pks_3&quot;&gt;
+   &lt;input id=&quot;album_tag_pks_3&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;3&quot;/&gt; 
+   3
+ &lt;/label&gt;
+&lt;/div&gt;
+</code></pre>
+
+        </div>
+      </div>
+      
+      
+      <!-- :checkboxset Alternative A -->
+      <div class="row">
+        <div class="col-md-12">
+    
+          <h4>With Error: &nbsp;&mdash;&nbsp; <span class="text-muted">Alternative A:</span> &nbsp;&mdash;&nbsp; CURRENT FORME OUTPUT
+            <br>
+            <small> - each <code>:checkbox</code> tag is NOT wrapped with a div wrapper with CSS class <code>.has-error</code> and <strong>without the error message</strong>
+            <br>
+            - and the entire <code>:checkboxset</code> is wrapped in a div with CSS class <code>.checkboxset has-error</code>
+            <br>
+            - and the error message is added below the final <code>:checkbox</code> tag.
+            </small>
+          </h4>
+    
+          <br>
+    
+          <div class="checkboxset has-error">
+            <label>Tags (Primary Keys)</label>
+      
+            <div class="checkbox">
+              <label class="option" for="album_tag_pks_1">
+                <input checked="checked" id="album_tag_pks_1" name="album[tag_pks][]" type="checkbox" value="1"/> 
+                1
+              </label>
+            </div>
+        
+            <div class="checkbox">
+              <label class="option" for="album_tag_pks_2">
+                <input id="album_tag_pks_2" name="album[tag_pks][]" type="checkbox" value="2"/> 
+                2
+              </label>
+            </div>
+        
+            <div class="checkbox">
+              <label class="option" for="album_tag_pks_3">
+                <input id="album_tag_pks_3" name="album[tag_pks][]" type="checkbox" value="3"/> 
+                3
+              </label>
+            </div>
+        
+            <span class="help-block with-errors">Error for :checkboxset</span>
+          </div>
+    
+          <br>
+    
+<pre><code class="html"><span class="hilite">&lt;div class=&quot;checkboxset has-error&quot;&gt;
+  &lt;label&gt;Tags (Primary Keys)&lt;/label&gt;</span>
+
+  &lt;div class=&quot;checkbox&quot;&gt;
+    &lt;label class=&quot;option&quot; for=&quot;album_tag_pks_1&quot;&gt;
+      &lt;input checked=&quot;checked&quot; id=&quot;album_tag_pks_1&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;1&quot;/&gt; 
+      1
+    &lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;checkbox&quot;&gt;
+    &lt;label class=&quot;option&quot; for=&quot;album_tag_pks_2&quot;&gt;
+      &lt;input id=&quot;album_tag_pks_2&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;2&quot;/&gt; 
+      2
+    &lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;checkbox&quot;&gt;
+    &lt;label class=&quot;option&quot; for=&quot;album_tag_pks_3&quot;&gt;
+      &lt;input id=&quot;album_tag_pks_3&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;3&quot;/&gt; 
+      3
+    &lt;/label&gt;
+  &lt;/div&gt;
+
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for :checkboxset&lt;/span&gt;
+&lt;/div&gt;</span>
+</code></pre>
+
+        </div>
+      </div>
+      
+      
+      <!--:checkboxset Alternative B -->
+      <div class="row">
+        <div class="col-md-12">
+
+          <h4>With Error: &nbsp;&mdash;&nbsp; <span class="text-muted">Alternative B:</span>
+            <br>
+            <small> - each <code>:checkbox</code> tag is wrapped with a div wrapper with CSS class <code>.has-error</code> <strong>including the error message</strong>
+            <br>
+             - and the entire <code>:checkboxset</code> is wrapped in a div with CSS class <code>.checkboxset has-error</code>
+            <br>
+             - the duplicate error messages are hidden via CSS code in the main stylesheet.
+          </small>
+          </h4>
+
+          <br>
+
+          <div class="checkboxset has-error">
+            <label>Tags (Primary Keys)</label>
+
+            <div class="has-error">
+              <div class="checkbox">
+                <label class="option" for="album_tag_pks_1">
+                  <input checked="checked" id="album_tag_pks_1" name="album[tag_pks][]" type="checkbox" value="1"/> 
+                  1
+                </label>
+              </div>
+              <span class="help-block with-errors">Error for :checkboxset</span>
+            </div>
+
+            <div class="has-error">
+              <div class="checkbox">
+                <label class="option" for="album_tag_pks_2">
+                  <input id="album_tag_pks_2" name="album[tag_pks][]" type="checkbox" value="2"/> 
+                  2
+                </label>
+              </div>
+              <span class="help-block with-errors">Error for :checkboxset</span>
+            </div>
+
+            <div class="has-error">
+              <div class="checkbox">
+                <label class="option" for="album_tag_pks_3">
+                  <input id="album_tag_pks_3" name="album[tag_pks][]" type="checkbox" value="3"/> 
+                  3
+                </label>
+              </div>
+              <span class="help-block with-errors">Error for :checkboxset</span>
+            </div>
+          </div>
+
+          <style type="text/css" media="screen">
+            .checkboxset div.has-error span.help-block { display: none; }
+            .checkboxset div.has-error:last-child span.help-block { display: block; }
+          </style>
+
+          <br>
+
+<pre><code class="html"><span class="hilite">&lt;div class=&quot;checkboxset has-error&quot;&gt;
+  &lt;label&gt;Tags (Primary Keys)&lt;/label&gt;</span>
+
+  <span class="hilite">&lt;div class=&quot;has-error&quot;&gt;</span>
+    &lt;div class=&quot;checkbox&quot;&gt;
+      &lt;label class=&quot;option&quot; for=&quot;album_tag_pks_1&quot;&gt;
+        &lt;input checked=&quot;checked&quot; id=&quot;album_tag_pks_1&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;1&quot;/&gt; 
+        1
+      &lt;/label&gt;
+    &lt;/div&gt;
+    <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for :checkboxset&lt;/span&gt;</span>
+  <span class="hilite">&lt;/div&gt;</span>
+
+  <span class="hilite">&lt;div class=&quot;has-error&quot;&gt;</span>
+    &lt;div class=&quot;checkbox&quot;&gt;
+      &lt;label class=&quot;option&quot; for=&quot;album_tag_pks_2&quot;&gt;
+        &lt;input id=&quot;album_tag_pks_2&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;2&quot;/&gt; 
+        2
+      &lt;/label&gt;
+    &lt;/div&gt;
+    <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for :checkboxset&lt;/span&gt;</span>
+  <span class="hilite">&lt;/div&gt;</span>
+
+  <span class="hilite">&lt;div class=&quot;has-error&quot;&gt;</span>
+    &lt;div class=&quot;checkbox&quot;&gt;
+      &lt;label class=&quot;option&quot; for=&quot;album_tag_pks_3&quot;&gt;
+        &lt;input id=&quot;album_tag_pks_3&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;3&quot;/&gt; 
+        3
+      &lt;/label&gt;
+    &lt;/div&gt;
+    <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for :checkboxset&lt;/span&gt;</span>
+  <span class="hilite">&lt;/div&gt;</span>
+<span class="hilite">&lt;/div&gt;</span>
+</code></pre>
+
+<p>With the following custom CSS added to the site CSS. (outside of Forme's scope)</p>
+
+<pre class="css"><code class="css"><span class="hilite">.checkboxset div.has-error span.help-block { display: none; }
+.checkboxset div.has-error:last-child span.help-block { display: block; }
+</span></code></pre>
+  
+  
+        </div>
+      </div>
+      
+      
+      <hr>
+      
+      
+      <!-- :radioset Default: -->
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Radio Set - <small><code>@f.input(:radioset)</code></small></h2>
+          
+          <div class="alert alert-info">
+            <p><strong>Please Note!</strong> 
+              This is really a Forme option that is being translated into BS3 format. 
+              <br>
+              I have therefore provided two (2) alternative output variants, but <strong><u>only one</u> should be supported in Forme's codebase</strong>.</p>
+            <p><strong>Alternative A:</strong> is probably the easiest one to support, but not a very elegant solution, which also requires additional CSS support.</p>
+            <p><strong>Alternative B:</strong> is the more elegant version, but may be more difficult to support in Forme.</p>
+            <p>Your input and opinion is sought and most welcome!</p>
+          </div>
+          
+          <h4>Default: <small>(without Error)</small></h4>
+          
+           <label>Agreement</label>
+           <div class="radio">
+             <label class="option" for="album_agreement_yes_1">
+               <input checked id="album_agreement_yes_1" name="album[agreement]" type="radio" value="yes"/> 
+               Yes
+             </label>
+           </div>
+           <div class="radio">
+             <label class="option" for="album_agreement_no_1">
+               <input id="album_agreement_no_1" name="album[agreement]" type="radio" value="no"/> 
+               No
+             </label>
+           </div>
+           
+<pre><code class="html">
+&lt;label&gt;Agreement&lt;/label&gt;
+&lt;div class=&quot;radio&quot;&gt;
+ &lt;label class=&quot;option&quot; for=&quot;album_agreement_yes&quot;&gt;
+   &lt;input checked=&quot;checked&quot; id=&quot;album_agreement_yes&quot; name=&quot;album[agreement]&quot; type=&quot;radio&quot; value=&quot;yes&quot;/&gt; 
+   Yes
+ &lt;/label&gt;
+&lt;/div&gt;
+&lt;div class=&quot;radio&quot;&gt;
+ &lt;label class=&quot;option&quot; for=&quot;album_agreement_no&quot;&gt;
+   &lt;input id=&quot;album_agreement_no&quot; name=&quot;album[agreement]&quot; type=&quot;radio&quot; value=&quot;no&quot;/&gt; 
+   No
+ &lt;/label&gt;
+&lt;/div&gt;
+</code></pre>
+
+        </div>
+      </div>
+      
+      
+      <!-- :radioset Error: Alternative A -->
+      <div class="row">
+        <div class="col-md-12">
+    
+          <h4>With Error: &nbsp;&mdash;&nbsp; <span class="text-muted">Alternative A:</span> &nbsp;&mdash;&nbsp; CURRENT FORME OUTPUT
+            <br>
+            <small> - each <code>:radio</code> tag is NOT wrapped with a div wrapper with CSS class <code>.has-error</code> and <strong>without the error message</strong>
+            <br>
+            - and the entire <code>:radioset</code> is wrapped in a div with CSS class <code>.radioset has-error</code>
+            <br>
+            - and the error message is added below the final <code>:radio</code> tag.
+            </small>
+          </h4>
+          
+          <br>
+    
+          <div class="radioset has-error">
+            <label>Agreement</label>
+            
+            <div class="radio">
+             <label class="option" for="album_agreement_yes_3">
+               <input checked="checked" id="album_agreement_yes_3" name="album[agreement]" type="radio" value="yes"/> 
+               Yes
+             </label>
+            </div>
+      
+            <div class="radio">
+             <label class="option" for="album_agreement_no_3">
+               <input id="album_agreement_no_3" name="album[agreement]" type="radio" value="no"/> 
+               No
+             </label>
+            </div>
+              
+            <span class="help-block with-errors">Error for :radioset</span>
+          </div>
+    
+          <br>
+    
+<pre><code class="html">
+<span class="hilite">&lt;div class=&quot;radioset has-error&quot;&gt;
+  &lt;label&gt;Agreement&lt;/label&gt;</span>
+    
+    &lt;div class=&quot;radio&quot;&gt;
+      &lt;label class=&quot;option&quot; for=&quot;album_agreement_yes&quot;&gt;
+        &lt;input checked=&quot;checked&quot; id=&quot;album_agreement_yes&quot; name=&quot;album[agreement]&quot; type=&quot;radio&quot; value=&quot;yes&quot;/&gt; 
+        1
+      &lt;/label&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&quot;radio&quot;&gt;
+      &lt;label class=&quot;option&quot; for=&quot;album_agreement_no&quot;&gt;
+        &lt;input id=&quot;album_agreement_no&quot; name=&quot;album[agreement]&quot; type=&quot;radio&quot; value=&quot;no&quot;/&gt; 
+        2
+      &lt;/label&gt;
+    &lt;/div&gt;
+    
+  <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for :radioset&lt;/span&gt;
+&lt;/div&gt;</span>
+</code></pre>
+
+        </div>
+      </div>
+      
+      <!--:radioset Error: Alternative B -->
+      <div class="row">
+        <div class="col-md-12">
+    
+          <h4>With Error: &nbsp;&mdash;&nbsp; <span class="text-muted">Alternative B:</span>
+            <br>
+            <small> - each <code>:radio</code> tag is wrapped with a div wrapper with CSS class <code>.has-error</code> <strong>including the error message</strong>
+            <br>
+             - and the entire <code>:radioset</code> is wrapped in a div with CSS class <code>.radioset has-error</code>
+            <br>
+             - the duplicate error messages are hidden via CSS code in the main stylesheet.
+          </small>
+          </h4>
+          
+          <br>
+          
+          <div class="radioset has-error">
+            <label>Agreement</label>
+            
+            <div class="has-error">
+              <div class="radio">
+               <label class="option" for="album_agreement_yes_2">
+                 <input checked id="album_agreement_yes_2" name="album[agreement][]" type="radio" value="yes"/> 
+                 Yes
+               </label>
+              </div>
+              <span class="help-block with-errors">Error for :radioset</span>
+            </div>
+            
+            <div class="has-error">
+              <div class="radio">
+                 <label class="option" for="album_agreement_no_2">
+                   <input id="album_agreement_no_2" name="album[agreement][]" type="radio" value="no"/> 
+                   No
+                 </label>
+              </div>
+              <span class="help-block with-errors">Error for :radioset</span>
+            </div>
+            
+          </div>
+          
+          <style type="text/css" media="screen">
+            .radioset div.has-error span.help-block { display: none; }
+            .radioset div.has-error:last-child span.help-block { display: block; }
+          </style>
+          
+          <br>
+          
+<pre><code class="html"><span class="hilite">&lt;div class=&quot;radioset has-error&quot;&gt;
+  &lt;label&gt;Agreement&lt;/label&gt;</span>
+  
+  <span class="hilite">&lt;div class=&quot;has-error&quot;&gt;</span>
+    &lt;div class=&quot;radio&quot;&gt;
+      &lt;label class=&quot;option&quot; for=&quot;album_agreement_yes&quot;&gt;
+        &lt;input checked=&quot;checked&quot; id=&quot;album_agreement_yes&quot; name=&quot;album[agreement]&quot; type=&quot;radio&quot; value=&quot;yes&quot;/&gt; 
+        Yes
+      &lt;/label&gt;
+    &lt;/div&gt;
+    <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for :radioset&lt;/span&gt;</span>
+  <span class="hilite">&lt;/div&gt;</span>
+  
+  <span class="hilite">&lt;div class=&quot;has-error&quot;&gt;</span>
+    &lt;div class=&quot;radio&quot;&gt;
+      &lt;label class=&quot;option&quot; for=&quot;album_agreement_no&quot;&gt;
+        &lt;input id=&quot;album_agreement_no&quot; name=&quot;album[agreement]&quot; type=&quot;radio&quot; value=&quot;no&quot;/&gt; 
+        No
+      &lt;/label&gt;
+    &lt;/div&gt;
+    <span class="hilite">&lt;span class=&quot;help-block with-errors&quot;&gt;Error for :radioset&lt;/span&gt;</span>
+  <span class="hilite">&lt;/div&gt;</span>
+  
+<span class="hilite">&lt;/div&gt;</span>
+</code></pre>
+
+<p>With the following custom CSS added to the site CSS. (outside of Forme's scope)</p>
+
+<pre class="css"><code class="css"><span class="hilite">.radioset div.has-error span.help-block { display: none; }
+.radioset div.has-error:last-child span.help-block { display: block; }</span>
+</code></pre>
+        
+        
+        </div>
+      </div>
+      
+      <hr>
+      
+    </form>
+    
+    
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
