@@ -4,12 +4,21 @@ require File.join(File.dirname(File.expand_path(__FILE__)), 'erb_helper.rb')
 
 require 'rubygems'
 begin
-require 'roda'
-require(ENV['ERUBIS'] ? 'erubis' : 'erb')
-require 'rack/csrf'
+  require 'roda'
+  require 'rack/csrf'
 rescue LoadError
   warn "unable to load roda or rack/csrf, skipping roda spec"
 else
+begin
+  require 'tilt/erubis'
+rescue LoadError
+  require 'tilt/erb'
+  begin
+    require 'erubis'
+  rescue LoadError
+    require 'erb'
+  end
+end
 class FormeRodaTest < Roda
   plugin :forme
   use Rack::Session::Cookie, :secret => "__a_very_long_string__"

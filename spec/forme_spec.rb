@@ -21,6 +21,18 @@ describe "Forme plain forms" do
     @f.input(:submit).to_s.must_equal '<input type="submit"/>'
   end
 
+  it "should use :html option if given" do
+    @f.input(:text, :html=>"<a>foo</a>").to_s.must_equal '<a>foo</a>'
+  end
+
+  it "should support a callable :html option" do
+    @f.input(:text, :html=>proc{|i| "<a>#{i.type}</a>"}).to_s.must_equal '<a>text</a>'
+  end
+
+  it "should still use labeler, wrapper, error_handler, and helper if :html option is given" do
+    @f.input(:text, :html=>"<a>foo</a>", :label=>'a', :error=>'b', :help=>'c', :wrapper=>:div).to_s.must_equal '<div><label>a: <a>foo</a></label><span class="error_message">b</span><span class="helper">c</span></div>'
+  end
+
   it "should use :name option as attribute" do
     @f.input(:text, :name=>"foo").to_s.must_equal '<input name="foo" type="text"/>'
   end
