@@ -73,7 +73,6 @@ passing the appopriate option to +input+ or +inputs+:
 
   f.input(:name, :wrapper=>:p)
 
-
 = Installation
 
   gem install forme
@@ -841,6 +840,15 @@ If you want to, you can base your configuration on an existing configuration:
 You can mark a configuration as the default using:
 
   Forme.default_config = :mine
+
+=== Bootstrap 3 Support
+
+Forme ships with support for Bootstrap 3 HTML formatting. This support is shipped in
+it's own file, so if you don't use it, you don't pay the memory penalty for loading
+it.
+
+  require 'forme/bs3'
+  Forme.default_config = :bs3
 
 = Other Similar Projects
 

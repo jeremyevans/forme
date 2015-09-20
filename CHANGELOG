@@ -1,5 +1,7 @@
 === HEAD
 
+* Add forme/bs3 library for Bootstrap 3 support (kematzy, jeremyevans) (#12, #14)
+
 * Support an :html option in the default formatter to override the HTML created (jeremyevans)
 
 === 1.3.0 (2015-04-17)
