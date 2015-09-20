@@ -254,9 +254,13 @@ module Forme
        _add_set_error(tags)
       end
 
-      tags.unshift(form._tag(:span, {:class=>'set-label'}, @opts[:set_label])) if @opts[:set_label]
+      tags.unshift(set_label) if @opts[:set_label]
 
       tags
+    end
+
+    def set_label
+      form._tag(:span, {:class=>:label}, @opts[:set_label])
     end
 
     def _add_set_error(tags)
