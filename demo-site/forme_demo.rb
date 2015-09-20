@@ -3,9 +3,10 @@ require 'rubygems'
 require 'erb'
 require 'roda'
 require 'models'
+require 'forme/bs3'
 
 class FormeDemo < Roda
-  plugin :static, %w'/css /js'
+  plugin :static, %w'/css'
 
   plugin :forme
   plugin :h
