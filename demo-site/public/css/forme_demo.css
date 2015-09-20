@@ -9,7 +9,7 @@ h1.error {
   text-align: center;
 }
 
-.set-label {
+.set-label, span.label {
   display: inline-block;
   max-width: 100%;
   margin-bottom: 5px;
@@ -19,10 +19,16 @@ h1.error {
   color: #333;
 }
 
-/*label[for]:after {
+label[for]:after, span.label:after {
   content: ": "
 }
-*/
+
+span.label {
+  padding: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
 li label input[type="checkbox"], li label input[type="radio"] {
   margin-left: 0.7em;
 }
@@ -44,9 +50,6 @@ input, select, textarea { width: auto }
 fieldset {margin-left: 10px}
 table caption {font-size: 20px; margin-bottom: 10px;}
 
-
-#footer .copyright {
-  text-align: right;
-  color: #ccc;
-  font-size: 85%;
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a {
+  color: white;
 }
