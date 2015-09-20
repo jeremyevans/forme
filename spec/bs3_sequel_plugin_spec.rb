@@ -1,5 +1,6 @@
 require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
 require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_helper.rb')
+require 'forme/bs3'
 
 describe "Forme Sequel::Model BS3 forms" do
   before do

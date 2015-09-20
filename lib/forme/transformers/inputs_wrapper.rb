@@ -58,26 +58,6 @@ module Forme
     end
   end
 
-  # Use a <fieldset> tag to wrap the inputs.
-  #
-  # Registered as :bs3.
-  class InputsWrapper::Bootstrap3
-    Forme.register_transformer(:inputs_wrapper, :bs3, new)
-
-    def call(form, opts, &block)
-      attr = opts[:attr] ? opts[:attr].dup : {}
-      Forme.attr_classes(attr, 'inputs')
-      if legend = opts[:legend]
-        form.tag(:fieldset, attr) do
-          form.emit(form.tag(:legend, opts[:legend_attr], legend))
-          yield
-        end
-      else
-        form.tag(:fieldset, attr, &Proc.new)
-      end
-    end
-  end
-
   # Use a <tr> tag to wrap the inputs.
   #
   # Registered as :tr.
@@ -99,29 +79,6 @@ module Forme
     # Wrap the inputs in a <table> tag.
     def call(form, opts, &block)
       attr = opts[:attr] ? opts[:attr].dup : {}
-      form.tag(:table, attr) do
-        if legend = opts[:legend]
-          form.emit(form.tag(:caption, opts[:legend_attr], legend))
-        end
-
-        if (labels = opts[:labels]) && !labels.empty?
-          form.emit(form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)}))
-        end
-
-        yield
-      end
-    end
-  end
-  
-  # Use a <table class="table"> tag to wrap the inputs.
-  #
-  # Registered as :bs3_table.
-  class InputsWrapper::Bs3Table
-    Forme.register_transformer(:inputs_wrapper, :bs3_table, new)
-
-    # Wrap the inputs in a <table> tag.
-    def call(form, opts, &block)
-      attr = opts[:attr] ? opts[:attr].dup : { :class=>'table table-bordered'}
       form.tag(:table, attr) do
         if legend = opts[:legend]
           form.emit(form.tag(:caption, opts[:legend_attr], legend))

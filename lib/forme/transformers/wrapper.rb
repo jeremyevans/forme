@@ -26,37 +26,6 @@ module Forme
     end
   end
   
-  # Wraps inputs with <div class="form-group">
-  class Wrapper::Bootstrap3 < Wrapper
-    # Wrap the input in the tag of the given type.
-
-    def call(tag, input)
-      attr = input.opts[:wrapper_attr] ? input.opts[:wrapper_attr].dup : { }
-      klass = attr[:class] ? attr[:class].split(' ').unshift('form-group').uniq : ['form-group']
-      
-      case input.type
-      when :submit, :reset
-        klass.delete('form-group')
-        attr[:class] = klass.sort.uniq.join(' ').strip
-        attr.delete(:class) if attr[:class].empty?
-        [tag]
-      when :radio, :checkbox
-        klass.delete('form-group')
-        klass.unshift( input.type.to_s )
-        attr[:class] = klass.sort.uniq.join(' ').strip
-        [input.tag(:div, attr, tag)]
-      when :hidden
-        super
-      else
-        attr[:class] = klass.sort.uniq.join(' ').strip
-        [input.tag(:div, attr, [tag])]
-      end
-
-    end
-    
-    Forme.register_transformer(:wrapper, :bs3, new)
-  end
-  
   class Wrapper::TableRow < Wrapper
     # Wrap the input in tr and td tags.
     def call(tag, input)
