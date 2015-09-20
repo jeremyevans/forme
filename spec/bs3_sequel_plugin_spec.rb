@@ -116,11 +116,8 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should wrap both inputs if :as=>:radio is used" do
-    # TODO: POSSIBLY INCORRECT OUTPUT: :wrapper=>:li is not part of the output produced by default, 
-    #       but I'm inclined to ignore this as the :bs3 output is correctly handled.
     @b = Forme::Form.new(@ab, :config=>:bs3, :wrapper=>:li)
     @b.input(:platinum, :as=>:radio).to_s.must_equal '<div class="boolean radioset"><label>Platinum</label><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div></div>'
-    # NOTE: when adding :wrapper=>:li to #input() tag, the output becomes correct and the expected format
     @b.input(:platinum, :as=>:radio,:wrapper=>:li).to_s.must_equal '<li class="boolean radioset"><label>Platinum</label><div class="radio"><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></div><div class="radio"><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></div></li>'
     @b.input(:platinum, :as=>:radio, :wrapper=>:div, :tag_wrapper=>:span).to_s.must_equal '<div class="boolean radioset"><label>Platinum</label><span><label class="option" for="album_platinum_yes"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label></span><span><label class="option" for="album_platinum_no"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label></span></div>'
   end
@@ -184,11 +181,8 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should correctly use the forms wrapper for wrapping radio buttons for many_to_one associations with :as=>:radio option" do
-    # TODO: POSSIBLY INCORRECT OUTPUT: :wrapper=>:li is not part of the output produced by default, 
-    #       but is that really a problem? I'm inclined to ignore this issue as :bs3 output is correctly handled.
     @b = Forme::Form.new(@ab, :config=>:bs3, :wrapper=>:li)
     @b.input(:artist, :as=>:radio).to_s.must_equal '<div class="many_to_one radioset"><label>Artist</label><div class="radio"><label class="option" for="album_artist_id_1"><input checked="checked" id="album_artist_id_1" name="album[artist_id]" type="radio" value="1"/> a</label></div><div class="radio"><label class="option" for="album_artist_id_2"><input id="album_artist_id_2" name="album[artist_id]" type="radio" value="2"/> d</label></div></div>'
-    # NOTE: when adding :wrapper=>:li to #input() tag, the output becomes correct and the expected format
     @b.input(:artist, :as=>:radio,:wrapper=>:li).to_s.must_equal '<li class="many_to_one radioset"><label>Artist</label><div class="radio"><label class="option" for="album_artist_id_1"><input checked="checked" id="album_artist_id_1" name="album[artist_id]" type="radio" value="1"/> a</label></div><div class="radio"><label class="option" for="album_artist_id_2"><input id="album_artist_id_2" name="album[artist_id]" type="radio" value="2"/> d</label></div></li>'
     @b.input(:artist, :as=>:radio,:wrapper=>nil).to_s.must_equal '<label>Artist</label><div class="radio"><label class="option" for="album_artist_id_1"><input checked="checked" id="album_artist_id_1" name="album[artist_id]" type="radio" value="1"/> a</label></div><div class="radio"><label class="option" for="album_artist_id_2"><input id="album_artist_id_2" name="album[artist_id]" type="radio" value="2"/> d</label></div>'
   end
@@ -297,12 +291,8 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should correctly use the forms wrapper for wrapping radio buttons for one_to_many associations with :as=>:checkbox option" do
-    # TODO: POSSIBLY INCORRECT OUTPUT: :wrapper=>:li is not part of the output produced by default, 
-    #       but is that really a problem? I'm inclined to ignore this as :bs3 output is correctly handled.
-    
     @b = Forme::Form.new(@ab, :config=>:bs3, :wrapper=>:li)
     @b.input(:tracks, :as=>:checkbox).to_s.must_equal '<div class="one_to_many checkboxset"><label>Tracks</label><div class="checkbox"><label class="option" for="album_track_pks_1"><input checked="checked" id="album_track_pks_1" name="album[track_pks][]" type="checkbox" value="1"/> m</label></div><div class="checkbox"><label class="option" for="album_track_pks_2"><input checked="checked" id="album_track_pks_2" name="album[track_pks][]" type="checkbox" value="2"/> n</label></div><div class="checkbox"><label class="option" for="album_track_pks_3"><input id="album_track_pks_3" name="album[track_pks][]" type="checkbox" value="3"/> o</label></div></div>'
-    # NOTE: when adding :wrapper=>:li to #input() tag, the output becomes correct and the expected format
     @b.input(:tracks, :as=>:checkbox, :wrapper=>:li).to_s.must_equal '<li class="one_to_many checkboxset"><label>Tracks</label><div class="checkbox"><label class="option" for="album_track_pks_1"><input checked="checked" id="album_track_pks_1" name="album[track_pks][]" type="checkbox" value="1"/> m</label></div><div class="checkbox"><label class="option" for="album_track_pks_2"><input checked="checked" id="album_track_pks_2" name="album[track_pks][]" type="checkbox" value="2"/> n</label></div><div class="checkbox"><label class="option" for="album_track_pks_3"><input id="album_track_pks_3" name="album[track_pks][]" type="checkbox" value="3"/> o</label></div></li>'
   end
 
@@ -530,6 +520,4 @@ describe "Forme Sequel::Model validation parsing" do
   it "should respect :placeholder option for any validation" do
     f(:validates_uniqueness_of, :name, :placeholder=>'must be unique').input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" placeholder="must be unique" type="text"/></div>'
   end
-
 end
-

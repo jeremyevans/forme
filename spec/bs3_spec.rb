@@ -421,11 +421,6 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:checkboxset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<div class="checkboxset"><fieldset><legend>d</legend><div class="checkbox"><label class="option"><input type="checkbox" value="1"/> a</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></div></fieldset><fieldset><legend>e</legend><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> c</label></div></fieldset></div>'
   end
 
-  # NOTE: Commented out since BS3 does not raise an Error. I'm unsure how this should be raised.
-  # it "should raise an Error for empty checkbox sets" do
-  #   @f.input(:checkboxset, :options=>[], :error=>'foo', :value=>2).to_s.must_equal '<span class="error_message">foo</span>'
-  # end
-  
   it "radio and checkbox inputs should handle :checked option" do
     @f.input(:radio, :checked=>true).to_s.must_equal '<div class="radio"><input checked="checked" type="radio"/></div>'
     @f.input(:radio, :checked=>false).to_s.must_equal '<div class="radio"><input type="radio"/></div>'
@@ -526,7 +521,6 @@ describe "Forme Bootstrap3 (BS3) forms" do
   it "#tag should accept children as methods" do
     o = Object.new
     def o.foo(t) t.form.tag(:input, :class=>t.attr[:class]) end
-    # @f.tag(:div, {:class=>"foo"}, o.method(:foo)).to_s.must_equal '<div class="foo"><input class="form-control foo"/></div>'
     @f.tag(:div, {:class=>"foo"}, o.method(:foo)).to_s.must_equal '<div class="foo"><input class="form-control foo" type="text"/></div>'
   end
 
@@ -693,37 +687,4 @@ describe "Forme Bootstrap3 (BS3) forms" do
     proc{@f.input(:textarea, :wrapper=>Object.new).to_s}.must_raise(Forme::Error)
     proc{@f.input(:textarea, :formatter=>nil).to_s}.must_raise(Forme::Error)
   end
-  
-
 end
-
-# describe "Forme::Form :hidden_tags option " do
-#   before do
-#     @f = Forme::Form.new(:config=>:bs3)
-#   end
-#
-#   it "should handle hash" do
-#     Forme.form({}, :hidden_tags=>[{:a=>'b'}]).to_s.must_equal '<form><input name="a" type="hidden" value="b"/></form>'
-#   end
-#
-#   it "should handle array" do
-#     Forme.form({}, :hidden_tags=>[["a ", "b"]]).to_s.must_equal '<form>a b</form>'
-#   end
-#
-#   it "should handle string" do
-#     Forme.form({}, :hidden_tags=>["a "]).to_s.must_equal '<form>a </form>'
-#   end
-#
-#   it "should handle proc return hash" do
-#     Forme.form({}, :hidden_tags=>[lambda{|tag| {:a=>'b'}}]).to_s.must_equal '<form><input name="a" type="hidden" value="b"/></form>'
-#   end
-#
-#   it "should handle proc return tag" do
-#     Forme.form({:method=>'post'}, :hidden_tags=>[lambda{|tag| tag.form._tag(tag.attr[:method])}]).to_s.must_equal '<form method="post"><post></post></form>'
-#   end
-#
-#   it "should raise error for unhandled object" do
-#     proc{Forme.form({}, :hidden_tags=>[Object.new])}.must_raise Forme::Error
-#   end
-# end
-
