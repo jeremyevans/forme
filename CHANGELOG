@@ -1,5 +1,7 @@
 === HEAD
 
+* Do not add required * to label if :label=>nil in the Sequel plugin (jeremyevans)
+
 * Add forme/bs3 library for Bootstrap 3 support (kematzy, jeremyevans) (#12, #14)
 
 * Support an :html option in the default formatter to override the HTML created (jeremyevans)

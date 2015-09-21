@@ -77,6 +77,10 @@ describe "Forme Sequel::Model forms" do
     @b.input(:name, :required=>true, :label=>'Foo').to_s.must_equal '<label>Foo<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label>'
   end
   
+  it "should not add required to label even if :label option is nil" do
+    @b.input(:name, :required=>true, :label=>nil).to_s.must_equal '<input id="album_name" name="album[name]" required="required" type="text" value="b"/>'
+  end
+  
   it "should include required wrapper class if required" do
     f = Forme::Form.new(@ab, :wrapper=>:li)
     f.input(:name, :required=>true).to_s.must_equal '<li class="string required"><label>Name<abbr title="required">*</abbr>: <input id="album_name" name="album[name]" required="required" type="text" value="b"/></label></li>'
