@@ -237,6 +237,7 @@ module Forme
         r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>{:class=>:option}, :wrapper=>tag_wrapper)
         r_opts[:value] ||= value if value
         r_opts[:checked] ||= :checked if sel
+        r_opts[:formatter] = @opts[:formatter] if @opts[:formatter]
 
         if name
           r_opts[:name] ||= name

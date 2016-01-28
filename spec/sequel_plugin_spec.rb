@@ -142,6 +142,10 @@ describe "Forme Sequel::Model forms" do
     @b.input(:platinum, :as=>:radio, :true_value=>"Foo", :false_value=>"Bar").to_s.must_equal '<span class="label">Platinum</span><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="Foo"/> Yes</label><label class="option"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="Bar"/> No</label>'
   end
   
+  it "should respect :formatter=>:readonly option for boolean fields if :as=>:radio is used" do
+    @b.input(:platinum, :as=>:radio, :formatter=>:readonly).to_s.must_equal '<span class="label">Platinum</span><label class="option"><input disabled="disabled" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input checked="checked" disabled="disabled" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+  end
+  
   it "should use a select box for many_to_one associations" do
     @b.input(:artist).to_s.must_equal '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
     @c.input(:artist).to_s.must_equal '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'

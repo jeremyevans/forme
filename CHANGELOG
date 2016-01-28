@@ -1,5 +1,7 @@
 === HEAD
 
+* Respect :formatter option for radioset and checkboxset inputs (jeremyevans)
+
 * Add support for running with --enable-frozen-string-literal on ruby 2.3 (jeremyevans)
 
 * Handle an explicit :value option for *_to_many association inputs in the Sequel plugin (jeremyevans)
