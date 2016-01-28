@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # Low level abstract tag form, where each instance represents a
   # html tag with attributes and children.

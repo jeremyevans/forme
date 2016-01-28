@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # Default helper used by the library, using a span with "helper" class
   #

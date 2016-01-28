@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # Default serializer class used by the library.  Any other serializer
   # classes that want to produce html should probably subclass this class.

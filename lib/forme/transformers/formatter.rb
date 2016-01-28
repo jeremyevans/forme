@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # The default formatter used by the library.  Any custom formatters should
   # probably inherit from this formatter unless they have very special needs.

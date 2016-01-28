@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # Empty module for marking objects as "raw", where they will no longer
   # html escaped by the default serializer.

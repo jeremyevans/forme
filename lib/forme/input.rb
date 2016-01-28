@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # High level abstract tag form, transformed by formatters into the lower
   # level +Tag+ form (or an array of them).

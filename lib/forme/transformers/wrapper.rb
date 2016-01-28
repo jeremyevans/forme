@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # Default wrapper doesn't wrap input in any tag
   class Wrapper

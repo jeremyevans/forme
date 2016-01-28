@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # Default inputs_wrapper used by the library, uses a <fieldset>.
   #

@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # Default labeler used by the library, using implicit labels (where the
   # label tag encloses the other tag).

@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # Version constant, use <tt>Forme.version</tt> instead.
   VERSION = '1.4.0'.freeze

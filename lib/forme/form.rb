@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # The +Form+ class is the main entry point to the library.  
   # Using the +form+, +input+, +tag+, and +inputs+ methods, one can easily build 

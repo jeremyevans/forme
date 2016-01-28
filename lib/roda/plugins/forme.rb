@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 require 'forme/erb'
 
 class Roda

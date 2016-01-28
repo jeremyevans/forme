@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   # Default error handler used by the library, using an "error" class
   # for the input field and a span tag with an "error_message" class

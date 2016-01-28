@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 module Forme
   register_config(:bs3, :formatter=>:bs3, :inputs_wrapper=>:bs3, :wrapper=>:bs3, :error_handler=>:bs3, :serializer=>:bs3, :labeler=>:bs3, :tag_wrapper=>:bs3, :set_wrapper=>:div)
 
