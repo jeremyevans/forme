@@ -301,7 +301,9 @@ module Sequel # :nodoc:
             opts[:array] = true unless opts.has_key?(:array)
             opts[:key] = field
           end
-          opts[:value] = obj.send(ref[:name]).map{|x| x.send(pk)} unless opts.has_key?(:value)
+          unless opts.has_key?(:value)
+            opts[:value] = obj.respond_to?(field) ? obj.send(field) : obj.send(ref[:name]).map{|x| x.send(pk)}
+          end
           opts[:options] = association_select_options(ref) unless opts.has_key?(:options)
           handle_label(label)
           if opts.delete(:as) == :checkbox

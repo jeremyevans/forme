@@ -1,5 +1,7 @@
 === HEAD
 
+* Handle an explicit :value option for *_to_many association inputs in the Sequel plugin (jeremyevans)
+
 * Do not add required * to label if :label=>nil in the Sequel plugin (jeremyevans)
 
 * Add forme/bs3 library for Bootstrap 3 support (kematzy, jeremyevans) (#12, #14)
