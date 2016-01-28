@@ -1,5 +1,7 @@
 === HEAD
 
+* Ignore submit buttons when using the :readonly formatter (jeremyevans)
+
 * Respect :formatter option for radioset and checkboxset inputs (jeremyevans)
 
 * Add support for running with --enable-frozen-string-literal on ruby 2.3 (jeremyevans)

@@ -522,6 +522,11 @@ module Forme
       tag(:span, {}, children)
     end
 
+    # Ignore submit buttons
+    def format_submit
+      ''
+    end
+
     # Use a span with text instead of a text area.
     def format_textarea
       tag(:span, {}, @attr[:value])

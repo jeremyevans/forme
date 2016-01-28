@@ -785,6 +785,10 @@ describe "Forme built-in custom" do
     Forme::Form.new(:formatter=>:readonly).input(:select, :label=>"Foo", :options=>[1, 2, 3], :value=>2).to_s.must_equal "<label>Foo: <span>2</span></label>"
   end
 
+  it "formatter: readonly should ignore submit buttons" do
+    Forme.form({}, :formatter=>:readonly, :button=>'a').to_s.must_equal '<form></form>'
+  end
+
   it "labeler: explicit uses an explicit label with for attribute" do
     Forme::Form.new(:labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'bar').to_s.must_equal '<label class="label-before" for="foo">bar</label><textarea id="foo"></textarea>'
   end
