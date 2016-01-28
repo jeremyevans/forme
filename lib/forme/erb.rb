@@ -30,7 +30,7 @@ module Forme
       # Set the template output object when initializing.
       def initialize(*)
         super
-        @output = @opts[:output] ? @opts[:output] : ''
+        @output = @opts[:output] ? @opts[:output] : String.new
       end
 
       # Serialize the tag and inject it into the output.
@@ -76,7 +76,7 @@ module Forme
         end
       end
 
-      def capture(block='') # :nodoc:
+      def capture(block=String.new) # :nodoc:
         buf_was, @output = @output, block.is_a?(Proc) ? (eval("@_out_buf", block.binding) || @output) : block
         yield
         ret = @output

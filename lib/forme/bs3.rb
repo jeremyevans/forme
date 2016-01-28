@@ -262,7 +262,7 @@ module Forme
           namespaces = input.form_opts[:namespace]
           id = "#{namespaces.join('_')}#{'_' unless namespaces.empty?}#{key}"
           if key_id = input.opts[:key_id]
-            id << "_#{key_id.to_s}"
+            id += "_#{key_id.to_s}"
           end
         end
       end

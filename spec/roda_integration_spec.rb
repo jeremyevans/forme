@@ -35,7 +35,7 @@ end
 
 describe "Forme Roda ERB integration" do
   def sin_get(path)
-    s = ''
+    s = String.new
     FormeRodaTest.app.call(@rack.merge('PATH_INFO'=>path))[2].each{|str| s << str}
     s.gsub(/\s+/, ' ').strip
   end

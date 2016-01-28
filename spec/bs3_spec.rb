@@ -566,7 +566,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should not escape raw tag content using Forme::Raw" do
-    @f.tag(:div, {}, ['<p></p>'.extend(Forme::Raw)]).to_s.must_equal '<div><p></p></div>'
+    @f.tag(:div, {}, ['<p></p>'.dup.extend(Forme::Raw)]).to_s.must_equal '<div><p></p></div>'
   end
 
   it "should not escape raw tag content using Forme.raw" do
@@ -582,7 +582,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should not escape raw tag content in attribute values" do
-    @f.tag(:div, :foo=>'<p></p>'.extend(Forme::Raw)).to_s.must_equal '<div foo="<p></p>"></div>'
+    @f.tag(:div, :foo=>Forme.raw('<p></p>')).to_s.must_equal '<div foo="<p></p>"></div>'
   end
 
   it "should format dates, times, and datetimes in ISO format" do

@@ -331,7 +331,7 @@ module Forme
         unless @attr[:id] || @attr['id']
           id = namespaced_id(key)
           if suffix = @opts[:key_id]
-            id << '_' << suffix.to_s
+            id += "_#{suffix}"
           end
           @attr[:id] = id
         end

@@ -130,7 +130,7 @@ describe "Forme Sequel::Model forms" do
   end
   
   it "should handle Raw :label options if :as=>:radio is used" do
-    @b.input(:platinum, :as=>:radio, :label=>'Foo:<br />'.extend(Forme::Raw)).to_s.must_equal '<span class="label">Foo:<br /></span><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+    @b.input(:platinum, :as=>:radio, :label=>Forme.raw('Foo:<br />')).to_s.must_equal '<span class="label">Foo:<br /></span><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
     @b.input(:platinum, :as=>:radio, :label=>'Foo:<br />').to_s.must_equal '<span class="label">Foo:&lt;br /&gt;</span><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
   end
   
@@ -165,7 +165,7 @@ describe "Forme Sequel::Model forms" do
   end
   
   it "should handle Raw label for many_to_one associations with :as=>:radio option" do
-    @b.input(:artist, :as=>:radio, :label=>'Foo:<br />'.extend(Forme::Raw)).to_s.must_equal '<span class="label">Foo:<br /></span><label class="option"><input checked="checked" id="album_artist_id_1" name="album[artist_id]" type="radio" value="1"/> a</label><label class="option"><input id="album_artist_id_2" name="album[artist_id]" type="radio" value="2"/> d</label>'
+    @b.input(:artist, :as=>:radio, :label=>Forme.raw('Foo:<br />')).to_s.must_equal '<span class="label">Foo:<br /></span><label class="option"><input checked="checked" id="album_artist_id_1" name="album[artist_id]" type="radio" value="1"/> a</label><label class="option"><input id="album_artist_id_2" name="album[artist_id]" type="radio" value="2"/> d</label>'
     @b.input(:artist, :as=>:radio, :label=>'Foo<br />').to_s.must_equal '<span class="label">Foo&lt;br /&gt;</span><label class="option"><input checked="checked" id="album_artist_id_1" name="album[artist_id]" type="radio" value="1"/> a</label><label class="option"><input id="album_artist_id_2" name="album[artist_id]" type="radio" value="2"/> d</label>'
   end
   
@@ -275,7 +275,7 @@ describe "Forme Sequel::Model forms" do
   end
 
   it "should handle Raw label for associations with :as=>:checkbox" do
-    @b.input(:tracks, :as=>:checkbox, :label=>'Foo<br />:'.extend(Forme::Raw)).to_s.must_equal '<span class="label">Foo<br />:</span><label class="option"><input checked="checked" id="album_track_pks_1" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label class="option"><input checked="checked" id="album_track_pks_2" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label class="option"><input id="album_track_pks_3" name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
+    @b.input(:tracks, :as=>:checkbox, :label=>Forme.raw('Foo<br />:')).to_s.must_equal '<span class="label">Foo<br />:</span><label class="option"><input checked="checked" id="album_track_pks_1" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label class="option"><input checked="checked" id="album_track_pks_2" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label class="option"><input id="album_track_pks_3" name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
     @b.input(:tracks, :as=>:checkbox, :label=>'Foo<br />').to_s.must_equal '<span class="label">Foo&lt;br /&gt;</span><label class="option"><input checked="checked" id="album_track_pks_1" name="album[track_pks][]" type="checkbox" value="1"/> m</label><label class="option"><input checked="checked" id="album_track_pks_2" name="album[track_pks][]" type="checkbox" value="2"/> n</label><label class="option"><input id="album_track_pks_3" name="album[track_pks][]" type="checkbox" value="3"/> o</label>'
   end
   
