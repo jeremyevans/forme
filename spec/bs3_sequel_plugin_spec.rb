@@ -448,7 +448,7 @@ end
 describe "Forme Sequel plugin default input types based on column names" do
   def f(name)
     DB.create_table!(:test){String name}
-    Forme::Form.new(Class.new(Sequel::Model){def self.name; 'Test' end; set_dataset :test}.new, {:config=>:bs3}).input(name, :value=>'foo')
+    Forme::Form.new(Class.new(Sequel::Model).class_eval{def self.name; 'Test' end; set_dataset :test}.new, {:config=>:bs3}).input(name, :value=>'foo')
   end
 
   it "should use password input with no value for string columns with name password" do
@@ -474,7 +474,7 @@ end
 describe "Forme Sequel plugin default input types based on column type" do
   def f(type)
     DB.create_table!(:test){column :foo, type}
-    Forme::Form.new(Class.new(Sequel::Model){def self.name; 'Test' end; set_dataset :test}.new,{:config=>:bs3}).input(:foo, :value=>'foo')
+    Forme::Form.new(Class.new(Sequel::Model).class_eval{def self.name; 'Test' end; set_dataset :test}.new,{:config=>:bs3}).input(:foo, :value=>'foo')
   end
 
   it "should use password input with no value for string columns with name password" do
