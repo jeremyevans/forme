@@ -1,16 +1,16 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    kgio (2.9.2)
-    minitest (5.4.3)
-    pg (0.18.0)
-    rack (1.6.0)
-    raindrops (0.10.0)
-    roda (2.2.0)
+    kgio (2.10.0)
+    minitest (5.8.3)
+    pg (0.18.4)
+    rack (1.6.2)
+    raindrops (0.15.0)
+    roda (2.10.0)
       rack
-    sequel (4.22.0)
+    sequel (4.31.0)
     tilt (2.0.1)
-    unicorn (4.8.0)
+    unicorn (5.0.1)
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
@@ -25,3 +25,6 @@ DEPENDENCIES
   sequel
   tilt
   unicorn
+
+BUNDLED WITH
+   1.10.6
