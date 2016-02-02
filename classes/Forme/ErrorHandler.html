@@ -31,7 +31,13 @@
         </h1>
         <ol class='paths'>
           <li>
+            <a target="docwin" href="../../files/lib/forme/bs3_rb.html">lib/forme/bs3.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../../files/lib/forme/transformers/error_handler_rb.html">lib/forme/transformers/error_handler.rb</a>
+          </li>
+          <li>
+            <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
           </li>
         </ol>
         <div class='parent'>
@@ -75,7 +81,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/error_handler.rb, line 11</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_attr</span>]&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;error_message&#39;</span>)&#x000A;  [<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error</span>])]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/error_handler.rb, line 13</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_attr</span>]&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;error_message&#39;</span>)&#x000A;  [<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error</span>])]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

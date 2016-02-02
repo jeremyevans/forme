@@ -43,7 +43,7 @@
         <div id='text'>
           <div id='description'>
             
-            <p>Default helper used by the library, using a spam with “helper” class</p>
+            <p>Default helper used by the library, using a span with “helper” class</p>
             
             <p>Registered as :default.</p>
           </div>
@@ -73,7 +73,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/helper.rb, line 9</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:helper_attr</span>]&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;helper&#39;</span>)&#x000A;  [<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:help</span>])]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/helper.rb, line 11</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:helper_attr</span>]&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;helper&#39;</span>)&#x000A;  [<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:help</span>])]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
