@@ -133,7 +133,6 @@ class FormeDemo < Roda
             r.is 'default' do
               @page_title = 'BS3: Album Basic - Default'
               @form_opts_base = { :config=>:bs3 }
-              @css = ""
               demo :album_basic
             end
 
@@ -145,8 +144,7 @@ class FormeDemo < Roda
 
             r.is 'list' do
               @page_title = 'BS3: Album Basic - List'
-              # TODO: the :wrapper_attr is not passed through. WHY??
-              @form_opts_base = {:config=>:bs3, :wrapper=>:li, :wrapper_attr => { :class => 'list-item' }, :inputs_wrapper=>:ol}
+              @form_opts_base = {:config=>:bs3, :wrapper=>:li, :inputs_wrapper=>:ol}
               @css = "ol, li {list-style-type: none;}"
               demo :album_basic
             end
@@ -160,13 +158,11 @@ class FormeDemo < Roda
             r.is 'alt_assoc' do
               @page_title = 'Album Basic - Association Radios/Checkboxes'
               @form_opts_base = {:config=>:bs3, :many=>{:as=>:checkbox}, :one=>{:as=>:radio} }
-              @css = ""
               demo :album_basic
             end
 
             r.is 'readonly' do
               @page_title = 'BS3: Album Basic - Read Only'
-              # @form_opts_base = {:config=>:bs3, :wrapper=>:li, :inputs_wrapper=>:ol, :formatter=>:readonly}
               @form_opts_base = {:config=>:bs3, :formatter=>:bs3_readonly}
               @css = "ol, li {list-style-type: none;}"
               demo :album_basic
@@ -177,7 +173,6 @@ class FormeDemo < Roda
           r.is 'nested' do
             @page_title = 'BS3: Single Level Nesting'
             @form_opts_base = { :config=>:bs3 }
-            @css = "" #form label { display: block; }"
             @subform_opts = { :config=>:bs3 }
             demo :album_nested
           end
@@ -188,7 +183,6 @@ class FormeDemo < Roda
           r.is 'nested' do
             @page_title = 'BS3: - Multiple Level Nesting'
             @form_opts_base = { :config=>:bs3 }
-            @css = ""
             @subform_opts = { :config=>:bs3 }
             demo :artist_nested
           end
