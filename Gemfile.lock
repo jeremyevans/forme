@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    i18n (0.7.0)
     kgio (2.10.0)
     minitest (5.8.3)
     pg (0.18.4)
@@ -19,6 +20,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  i18n
   minitest
   pg
   roda (>= 1.2.0)
@@ -27,4 +29,4 @@ DEPENDENCIES
   unicorn
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

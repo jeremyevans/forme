@@ -29,4 +29,5 @@ END
   s.add_development_dependency "tilt"
   s.add_development_dependency "sinatra"
   s.add_development_dependency "rails"
+  s.add_development_dependency "i18n"
 end

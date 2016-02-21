@@ -8,4 +8,5 @@ gem 'unicorn'
 
 group :development, :test do
   gem "minitest"
+  gem "i18n"
 end
