@@ -3,7 +3,8 @@ require 'sequel/plugins/forme'
 
 module Sequel # :nodoc:
   module Plugins # :nodoc:
-    module Forme
+    # This Sequel plugin extends Forme usage with Sequel to support I18n
+    module FormeI18n
       module SequelFormI18n
         # Checks if there's a translation for the
         # 'models.<table_name>.<association>' key and merge it to the options
@@ -20,13 +21,9 @@ module Sequel # :nodoc:
           super
         end
       end
-    end
 
-    # This Sequel plugin extends Forme usage with Sequel to support I18n
-    module FormeI18n
       def self.apply(model)
         model.plugin(:forme)
-        model.include(self)
       end
 
       module InstanceMethods
@@ -34,8 +31,7 @@ module Sequel # :nodoc:
         # Includes the SequelFormI18n methods on the original returned class
         def forme_form_class(base)
           klass = super
-          klass.include Sequel::Plugins::Forme::SequelFormI18n
-
+          klass.send(:include, SequelFormI18n)
           klass
         end
 

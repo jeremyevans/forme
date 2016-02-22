@@ -1,5 +1,6 @@
 require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_helper.rb')
 
+gem 'i18n', '>= 0.7.0'
 require 'i18n'
 I18n.load_path = [File.join(File.dirname(File.expand_path(__FILE__)), 'i18n_helper.yml')] 
 
