@@ -1,7 +1,8 @@
 require 'rubygems'
 require 'sequel/no_core_ext'
 
-DB = Sequel.sqlite
+db_url = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' ? 'jdbc:sqlite::memory:' : 'sqlite:/'
+DB = Sequel.connect(db_url)
 Sequel.default_timezone = :utc
 DB.create_table(:artists) do
   primary_key :id
@@ -64,6 +65,11 @@ class Album < Sequel::Model
 
   def artist_name
     artist.name if artist
+  end
+
+  if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
+    # Add workaround for no boolean handling in jdbc-sqlite3
+    plugin :typecast_on_load, :gold, :platinum, :release_date, :created_at
   end
 end
 class Artist < Sequel::Model
