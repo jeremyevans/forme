@@ -50,7 +50,7 @@ end
 
 desc "Run specs"
 task :spec do
-  sh "#{FileUtils::RUBY} -rubygems -I lib -e 'ARGV.each{|f| require f}' ./spec/*_spec.rb"
+  sh "#{FileUtils::RUBY} spec/all.rb"
 end
 task :default => :spec
 
