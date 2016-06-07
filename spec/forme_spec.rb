@@ -646,6 +646,10 @@ describe "Forme plain forms" do
     @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo, :label_position=>:after).to_s.must_equal '<textarea id="foo"></textarea><label class="label-after" for="foo">bar</label>'
   end
 
+  it "inputs handle explicit labels with :key_id" do
+    @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :key=>:bar, :key_id=>:foo).to_s.must_equal '<label class="label-before" for="bar_foo">bar</label><textarea id="bar_foo" name="bar"></textarea>'
+  end
+
   it "should handle explicit labels with checkboxes" do
     @f.input(:checkbox, :labeler=>:explicit, :label=>'Foo', :value=>'foo', :name=>'a', :id=>'bar').to_s.must_equal '<input id="bar_hidden" name="a" type="hidden" value="0"/><input id="bar" name="a" type="checkbox" value="foo"/><label class="label-after" for="bar">Foo</label>'
   end

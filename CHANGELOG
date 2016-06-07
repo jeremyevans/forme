@@ -1,5 +1,7 @@
 === HEAD
 
+* Fix frozen string literal issue in explicit labeler (jeremyevans)
+
 * Add forme_i18n Sequel plugin, for internalization support (badosu) (#15)
 
 === 1.4.0 (2016-02-01)
