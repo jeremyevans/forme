@@ -1,20 +1,21 @@
 require 'rubygems'
 require 'sequel'
 require 'logger'
-$: << '../lib'
+$: << ::File.expand_path('../../lib',  __FILE__)
 
+module FormeDemo
 DEMO_MODE = !!ENV['DATABASE_URL']
-DB = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite:/')
+DB = Sequel.connect(ENV['FORME_DATABASE_URL'] || ENV['DATABASE_URL'] || 'sqlite:/')
 CREATE_TABLES_FILE = File.join(File.dirname(__FILE__), 'create_tables.rb')
 
-require CREATE_TABLES_FILE
+require  ::File.expand_path('../create_tables',  __FILE__)
 
 Sequel::Model.plugin :defaults_setter
 Sequel::Model.plugin :forme
 Sequel::Model.plugin :association_pks
 Sequel::Model.plugin :prepared_statements
 Sequel::Model.plugin :prepared_statements_associations
-Dir['models/*.rb'].each{|f| require f}
+Dir[::File.expand_path('../models/*.rb',  __FILE__)].each{|f| require f}
 
 def DB.reset
   [:albums_tags, :tags, :tracks, :albums, :artists].each{|t| DB[t].delete}
@@ -49,3 +50,4 @@ end
 DB.reset
 
 DB.loggers << Logger.new($stdout) unless DEMO_MODE
+end

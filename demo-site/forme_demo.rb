@@ -1,11 +1,13 @@
 #!/usr/bin/env/ruby
 require 'rubygems'
-require 'erb'
 require 'roda'
-require 'models'
+require ::File.expand_path('../models',  __FILE__)
 require 'forme/bs3'
 
-class FormeDemo < Roda
+class FormeDemo::App < Roda
+  include FormeDemo
+  opts[:root] = File.dirname(__FILE__)
+
   plugin :static, %w'/css'
 
   plugin :forme
@@ -192,7 +194,7 @@ class FormeDemo < Roda
       
     end
 
-    unless ENV['DATABASE_URL']
+    if ENV['FORME_DEMO_POST']
       r.post do
         r.is 'album' do
           Album.last.update(r['album'])

@@ -1,3 +1,4 @@
+module FormeDemo
 DB.create_table?(:artists) do
   primary_key :id
   String :name, :null=>false, :unique=>true
@@ -32,4 +33,5 @@ DB.create_table?(:albums_tags) do
   foreign_key :album_id, :albums
   foreign_key :tag_id, :tags
   primary_key [:album_id, :tag_id]
+end
 end
