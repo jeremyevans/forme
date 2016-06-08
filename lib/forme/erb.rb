@@ -16,7 +16,7 @@ module Forme
 
     # Add CSRF token tag by default for POST forms
     add_hidden_tag do |tag|
-      if defined?(::Rack::Csrf) && (form = tag.form) && (env = form.opts[:env]) && tag.attr[:method].to_s.upcase == 'POST'
+      if defined?(::Rack::Csrf) && (form = tag.form) && (env = form.opts[:env]) && env['rack.session'] && tag.attr[:method].to_s.upcase == 'POST'
         {::Rack::Csrf.field=>::Rack::Csrf.token(env)}
       end
     end

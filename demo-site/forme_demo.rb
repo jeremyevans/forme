@@ -32,9 +32,6 @@ class FormeDemo::App < Roda
   end
 
   route do |r|
-    # Use bogus session in case rack_csrf is being used implicitly
-    env['rack.session'] = {}
-
     r.get do
       r.is '' do
         @page_title = 'Forme Demo Site'
