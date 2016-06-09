@@ -293,11 +293,11 @@ module Sequel # :nodoc:
           label = klass.send(:singularize, ref[:name])
 
           field = if ref[:type] == :pg_array_to_many
-            handle_errors(key)
             key
           else
             "#{label}_pks"
           end
+          handle_errors(field)
 
           unless opts.has_key?(:key)
             opts[:array] = true unless opts.has_key?(:array)

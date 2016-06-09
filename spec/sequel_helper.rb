@@ -51,10 +51,13 @@ u = DB[:tags].insert(:name=>'u')
 
 Sequel::Model.plugin :forme
 class Album < Sequel::Model
+  plugin :association_pks
+  plugin :forme_set
+
   many_to_one :artist, :order=>:name
   one_to_one :album_info
   one_to_many :tracks
-  many_to_many :tags
+  many_to_many :tags, :delay_pks=>:always
 
   plugin :pg_array_associations
   pg_array_to_many :atags, :class=>:Tag
@@ -66,6 +69,8 @@ class Album < Sequel::Model
   def artist_name
     artist.name if artist
   end
+
+  alias foo= name=
 
   if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
     # Add workaround for no boolean handling in jdbc-sqlite3

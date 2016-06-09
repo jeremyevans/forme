@@ -509,6 +509,18 @@ subform options:
 :inputs_opts :: When using the :grid option, this allows you to specify options
                 to pass to the table InputsWrapper.
 
+== Other Sequel Plugins
+
+In addition to the +forme+ Sequel plugin, Forme also ships with additional Sequel plugins:
+
+forme_i18n :: Handles translations for labels using i18n.
+forme_set :: Tracks which inputs have been added for an object, and adds a +forme_set+ model
+             instance method that will take a parameter hash and only set the values that
+             match one of the inputs added via the form.  Additionally, when filtering
+             associated objects when displaying the form (or when using filters on associations),
+             adds validations that the value submitted by the form matches one of the options
+             in the form.
+
 = ERB Support
 
 Forme ships with a ERB extension that you can get by <tt>require "forme/erb"</tt> and using

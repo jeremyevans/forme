@@ -1,5 +1,7 @@
 === HEAD
 
+* Add forme_set Sequel plugin, for handling the intake of submitted params based on form fields (jeremyevans)
+
 * Only add csrf tag in forme/erb support if there is a current session in the environment (jeremyevans)
 
 * Fix frozen string literal issue in explicit labeler (jeremyevans)
