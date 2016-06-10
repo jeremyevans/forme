@@ -99,9 +99,7 @@ describe "Sequel forme_set plugin" do
       [{:dataset=>proc{|ds| ds.exclude(:id=>1)}},
        {:dataset=>proc{|ds| ds.exclude(:id=>1)}}],
       [{:options=>Artist.exclude(:id=>1).select_order_map([:name, :id])},
-       {:options=>Tag.exclude(:id=>1).select_order_map(:id)}],
-      [{:options=>Artist.exclude(:id=>1).all},
-       {:options=>Tag.exclude(:id=>1).all}]
+       {:options=>Tag.exclude(:id=>1).select_order_map(:id)}]
     ].each do |artist_opts, tag_opts|
       @ab.forme_inputs.clear
       @f.input(:artist, artist_opts)

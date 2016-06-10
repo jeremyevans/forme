@@ -40,16 +40,7 @@ module Sequel # :nodoc:
             next unless ref = model.association_reflection(field)
             next unless options = opts[:options]
 
-            values = options.map do |obj|
-              case obj
-              when Sequel::Model
-                obj.pk
-              when Array
-                obj.last
-              else
-                obj
-              end
-            end
+            values = options.map{|obj| obj.is_a?(Array) ? obj.last : obj}
 
             after_validation_hook do
               value = send(column)
