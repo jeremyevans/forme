@@ -56,7 +56,8 @@ module Sequel # :nodoc:
             name ||= opts[:name] || opts[:key] || next
 
             # Pull out last component of the name if there is one
-            column = (name =~ /\[([^\[\]]+)\]\z/ ? $1 : name).to_sym
+            column = (name =~ /\[([^\[\]]+)\]\z/ ? $1 : name)
+            column = column.to_s.sub(/\[\]\z/, '').to_sym
 
             hash_values[column] = params[column] || params[column.to_s]
 
