@@ -21,7 +21,9 @@ module Sequel # :nodoc:
           @forme_inputs ||= {}
         end
 
-        # Hash with column name symbol keys and [reflection, allowed_values] values
+        # Hash with column name symbol keys and <tt>[subset, allowed_values]</tt> values.  +subset+
+        # is a boolean flag, if true, the uploaded values should be a subset of the allowed values,
+        # otherwise, there should be a single uploaded value that is a member of the allowed values.
         def forme_validations
           @forme_validations ||= {}
         end
@@ -63,7 +65,7 @@ module Sequel # :nodoc:
 
             values = options.map{|obj| obj.is_a?(Array) ? obj.last : obj}
             values << nil if ref[:type] == :many_to_one && opts[:add_blank]
-            validations[column] = [ref, values]
+            validations[column] = [ref[:type] != :many_to_one, values]
           end
 
           hash
@@ -84,13 +86,13 @@ module Sequel # :nodoc:
           super
 
           if validations = @forme_validations
-            validations.each do |column, (ref, values)|
+            validations.each do |column, (subset, values)|
               value = send(column)
 
-              valid = if ref[:type] == :many_to_one
-                values.include?(value)
-              else
+              valid = if subset
                 (value - values).empty?
+              else
+                values.include?(value)
               end
 
               unless valid
