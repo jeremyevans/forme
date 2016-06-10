@@ -3,26 +3,47 @@
 module Sequel # :nodoc:
   module Plugins # :nodoc:
     # The forme_set plugin makes the model instance keep track of which form
-    # inputs have been added for it, and adds a forme_set method to handle
-    # the intake of submitted data from the form.
+    # inputs have been added for it. Adds a forme_set method to handle
+    # the intake of submitted data from the form.  For more complete control,
+    # adds a forme_parse method that returns a hash of information that can be
+    # used to modify and validate the object.
     module FormeSet
       SKIP_FORMATTERS = [:disabled, :readonly, ::Forme::Formatter::Disabled, ::Forme::Formatter::ReadOnly]
 
+      # Depend on the forme plugin, as forme_input already needs to be defined.
       def self.apply(model)
         model.plugin :forme
-        model.plugin :instance_hooks
       end
 
       module InstanceMethods
+        # Hash with column name symbol keys and Forme::SequelInput values
         def forme_inputs
           @forme_inputs ||= {}
         end
 
+        # Hash with column name symbol keys and [reflection, allowed_values] values
+        def forme_validations
+          @forme_validations ||= {}
+        end
+
+        # Keep track of the inputs used.
         def forme_input(_form, field, _opts)
           forme_inputs[field] = super
         end
 
-        def forme_set(params)
+        # Given the hash of submitted parameters, return a hash containing information on how to
+        # set values in the model based on the inputs used on the related form.  Currently, the
+        # hash contains the following information:
+        # :values :: A hash of values that can be used to update the model, suitable for passing
+        #            to Sequel::Model#set.
+        # :validations :: A hash of values suitable for merging into forme_validations. Used to
+        #                 check that the submitted values for associated objects match one of the
+        #                 options for the input in the form.
+        def forme_parse(params)
+          hash = {}
+          hash_values = hash[:values] = {}
+          validations = hash[:validations] = {}
+
           forme_inputs.each do |field, input|
             opts = input.opts
             next if SKIP_FORMATTERS.include?(opts.fetch(:formatter){input.form.opts[:formatter]})
@@ -35,18 +56,39 @@ module Sequel # :nodoc:
             # Pull out last component of the name if there is one
             column = (name =~ /\[([^\[\]]+)\]\z/ ? $1 : name).to_sym
 
-            send(:"#{column}=", params[column] || params[column.to_s])
+            hash_values[column] = params[column] || params[column.to_s]
 
             next unless ref = model.association_reflection(field)
             next unless options = opts[:options]
 
             values = options.map{|obj| obj.is_a?(Array) ? obj.last : obj}
+            values << nil if ref[:type] == :many_to_one && opts[:add_blank]
+            validations[column] = [ref, values]
+          end
 
-            after_validation_hook do
+          hash
+        end
+
+        # Set the values in the object based on the parameters parsed from the form, and add
+        # validations based on the form to ensure that associated objects match form values.
+        def forme_set(params)
+          hash = forme_parse(params)
+          set(hash[:values])
+          unless hash[:validations].empty?
+            forme_validations.merge!(hash[:validations])
+          end
+        end
+
+        # Check associated values to ensure they match one of options in the form.
+        def validate
+          super
+
+          if validations = @forme_validations
+            validations.each do |column, (ref, values)|
               value = send(column)
 
               valid = if ref[:type] == :many_to_one
-                values.include?(value) || (value.nil? && opts[:add_blank])
+                values.include?(value)
               else
                 (value - values).empty?
               end

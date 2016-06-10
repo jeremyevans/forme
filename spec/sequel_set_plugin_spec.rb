@@ -105,7 +105,7 @@ describe "Sequel forme_set plugin" do
       @f.input(:artist, artist_opts)
       @f.input(:tags, tag_opts)
 
-      @ab.send(:instance_hooks, :after_validation).clear
+      @ab.forme_validations.clear
       @ab.forme_set('artist_id'=>'1', 'tag_pks'=>%w'1 2')
       @ab.artist_id.must_equal 1
       @ab.tag_pks.must_equal [1, 2]
@@ -114,15 +114,30 @@ describe "Sequel forme_set plugin" do
       @ab.errors[:artist_id].must_equal ['invalid value submitted']
       @ab.errors[:tag_pks].must_equal ['invalid value submitted']
 
-      @ab.send(:instance_hooks, :after_validation).clear
+      @ab.forme_validations.clear
       @ab.forme_set('artist_id'=>'1', 'tag_pks'=>['2'])
       @ab.valid?.must_equal false
       @ab.errors[:artist_id].must_equal ['invalid value submitted']
       @ab.errors[:tag_pks].must_equal nil
 
-      @ab.send(:instance_hooks, :after_validation).clear
+      @ab.forme_validations.clear
       @ab.forme_set('artist_id'=>'2', 'tag_pks'=>['2'])
       @ab.valid?.must_equal true
     end
+  end
+
+  it "#forme_parse should return hash with values and validations" do
+    @f.input(:name)
+    @ab.forme_parse(:name=>'Foo').must_equal(:values=>{:name=>'Foo'}, :validations=>{})
+
+    @f.input(:artist, :dataset=>proc{|ds| ds.exclude(:id=>1)})
+    hash = @ab.forme_parse(:name=>'Foo', 'artist_id'=>'1')
+    hash[:values] = {:name=>'Foo', :artist_id=>'1'}
+    @ab.set(hash[:values])
+    @ab.valid?.must_equal true
+
+    @ab.forme_validations.merge!(hash[:validations])
+    @ab.valid?.must_equal false
+    @ab.errors[:artist_id].must_equal ['invalid value submitted']
   end
 end
