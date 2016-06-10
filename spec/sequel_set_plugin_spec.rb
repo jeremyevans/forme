@@ -46,6 +46,36 @@ describe "Sequel forme_set plugin" do
     @ab.name.must_equal nil
   end
   
+  it "#forme_set should skip inputs with disabled/readonly formatter" do
+    @f.input(:name, :formatter=>:disabled)
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_equal nil
+
+    @f.input(:name, :formatter=>:readonly)
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_equal nil
+
+    @f.input(:name, :formatter=>:default)
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_equal 'Foo'
+  end
+  
+  it "#forme_set should skip inputs with disabled/readonly formatter" do
+    @f = Forme::Form.new(@ab, :formatter=>:disabled)
+    @f.input(:name)
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_equal nil
+
+    @f = Forme::Form.new(@ab, :formatter=>:readonly)
+    @f.input(:name)
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_equal nil
+
+    @f.input(:name, :formatter=>:default)
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_equal 'Foo'
+  end
+  
   it "#forme_set should handle setting values for associated objects" do
     @ab.forme_set(:artist_id=>1)
     @ab.artist_id.must_equal nil

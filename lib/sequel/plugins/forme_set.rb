@@ -6,6 +6,8 @@ module Sequel # :nodoc:
     # inputs have been added for it, and adds a forme_set method to handle
     # the intake of submitted data from the form.
     module FormeSet
+      SKIP_FORMATTERS = [:disabled, :readonly, ::Forme::Formatter::Disabled, ::Forme::Formatter::ReadOnly]
+
       def self.apply(model)
         model.plugin :forme
         model.plugin :instance_hooks
@@ -23,6 +25,7 @@ module Sequel # :nodoc:
         def forme_set(params)
           forme_inputs.each do |field, input|
             opts = input.opts
+            next if SKIP_FORMATTERS.include?(opts.fetch(:formatter){input.form.opts[:formatter]})
 
             if attr = opts[:attr]
               name = attr[:name] || attr['name']
