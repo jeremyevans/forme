@@ -140,4 +140,9 @@ describe "Sequel forme_set plugin" do
     @ab.valid?.must_equal false
     @ab.errors[:artist_id].must_equal ['invalid value submitted']
   end
+
+  it "#forme_parse should return hash with values and validations" do
+    @ab.forme_validations[:name] = [:bar, []]
+    proc{@ab.valid?}.must_raise Sequel::Plugins::Forme::Error
+  end
 end

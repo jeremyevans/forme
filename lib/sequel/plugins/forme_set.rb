@@ -3,9 +3,9 @@
 module Sequel # :nodoc:
   module Plugins # :nodoc:
     # The forme_set plugin makes the model instance keep track of which form
-    # inputs have been added for it. Adds a forme_set method to handle
+    # inputs have been added for it. It adds a forme_set method to handle
     # the intake of submitted data from the form.  For more complete control,
-    # adds a forme_parse method that returns a hash of information that can be
+    # it also adds a forme_parse method that returns a hash of information that can be
     # used to modify and validate the object.
     module FormeSet
       SKIP_FORMATTERS = [:disabled, :readonly, ::Forme::Formatter::Disabled, ::Forme::Formatter::ReadOnly]
@@ -66,7 +66,7 @@ module Sequel # :nodoc:
 
             values = options.map{|obj| obj.is_a?(Array) ? obj.last : obj}
             values << nil if ref[:type] == :many_to_one && opts[:add_blank]
-            validations[column] = [ref[:type] != :many_to_one, values]
+            validations[column] = [ref[:type] != :many_to_one ? :subset : :include, values]
           end
 
           hash
@@ -87,13 +87,16 @@ module Sequel # :nodoc:
           super
 
           if validations = @forme_validations
-            validations.each do |column, (subset, values)|
+            validations.each do |column, (type, values)|
               value = send(column)
 
-              valid = if subset
+              valid = case type
+              when :subset
                 (value - values).empty?
-              else
+              when :include
                 values.include?(value)
+              else
+                raise Forme::Error, "invalid type used in forme_validations"
               end
 
               unless valid
