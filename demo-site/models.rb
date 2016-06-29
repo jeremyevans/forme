@@ -10,11 +10,12 @@ CREATE_TABLES_FILE = File.join(File.dirname(__FILE__), 'create_tables.rb')
 
 require  ::File.expand_path('../create_tables',  __FILE__)
 
-Sequel::Model.plugin :defaults_setter
-Sequel::Model.plugin :forme
-Sequel::Model.plugin :association_pks
-Sequel::Model.plugin :prepared_statements
-Sequel::Model.plugin :prepared_statements_associations
+Model = Class.new(Sequel::Model)
+Model.plugin :defaults_setter
+Model.plugin :forme
+Model.plugin :association_pks
+Model.plugin :prepared_statements
+Model.plugin :prepared_statements_associations
 Dir[::File.expand_path('../models/*.rb',  __FILE__)].each{|f| require f}
 
 def DB.reset

@@ -1,5 +1,5 @@
 module FormeDemo
-class Album < Sequel::Model(DB)
+class Album < Model
   many_to_one :artist
   one_to_many :tracks
   many_to_many :tags

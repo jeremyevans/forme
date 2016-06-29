@@ -1,5 +1,5 @@
 module FormeDemo
-class Tag < Sequel::Model(DB)
+class Tag < Model
   many_to_many :albums
 end
 end
