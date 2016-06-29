@@ -8,7 +8,7 @@ class FormeDemo::App < Roda
   include FormeDemo
   opts[:root] = File.dirname(__FILE__)
 
-  plugin :static, %w'/css'
+  plugin :public
 
   plugin :forme
   plugin :h
@@ -33,6 +33,8 @@ class FormeDemo::App < Roda
 
   route do |r|
     r.get do
+      r.public
+
       r.is '' do
         @page_title = 'Forme Demo Site'
         view :index
