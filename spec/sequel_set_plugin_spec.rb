@@ -126,6 +126,32 @@ describe "Sequel forme_set plugin" do
     end
   end
 
+  it "#forme_set should not require associated values for many_to_one association with select boxes" do
+    @f.input(:artist)
+    @ab.forme_set({})
+    @ab.valid?.must_equal true
+  end
+
+  it "#forme_set should not require associated values for many_to_one association with radio buttons" do
+    @f.input(:artist, :as=>:radio)
+    @ab.forme_set({})
+    @ab.valid?.must_equal true
+  end
+
+  it "#forme_set should require associated values for many_to_one association with select boxes when :required is used" do
+    @f.input(:artist, :required=>true)
+    @ab.forme_set({})
+    @ab.valid?.must_equal false
+    @ab.errors[:artist_id].must_equal ['invalid value submitted']
+  end
+
+  it "#forme_set should require associated values for many_to_one association with radio buttons when :required is used" do
+    @f.input(:artist, :as=>:radio, :required=>true)
+    @ab.forme_set({})
+    @ab.valid?.must_equal false
+    @ab.errors[:artist_id].must_equal ['invalid value submitted']
+  end
+
   it "#forme_parse should return hash with values and validations" do
     @f.input(:name)
     @ab.forme_parse(:name=>'Foo').must_equal(:values=>{:name=>'Foo'}, :validations=>{})

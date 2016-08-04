@@ -65,7 +65,9 @@ module Sequel # :nodoc:
             next unless options = opts[:options]
 
             values = options.map{|obj| obj.is_a?(Array) ? obj.last : obj}
-            values << nil if ref[:type] == :many_to_one && opts[:add_blank]
+            if ref[:type] == :many_to_one && !opts[:required]
+              values << nil
+            end
             validations[column] = [ref[:type] != :many_to_one ? :subset : :include, values]
           end
 
