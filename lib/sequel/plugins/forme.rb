@@ -273,6 +273,7 @@ module Sequel # :nodoc:
             handle_label(field)
             _input(:radioset, opts)
           else
+            opts[:required] = true if !opts.has_key?(:required) && (sch = obj.model.db_schema[key]) && !sch[:allow_null]
             opts[:add_blank] = true if !opts.has_key?(:add_blank) && !(opts[:required] && opts[:value])
             handle_label(field)
             ::Forme.attr_classes(opts[:wrapper_attr], "required") if opts[:required]

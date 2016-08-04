@@ -159,6 +159,16 @@ describe "Forme Sequel::Model forms" do
     @b.input(:artist, :type=>:string, :value=>nil).to_s.must_equal '<label>Artist: <input id="album_artist" name="album[artist]" type="text"/></label>'
   end
 
+  it "should automatically set :required for many_to_one assocations based on whether the field is required" do
+    begin
+      Album.db_schema[:artist_id][:allow_null] = false
+      @b.input(:artist).to_s.must_equal '<label>Artist<abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
+      @b.input(:artist, :required=>false).to_s.must_equal '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
+    ensure
+      Album.db_schema[:artist_id][:allow_null] = true
+    end
+  end
+
   it "should use a required wrapper tag for many_to_one required associations" do
     @b.input(:artist, :required=>true, :wrapper=>:li).to_s.must_equal '<li class="many_to_one required"><label>Artist<abbr title="required">*</abbr>: <select id="album_artist_id" name="album[artist_id]" required="required"><option selected="selected" value="1">a</option><option value="2">d</option></select></label></li>'
   end
