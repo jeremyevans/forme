@@ -64,7 +64,13 @@ module Sequel # :nodoc:
             next unless ref = model.association_reflection(field)
             next unless options = opts[:options]
 
-            values = options.map{|obj| obj.is_a?(Array) ? obj.last : obj}
+            values = if opts[:text_method]
+              value_method = opts[:value_method] || opts[:text_method]
+              options.map(&value_method)
+            else
+              options.map{|obj| obj.is_a?(Array) ? obj.last : obj}
+            end
+
             if ref[:type] == :many_to_one && !opts[:required]
               values << nil
             end
