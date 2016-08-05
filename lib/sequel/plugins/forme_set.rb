@@ -100,7 +100,9 @@ module Sequel # :nodoc:
 
               valid = case type
               when :subset
-                (value - values).empty?
+                # Handle missing value the same as the empty array,
+                # can happen with PostgreSQL array associations 
+                !value || (value - values).empty?
               when :include
                 values.include?(value)
               else

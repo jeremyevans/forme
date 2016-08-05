@@ -154,6 +154,13 @@ describe "Sequel forme_set plugin" do
     @ab.errors[:artist_id].must_equal ['invalid value submitted']
   end
 
+  it "#forme_set should handle cases where currently associated values is nil" do
+    @f.input(:tags)
+    @ab.forme_set({:tag_pks=>[1]})
+    def @ab.tag_pks; nil; end
+    @ab.valid?.must_equal true
+  end
+
   it "#forme_parse should return hash with values and validations" do
     @f.input(:name)
     @ab.forme_parse(:name=>'Foo').must_equal(:values=>{:name=>'Foo'}, :validations=>{})
