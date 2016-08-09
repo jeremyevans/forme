@@ -376,7 +376,6 @@ based on the format, numericality, and length validations.
 
 In addition to the default Forme options, the Sequel support includes, for specific column types, 
 these additional options to the #input method:
-.
 
 === boolean
 
@@ -425,7 +424,7 @@ This will create a form similar to:
 For one_to_many and many_to_many associations, you will probably want to use the
 +association_pks+ plugin that ships with Sequel.
 
-This supports the pg_array_to_many association type that comes with Sequel's
+This also supports the pg_array_to_many association type that comes with Sequel's
 +pg_array_association+ plugin.
 
 association input options:
@@ -509,17 +508,153 @@ subform options:
 :inputs_opts :: When using the :grid option, this allows you to specify options
                 to pass to the table InputsWrapper.
 
+== Handling form submissions
+
+The Sequel forme plugin only handles creating the forms, it does not handle processing
+input submitted via forms.  For a form such as:
+
+  Forme.form(Album[1], :action=>'/foo') do |f|
+    f.input :name
+    f.input :copies_sold
+  end
+
+Input of the form will often be submitted as the following parameter hash (this depends
+on your web framework, but Rack works this way by default):
+
+  {'album'=>{'name'=>'Rising Force', 'copies_sold'=>'100000'}}
+
+One way to handle the form submission is to use Sequel::Model#set_fields.
+
+  album = Album[1]
+  album.set_fields(params['album'], %w'name copies_sold')
+  album.save
+
+Note that you have to specify the parameter names again as the second argument to
+set_fields.
+
+Handling Submitted parameters becomes more complex as your forms become more complex.
+For example, if you are only displaying certain form fields in certain situations:
+
+  album = Album[1]
+  Forme.form(album, :action=>'/foo') do |f|
+    f.input :name
+    f.input :copies_sold if album.released?
+  end
+
+Then your parameter handling becomes more complex:
+
+  album = Album[1]
+  album.set_fields(params['album'], %w'name')
+  album.set_fields(params['album'], %w'copies_sold') if album.released?
+  album.save
+
+As you can see, you basically need to recreate the conditionals used when creating
+the form, so that that the processing of the form submission handles only the
+inputs that were displayed on the form.
+
+=== forme_set plugin
+
+The forme_set plugin is designed to make handling form submissions easier.  What it does
+is record the form fields that are used on the object, and then it uses those fields
+to handle input submitted for the object.  For example:
+
+  album = Album[1]
+  Forme.form(album, :action=>'/foo') do |f|
+    f.input :name
+    f.input :copies_sold if album.released?
+  end
+  album.forme_set(params['album'])
+
+If the album has been released, and the form would display the name and copies_sold
+inputs, then forme_set will accept input for both.  If the album has not been released,
+the form will only display the name input, so forme_set will only accept the name input.
+
+So forme_set offers two advantages over using set_fields:
+
+1. DRYs up code as you don't have to specify the names twice
+2. Simplifies complex form submissions by eliminating duplication of conditionals
+
+==== Validations
+
+forme_set offers one additional advantage over using set_fields.  When dealing with
+associations, set_fields does not check that the value submitted for an input matches
+one of the available options displayed on the form.  For example, if you have a form such as:
+
+  Forme.form(album, :action=>'/foo') do |f|
+    f.input :name
+    f.input :artist, :dataset=>proc{|ds| ds.where{name > 'M'}}
+  end
+
+The form will only display artists whose name is greater than 'M'.  However, if you process
+input using:
+
+  album.set_fields(params['album'], %w'name artist_id')
+
+Then a malicious user can submit an artist_id for an artist whose name is not greater than 'M',
+and the value will be set.  In addition to setting values, forme_set also adds validations
+that the submitted values for associated objects match one of the options displayed on the form,
+which can increase security.
+
+==== Usage
+
+Because forme_set relies on creating form inputs using the same model instance that will
+be used for accepting input, using it often requires some code rearranging.  If you are
+storing Forme::Form objects and later using them on forms, it is fairly simple to move the
+Forme::Forme object creation to a method, that you can call both in the initial display
+and when processing the input:
+
+  def show_form(album)
+    Forme.form(album, :action=>'/foo') do |f|
+      f.input :name
+      f.input :copies_sold
+    end
+  end
+
+Then when displaying the form:
+
+  <%= album_form(Album[1]) %>
+
+and when processing the form's input:
+
+  album = Album[1]
+  album_form(album)
+  album.forme_set(params['album'])
+
+However, if you use Forme's ERB/Rails template integration (see below), and are inlining
+forms in your templates, unless you want to extract the Forme::Form creation to methods,
+you have to basically rerender the template when processing the input.  How you do
+this is specific to the web framework you are using, but is it similar to:
+
+  @album = Album[1]
+  render :template
+  @album.forme_set(params['album'])
+
+==== Caveats
+
+forme_set is not perfect, there are ways to use Forme that forme_set will not handle
+correctly.  First, forme_set only works with forms that use model objects, and doesn't
+handle inputs where the :obj option is provided to change the input.
+Additionally, forme_set does not currently handle subform/nested_attributes.
+
+In cases where forme_set does not handle things correctly, you can use forme_parse,
+which will return metadata that forme_set uses (forme_set calls forme_parse
+internally).  forme_parse returns a hash with the following keys:
+
+:values :: A hash of values that can be used to update the model, suitable for passing
+           to Sequel::Model#set.
+:validations :: A hash of values suitable for merging into forme_validations. Used to
+                check that the submitted values for associated objects match one of the
+                options for the input in the form.
+
+It is possible to use forme_set for the values it can handle, and set other fields manually
+using set_fields.
+
 == Other Sequel Plugins
 
-In addition to the +forme+ Sequel plugin, Forme also ships with additional Sequel plugins:
+In addition to the Sequel plugins mentioned above, Forme also ships with additional Sequel
+plugins:
 
 forme_i18n :: Handles translations for labels using i18n.
-forme_set :: Tracks which inputs have been added for an object, and adds a +forme_set+ model
-             instance method that will take a parameter hash and only set the values that
-             match one of the inputs added via the form.  Additionally, when filtering
-             associated objects when displaying the form (or when using filters on associations),
-             adds validations that the value submitted by the form matches one of the options
-             in the form.
 
 = ERB Support
 
