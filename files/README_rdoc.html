@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2015-09-20 00:24:04 -0700</span>
+          <span class='datetime'>2016-08-09 10:41:34 -0700</span>
         </div>
       </div>
       <div id='content'>
@@ -373,7 +373,7 @@
             
             <p>In addition to the default <a href="../classes/Forme.html">Forme</a>
             options, the <a href="../classes/Sequel.html">Sequel</a> support includes,
-            for specific column types,  these additional options to the input method: .</p>
+            for specific column types,  these additional options to the input method:</p>
             
             <h3 id="label-boolean">boolean<span><a href="#label-boolean">&para;</a> <a href="#top">&uarr;</a></span></h3>
             <table class="rdoc-list note-list"><tbody><tr><td class='label'>:as </td><td>
@@ -415,7 +415,7 @@
             use the <code>association_pks</code> plugin that ships with <a
             href="../classes/Sequel.html">Sequel</a>.</p>
             
-            <p>This supports the pg_array_to_many association type that comes with
+            <p>This also supports the pg_array_to_many association type that comes with
             Sequel&#39;s <code>pg_array_association</code> plugin.</p>
             
             <p>association input options:</p>
@@ -477,6 +477,145 @@
             </td></tr><tr><td class='label'>:inputs_opts </td><td>
             <p>When using the :grid option, this allows you to specify options to pass to
             the table InputsWrapper.</p>
+            </td></tr></tbody></table>
+            
+            <h2 id="label-Handling+form+submissions">Handling form submissions<span><a href="#label-Handling+form+submissions">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            
+            <p>The <a href="../classes/Sequel.html">Sequel</a> forme plugin only handles
+            creating the forms, it does not handle processing input submitted via
+            forms.  For a form such as:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>], :<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">copies_sold</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Input of the form will often be submitted as the following parameter hash
+            (this depends on your web framework, but Rack works this way by default):</p>
+            
+            <pre class="ruby">{<span class="ruby-string">&#39;album&#39;</span>=<span class="ruby-operator">&gt;</span>{<span class="ruby-string">&#39;name&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;Rising Force&#39;</span>, <span class="ruby-string">&#39;copies_sold&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;100000&#39;</span>}}</pre>
+            
+            <p>One way to handle the form submission is to use Sequel::Model#set_fields.</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>], <span class="ruby-node">%w&#39;name copies_sold&#39;</span>)&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">save</span></pre>
+            
+            <p>Note that you have to specify the parameter names again as the second
+            argument to set_fields.</p>
+            
+            <p>Handling Submitted parameters becomes more complex as your forms become
+            more complex. For example, if you are only displaying certain form fields
+            in certain situations:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, :<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">copies_sold</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">released?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Then your parameter handling becomes more complex:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>], <span class="ruby-node">%w&#39;name&#39;</span>)&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>], <span class="ruby-node">%w&#39;copies_sold&#39;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">released?</span>&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">save</span></pre>
+            
+            <p>As you can see, you basically need to recreate the conditionals used when
+            creating the form, so that that the processing of the form submission
+            handles only the inputs that were displayed on the form.</p>
+            
+            <h3 id="label-forme_set+plugin">forme_set plugin<span><a href="#label-forme_set+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
+            
+            <p>The forme_set plugin is designed to make handling form submissions easier. 
+            What it does is record the form fields that are used on the object, and
+            then it uses those fields to handle input submitted for the object.  For
+            example:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, :<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">copies_sold</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">released?</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>])</pre>
+            
+            <p>If the album has been released, and the form would display the name and
+            copies_sold inputs, then forme_set will accept input for both.  If the
+            album has not been released, the form will only display the name input, so
+            forme_set will only accept the name input.</p>
+            
+            <p>So forme_set offers two advantages over using set_fields:</p>
+            <ol><li>
+            <p>DRYs up code as you don&#39;t have to specify the names twice</p>
+            </li><li>
+            <p>Simplifies complex form submissions by eliminating duplication of
+            conditionals</p>
+            </li></ol>
+            
+            <h4 id="label-Validations">Validations<span><a href="#label-Validations">&para;</a> <a href="#top">&uarr;</a></span></h4>
+            
+            <p>forme_set offers one additional advantage over using set_fields.  When
+            dealing with associations, set_fields does not check that the value
+            submitted for an input matches one of the available options displayed on
+            the form.  For example, if you have a form such as:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, :<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">artist</span>, :<span class="ruby-identifier">dataset=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">ds</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ds</span>.<span class="ruby-identifier">where</span>{<span class="ruby-identifier">name</span> <span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;M&#39;</span>}}&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>The form will only display artists whose name is greater than &#39;M&#39;. 
+            However, if you process input using:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">album</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>], <span class="ruby-node">%w&#39;name artist_id&#39;</span>)</pre>
+            
+            <p>Then a malicious user can submit an artist_id for an artist whose name is
+            not greater than &#39;M&#39;, and the value will be set.  In addition to
+            setting values, forme_set also adds validations that the submitted values
+            for associated objects match one of the options displayed on the form,
+            which can increase security.</p>
+            
+            <h4 id="label-Usage">Usage<span><a href="#label-Usage">&para;</a> <a href="#top">&uarr;</a></span></h4>
+            
+            <p>Because forme_set relies on creating form inputs using the same model
+            instance that will be used for accepting input, using it often requires
+            some code rearranging.  If you are storing <a
+            href="../classes/Forme/Form.html">Forme::Form</a> objects and later using
+            them on forms, it is fairly simple to move the Forme::Forme object creation
+            to a method, that you can call both in the initial display and when
+            processing the input:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier">show_form</span>(<span class="ruby-identifier">album</span>)&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, :<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">copies_sold</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Then when displaying the form:</p>
+            
+            <pre>&lt;%= album_form(Album[1]) %&gt;</pre>
+            
+            <p>and when processing the form&#39;s input:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">album_form</span>(<span class="ruby-identifier">album</span>)&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>])</pre>
+            
+            <p>However, if you use Forme&#39;s ERB/Rails template integration (see below),
+            and are inlining forms in your templates, unless you want to extract the <a
+            href="../classes/Forme/Form.html">Forme::Form</a> creation to methods, you
+            have to basically rerender the template when processing the input.  How you
+            do this is specific to the web framework you are using, but is it similar
+            to:</p>
+            
+            <pre class="ruby"><span class="ruby-ivar">@album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">render</span> :<span class="ruby-identifier">template</span>&#x000A;<span class="ruby-ivar">@album</span>.<span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>])</pre>
+            
+            <h4 id="label-Caveats">Caveats<span><a href="#label-Caveats">&para;</a> <a href="#top">&uarr;</a></span></h4>
+            
+            <p>forme_set is not perfect, there are ways to use <a
+            href="../classes/Forme.html">Forme</a> that forme_set will not handle
+            correctly.  First, forme_set only works with forms that use model objects,
+            and doesn&#39;t handle inputs where the :obj option is provided to change
+            the input. Additionally, forme_set does not currently handle
+            subform/nested_attributes.</p>
+            
+            <p>In cases where forme_set does not handle things correctly, you can use
+            forme_parse, which will return metadata that forme_set uses (forme_set
+            calls forme_parse internally).  forme_parse returns a hash with the
+            following keys:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:values </td><td>
+            <p>A hash of values that can be used to update the model, suitable for passing
+            to Sequel::Model#set.</p>
+            </td></tr><tr><td class='label'>:validations </td><td>
+            <p>A hash of values suitable for merging into forme_validations. Used to check
+            that the submitted values for associated objects match one of the options
+            for the input in the form.</p>
+            </td></tr></tbody></table>
+            
+            <p>It is possible to use forme_set for the values it can handle, and set other
+            fields manually using set_fields.</p>
+            
+            <h2 id="label-Other+Sequel+Plugins">Other <a href="../classes/Sequel.html">Sequel</a> Plugins<span><a href="#label-Other+Sequel+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            
+            <p>In addition to the <a href="../classes/Sequel.html">Sequel</a> plugins
+            mentioned above, <a href="../classes/Forme.html">Forme</a> also ships with
+            additional <a href="../classes/Sequel.html">Sequel</a> plugins:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>forme_i18n </td><td>
+            <p>Handles translations for labels using i18n.</p>
             </td></tr></tbody></table>
             
             <h1 id="label-ERB+Support">ERB Support<span><a href="#label-ERB+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>

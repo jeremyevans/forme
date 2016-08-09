@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Sequel::Plugins::FormeI18n::InstanceMethods</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Sequel::Plugins::FormeI18n::InstanceMethods
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../../files/lib/sequel/plugins/forme_i18n_rb.html">lib/sequel/plugins/forme_i18n.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-forme_form_class">forme_form_class</a></li>
+              <li><a target="docwin" href="#method-i-forme_input">forme_input</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-forme_form_class'>
+                <a name='method-i-forme_form_class'></a>
+                <div class='synopsis'>
+                  <span class='name'>forme_form_class</span>
+                  <span class='arguments'>(base)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Includes the <a href="SequelFormI18n.html">SequelFormI18n</a> methods on
+                  the original returned class</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-forme_form_class-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-forme_form_class-source'><span class="ruby-comment"># File lib/sequel/plugins/forme_i18n.rb, line 32</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">forme_form_class</span>(<span class="ruby-identifier">base</span>)&#x000A;  <span class="ruby-identifier">klass</span> = <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">SequelFormI18n</span>)&#x000A;  <span class="ruby-identifier">klass</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-forme_input'>
+                <a name='method-i-forme_input'></a>
+                <div class='synopsis'>
+                  <span class='name'>forme_input</span>
+                  <span class='arguments'>(form, field, opts)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Checks if there&#39;s a translation for the
+                  &#39;models.&lt;table_name&gt;.&lt;field&gt;&#39; key and merge it to the
+                  options with the :label key</p>
+                  
+                  <p>Calls the original <a href="../Forme.html">Sequel::Plugins::Forme</a>
+                  method</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-forme_input-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-forme_input-source'><span class="ruby-comment"># File lib/sequel/plugins/forme_i18n.rb, line 42</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">forme_input</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">i18n_key</span> = <span class="ruby-node">&quot;models.#{self.class.table_name}.#{field}&quot;</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">i18n_key</span>)&#x000A;    <span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>] = <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-identifier">i18n_key</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
