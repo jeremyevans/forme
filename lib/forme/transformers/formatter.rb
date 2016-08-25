@@ -234,7 +234,9 @@ module Forme
 
       tags = process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
         value ||= label
-        r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>{:class=>:option}, :wrapper=>tag_wrapper)
+        label_attr = {:class=>:option}
+        label_attr.merge!(@opts[:label_attr]) if @opts[:label_attr]
+        r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>label_attr, :wrapper=>tag_wrapper)
         r_opts[:value] ||= value if value
         r_opts[:checked] ||= :checked if sel
         r_opts[:formatter] = @opts[:formatter] if @opts[:formatter]

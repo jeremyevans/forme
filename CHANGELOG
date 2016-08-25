@@ -1,3 +1,7 @@
+=== HEAD
+
+* Allow :label_attr for checkboxset and radioset to set attributes for individual labels in the set (jeremyevans)
+
 === 1.5.0 (2016-08-09)
 
 * Add forme_set Sequel plugin, for handling the intake of submitted params based on form fields (jeremyevans)

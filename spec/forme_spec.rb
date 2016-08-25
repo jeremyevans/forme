@@ -390,6 +390,10 @@ describe "Forme plain forms" do
     @f.input(:radioset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<fieldset><legend>d</legend><label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="radio" value="3"/> c</label></fieldset>'
   end
 
+  it "should create set of radio buttons with label attributes" do
+    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2, :label_attr=>{:foo=>:bar}).to_s.must_equal '<label class="option" foo="bar"><input type="radio" value="1"/> 1</label><label class="option" foo="bar"><input checked="checked" type="radio" value="2"/> 2</label><label class="option" foo="bar"><input type="radio" value="3"/> 3</label>'
+  end
+
   it "should create set of checkbox buttons" do
     @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
     @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
@@ -434,6 +438,10 @@ describe "Forme plain forms" do
 
   it "should create set of checkbox buttons with fieldsets and legends for optgroups" do
     @f.input(:checkboxset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<fieldset><legend>d</legend><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label></fieldset><fieldset><legend>e</legend><label class="option"><input type="checkbox" value="3"/> c</label></fieldset>'
+  end
+
+  it "should create set of checkbox buttons with label attributes" do
+    @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2, :label_attr=>{:foo=>:bar}).to_s.must_equal '<label class="option" foo="bar"><input type="checkbox" value="1"/> 1</label><label class="option" foo="bar"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option" foo="bar"><input type="checkbox" value="3"/> 3</label>'
   end
 
   it "should raise an Error for empty checkbox sets" do
