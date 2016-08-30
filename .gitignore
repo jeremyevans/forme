@@ -3,4 +3,4 @@
 /forme-*.gem
 *.rbc
 /log
-Gemfile.lock
+/Gemfile.lock
