@@ -1,5 +1,7 @@
 === HEAD
 
+* Add support for overriding forme_namespace on the Sequel::Model instance to change forme's namespacing (mwpastore, jeremyevans) (#17)
+
 * Allow :label_attr for checkboxset and radioset to set attributes for individual labels in the set (jeremyevans)
 
 === 1.5.0 (2016-08-09)

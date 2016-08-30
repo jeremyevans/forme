@@ -22,8 +22,7 @@ module Sequel # :nodoc:
         # overridden with the :method attribute.
         def form(attr={}, &block)
           attr = {:method=>:post}.merge(attr)
-          fclass = obj.respond_to?(:forme_namespace) ? obj.send(:forme_namespace) : obj.model.send(:underscore, obj.model.name)
-          attr[:class] = ::Forme.merge_classes(attr[:class], "forme", fclass)
+          attr[:class] = ::Forme.merge_classes(attr[:class], "forme", obj.forme_namespace)
           super(attr, &block)
         end
 
@@ -462,7 +461,7 @@ module Sequel # :nodoc:
         # Configure the +form+ with support for <tt>Sequel::Model</tt>
         # specific code, such as support for nested attributes.
         def forme_config(form)
-          form.namespaces << (respond_to?(:forme_namespace) ? send(:forme_namespace) : model.send(:underscore, model.name))
+          form.namespaces << forme_namespace
         end
 
         # Return subclass of base form that includes the necessary Sequel form methods.
@@ -479,6 +478,11 @@ module Sequel # :nodoc:
         # Return <tt>Forme::Input</tt> instance based on the given arguments.
         def forme_input(form, field, opts)
           SequelInput.new(self, form, field, opts).input
+        end
+
+        # Use the underscored model name as the default namespace.
+        def forme_namespace
+          model.send(:underscore, model.name)
         end
       end
     end

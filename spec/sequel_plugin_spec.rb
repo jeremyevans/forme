@@ -535,6 +535,9 @@ describe "Forme Sequel::Model default namespacing" do
     @ab = Foo::Album[1]
     @b = Forme::Form.new(@ab)
   end
+  after do
+    Object.send(:remove_const, :Foo)
+  end
 
   it "namespaces the form class" do
     @b.form.to_s.must_equal '<form class="forme foo/album" method="post"></form>'
@@ -550,13 +553,16 @@ describe "Forme Sequel::Model custom namespacing" do
     module Bar
       class Album < ::Album
         def forme_namespace
-          self.class.name.underscore.tr('/', '_')
+          'bar_album'
         end
       end
     end
 
     @ab = Bar::Album[1]
     @b = Forme::Form.new(@ab)
+  end
+  after do
+    Object.send(:remove_const, :Bar)
   end
 
   it "namespaces the form class" do
