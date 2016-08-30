@@ -16,7 +16,6 @@ matrix:
   allow_failures:
     - rvm: jruby-head
     - rvm: ruby-head
-gemfile: .travis.gemfile
 script: bundle exec rake
 before_install:
   - gem install bundler
