@@ -216,6 +216,16 @@ describe "Forme plain forms" do
     @f.input(:checkbox, :name=>"foo").to_s.must_equal '<input name="foo" type="hidden" value="0"/><input name="foo" type="checkbox"/>'
   end
 
+  it "should not create hidden input with value 0 for readonly or disabled checkboxes" do
+    @f.input(:checkbox, :name=>"foo", :formatter=>:disabled).to_s.must_equal '<input disabled="disabled" name="foo" type="checkbox"/>'
+    @f.input(:checkbox, :name=>"foo", :formatter=>:readonly).to_s.must_equal '<input disabled="disabled" name="foo" type="checkbox"/>'
+  end
+
+  it "should create hidden input with value 0 for readonly or disabled checkboxes if no_hidden is explicitly given and not true" do
+    @f.input(:checkbox, :name=>"foo", :formatter=>:disabled, :no_hidden=>false).to_s.must_equal '<input name="foo" type="hidden" value="0"/><input disabled="disabled" name="foo" type="checkbox"/>'
+    @f.input(:checkbox, :name=>"foo", :formatter=>:readonly, :no_hidden=>false).to_s.must_equal '<input name="foo" type="hidden" value="0"/><input disabled="disabled" name="foo" type="checkbox"/>'
+  end
+
   it "should not create hidden input with value 0 for each checkbox with a name if :no_hidden option is used" do
     @f.input(:checkbox, :name=>"foo", :no_hidden=>true).to_s.must_equal '<input name="foo" type="checkbox"/>'
   end

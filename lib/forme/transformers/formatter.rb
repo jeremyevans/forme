@@ -478,6 +478,12 @@ module Forme
 
     private
 
+    # Disabled checkbox inputs, without a hidden input.
+    def format_checkbox
+      @opts[:no_hidden] = true unless @opts.has_key?(:no_hidden)
+      super
+    end
+
     # Unless the :disabled option is specifically set
     # to +false+, set the :disabled attribute on the
     # resulting tag.
@@ -500,9 +506,10 @@ module Forme
 
     private
 
-    # Disabled checkbox inputs.
+    # Disabled checkbox inputs, without a hidden input.
     def format_checkbox
       @attr[:disabled] = :disabled
+      @opts[:no_hidden] = true unless @opts.has_key?(:no_hidden)
       super
     end
 
