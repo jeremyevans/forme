@@ -525,3 +525,46 @@ describe "Forme Sequel::Model validation parsing" do
 
 end
 
+describe "Forme Sequel::Model default namespacing" do
+  before do
+    module Foo
+      class Album < ::Album
+      end
+    end
+
+    @ab = Foo::Album[1]
+    @b = Forme::Form.new(@ab)
+  end
+
+  it "namespaces the form class" do
+    @b.form.to_s.must_equal '<form class="forme foo/album" method="post"></form>'
+  end
+
+  it "namespaces the input id and name" do
+    @b.input(:name).to_s.must_equal '<label>Name: <input id="foo/album_name" name="foo/album[name]" type="text" value="b"/></label>'
+  end
+end
+
+describe "Forme Sequel::Model custom namespacing" do
+  before do
+    module Bar
+      class Album < ::Album
+        def forme_namespace
+          self.class.name.underscore.tr('/', '_')
+        end
+      end
+    end
+
+    @ab = Bar::Album[1]
+    @b = Forme::Form.new(@ab)
+  end
+
+  it "namespaces the form class" do
+    @b.form.to_s.must_equal '<form class="forme bar_album" method="post"></form>'
+  end
+
+  it "namespaces the form input and name" do
+    @b.input(:name).to_s.must_equal '<label>Name: <input id="bar_album_name" name="bar_album[name]" type="text" value="b"/></label>'
+  end
+
+end

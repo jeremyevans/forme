@@ -351,6 +351,17 @@ object in the enumerable, and includes the index in the namespace:
 
 Forme ships with a Sequel plugin (use <tt>Sequel::Model.plugin :forme</tt> to enable), that makes
 Sequel::Model instances support the +forme_config+ and +forme_input+ methods and return customized inputs.
+An additional instance method, +forme_namespace+ can optionally be defined to customize how model classnames
+are transformed into form classes and input IDs and names. This can be useful if your Sequel::Model classes
+are nested under a parent namespace. It falls back to the behaviour of Sequel::Model#underscore.
+
+  module Admin
+    class Albums < Sequel::Model
+      def forme_namespace
+        self.class.name.underscore.tr('/', '_')
+      end
+    end
+  end
 
 == Basics
 
