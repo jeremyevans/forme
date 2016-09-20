@@ -10,11 +10,16 @@ else
 require 'forme/rails'
 
 class FormeRails < Rails::Application
-  config.secret_token = routes.append { get ':action' , :controller=>'forme' }.inspect
+  routes.append do
+    %w'index inputs_block inputs_block_wrapper nest nest_sep nest_inputs nest_seq hash legend combined noblock noblock_post safe_buffer'.each do |action|
+      get action, :controller=>'forme', :action=>action
+    end
+  end
   config.active_support.deprecation = :stderr
   config.middleware.delete(ActionDispatch::ShowExceptions)
-  config.middleware.delete("Rack::Lock")
-  config.secret_key_base = 'foo'
+  config.middleware.delete(Rack::Lock)
+  config.secret_key_base = 'foo'*15
+  config.secret_token = 'secret token'*15
   config.eager_load = true
   initialize!
 end
