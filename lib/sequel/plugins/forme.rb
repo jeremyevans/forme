@@ -44,6 +44,8 @@ module Sequel # :nodoc:
         # :inputs :: Automatically call +inputs+ with the given values.  Using
         #            this, it is not required to pass a block to the method,
         #            though it will still work if you do.
+        # :inputs_opts :: When using the :grid option, this allows you to specify options
+        #                 to pass to the table InputsWrapper.
         # :legend :: Overrides the default :legend used (which is based on the
         #            association name).  You can also use a proc as the value,
         #            which will called with each associated object (and the position
