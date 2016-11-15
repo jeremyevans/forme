@@ -55,7 +55,7 @@ end
 task :default => :spec
 
 desc "Run specs with coverage"
-task :spec do
+task :spec_cov do
   ENV['COVERAGE'] = '1'
   Rake::Task['spec'].invoke
 end
