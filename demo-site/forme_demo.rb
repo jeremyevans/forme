@@ -1,5 +1,6 @@
 #!/usr/bin/env/ruby
 require 'rubygems'
+require 'tilt/erubi'
 require 'roda'
 require ::File.expand_path('../models',  __FILE__)
 require 'forme/bs3'
