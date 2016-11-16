@@ -16,10 +16,6 @@ module Forme
     # The hidden tags to automatically add to the form.
     attr_reader :hidden_tags
 
-    # The namespaces if any for the receiver's inputs.  This can be used to
-    # automatically setup namespaced class and id attributes.
-    attr_accessor :namespaces
-
     # The +serializer+ determines how +Tag+ objects are transformed into strings.
     # Must respond to +call+ or be a registered symbol.
     attr_reader :serializer
@@ -248,7 +244,8 @@ module Forme
       @opts[:obj]
     end
 
-    # The current namespaces for the form, if any.
+    # The namespaces if any for the receiver's inputs.  This can be used to
+    # automatically setup namespaced class and id attributes.
     def namespaces
       @opts[:namespace]
     end
