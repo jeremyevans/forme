@@ -234,7 +234,7 @@ module Forme
     # Create a +Tag+ associated to the receiver with the given arguments and block,
     # doing no other processing.
     def _tag(*a, &block)
-      tag = Tag.new(self, *a, &block)
+      Tag.new(self, *a, &block)
     end
 
     # The object associated with this form, if any. If the +Form+ has an associated
