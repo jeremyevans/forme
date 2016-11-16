@@ -21,7 +21,7 @@ DB.create_table(:clients) do
 end
 
 a = DB[:firms].insert(:name=>'a')
-b = DB[:invoices].insert(:name=>'b', :firm_id=>a, :summary=>'a brief summary')
+DB[:invoices].insert(:name=>'b', :firm_id=>a, :summary=>'a brief summary')
 DB[:clients].insert(:name=>'a great client', :firm_id=>a)
 
 class Firm < Sequel::Model

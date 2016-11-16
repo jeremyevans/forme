@@ -46,7 +46,7 @@ c = DB[:albums].insert(:name=>'c', :artist_id=>d, :gold=>true, :platinum=>true)
 DB[:tracks].insert(:name=>'o', :album_id=>c)
 s = DB[:tags].insert(:name=>'s')
 t = DB[:tags].insert(:name=>'t')
-u = DB[:tags].insert(:name=>'u')
+DB[:tags].insert(:name=>'u')
 [[b, s], [b, t], [c, t]].each{|k, v| DB[:albums_tags].insert(k, v)}
 
 Sequel::Model.plugin :forme
