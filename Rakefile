@@ -57,7 +57,13 @@ task :default => :spec
 desc "Run specs with coverage"
 task :spec_cov do
   ENV['COVERAGE'] = '1'
-  Rake::Task['spec'].invoke
+  sh "#{FileUtils::RUBY} spec/all.rb"
+end
+
+desc "Run specs with -w, some warnings filtered"
+task :spec_w do
+  ENV['WARNING'] = '1'
+  sh "#{FileUtils::RUBY} -w spec/all.rb"
 end
 
 ### Other
