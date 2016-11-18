@@ -217,6 +217,10 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:checkbox, :name=>"foo", :hidden_value=>"no").to_s.must_equal '<div class="checkbox"><input name="foo" type="hidden" value="no"/><input name="foo" type="checkbox"/></div>'
   end
 
+  it "should create hidden input" do
+    @f.input(:hidden).to_s.must_equal '<input type="hidden"/>'
+  end
+
   it "should handle :checked option" do
     @f.input(:checkbox, :checked=>true).to_s.must_equal '<div class="checkbox"><input checked="checked" type="checkbox"/></div>'
     @f.input(:checkbox, :checked=>false).to_s.must_equal '<div class="checkbox"><input type="checkbox"/></div>'
@@ -375,6 +379,10 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:radioset, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<div class="radioset"><fieldset><legend>d</legend><div class="radio"><label class="option"><input type="radio" value="1"/> a</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> b</label></div></fieldset><fieldset><legend>e</legend><div class="radio"><label class="option"><input type="radio" value="3"/> c</label></div></fieldset></div>'
   end
   
+  it "should create set of radio buttons with set label" do
+    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2, :label=>'foo').to_s.must_equal '<div class="radioset"><label>foo</label><div class="radio"><label class="option"><input type="radio" value="1"/> 1</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> 2</label></div><div class="radio"><label class="option"><input type="radio" value="3"/> 3</label></div></div>'
+  end
+
   it "should create set of checkbox buttons" do
     @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<div class="checkboxset"><div class="checkbox"><label class="option"><input type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> 3</label></div></div>'
     @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<div class="checkboxset"><div class="checkbox"><label class="option"><input type="checkbox" value="1"/> 1</label></div><div class="checkbox"><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label></div><div class="checkbox"><label class="option"><input type="checkbox" value="3"/> 3</label></div></div>'
@@ -500,6 +508,10 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.button.to_s.must_equal '<input class="btn btn-default" type="submit"/>'
   end
 
+  it "#button should return a submit tag without label" do
+    @f.button(:label=>'foo').to_s.must_equal '<input class="btn btn-default" type="submit"/>'
+  end
+
   it "#button should accept an options hash" do
     @f.button(:name=>'foo', :value=>'bar').to_s.must_equal '<input class="btn btn-default" name="foo" type="submit" value="bar"/>'
   end
@@ -621,6 +633,13 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:text, :formatter=>:bs3_readonly, :value=>'1', :label=>'Foo').to_s.must_equal '<div class="form-group"><label>Foo</label> <input class="form-control" readonly="readonly" type="text" value="1"/></div>'
   end
 
+  it "bs3_readonly formatter should disable checkbox, radio, select, and textarea inputs" do
+    @f.input(:checkbox, :formatter=>:bs3_readonly).to_s.must_equal '<div class="checkbox"><input disabled="disabled" type="checkbox"/></div>'
+    @f.input(:radio, :formatter=>:bs3_readonly).to_s.must_equal '<div class="radio"><input disabled="disabled" type="radio"/></div>'
+    @f.input(:select, :formatter=>:bs3_readonly).to_s.must_equal '<div class="form-group"><select class="form-control" disabled="disabled"></select></div>'
+    @f.input(:textarea, :formatter=>:bs3_readonly).to_s.must_equal '<div class="form-group"><textarea class="form-control" readonly="readonly"></textarea></div>' 
+  end
+
   it "inputs should accept a :labeler option to use a custom labeler" do
     @f.input(:textarea, :labeler=>:explicit, :label=>'bar', :id=>:foo).to_s.must_equal '<div class="form-group"><label class="label-before" for="foo">bar</label><textarea class="form-control" id="foo"></textarea></div>'
   end
@@ -648,6 +667,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   it "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do
     @f.inputs([:textarea], :inputs_wrapper=>:ol).to_s.must_equal '<ol><div class="form-group"><textarea class="form-control"></textarea></div></ol>'
     @f.inputs([:textarea], :inputs_wrapper=>:bs3_table, :wrapper=>:trtd).to_s.must_equal '<table class="table table-bordered"><tr><td><textarea class="form-control"></textarea></td><td></td></tr></table>'
+    @f.inputs([:textarea], :inputs_wrapper=>:bs3_table, :wrapper=>:trtd, :legend=>'Foo', :labels=>['bar']).to_s.must_equal '<table class="table table-bordered"><caption>Foo</caption><tr><th>bar</th></tr><tr><td><textarea class="form-control"></textarea></td><td></td></tr></table>'
   end
 
   it "inputs should accept a :wrapper=>nil option to not use a wrapper" do
