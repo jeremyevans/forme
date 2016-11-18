@@ -36,9 +36,6 @@ module Forme
       if labels.length == 1
         ltd = labels
         rtd = other
-      elsif a.length == 1
-        ltd = [a.first]
-        rtd = a[1..-1]
       else
         ltd = a
       end
