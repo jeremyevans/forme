@@ -24,12 +24,6 @@ module Forme
       @form_opts = form.opts
     end
 
-    # Replace the +opts+ by merging the given +hash+ into +opts+,
-    # without modifying +opts+.
-    def merge_opts(hash)
-      @opts = @opts.merge(hash)
-    end
-
     # Create a new +Tag+ instance with the given arguments and block
     # related to the receiver's +form+.
     def tag(*a, &block)
