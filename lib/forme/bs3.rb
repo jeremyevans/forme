@@ -92,10 +92,6 @@ module Forme
       end
     end
 
-    def set_label
-      form._tag(:span, {:class=>'set-label'}, @opts[:set_label])
-    end
-
     def _add_set_error(tags)
       tags << input.tag(:span, {:class=>'help-block with-errors'}, @opts[:set_error])
     end
