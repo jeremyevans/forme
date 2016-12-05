@@ -9,15 +9,15 @@ describe "Sequel forme_set plugin" do
   
   it "#forme_set should only set values in the form" do
     @ab.forme_set(:name=>'Foo')
-    @ab.name.must_equal nil
+    @ab.name.must_be_nil
 
     @f.input(:name)
     @ab.forme_set(:name=>'Foo')
     @ab.name.must_equal 'Foo'
 
     @ab.forme_set('copies_sold'=>'1')
-    @ab.name.must_equal nil
-    @ab.copies_sold.must_equal nil
+    @ab.name.must_be_nil
+    @ab.copies_sold.must_be_nil
 
     @f.input(:copies_sold)
     @ab.forme_set('name'=>'Bar', 'copies_sold'=>'1')
@@ -30,7 +30,7 @@ describe "Sequel forme_set plugin" do
       @f.input(:name, opts)
 
       @ab.forme_set(:name=>'Foo')
-      @ab.name.must_equal nil
+      @ab.name.must_be_nil
 
       @ab.forme_set('foo'=>'Foo')
       @ab.name.must_equal 'Foo'
@@ -41,19 +41,19 @@ describe "Sequel forme_set plugin" do
   it "#forme_set should ignore values where key is explicitly set to nil" do
     @f.input(:name, :key=>nil)
     @ab.forme_set(:name=>'Foo')
-    @ab.name.must_equal nil
+    @ab.name.must_be_nil
     @ab.forme_set(nil=>'Foo')
-    @ab.name.must_equal nil
+    @ab.name.must_be_nil
   end
   
   it "#forme_set should skip inputs with disabled/readonly formatter" do
     @f.input(:name, :formatter=>:disabled)
     @ab.forme_set(:name=>'Foo')
-    @ab.name.must_equal nil
+    @ab.name.must_be_nil
 
     @f.input(:name, :formatter=>:readonly)
     @ab.forme_set(:name=>'Foo')
-    @ab.name.must_equal nil
+    @ab.name.must_be_nil
 
     @f.input(:name, :formatter=>:default)
     @ab.forme_set(:name=>'Foo')
@@ -64,12 +64,12 @@ describe "Sequel forme_set plugin" do
     @f = Forme::Form.new(@ab, :formatter=>:disabled)
     @f.input(:name)
     @ab.forme_set(:name=>'Foo')
-    @ab.name.must_equal nil
+    @ab.name.must_be_nil
 
     @f = Forme::Form.new(@ab, :formatter=>:readonly)
     @f.input(:name)
     @ab.forme_set(:name=>'Foo')
-    @ab.name.must_equal nil
+    @ab.name.must_be_nil
 
     @f.input(:name, :formatter=>:default)
     @ab.forme_set(:name=>'Foo')
@@ -78,14 +78,14 @@ describe "Sequel forme_set plugin" do
   
   it "#forme_set should handle setting values for associated objects" do
     @ab.forme_set(:artist_id=>1)
-    @ab.artist_id.must_equal nil
+    @ab.artist_id.must_be_nil
 
     @f.input(:artist)
     @ab.forme_set(:artist_id=>'1')
     @ab.artist_id.must_equal 1
 
     @ab.forme_set('tag_pks'=>%w'1 2')
-    @ab.artist_id.must_equal nil
+    @ab.artist_id.must_be_nil
     @ab.tag_pks.must_equal []
 
     @f.input(:tags)
@@ -120,7 +120,7 @@ describe "Sequel forme_set plugin" do
       @ab.forme_set('artist_id'=>'1', 'tag_pks'=>['2'])
       @ab.valid?.must_equal false
       @ab.errors[:artist_id].must_equal ['invalid value submitted']
-      @ab.errors[:tag_pks].must_equal nil
+      @ab.errors[:tag_pks].must_be_nil
 
       @ab.forme_validations.clear
       @ab.forme_set('artist_id'=>'2', 'tag_pks'=>['2'])
