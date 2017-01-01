@@ -2,7 +2,8 @@ require 'rubygems'
 require 'sequel/no_core_ext'
 
 db_url = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' ? 'jdbc:sqlite::memory:' : 'sqlite:/'
-DB = Sequel.connect(db_url)
+DB = Sequel.connect(db_url, :identifier_mangling=>false)
+DB.extension(:freeze_datasets)
 Sequel.default_timezone = :utc
 DB.create_table(:artists) do
   primary_key :id

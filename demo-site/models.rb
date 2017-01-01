@@ -5,7 +5,8 @@ $: << ::File.expand_path('../../lib',  __FILE__)
 
 module FormeDemo
 DEMO_MODE = !!ENV['DATABASE_URL']
-DB = Sequel.connect(ENV['FORME_DATABASE_URL'] || ENV['DATABASE_URL'] || 'sqlite:/')
+DB = Sequel.connect(ENV['FORME_DATABASE_URL'] || ENV['DATABASE_URL'] || 'sqlite:/', :identifier_mangling=>false)
+DB.extension(:freeze_datasets)
 CREATE_TABLES_FILE = File.join(File.dirname(__FILE__), 'create_tables.rb')
 
 require  ::File.expand_path('../create_tables',  __FILE__)
