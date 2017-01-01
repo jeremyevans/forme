@@ -22,9 +22,11 @@ if RUBY_VERSION < '1.9'
   gem 'rails', '< 4'
   gem 'i18n', '< 0.7'
   gem 'rack-cache', '< 1.3'
+  gem 'rack_csrf', '< 2.6'
 elsif RUBY_VERSION < '2.2'
   gem 'rails', '< 5'
   gem 'rack', '< 2'
+  gem 'nokogiri', '< 1.7'
 else
   gem 'sinatra', '2.0.0.beta2'
 end
