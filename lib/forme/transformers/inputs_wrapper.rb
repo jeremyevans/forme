@@ -87,10 +87,14 @@ module Forme
         end
 
         if (labels = opts[:labels]) && !labels.empty?
-          form.emit(form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)}))
+          form.tag(:thead) do
+            form.emit(form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)}))
+          end
         end
 
-        yield
+        form.tag(:tbody) do
+          yield
+        end
       end
     end
   end

@@ -1,5 +1,7 @@
 === HEAD
 
+* Use thead/tbody tags for table inputs_wrapper transformer and Sequel plugin subform :grid option (jeremyevans)
+
 * Do not create a hidden input for checkboxes when using disabled/readonly formatters (jeremyevans)
 
 * Add support for overriding forme_namespace on the Sequel::Model instance to change forme's namespacing (mwpastore, jeremyevans) (#17)

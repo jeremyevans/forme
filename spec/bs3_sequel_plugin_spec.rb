@@ -424,23 +424,23 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should have #subform :grid option create a grid" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><tr><th>Name</th></tr><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
 
   it "should have #subform :grid option respect :inputs_opts option to pass options to inputs" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :inputs_opts=>{:attr=>{:class=>'foo'}})}.to_s.must_equal '<form class="forme album" method="post"><table class="foo"><caption>Artist</caption><tr><th>Name</th></tr><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :inputs_opts=>{:attr=>{:class=>'foo'}})}.to_s.must_equal '<form class="forme album" method="post"><table class="foo"><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
 
   it "should have #subform :grid option handle :legend and :labels options" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>'Foo', :labels=>%w'Bar')}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Foo</caption><tr><th>Bar</th></tr><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>'Foo', :labels=>%w'Bar')}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Foo</caption><thead><tr><th>Bar</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
 
   it "should have #subform :grid option handle :legend and :labels nil values" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>nil, :labels=>nil)}.to_s.must_equal '<form class="forme album" method="post"><table><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>nil, :labels=>nil)}.to_s.must_equal '<form class="forme album" method="post"><table><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
 
   it "should have #subform :grid option handle :skip_primary_key option" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :skip_primary_key=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><tr><th>Name</th></tr><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :skip_primary_key=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
   
 end

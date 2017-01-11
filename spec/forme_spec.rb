@@ -872,9 +872,9 @@ describe "Forme built-in custom" do
   end
 
   it "wrapper: table should use a trtd wrapper and table inputs_wrapper" do
-    Forme::Form.new(:wrapper=>:table).inputs([:textarea]).to_s.must_equal '<table><tr><td><textarea></textarea></td><td></td></tr></table>'
+    Forme::Form.new(:wrapper=>:table).inputs([:textarea]).to_s.must_equal '<table><tbody><tr><td><textarea></textarea></td><td></td></tr></tbody></table>'
     f = Forme::Form.new
-    f.with_opts(:wrapper=>:table){f.inputs([:textarea])}.to_s.must_equal '<table><tr><td><textarea></textarea></td><td></td></tr></table>'
+    f.with_opts(:wrapper=>:table){f.inputs([:textarea])}.to_s.must_equal '<table><tbody><tr><td><textarea></textarea></td><td></td></tr></tbody></table>'
   end
 
   it "wrapper: ol should use an li wrapper and ol inputs_wrapper" do
@@ -920,24 +920,24 @@ describe "Forme built-in custom" do
   end
 
   it "inputs_wrapper: table wraps tags in an table" do
-    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea]).to_s.must_equal '<table><tr><td><textarea></textarea></td><td></td></tr></table>'
-    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea], :attr=>{:foo=>1}).to_s.must_equal '<table foo="1"><tr><td><textarea></textarea></td><td></td></tr></table>'
+    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea]).to_s.must_equal '<table><tbody><tr><td><textarea></textarea></td><td></td></tr></tbody></table>'
+    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea], :attr=>{:foo=>1}).to_s.must_equal '<table foo="1"><tbody><tr><td><textarea></textarea></td><td></td></tr></tbody></table>'
   end
 
   it "inputs_wrapper: table accepts a :legend option" do
-   Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea], :legend=>'Inputs').to_s.must_equal '<table><caption>Inputs</caption><tr><td><textarea></textarea></td><td></td></tr></table>'
+   Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea], :legend=>'Inputs').to_s.must_equal '<table><caption>Inputs</caption><tbody><tr><td><textarea></textarea></td><td></td></tr></tbody></table>'
   end
 
   it "inputs_wrapper: table accepts a :legend_attr option" do
-    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea], :legend=>'Inputs', :legend_attr=>{:class=>'foo'}).to_s.must_equal '<table><caption class="foo">Inputs</caption><tr><td><textarea></textarea></td><td></td></tr></table>'
+    Forme::Form.new(:inputs_wrapper=>:table, :wrapper=>:trtd).inputs([:textarea], :legend=>'Inputs', :legend_attr=>{:class=>'foo'}).to_s.must_equal '<table><caption class="foo">Inputs</caption><tbody><tr><td><textarea></textarea></td><td></td></tr></tbody></table>'
   end
 
   it "inputs_wrapper: table accepts a :labels option" do
-    Forme::Form.new(:inputs_wrapper=>:table).inputs(:labels=>%w'A B C').to_s.must_equal '<table><tr><th>A</th><th>B</th><th>C</th></tr></table>'
+    Forme::Form.new(:inputs_wrapper=>:table).inputs(:labels=>%w'A B C').to_s.must_equal '<table><thead><tr><th>A</th><th>B</th><th>C</th></tr></thead><tbody></tbody></table>'
   end
 
   it "inputs_wrapper: table doesn't add empty header row for :labels=>[]" do
-    Forme::Form.new(:inputs_wrapper=>:table).inputs(:labels=>[]).to_s.must_equal '<table></table>'
+    Forme::Form.new(:inputs_wrapper=>:table).inputs(:labels=>[]).to_s.must_equal '<table><tbody></tbody></table>'
   end
 
   it "serializer: html_usa formats dates and datetimes in American format without timezones" do
