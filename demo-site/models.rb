@@ -16,8 +16,6 @@ Model.db = DB
 Model.plugin :defaults_setter
 Model.plugin :forme
 Model.plugin :association_pks
-Model.plugin :prepared_statements
-Model.plugin :prepared_statements_associations
 Dir[::File.expand_path('../models/*.rb',  __FILE__)].each{|f| require f}
 
 def DB.reset
