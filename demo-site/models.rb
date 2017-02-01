@@ -51,4 +51,5 @@ end
 DB.reset
 
 DB.loggers << Logger.new($stdout) unless DEMO_MODE
+DB.freeze
 end
