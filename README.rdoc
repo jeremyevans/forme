@@ -84,6 +84,14 @@ passing the appropriate option to +input+ or +inputs+:
 
   f.input(:name, :wrapper=>:p)
 
+Existing transformers can be easily extended (ie, to set the class attribute),
+by creating your own transformer and then calling the existing transformer.
+
+  Forme.register_transformer(:labeler, :explicit) do |tag, input|
+    input.opts[:label_attr] ||= { :class => 'label' }
+    Forme::Labeler::Explicit.new.call(tag, input)
+  end
+
 = Installation
 
   gem install forme
