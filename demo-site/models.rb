@@ -16,6 +16,7 @@ Model.db = DB
 Model.plugin :defaults_setter
 Model.plugin :forme
 Model.plugin :association_pks
+Model.plugin :subclasses
 Dir[::File.expand_path('../models/*.rb',  __FILE__)].each{|f| require f}
 
 def DB.reset
@@ -51,5 +52,6 @@ end
 DB.reset
 
 DB.loggers << Logger.new($stdout) unless DEMO_MODE
+Model.freeze_descendents
 DB.freeze
 end
