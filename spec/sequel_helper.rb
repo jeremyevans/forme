@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'sequel/no_core_ext'
+require 'sequel'
 
 db_url = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' ? 'jdbc:sqlite::memory:' : 'sqlite:/'
 DB = Sequel.connect(db_url, :identifier_mangling=>false)
