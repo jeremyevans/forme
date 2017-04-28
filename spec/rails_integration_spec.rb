@@ -7,6 +7,10 @@ require 'action_controller/railtie'
 rescue LoadError
   warn "unable to load rails, skipping rails spec"
 else
+begin
+  require 'active_pack/gem_version'
+rescue LoadError
+end
 require 'forme/rails'
 
 class FormeRails < Rails::Application
@@ -222,8 +226,14 @@ describe "Forme Rails integration" do
     sin_get('/nest_inputs').must_equal "0 <form action=\"/baz\"> 1 <p>FBB</p> 2 n1 <fieldset class=\"inputs\"> n2 <input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/> <input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/> n3 </fieldset> n4 <fieldset class=\"inputs\"><legend>Foo</legend><input id=\"first\" name=\"first\" type=\"text\" value=\"foo\"/><input id=\"last\" name=\"last\" type=\"text\" value=\"bar\"/></fieldset> n5 3 </form>4"
   end
 
-  it "#form should correctly handle situation Sequel integration with subforms where multiple templates are used with same form object" do
-    sin_get('/nest_seq').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").must_equal "0 <form action=\"/baz\" class=\"forme album\" method=\"post\"><input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/> 1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Foo</legend><label>Name: <input id=\"album_artist_attributes_name\" name=\"album[artist_attributes][name]\" type=\"text\" value=\"A\"/></label></fieldset> 2 n1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Artist</legend> n2 <label>Name2: <input id=\"album_artist_attributes_name2\" name=\"album[artist_attributes][name2]\" type=\"text\" value=\"A2\"/></label> n3 </fieldset> n4 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Bar</legend><label>Name3: <input id=\"album_artist_attributes_name3\" name=\"album[artist_attributes][name3]\" type=\"text\" value=\"A3\"/></label></fieldset> n5 3 </form>4"
+  unless defined?(JRUBY_VERSION) && JRUBY_VERSION =~ /\A9\.0/ && defined?(ActionPack::VERSION::STRING) && ActionPack::VERSION::STRING >= '5.1'
+    it "#form should correctly handle situation Sequel integration with subforms where multiple templates are used with same form object" do
+      sin_get('/nest_seq').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").must_equal "0 <form action=\"/baz\" class=\"forme album\" method=\"post\"><input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/> 1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Foo</legend><label>Name: <input id=\"album_artist_attributes_name\" name=\"album[artist_attributes][name]\" type=\"text\" value=\"A\"/></label></fieldset> 2 n1 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Artist</legend> n2 <label>Name2: <input id=\"album_artist_attributes_name2\" name=\"album[artist_attributes][name2]\" type=\"text\" value=\"A2\"/></label> n3 </fieldset> n4 <input id=\"album_artist_attributes_id\" name=\"album[artist_attributes][id]\" type=\"hidden\" value=\"2\"/><fieldset class=\"inputs\"><legend>Bar</legend><label>Name3: <input id=\"album_artist_attributes_name3\" name=\"album[artist_attributes][name3]\" type=\"text\" value=\"A3\"/></label></fieldset> n5 3 </form>4"
+    end
+
+    it "#form should work without a block with hidden tags" do
+      sin_get('/noblock_post').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").must_equal '<form method="post"><input name="authenticity_token" type="hidden" value="csrf"/><input type="submit" value="xyz"/></form>'
+    end
   end
 
   it "#form should accept two hashes instead of requiring obj as first argument" do
@@ -240,10 +250,6 @@ describe "Forme Rails integration" do
 
   it "#form should work without a block" do
     sin_get('/noblock').must_equal '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
-  end
-
-  it "#form should work without a block with hidden tags" do
-    sin_get('/noblock_post').sub(%r{<input name=\"authenticity_token\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"authenticity_token\" type=\"hidden\" value=\"csrf\"/>").must_equal '<form method="post"><input name="authenticity_token" type="hidden" value="csrf"/><input type="submit" value="xyz"/></form>'
   end
 
   it "#form should handle Rails SafeBuffers" do
