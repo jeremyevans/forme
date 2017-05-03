@@ -1,4 +1,4 @@
-=== HEAD
+=== 1.6.0 (2017-05-03)
 
 * Use thead/tbody tags for table inputs_wrapper transformer and Sequel plugin subform :grid option (jeremyevans)
 
