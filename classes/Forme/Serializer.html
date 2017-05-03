@@ -5,21 +5,19 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
+      function popupCode(url) {
+        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+      }
+      
+      function toggleCode(id) {
+        var code = document.getElementById(id)
+      
+        code.style.display = code.style.display != 'block' ? 'block' : 'none'
+        return true
+      }
+      
+      // Make codeblocks hidden by default
+      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
     </script>
   </head>
   <body class='page'>
@@ -31,10 +29,10 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../files/lib/forme/bs3_rb.html">lib/forme/bs3.rb</a>
+            <a href="../../files/lib/forme/bs3_rb.html">lib/forme/bs3.rb</a>
           </li>
           <li class='other'>
-            <a target="docwin" href="../../files/lib/forme/transformers/serializer_rb.html">lib/forme/transformers/serializer.rb</a>
+            <a href="../../files/lib/forme/transformers/serializer_rb.html">lib/forme/transformers/serializer.rb</a>
           </li>
           <li>
             <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
@@ -58,9 +56,9 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-call">call</a></li>
-              <li><a target="docwin" href="#method-i-serialize_close">serialize_close</a></li>
-              <li><a target="docwin" href="#method-i-serialize_open">serialize_open</a></li>
+              <li><a href="#method-i-call">call</a></li>
+              <li><a href="#method-i-serialize_close">serialize_close</a></li>
+              <li><a href="#method-i-serialize_open">serialize_open</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -68,11 +66,49 @@
           <div id='class-list'>
             <h2>Classes and Modules</h2>
             <ol>
-              <li><a target="docwin" href="Serializer/AmericanTime.html">Forme::Serializer::AmericanTime</a></li>
-              <li><a target="docwin" href="Serializer/PlainText.html">Forme::Serializer::PlainText</a></li>
+              <li><a href="Serializer/AmericanTime.html">Forme::Serializer::AmericanTime</a></li>
+              <li><a href="Serializer/PlainText.html">Forme::Serializer::PlainText</a></li>
             </ol>
           </div>
           <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ESCAPE_HTML</td>
+                    <td>=</td>
+                    <td class='context-item-value'>{"&" => "&amp;", "<" => "&lt;", ">" => "&gt;", "'" => "&#39;", '"' => "&quot;"}</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>Borrowed from Rack::Utils, map of single character strings to html escaped
+                      versions.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ESCAPE_HTML_PATTERN</td>
+                    <td>=</td>
+                    <td class='context-item-value'>Regexp.union(*ESCAPE_HTML.keys)</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>A regexp that matches all html characters requiring escaping.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>SELF_CLOSING</td>
+                    <td>=</td>
+                    <td class='context-item-value'>[:img, :input]</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>Which tags are self closing (such tags ignore children).</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
             <div id='methods'>
               <h2>Public Instance methods</h2>
               <div class='method public-instance' id='method-method-i-call'>
@@ -94,7 +130,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/serializer.rb, line 25</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-keyword">case</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Tag</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-constant">SELF_CLOSING</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">type</span>)&#x000A;      <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(tag.attr)}/&gt;&quot;</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-node">&quot;#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Input</span>&#x000A;    <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">format</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Array</span>&#x000A;    <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">x</span>)}.<span class="ruby-identifier">join</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">DateTime</span>, <span class="ruby-constant">Time</span>&#x000A;    <span class="ruby-identifier">format_time</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Date</span>&#x000A;    <span class="ruby-identifier">format_date</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">BigDecimal</span>&#x000A;    <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-string">&#39;F&#39;</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Raw</span>&#x000A;    <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">h</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/serializer.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-keyword">case</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Tag</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-constant">SELF_CLOSING</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">type</span>)&#x000A;      <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(tag.attr)}/&gt;&quot;</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-node">&quot;#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Input</span>&#x000A;    <span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">format</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Array</span>&#x000A;    <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">x</span>)}.<span class="ruby-identifier">join</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">DateTime</span>, <span class="ruby-constant">Time</span>&#x000A;    <span class="ruby-identifier">format_time</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Date</span>&#x000A;    <span class="ruby-identifier">format_date</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">BigDecimal</span>&#x000A;    <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-string">&#39;F&#39;</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Raw</span>&#x000A;    <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">h</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-serialize_close'>
@@ -111,7 +147,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-serialize_close-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-serialize_close-source'><span class="ruby-comment"># File lib/forme/transformers/serializer.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-node">&quot;&lt;/#{tag.type}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-serialize_close-source'><span class="ruby-comment"># File lib/forme/transformers/serializer.rb, line 55</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-node">&quot;&lt;/#{tag.type}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-serialize_open'>
@@ -128,7 +164,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-serialize_open-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-serialize_open-source'><span class="ruby-comment"># File lib/forme/transformers/serializer.rb, line 51</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(tag.attr)}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-serialize_open-source'><span class="ruby-comment"># File lib/forme/transformers/serializer.rb, line 50</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(tag.attr)}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
@@ -138,7 +174,7 @@
       <div id='footer-push'></div>
     </div>
     <div id='footer'>
-      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
     </div>
   </body>
 </html>

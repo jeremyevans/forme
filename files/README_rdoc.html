@@ -5,21 +5,19 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
+      function popupCode(url) {
+        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+      }
+      
+      function toggleCode(id) {
+        var code = document.getElementById(id)
+      
+        code.style.display = code.style.display != 'block' ? 'block' : 'none'
+        return true
+      }
+      
+      // Make codeblocks hidden by default
+      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
     </script>
   </head>
   <body class='page'>
@@ -31,7 +29,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2016-08-09 10:41:34 -0700</span>
+          <span class='datetime'>2017-02-26 22:16:42 -0800</span>
         </div>
       </div>
       <div id='content'>
@@ -99,18 +97,16 @@
             </td></tr></tbody></table>
             
             <p>Technically, only the <code>Serializer</code> is necessary.  The
-            <code>input</code> and <code>tag</code> methods return <code>Input</code>
-            and <code>Tag</code> objects.  These objects both have <code>to_s</code>
-            defined to call the appropriate <code>Serializer</code> with themselves. 
-            The <code>Serializer</code> calls the appropriate <code>Formatter</code> if
-            it encounters an <code>Input</code> instance, and attempts to serialize the
-            output of that (which is usually a <code>Tag</code> instance).  It is up to
-            the <code>Formatter</code> to call the <code>Labeler</code> and/or
-            <code>ErrorHandler</code> (if necessary) and the <code>Wrapper</code>.</p>
-            
-            <p>There is also an <code>InputsWrapper</code> transformer, that is called by
-            <code>Forme::Form#inputs</code>.  It&#39;s used to wrap up a group of
-            related options (in a fieldset by default).</p>
+            <code>Forme::Form#input</code> and <code>Forme::Form#tag</code> methods
+            return <code>Input</code> and <code>Tag</code> objects.  These objects both
+            have <code>to_s</code> defined to call the appropriate
+            <code>Serializer</code> with themselves.  The <code>Serializer</code> calls
+            the appropriate <code>Formatter</code> if it encounters an
+            <code>Input</code> instance, and attempts to serialize the output of that
+            (which is usually a <code>Tag</code> instance).  It is up to the
+            <code>Formatter</code> to call the <code>Labeler</code>,
+            <code>ErrorHandler</code>, <code>Helper</code>,  and/or
+            <code>Wrapper</code>.</p>
             
             <p>The <code>Forme::Form</code> object takes the 6 transformers as options
             (:formatter, :labeler, :error_handler, :helper, :wrapper, :inputs_wrapper,
@@ -118,12 +114,34 @@
             <code>call</code> (so you can use +Proc+s) or be symbols registered with
             the library using <code>Forme.register_transformer</code>:</p>
             
-            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">register_transformer</span>(:<span class="ruby-identifier">wrapper</span>, :<span class="ruby-identifier">p</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">tag</span>(:<span class="ruby-identifier">p</span>, {}, <span class="ruby-identifier">t</span>)}</pre>
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">register_transformer</span>(:<span class="ruby-identifier">wrapper</span>, :<span class="ruby-identifier">p</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(:<span class="ruby-identifier">p</span>, {}, <span class="ruby-identifier">tag</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Most transformers are called with two arguments, <code>tag</code> and
+            <code>input</code>.  <code>tag</code> is a <code>Forme::Tag</code>
+            instance, and <code>input</code> is a <code>Forme::Input</code> instance. 
+            The <code>Formatter</code> and <code>Serializer</code> transformers are the
+            two exceptions, with <code>Formatter</code> being called with just an
+            <code>input</code>, and <code>Serializer</code> potentionally being called
+            with any object.  The <code>Serializer</code> will in general recursively
+            call itself with children of the argument given.</p>
+            
+            <p>There is also an <code>InputsWrapper</code> transformer, that is called by
+            <code>Forme::Form#inputs</code>.  It&#39;s used to wrap up a group of
+            related options (in a fieldset by default).  It takes <code>form</code>
+            (<code>Forme::Form</code> instance) and <code>input_opts</code>
+            (<code>Hash</code>) arguments.</p>
             
             <p>Most of the transformers can be overridden on a per instance basis by
-            passing the appopriate option to <code>input</code> or <code>inputs</code>:</p>
+            passing the appropriate option to <code>input</code> or
+            <code>inputs</code>:</p>
             
             <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(:<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">wrapper=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">p</span>)</pre>
+            
+            <p>Existing transformers can be easily extended (ie, to set the class
+            attribute), by creating your own transformer and then calling the existing
+            transformer.</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">register_transformer</span>(:<span class="ruby-identifier">labeler</span>, :<span class="ruby-identifier">explicit</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">label_attr</span>] <span class="ruby-operator">||=</span> { :<span class="ruby-keyword">class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;label&#39;</span> }&#x000A;  <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Labeler</span><span class="ruby-operator">::</span><span class="ruby-constant">Explicit</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <h1 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#top">&uarr;</a></span></h1>
             
@@ -348,7 +366,14 @@
             href="../classes/Sequel.html">Sequel</a> plugin (use
             <code>Sequel::Model.plugin :forme</code> to enable), that makes
             Sequel::Model instances support the <code>forme_config</code> and
-            <code>forme_input</code> methods and return customized inputs.</p>
+            <code>forme_input</code> methods and return customized inputs. An
+            additional instance method, <code>forme_namespace</code> can optionally be
+            defined to customize how model classnames are transformed into form classes
+            and input IDs and names. This can be useful if your Sequel::Model classes
+            are nested under a parent namespace. It falls back to the behaviour of
+            Sequel::Model#underscore.</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">module</span> <span class="ruby-constant">Admin</span>&#x000A;  <span class="ruby-keyword">class</span> <span class="ruby-constant">Albums</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>&#x000A;    <span class="ruby-keyword">def</span> <span class="ruby-identifier">forme_namespace</span>&#x000A;      <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">tr</span>(<span class="ruby-string">&#39;/&#39;</span>, <span class="ruby-string">&#39;_&#39;</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <h2 id="label-Basics">Basics<span><a href="#label-Basics">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -461,6 +486,9 @@
             <p>Automatically call <code>inputs</code> with the given values.  Using this,
             it is not required to pass a block to the method, though it will still work
             if you do.</p>
+            </td></tr><tr><td class='label'>:inputs_opts </td><td>
+            <p>When using the :grid option, this allows you to specify options to pass to
+            the table InputsWrapper.</p>
             </td></tr><tr><td class='label'>:legend </td><td>
             <p>Overrides the default :legend used (which is based on the association
             name).  You can also use a proc as the value, which will called with each
@@ -474,9 +502,8 @@
             <p>When using the :grid option, override the labels that would be created via
             the :inputs option.  If you are not providing an :inputs option or are
             using a block with additional inputs, you should specify this option.</p>
-            </td></tr><tr><td class='label'>:inputs_opts </td><td>
-            <p>When using the :grid option, this allows you to specify options to pass to
-            the table InputsWrapper.</p>
+            </td></tr><tr><td class='label'>:skip_primary_key </td><td>
+            <p>Skip adding a hidden primary key field for existing objects.</p>
             </td></tr></tbody></table>
             
             <h2 id="label-Handling+form+submissions">Handling form submissions<span><a href="#label-Handling+form+submissions">&para;</a> <a href="#top">&uarr;</a></span></h2>
@@ -565,7 +592,7 @@
             to a method, that you can call both in the initial display and when
             processing the input:</p>
             
-            <pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier">show_form</span>(<span class="ruby-identifier">album</span>)&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, :<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">copies_sold</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier">album_form</span>(<span class="ruby-identifier">album</span>)&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, :<span class="ruby-identifier">action=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> :<span class="ruby-identifier">copies_sold</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>Then when displaying the form:</p>
             
@@ -1116,7 +1143,7 @@
       <div id='footer-push'></div>
     </div>
     <div id='footer'>
-      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
     </div>
   </body>
 </html>
