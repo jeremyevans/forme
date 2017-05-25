@@ -54,12 +54,12 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should use datetime inputs for Time" do
-    @b.input(:created_at).to_s.must_match %r{<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album\[created_at\]" type="datetime-local" value="2011-06-05T00:00:00.000000"/></div>}
+    @b.input(:created_at).to_s.must_match %r{<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album\[created_at\]" type="datetime-local" value="2011-06-05T00:00:00.000"/></div>}
   end
 
   it "should use datetime inputs for DateTimes" do
     @ab.values[:created_at] = DateTime.new(2011, 6, 5)
-    @b.input(:created_at).to_s.must_equal '<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000000"/></div>'
+    @b.input(:created_at).to_s.must_equal '<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000"/></div>'
   end
 
   it "should include type as wrapper class" do
@@ -67,7 +67,7 @@ describe "Forme Sequel::Model BS3 forms" do
     f = Forme::Form.new(@ab, :config=>:bs3)
     f.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" type="text" value="b"/></div>'
     f.input(:release_date).to_s.must_equal '<div class="date form-group"><label for="album_release_date">Release date</label> <input class="form-control" id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></div>'
-    f.input(:created_at).to_s.must_equal '<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000000"/></div>'
+    f.input(:created_at).to_s.must_equal '<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000"/></div>'
   end
 
   it "should include required * in label if required" do

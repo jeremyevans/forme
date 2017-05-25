@@ -623,8 +623,8 @@ describe "Forme plain forms" do
 
   it "should format dates, times, and datetimes in ISO format" do
     @f.tag(:div, :foo=>Date.new(2011, 6, 5)).to_s.must_equal '<div foo="2011-06-05"></div>'
-    @f.tag(:div, :foo=>DateTime.new(2011, 6, 5, 4, 3, 2)).to_s.must_equal '<div foo="2011-06-05T04:03:02.000000"></div>'
-    @f.tag(:div, :foo=>Time.utc(2011, 6, 5, 4, 3, 2)).to_s.must_equal '<div foo="2011-06-05T04:03:02.000000"></div>'
+    @f.tag(:div, :foo=>DateTime.new(2011, 6, 5, 4, 3, 2)).to_s.must_equal '<div foo="2011-06-05T04:03:02.000"></div>'
+    @f.tag(:div, :foo=>Time.utc(2011, 6, 5, 4, 3, 2)).to_s.must_equal '<div foo="2011-06-05T04:03:02.000"></div>'
   end
 
   it "should format bigdecimals in standard notation" do

@@ -1,3 +1,7 @@
+=== master
+
+* Use milliseconds instead of microseconds for serializing Time and DateTime values, since that's what datetime-local inputs support (jeremyevans)
+
 === 1.6.0 (2017-05-03)
 
 * Use thead/tbody tags for table inputs_wrapper transformer and Sequel plugin subform :grid option (jeremyevans)
