@@ -50,6 +50,14 @@ t = DB[:tags].insert(:name=>'t')
 DB[:tags].insert(:name=>'u')
 [[b, s], [b, t], [c, t]].each{|k, v| DB[:albums_tags].insert(k, v)}
 
+# Allow loading of pg_array extension even when not on PostgreSQL
+def DB.add_conversion_proc(*)
+  super if defined?(super)
+end
+def DB.conversion_procs_updated(*)
+  super if defined?(super)
+end
+
 Sequel::Model.plugin :forme
 class Album < Sequel::Model
   plugin :association_pks
