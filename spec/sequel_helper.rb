@@ -57,6 +57,10 @@ end
 def DB.conversion_procs_updated(*)
   super if defined?(super)
 end
+def DB.conversion_procs
+  return super if defined?(super)
+  {}
+end
 
 Sequel::Model.plugin :forme
 class Album < Sequel::Model
