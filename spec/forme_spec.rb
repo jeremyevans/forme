@@ -413,6 +413,18 @@ describe "Forme plain forms" do
     @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
   end
 
+  it "should support :wrapper and :tag_wrapper for checkboxsets" do
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :tag_wrapper=>:div, :wrapper=>:li).to_s.must_equal '<li><div><label class="option"><input type="checkbox" value="1"/> a</label></div><div><label class="option"><input type="checkbox" value="2"/> b</label></div><div><label class="option"><input type="checkbox" value="3"/> c</label></div></li>'
+  end
+
+  it "should support :label for checkboxsets" do
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :label=>'foo').to_s.must_equal '<span class="label">foo</span><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
+  end
+
+  it "should support :tag_labeler for checkboxsets" do
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :tag_labeler=>:explicit).to_s.must_equal '<input type="checkbox" value="1"/><label class="option label-after">a</label><input type="checkbox" value="2"/><label class="option label-after">b</label><input type="checkbox" value="3"/><label class="option label-after">c</label>'
+  end
+
   it "should create set of checkbox buttons with options and values with hashes" do
     @f.input(:checkboxset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<label class="option"><input foo="1" type="checkbox" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="checkbox" value="2"/> b</label><label class="option"><input id="baz" type="checkbox" value="c"/> c</label>'
   end

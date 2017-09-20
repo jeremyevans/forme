@@ -229,6 +229,7 @@ module Forme
       end
 
       tag_wrapper = Forme.transformer(:tag_wrapper, @opts.delete(:tag_wrapper), @input.form_opts) || :default
+      tag_labeler = Forme.transformer(:labeler, @opts.delete(:tag_labeler), @input.form_opts) || :default
       wrapper = @opts.fetch(:wrapper){@opts[:wrapper] = @input.form_opts[:set_wrapper] || @input.form_opts[:wrapper]}
       wrapper = Forme.transformer(:wrapper, wrapper)
 
@@ -236,7 +237,7 @@ module Forme
         value ||= label
         label_attr = {:class=>:option}
         label_attr.merge!(@opts[:label_attr]) if @opts[:label_attr]
-        r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>label_attr, :wrapper=>tag_wrapper)
+        r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>label_attr, :wrapper=>tag_wrapper, :labeler=>tag_labeler)
         r_opts[:value] ||= value if value
         r_opts[:checked] ||= :checked if sel
         r_opts[:formatter] = @opts[:formatter] if @opts[:formatter]

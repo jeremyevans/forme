@@ -813,12 +813,16 @@ Creates a select tag, containing option tags specified by the :options option.  
 === :checkboxset
 
 Creates a set of checkbox inputs all using the same name.  Supports the same options
-as the select type, except that the :multiple option is assumed to be true.
+as the select type, except that the :multiple option is assumed to be true.  Also supports
+the following options:
+
+:tag_wrapper :: The wrapper transformer for individual tags in the set
+:tag_labeler :: The labeler transformer for individual tags in the set
 
 === :radioset
 
 Creates a set of radio buttons all using the same name.  Supports the same options
-as the select type.
+as the :checkboxset type.
 
 === :textarea
 
