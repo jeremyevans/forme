@@ -1,15 +1,13 @@
-require 'rubygems'
 require 'sequel'
 require 'logger'
-$: << ::File.expand_path('../../lib',  __FILE__)
+$:.unshift(::File.expand_path('../../lib',  __FILE__))
 
 module FormeDemo
-DEMO_MODE = !!ENV['DATABASE_URL']
-DB = Sequel.connect(ENV['FORME_DATABASE_URL'] || ENV['DATABASE_URL'] || 'sqlite:/', :identifier_mangling=>false)
-DB.extension(:freeze_datasets)
+DEMO_MODE = !!(ENV['FORME_DATABASE_URL'] || ENV['DATABASE_URL'])
+DB = Sequel.connect(ENV.delete('FORME_DATABASE_URL') || ENV.delete('DATABASE_URL') || 'sqlite:/')
 CREATE_TABLES_FILE = File.join(File.dirname(__FILE__), 'create_tables.rb')
 
-require  ::File.expand_path('../create_tables',  __FILE__)
+require_relative 'create_tables'
 
 Model = Class.new(Sequel::Model)
 Model.db = DB

@@ -1,16 +1,11 @@
-#!/usr/bin/env/ruby
-require 'rubygems'
 require 'tilt/erubi'
 require 'roda'
-require ::File.expand_path('../models',  __FILE__)
+require_relative 'models'
 require 'forme/bs3'
 
 class FormeDemo::App < Roda
   include FormeDemo
   opts[:root] = File.dirname(__FILE__)
-  opts[:unsupported_block_result] = :raise
-  opts[:unsupported_matcher] = :raise
-  opts[:verbatim_string_matcher] = true
 
   plugin :public
 
