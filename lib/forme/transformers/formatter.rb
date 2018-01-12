@@ -257,7 +257,7 @@ module Forme
       end
 
       if @opts[:set_error]
-       _add_set_error(tags)
+        _add_set_error(tags)
       end
 
       tags.unshift(set_label) if @opts[:set_label]
@@ -272,8 +272,11 @@ module Forme
     def _add_set_error(tags)
       if (last_input = tags.last) && last_input.is_a?(Input)
         last_input.opts[:error] = @opts[:set_error]
+        last_input.opts[:error_attr] = @opts[:error_attr] if @opts[:error_attr]
       else
-        tags << form._tag(:span, {:class=>'error_message'}, [@opts[:set_error]])
+        attr = @opts[:error_attr] || {}
+        Forme.attr_classes(attr, 'error_message')
+        tags << form._tag(:span, attr, [@opts[:set_error]])
       end
     end
 

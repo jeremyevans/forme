@@ -404,6 +404,10 @@ describe "Forme plain forms" do
     @f.input(:radioset, :options=>[1, 2, 3], :selected=>2, :label_attr=>{:foo=>:bar}).to_s.must_equal '<label class="option" foo="bar"><input type="radio" value="1"/> 1</label><label class="option" foo="bar"><input checked="checked" type="radio" value="2"/> 2</label><label class="option" foo="bar"><input type="radio" value="3"/> 3</label>'
   end
 
+  it "should create set of radio buttons with :error and :error_attr options" do
+    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2, :error=>'foo', :error_attr=>{'bar'=>'baz'}).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input class="error" type="radio" value="3"/> 3</label><span bar="baz" class="error_message">foo</span>'
+  end
+
   it "should create set of checkbox buttons" do
     @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
     @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
