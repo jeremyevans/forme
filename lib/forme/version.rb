@@ -2,7 +2,7 @@
 
 module Forme
   # Version constant, use <tt>Forme.version</tt> instead.
-  VERSION = '1.6.0'.freeze
+  VERSION = '1.7.0'.freeze
 
   # Returns the version as a frozen string (e.g. '0.1.0')
   def self.version

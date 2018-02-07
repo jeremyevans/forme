@@ -1,4 +1,4 @@
-=== master
+=== 1.7.0 (2018-02-07)
 
 * Have radioset and checkboxset inputs respect :error_attr option (jeremyevans)
 
