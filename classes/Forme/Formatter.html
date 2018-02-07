@@ -1,265 +1,262 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Forme::Formatter</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>class</span>
-          Forme::Formatter
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../files/lib/forme/bs3_rb.html">lib/forme/bs3.rb</a>
-          </li>
-          <li class='other'>
-            <a href="../../files/lib/forme/transformers/formatter_rb.html">lib/forme/transformers/formatter.rb</a>
-          </li>
-          <li>
-            <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
-          </li>
-        </ol>
-        <div class='parent'>
-          Superclass:
-          <strong>Object</strong>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <p>The default formatter used by the library.  Any custom formatters should
-            probably inherit from this formatter unless they have very special needs.</p>
-            
-            <p>Unlike most other transformers which are registered as instances and use a
-            functional style, this class is registered as a class due to the large
-            amount of state it uses.</p>
-            
-            <p>Registered as :default.</p>
-          </div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Class</h3>
-            <ol>
-              <li><a href="#method-c-call">call</a></li>
-            </ol>
-            <h3>Public Instance</h3>
-            <ol>
-              <li><a href="#attribute-i-attr">attr</a></li>
-              <li><a href="#method-i-call">call</a></li>
-              <li><a href="#attribute-i-form">form</a></li>
-              <li><a href="#attribute-i-input">input</a></li>
-              <li><a href="#attribute-i-opts">opts</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
-            <ol>
-              <li><a href="Formatter/Bs3ReadOnly.html">Forme::Formatter::Bs3ReadOnly</a></li>
-              <li><a href="Formatter/Disabled.html">Forme::Formatter::Disabled</a></li>
-              <li><a href="Formatter/ReadOnly.html">Forme::Formatter::ReadOnly</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>ATTRIBUTE_BOOLEAN_OPTIONS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>[:autofocus, :required, :disabled]</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>Options copied from the options hash into the attributes hash, where a true
-                      value in the options hash sets the attribute value to the same name as the
-                      key.</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>ATTRIBUTE_OPTIONS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>[:name, :id, :placeholder, :value, :style]</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>These options are copied directly from the options hash to the the
-                      attributes hash, so they don&#39;t need to be specified in the :attr
-                      option.  However, they can be specified in both places, and if so, the
-                      :attr option version takes precedence.</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>CHECKBOX_MAP</td>
-                    <td>=</td>
-                    <td class='context-item-value'>Hash.new(0)</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>Used to specify the value of the hidden input created for checkboxes. Since
-                      the default for an unspecified checkbox value is 1, the default is</p>
-                      <ol><li>
-                      <p>If the checkbox value is &#39;t&#39;, the hidden value is &#39;f&#39;,
-                      since that is</p>
-                      </li></ol>
-                      
-                      <p>common usage for boolean values.</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>DATE_SELECT_FORMAT</td>
-                    <td>=</td>
-                    <td class='context-item-value'>'%02i'.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>DEFAULT_DATETIME_ORDER</td>
-                    <td>=</td>
-                    <td class='context-item-value'>[:year, '-'.freeze, :month, '-'.freeze, :day, ' '.freeze, :hour, ':'.freeze, :minute, ':'.freeze, :second].freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>DEFAULT_DATE_ORDER</td>
-                    <td>=</td>
-                    <td class='context-item-value'>[:year, '-'.freeze, :month, '-'.freeze, :day].freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>DEFAULT_DATE_SELECT_OPS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{:year=>1900..2050, :month=>1..12, :day=>1..31, :hour=>0..23, :minute=>0..59, :second=>0..59}.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div id='attribute-list'>
-              <h2 class='section-bar'>Attributes</h2>
-              <div class='name-list'>
-                <table>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-attr'>attr</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The attributes to to set on the lower level <code>Tag</code> form returned.
-                      This are derived from the <code>input</code>&#39;s <code>opts</code>, but
-                      some processing is done on them.</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-form'>form</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The <code>Form</code> instance for the receiver, taken from the
-                      <code>input</code>.</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-input'>input</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The <code>Input</code> instance for the receiver.  This is what the
-                      receiver converts to the lower level <code>Tag</code> form (or an array of
-                      them).</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-opts'>opts</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The <code>opts</code> hash of the <code>input</code>.</p>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div id='methods'>
-              <h2>Public Class methods</h2>
-              <div class='method public-class' id='method-method-c-call'>
-                <a name='method-c-call'></a>
-                <div class='synopsis'>
-                  <span class='name'>call</span>
-                  <span class='arguments'>(input)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Create a new instance and call it</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-call-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-call-source'><span class="ruby-comment"># File lib/forme/transformers/formatter.rb, line 26</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">new</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-call'>
-                <a name='method-i-call'></a>
-                <div class='synopsis'>
-                  <span class='name'>call</span>
-                  <span class='arguments'>(input)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Transform the <code>input</code> into a <code>Tag</code> instance (or an
-                  array of them), wrapping it with the <code>form</code>&#39;s wrapper, and
-                  the form&#39;s <code>error_handler</code> and <code>labeler</code> if the
-                  <code>input</code> has an <code>:error</code> or <code>:label</code>
-                  options.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/formatter.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-ivar">@input</span> = <span class="ruby-identifier">input</span>&#x000A;  <span class="ruby-ivar">@form</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">form</span>&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>]&#x000A;  <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-identifier">normalize_options</span>&#x000A;&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">html</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:html</span>]&#x000A;    <span class="ruby-identifier">html</span> = <span class="ruby-identifier">html</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">html</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:call</span>)&#x000A;    <span class="ruby-identifier">form</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">html</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">convert_to_tag</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_label</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:label</span>]&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_error</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:error</span>]&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap</span>(<span class="ruby-value">:helper</span>, <span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:help</span>]&#x000A;  <span class="ruby-identifier">wrap_tag</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Forme::Formatter</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>class</span>
+Forme::Formatter
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../files/lib/forme/bs3_rb.html">lib/forme/bs3.rb</a>
+</li>
+<li class='other'>
+<a href="../../files/lib/forme/transformers/formatter_rb.html">lib/forme/transformers/formatter.rb</a>
+</li>
+<li>
+<a class='show' href='#' onclick='this.parentNode.parentNode.className += &quot; expanded&quot;; this.parentNode.removeChild(this); return false'>show all</a>
+</li>
+</ol>
+<div class='parent'>
+Superclass:
+<strong>Object</strong>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The default formatter used by the library.  Any custom formatters should
+probably inherit from this formatter unless they have very special needs.</p>
+
+<p>Unlike most other transformers which are registered as instances and use a
+functional style, this class is registered as a class due to the large
+amount of state it uses.</p>
+
+<p>Registered as :default.</p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-call">call</a></li>
+</ol>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#attribute-i-attr">attr</a></li>
+<li><a href="#method-i-call">call</a></li>
+<li><a href="#attribute-i-form">form</a></li>
+<li><a href="#attribute-i-input">input</a></li>
+<li><a href="#attribute-i-opts">opts</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="Formatter/Bs3ReadOnly.html">Forme::Formatter::Bs3ReadOnly</a></li>
+<li><a href="Formatter/Disabled.html">Forme::Formatter::Disabled</a></li>
+<li><a href="Formatter/ReadOnly.html">Forme::Formatter::ReadOnly</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='constants-list'>
+<h2>Constants</h2>
+<div class='name-list'>
+<table summary='Constants'>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>ATTRIBUTE_BOOLEAN_OPTIONS</td>
+<td>=</td>
+<td class='context-item-value'>[:autofocus, :required, :disabled]</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'>
+<p>Options copied from the options hash into the attributes hash, where a true
+value in the options hash sets the attribute value to the same name as the
+key.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>ATTRIBUTE_OPTIONS</td>
+<td>=</td>
+<td class='context-item-value'>[:name, :id, :placeholder, :value, :style]</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'>
+<p>These options are copied directly from the options hash to the the
+attributes hash, so they don&#39;t need to be specified in the :attr
+option.  However, they can be specified in both places, and if so, the
+:attr option version takes precedence.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>CHECKBOX_MAP</td>
+<td>=</td>
+<td class='context-item-value'>Hash.new(0)</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'>
+<p>Used to specify the value of the hidden input created for checkboxes. Since
+the default for an unspecified checkbox value is 1, the default is</p>
+<ol><li>
+<p>If the checkbox value is &#39;t&#39;, the hidden value is &#39;f&#39;,
+since that is</p>
+</li></ol>
+
+<p>common usage for boolean values.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>DATE_SELECT_FORMAT</td>
+<td>=</td>
+<td class='context-item-value'>'%02i'.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>DEFAULT_DATETIME_ORDER</td>
+<td>=</td>
+<td class='context-item-value'>[:year, '-'.freeze, :month, '-'.freeze, :day, ' '.freeze, :hour, ':'.freeze, :minute, ':'.freeze, :second].freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>DEFAULT_DATE_ORDER</td>
+<td>=</td>
+<td class='context-item-value'>[:year, '-'.freeze, :month, '-'.freeze, :day].freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>DEFAULT_DATE_SELECT_OPS</td>
+<td>=</td>
+<td class='context-item-value'>{:year=>1900..2050, :month=>1..12, :day=>1..31, :hour=>0..23, :minute=>0..59, :second=>0..59}.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+</table>
+</div>
+</div>
+<div id='attribute-list'>
+<h2 class='section-bar'>Attributes</h2>
+<div class='name-list'>
+<table>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>
+<a name='attribute-i-attr'>attr</a>
+</td>
+<td class='context-item-value'>[R]</td>
+<td class='context-item-desc'>
+<p>The attributes to to set on the lower level <code>Tag</code> form returned.
+This are derived from the <code>input</code>&#39;s <code>opts</code>, but
+some processing is done on them.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>
+<a name='attribute-i-form'>form</a>
+</td>
+<td class='context-item-value'>[R]</td>
+<td class='context-item-desc'>
+<p>The <code>Form</code> instance for the receiver, taken from the
+<code>input</code>.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>
+<a name='attribute-i-input'>input</a>
+</td>
+<td class='context-item-value'>[R]</td>
+<td class='context-item-desc'>
+<p>The <code>Input</code> instance for the receiver.  This is what the
+receiver converts to the lower level <code>Tag</code> form (or an array of
+them).</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>
+<a name='attribute-i-opts'>opts</a>
+</td>
+<td class='context-item-value'>[R]</td>
+<td class='context-item-desc'>
+<p>The <code>opts</code> hash of the <code>input</code>.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-call'>
+<a name='method-c-call'></a>
+<div class='synopsis'>
+<span class='name'>call</span>
+<span class='arguments'>(input)</span>
+
+</div>
+<div class='description'>
+
+<p>Create a new instance and call it</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-call-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-call-source'><span class="ruby-comment"># File lib/forme/transformers/formatter.rb, line 26</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">new</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-call'>
+<a name='method-i-call'></a>
+<div class='synopsis'>
+<span class='name'>call</span>
+<span class='arguments'>(input)</span>
+
+</div>
+<div class='description'>
+
+<p>Transform the <code>input</code> into a <code>Tag</code> instance (or an
+array of them), wrapping it with the <code>form</code>&#39;s wrapper, and
+the form&#39;s <code>error_handler</code> and <code>labeler</code> if the
+<code>input</code> has an <code>:error</code> or <code>:label</code>
+options.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/formatter.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-ivar">@input</span> = <span class="ruby-identifier">input</span>&#x000A;  <span class="ruby-ivar">@form</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">form</span>&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>]&#x000A;  <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-identifier">normalize_options</span>&#x000A;&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">html</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:html</span>]&#x000A;    <span class="ruby-identifier">html</span> = <span class="ruby-identifier">html</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">html</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:call</span>)&#x000A;    <span class="ruby-identifier">form</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">html</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">convert_to_tag</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_label</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:label</span>]&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_error</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:error</span>]&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap</span>(<span class="ruby-value">:helper</span>, <span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:help</span>]&#x000A;  <span class="ruby-identifier">wrap_tag</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

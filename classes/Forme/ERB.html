@@ -1,106 +1,109 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Forme::ERB</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Forme::ERB
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../files/lib/forme/erb_rb.html">lib/forme/erb.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'></div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Class</h3>
-            <ol>
-              <li><a href="#method-c-add_hidden_tag">add_hidden_tag</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
-            <ol>
-              <li><a href="ERB/Helper.html">Forme::ERB::Helper</a></li>
-              <li><a href="ERB/Rack.html">Forme::ERB::Rack</a></li>
-              <li><a href="ERB/Form.html">Forme::ERB::Form</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>HIDDEN_TAGS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>[]</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div id='methods'>
-              <h2>Public Class methods</h2>
-              <div class='method public-class' id='method-method-c-add_hidden_tag'>
-                <a name='method-c-add_hidden_tag'></a>
-                <div class='synopsis'>
-                  <span class='name'>add_hidden_tag</span>
-                  <span class='arguments'>(&block)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Add a hidden tag proc that will be used for all forms created via <a
-                  href="ERB/Helper.html#method-i-form">Forme::ERB::Helper#form</a>. The block
-                  is yielded the <a href="Tag.html">Forme::Tag</a> object for the form tag.
-                  The block should return either nil if hidden tag should be added, or a <a
-                  href="Tag.html">Forme::Tag</a> object (or an array of them), or a hash with
-                  keys specifying the name of the tags and the values specifying the values
-                  of the tags .</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-add_hidden_tag-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-add_hidden_tag-source'><span class="ruby-comment"># File lib/forme/erb.rb, line 12</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">add_hidden_tag</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-constant">HIDDEN_TAGS</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Forme::ERB</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Forme::ERB
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../files/lib/forme/erb_rb.html">lib/forme/erb.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-add_hidden_tag">add_hidden_tag</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="ERB/Helper.html">Forme::ERB::Helper</a></li>
+<li><a href="ERB/Rack.html">Forme::ERB::Rack</a></li>
+<li><a href="ERB/Form.html">Forme::ERB::Form</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='constants-list'>
+<h2>Constants</h2>
+<div class='name-list'>
+<table summary='Constants'>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>HIDDEN_TAGS</td>
+<td>=</td>
+<td class='context-item-value'>[]</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+</table>
+</div>
+</div>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-add_hidden_tag'>
+<a name='method-c-add_hidden_tag'></a>
+<div class='synopsis'>
+<span class='name'>add_hidden_tag</span>
+<span class='arguments'>(&block)</span>
+
+</div>
+<div class='description'>
+
+<p>Add a hidden tag proc that will be used for all forms created via <a
+href="ERB/Helper.html#method-i-form">Forme::ERB::Helper#form</a>. The block
+is yielded the <a href="Tag.html">Forme::Tag</a> object for the form tag.
+The block should return either nil if hidden tag should be added, or a <a
+href="Tag.html">Forme::Tag</a> object (or an array of them), or a hash with
+keys specifying the name of the tags and the values specifying the values
+of the tags .</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-add_hidden_tag-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-add_hidden_tag-source'><span class="ruby-comment"># File lib/forme/erb.rb, line 12</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">add_hidden_tag</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-constant">HIDDEN_TAGS</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

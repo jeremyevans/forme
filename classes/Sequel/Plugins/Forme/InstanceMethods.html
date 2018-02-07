@@ -1,155 +1,164 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Sequel::Plugins::Forme::InstanceMethods</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Sequel::Plugins::Forme::InstanceMethods
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../../files/lib/sequel/plugins/forme_rb.html">lib/sequel/plugins/forme.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'></div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Instance</h3>
-            <ol>
-              <li><a href="#method-i-forme_config">forme_config</a></li>
-              <li><a href="#method-i-forme_form_class">forme_form_class</a></li>
-              <li><a href="#method-i-forme_input">forme_input</a></li>
-              <li><a href="#method-i-forme_namespace">forme_namespace</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>FORM_CLASSES</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{::Forme::Form=>Form}</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>MUTEX</td>
-                    <td>=</td>
-                    <td class='context-item-value'>Mutex.new</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div id='methods'>
-              <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-forme_config'>
-                <a name='method-i-forme_config'></a>
-                <div class='synopsis'>
-                  <span class='name'>forme_config</span>
-                  <span class='arguments'>(form)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Configure the <code>form</code> with support for <code>Sequel::Model</code>
-                  specific code, such as support for nested attributes.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-forme_config-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-forme_config-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 464</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">forme_config</span>(<span class="ruby-identifier">form</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">namespaces</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">forme_namespace</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-forme_form_class'>
-                <a name='method-i-forme_form_class'></a>
-                <div class='synopsis'>
-                  <span class='name'>forme_form_class</span>
-                  <span class='arguments'>(base)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Return subclass of base form that includes the necessary <a
-                  href="../../../Sequel.html">Sequel</a> form methods.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-forme_form_class-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-forme_form_class-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 469</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">forme_form_class</span>(<span class="ruby-identifier">base</span>)&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">klass</span> = <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-constant">FORM_CLASSES</span>[<span class="ruby-identifier">base</span>]}&#x000A;    <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">base</span>)&#x000A;    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">SequelForm</span>)&#x000A;    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">ERBSequelForm</span>) <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">base</span> <span class="ruby-operator">==</span> <span class="ruby-operator">::</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>&#x000A;    <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-constant">FORM_CLASSES</span>[<span class="ruby-identifier">base</span>] = <span class="ruby-identifier">klass</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">klass</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-forme_input'>
-                <a name='method-i-forme_input'></a>
-                <div class='synopsis'>
-                  <span class='name'>forme_input</span>
-                  <span class='arguments'>(form, field, opts)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Return <code>Forme::Input</code> instance based on the given arguments.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-forme_input-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-forme_input-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 480</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">forme_input</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-constant">SequelInput</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>).<span class="ruby-identifier">input</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-forme_namespace'>
-                <a name='method-i-forme_namespace'></a>
-                <div class='synopsis'>
-                  <span class='name'>forme_namespace</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Use the underscored model name as the default namespace.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-forme_namespace-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-forme_namespace-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 485</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">forme_namespace</span>&#x000A;  <span class="ruby-identifier">model</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:underscore</span>, <span class="ruby-identifier">model</span>.<span class="ruby-identifier">name</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Sequel::Plugins::Forme::InstanceMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Sequel::Plugins::Forme::InstanceMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/sequel/plugins/forme_rb.html">lib/sequel/plugins/forme.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-forme_config">forme_config</a></li>
+<li><a href="#method-i-forme_form_class">forme_form_class</a></li>
+<li><a href="#method-i-forme_input">forme_input</a></li>
+<li><a href="#method-i-forme_namespace">forme_namespace</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='constants-list'>
+<h2>Constants</h2>
+<div class='name-list'>
+<table summary='Constants'>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>FORM_CLASSES</td>
+<td>=</td>
+<td class='context-item-value'>{::Forme::Form=>Form}</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>MUTEX</td>
+<td>=</td>
+<td class='context-item-value'>Mutex.new</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+</table>
+</div>
+</div>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-forme_config'>
+<a name='method-i-forme_config'></a>
+<div class='synopsis'>
+<span class='name'>forme_config</span>
+<span class='arguments'>(form)</span>
+
+</div>
+<div class='description'>
+
+<p>Configure the <code>form</code> with support for <code>Sequel::Model</code>
+specific code, such as support for nested attributes.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_config-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-forme_config-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 464</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_config</span>(<span class="ruby-identifier">form</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">namespaces</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">forme_namespace</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-forme_form_class'>
+<a name='method-i-forme_form_class'></a>
+<div class='synopsis'>
+<span class='name'>forme_form_class</span>
+<span class='arguments'>(base)</span>
+
+</div>
+<div class='description'>
+
+<p>Return subclass of base form that includes the necessary <a
+href="../../../Sequel.html">Sequel</a> form methods.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_form_class-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-forme_form_class-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 469</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_form_class</span>(<span class="ruby-identifier">base</span>)&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">klass</span> = <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-constant">FORM_CLASSES</span>[<span class="ruby-identifier">base</span>]}&#x000A;    <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">base</span>)&#x000A;    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">SequelForm</span>)&#x000A;    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">ERBSequelForm</span>) <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">base</span> <span class="ruby-operator">==</span> <span class="ruby-operator">::</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>&#x000A;    <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-constant">FORM_CLASSES</span>[<span class="ruby-identifier">base</span>] = <span class="ruby-identifier">klass</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">klass</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-forme_input'>
+<a name='method-i-forme_input'></a>
+<div class='synopsis'>
+<span class='name'>forme_input</span>
+<span class='arguments'>(form, field, opts)</span>
+
+</div>
+<div class='description'>
+
+<p>Return <code>Forme::Input</code> instance based on the given arguments.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_input-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-forme_input-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 480</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_input</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-constant">SequelInput</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>).<span class="ruby-identifier">input</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-forme_namespace'>
+<a name='method-i-forme_namespace'></a>
+<div class='synopsis'>
+<span class='name'>forme_namespace</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Use the underscored model name as the default namespace.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_namespace-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-forme_namespace-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 485</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_namespace</span>&#x000A;  <span class="ruby-identifier">model</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:underscore</span>, <span class="ruby-identifier">model</span>.<span class="ruby-identifier">name</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

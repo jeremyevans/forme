@@ -1,198 +1,202 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Forme::Input</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>class</span>
-          Forme::Input
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../files/lib/forme/input_rb.html">lib/forme/input.rb</a>
-          </li>
-        </ol>
-        <div class='parent'>
-          Superclass:
-          <strong>Object</strong>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <p>High level abstract tag form, transformed by formatters into the lower
-            level <code>Tag</code> form (or an array of them).</p>
-          </div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Class</h3>
-            <ol>
-              <li><a href="#method-c-new">new</a></li>
-            </ol>
-            <h3>Public Instance</h3>
-            <ol>
-              <li><a href="#attribute-i-form">form</a></li>
-              <li><a href="#attribute-i-form_opts">form_opts</a></li>
-              <li><a href="#method-i-format">format</a></li>
-              <li><a href="#attribute-i-opts">opts</a></li>
-              <li><a href="#method-i-tag">tag</a></li>
-              <li><a href="#method-i-to_s">to_s</a></li>
-              <li><a href="#attribute-i-type">type</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='section'>
-            <div id='attribute-list'>
-              <h2 class='section-bar'>Attributes</h2>
-              <div class='name-list'>
-                <table>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-form'>form</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The <code>Form</code> object related to the receiver.</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-form_opts'>form_opts</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The options hash in use by the form at the time of the Input&#39;s
-                      instantiation.</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-opts'>opts</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The options hash for the <a href="Input.html">Input</a>.</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-type'>type</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The type of input, should be a symbol (e.g. :submit, :text, :select).</p>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div id='methods'>
-              <h2>Public Class methods</h2>
-              <div class='method public-class' id='method-method-c-new'>
-                <a name='method-c-new'></a>
-                <div class='synopsis'>
-                  <span class='name'>new</span>
-                  <span class='arguments'>(form, type, opts={})</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Set the <code>form</code>, <code>type</code>, and <code>opts</code>.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/input.rb, line 19</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-identifier">defaults</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">input_defaults</span>&#x000A;  <span class="ruby-ivar">@opts</span> = (<span class="ruby-identifier">defaults</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">type</span>){<span class="ruby-identifier">defaults</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>]} <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-ivar">@form_opts</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-format'>
-                <a name='method-i-format'></a>
-                <div class='synopsis'>
-                  <span class='name'>format</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Transform the receiver into a lower level <code>Tag</code> form (or an
-                  array of them).</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-format-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-format-source'><span class="ruby-comment"># File lib/forme/input.rb, line 39</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">format</span>&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:formatter</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-tag'>
-                <a name='method-i-tag'></a>
-                <div class='synopsis'>
-                  <span class='name'>tag</span>
-                  <span class='arguments'>(*a, &block)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Create a new <code>Tag</code> instance with the given arguments and block
-                  related to the receiver&#39;s <code>form</code>.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-tag-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/input.rb, line 28</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-to_s'>
-                <a name='method-i-to_s'></a>
-                <div class='synopsis'>
-                  <span class='name'>to_s</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Return a string containing the serialized content of the receiver.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-to_s-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/forme/input.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">raw_output</span>(<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:serializer</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>))&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Forme::Input</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>class</span>
+Forme::Input
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../files/lib/forme/input_rb.html">lib/forme/input.rb</a>
+</li>
+</ol>
+<div class='parent'>
+Superclass:
+<strong>Object</strong>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>High level abstract tag form, transformed by formatters into the lower
+level <code>Tag</code> form (or an array of them).</p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-new">new</a></li>
+</ol>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#attribute-i-form">form</a></li>
+<li><a href="#attribute-i-form_opts">form_opts</a></li>
+<li><a href="#method-i-format">format</a></li>
+<li><a href="#attribute-i-opts">opts</a></li>
+<li><a href="#method-i-tag">tag</a></li>
+<li><a href="#method-i-to_s">to_s</a></li>
+<li><a href="#attribute-i-type">type</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='attribute-list'>
+<h2 class='section-bar'>Attributes</h2>
+<div class='name-list'>
+<table>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>
+<a name='attribute-i-form'>form</a>
+</td>
+<td class='context-item-value'>[R]</td>
+<td class='context-item-desc'>
+<p>The <code>Form</code> object related to the receiver.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>
+<a name='attribute-i-form_opts'>form_opts</a>
+</td>
+<td class='context-item-value'>[R]</td>
+<td class='context-item-desc'>
+<p>The options hash in use by the form at the time of the Input&#39;s
+instantiation.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>
+<a name='attribute-i-opts'>opts</a>
+</td>
+<td class='context-item-value'>[R]</td>
+<td class='context-item-desc'>
+<p>The options hash for the <a href="Input.html">Input</a>.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>
+<a name='attribute-i-type'>type</a>
+</td>
+<td class='context-item-value'>[R]</td>
+<td class='context-item-desc'>
+<p>The type of input, should be a symbol (e.g. :submit, :text, :select).</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-new'>
+<a name='method-c-new'></a>
+<div class='synopsis'>
+<span class='name'>new</span>
+<span class='arguments'>(form, type, opts={})</span>
+
+</div>
+<div class='description'>
+
+<p>Set the <code>form</code>, <code>type</code>, and <code>opts</code>.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/input.rb, line 19</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-identifier">defaults</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">input_defaults</span>&#x000A;  <span class="ruby-ivar">@opts</span> = (<span class="ruby-identifier">defaults</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">type</span>){<span class="ruby-identifier">defaults</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>]} <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-ivar">@form_opts</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-format'>
+<a name='method-i-format'></a>
+<div class='synopsis'>
+<span class='name'>format</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Transform the receiver into a lower level <code>Tag</code> form (or an
+array of them).</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-format-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-format-source'><span class="ruby-comment"># File lib/forme/input.rb, line 39</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">format</span>&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:formatter</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-tag'>
+<a name='method-i-tag'></a>
+<div class='synopsis'>
+<span class='name'>tag</span>
+<span class='arguments'>(*a, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Create a new <code>Tag</code> instance with the given arguments and block
+related to the receiver&#39;s <code>form</code>.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-tag-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/input.rb, line 28</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-to_s'>
+<a name='method-i-to_s'></a>
+<div class='synopsis'>
+<span class='name'>to_s</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Return a string containing the serialized content of the receiver.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-to_s-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/forme/input.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">raw_output</span>(<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:serializer</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>))&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>
