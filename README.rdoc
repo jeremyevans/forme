@@ -242,7 +242,7 @@ object responds to +forme_input+, calls forme_input with the argument and option
   f = Forme::Form.new(obj)
   f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo"/>'
 
-If the form has an associated object, and that object does not respond to +forme_iuput+,
+If the form has an associated object, and that object does not respond to +forme_input+,
 calls the method on the object (or uses [] if the object is a hash), and uses the result
 as the value:
 
