@@ -249,7 +249,7 @@ as the value:
   f = Forme::Form.new([:foo])
   f.input(:first) # '<input id="first" name="first" type="text" value="foo"/>'
   
-If the form does not have an assocaited object, uses the first argument as the input
+If the form does not have an associated object, uses the first argument as the input
 type:
 
   f = Forme::Form.new
