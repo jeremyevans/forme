@@ -43,6 +43,10 @@ describe "Forme Sequel::Model forms" do
     @b.input(:name, :type=>:textarea).to_s.must_equal '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
     @c.input(:name, :type=>:textarea).to_s.must_equal '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
   end
+
+  it "should not include labels for hidden inputs" do
+    @b.input(:name, :type=>:hidden).to_s.must_equal '<input id="album_name" name="album[name]" type="hidden" value="b"/>'
+  end
   
   it "should use number inputs for integers" do
     @b.input(:copies_sold).to_s.must_equal '<label>Copies sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="10"/></label>'
@@ -59,6 +63,10 @@ describe "Forme Sequel::Model forms" do
   it "should use datetime inputs for DateTimes" do
     @ab.values[:created_at] = DateTime.new(2011, 6, 5)
     @b.input(:created_at).to_s.must_equal '<label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000"/></label>'
+  end
+
+  it "should use file inputs without value" do
+    @b.input(:name, :type=>:file).to_s.must_equal '<label>Name: <input id="album_name" name="album[name]" type="file"/></label>'
   end
 
   it "should include type as wrapper class" do

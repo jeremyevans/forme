@@ -385,6 +385,13 @@ module Sequel # :nodoc:
           opts[:value] = nil
           standard_input(:file)
         end
+        alias input_file input_blob
+
+        # Use hidden inputs without labels.
+        def input_hidden(sch)
+          opts[:label] = nil
+          standard_input(:hidden)
+        end
 
         # Use the text type by default for other cases not handled.
         def input_string(sch)
