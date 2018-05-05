@@ -386,6 +386,12 @@ module Sequel # :nodoc:
           standard_input(:file)
         end
 
+        # Use hidden inputs without labels.
+        def input_hidden(sch)
+          opts[:label] = nil
+          standard_input(:hidden)
+        end
+
         # Use the text type by default for other cases not handled.
         def input_string(sch)
           if opts[:as] == :textarea

@@ -43,6 +43,10 @@ describe "Forme Sequel::Model forms" do
     @b.input(:name, :type=>:textarea).to_s.must_equal '<label>Name: <textarea id="album_name" name="album[name]">b</textarea></label>'
     @c.input(:name, :type=>:textarea).to_s.must_equal '<label>Name: <textarea id="album_name" name="album[name]">c</textarea></label>'
   end
+
+  it "should not include labels for hidden inputs" do
+    @b.input(:name, :type=>:hidden).to_s.must_equal '<input id="album_name" name="album[name]" type="hidden" value="b"/>'
+  end
   
   it "should use number inputs for integers" do
     @b.input(:copies_sold).to_s.must_equal '<label>Copies sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="10"/></label>'
