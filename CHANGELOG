@@ -1,3 +1,11 @@
+=== master
+
+* Omit labels for hidden inputs in Sequel plugin (janko-m) (#27)
+
+* Allow use of :type option for specifying input type when using an associated object that doesn't respond to forme_input (janko-m) (#25)
+
+* Ignore default values for Sequel inputs when type: :file option is used (janko-m) (#24)
+
 === 1.7.0 (2018-02-07)
 
 * Have radioset and checkboxset inputs respect :error_attr option (jeremyevans)

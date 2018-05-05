@@ -382,10 +382,14 @@ module Sequel # :nodoc:
 
         # Use a file type for blobs.
         def input_blob(sch)
+          input_file(sch)
+        end
+
+        # Ignore any default values for file inputs.
+        def input_file(sch)
           opts[:value] = nil
           standard_input(:file)
         end
-        alias input_file input_blob
 
         # Use hidden inputs without labels.
         def input_hidden(sch)
