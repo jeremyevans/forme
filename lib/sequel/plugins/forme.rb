@@ -385,6 +385,7 @@ module Sequel # :nodoc:
           opts[:value] = nil
           standard_input(:file)
         end
+        alias input_file input_blob
 
         # Use the text type by default for other cases not handled.
         def input_string(sch)
@@ -420,12 +421,6 @@ module Sequel # :nodoc:
         # Use datetime inputs for datetimes.
         def input_datetime(sch)
           standard_input(:datetime)
-        end
-
-        # Use file inputs without value.
-        def input_file(sch)
-          opts[:value] = nil unless opts.has_key?(:value)
-          standard_input(:file)
         end
 
         # Use a text input for all other types.
