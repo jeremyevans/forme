@@ -1082,6 +1082,18 @@ describe "Forme object forms" do
   it "should be able to turn off obj handling per input using :obj=>nil option" do
     Forme::Form.new([:foo]).input(:checkbox, :name=>"foo", :hidden_value=>"no", :obj=>nil).to_s.must_equal '<input name="foo" type="hidden" value="no"/><input name="foo" type="checkbox"/>'
   end
+
+  it "should be able to change input type" do
+    Forme::Form.new([:foo]).input(:first, :type=>:email).to_s.must_equal  '<input id="first" name="first" type="email" value="foo"/>'
+  end
+
+  it "should not have default value for file input" do
+    Forme::Form.new([:foo]).input(:first, :type=>:file).to_s.must_equal  '<input id="first" name="first" type="file"/>'
+  end
+
+  it "should be able to set value for file input" do
+    Forme::Form.new([:foo]).input(:first, :type=>:file, :value=>"foo").to_s.must_equal  '<input id="first" name="first" type="file" value="foo"/>'
+  end
 end
 
 describe "Forme.form DSL" do

@@ -138,14 +138,15 @@ module Forme
         else
           opts = opts.dup
           opts[:key] = field unless opts.has_key?(:key)
-          unless opts.has_key?(:value)
+          type = opts.delete(:type) || :text
+          unless opts.has_key?(:value) || type == :file
             opts[:value] = if obj.is_a?(Hash)
               obj[field]
             else
               obj.send(field)
             end
           end
-          _input(:text, opts)
+          _input(type, opts)
         end
       else
         _input(field, opts)

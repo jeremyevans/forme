@@ -244,11 +244,16 @@ object responds to +forme_input+, calls forme_input with the argument and option
 
 If the form has an associated object, and that object does not respond to +forme_input+,
 calls the method on the object (or uses [] if the object is a hash), and uses the result
-as the value:
+as the value for a text input:
 
   f = Forme::Form.new([:foo])
   f.input(:first) # '<input id="first" name="first" type="text" value="foo"/>'
-  
+
+You can change the type of the input via the +:type+ option:
+
+  f = Forme::Form.new(obj)
+  f.input(:field, :type=>:email) # '<input id="obj_field" name="obj[field]" type="email" value="foo"/>'
+
 If the form does not have an associated object, uses the first argument as the input
 type:
 
@@ -748,6 +753,7 @@ These options are supported by all of the input types:
 :name :: The name attribute to use
 :placeholder :: The placeholder attribute to use
 :required :: Set the required attribute if true
+:type :: Override the type of the input when the form has an associated object
 :value :: The value attribute to use for input tags, the content of the textarea
           for textarea tags, or the selected option(s) for select tags.
 :wrapper :: Set a custom wrapper, overriding the form's default
