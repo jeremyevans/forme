@@ -422,6 +422,12 @@ module Sequel # :nodoc:
           standard_input(:datetime)
         end
 
+        # Use file inputs without value.
+        def input_file(sch)
+          opts[:value] = nil unless opts.has_key?(:value)
+          standard_input(:file)
+        end
+
         # Use a text input for all other types.
         def input_other(sch)
           standard_input(:text)

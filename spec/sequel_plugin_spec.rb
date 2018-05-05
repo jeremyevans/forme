@@ -61,6 +61,14 @@ describe "Forme Sequel::Model forms" do
     @b.input(:created_at).to_s.must_equal '<label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000"/></label>'
   end
 
+  it "should use file inputs without value by default" do
+    @b.input(:name, :type=>:file).to_s.must_equal '<label>Name: <input id="album_name" name="album[name]" type="file"/></label>'
+  end
+
+  it "should support overriding file input value" do
+    @b.input(:name, :type=>:file, :value=>"foo").to_s.must_equal '<label>Name: <input id="album_name" name="album[name]" type="file" value="foo"/></label>'
+  end
+
   it "should include type as wrapper class" do
     @ab.values[:created_at] = DateTime.new(2011, 6, 5)
     f = Forme::Form.new(@ab, :wrapper=>:li)
