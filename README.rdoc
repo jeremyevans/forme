@@ -419,7 +419,7 @@ these additional options to the #input method:
 :true_label :: The value to use for the true label, 'Yes' by default.
 :true_value :: The value to use for the true input, 't' by default.
 
-== string
+=== string
 
 :as :: Can be set to :textarea to use a textarea input. You can use the usual attributes hash or a stylesheet to 
        control the size of the textarea.
