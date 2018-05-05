@@ -195,12 +195,12 @@ describe "Forme plain forms" do
     @f.input(:text, :data=>{:bar=>"foo"}).to_s.must_equal '<input data-bar="foo" type="text"/>'
   end
 
-  it "should replace underscores with hyphens in symbol :data keys" do
-    @f.input(:text, :data=>{:foo_bar=>"baz"}).to_s.must_equal '<input data-foo-bar="baz" type="text"/>'
-  end
-
-  it "should take string :data keys literally" do
+  it "should replace underscores with hyphens in symbol :data keys when :dasherize_data is set" do
+    @f.input(:text, :data=>{:foo_bar=>"baz"}).to_s.must_equal '<input data-foo_bar="baz" type="text"/>'
     @f.input(:text, :data=>{"foo_bar"=>"baz"}).to_s.must_equal '<input data-foo_bar="baz" type="text"/>'
+
+    @f.input(:text, :data=>{:foo_bar=>"baz"}, dasherize_data: true).to_s.must_equal '<input data-foo-bar="baz" type="text"/>'
+    @f.input(:text, :data=>{"foo_bar"=>"baz"}, dasherize_data: true).to_s.must_equal '<input data-foo_bar="baz" type="text"/>'
   end
 
   it "should not have standard options override the :attr option" do
