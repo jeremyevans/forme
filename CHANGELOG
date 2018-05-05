@@ -1,5 +1,7 @@
 === master
 
+* Support :dasherize_data input option to convert underscores to dashes for :data hash symbol keys (janko-m) (#29)
+
 * Omit labels for hidden inputs in Sequel plugin (janko-m) (#27)
 
 * Allow use of :type option for specifying input type when using an associated object that doesn't respond to forme_input (janko-m) (#25)
