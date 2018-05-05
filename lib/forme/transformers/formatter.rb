@@ -322,6 +322,7 @@ module Forme
 
       if data = opts[:data]
         data.each do |k, v|
+          k = k.to_s.tr("_", "-") if k.is_a?(Symbol)
           sym = :"data-#{k}"
           @attr[sym] = v unless @attr.has_key?(sym)
         end
