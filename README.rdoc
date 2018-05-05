@@ -751,6 +751,7 @@ These options are supported by all of the input types:
 :label :: Set a label, invoking the labeler
 :labeler :: Set a custom labeler, overriding the form's default
 :name :: The name attribute to use
+:obj :: Set the form object, overriding the form's default
 :placeholder :: The placeholder attribute to use
 :required :: Set the required attribute if true
 :type :: Override the type of the input when the form has an associated object
