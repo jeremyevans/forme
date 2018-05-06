@@ -790,7 +790,7 @@ creates multiple select options. Options:
           (:date default: <tt>[:year, '-', :month, '-', :day]</tt>)
           (:datetime default: <tt>[:year, '-', :month, '-', :day, ' ', :hour, ':', :minute, ':', :second]</tt>)
 :select_options :: The options to use for the select boxes.  Should be a hash keyed by the
-                  symbol used in order (e.g. <tt>{:year=>1970..2020}</tt>)
+                   symbol used in order (e.g. <tt>{:year=>1970..2020}</tt>)
 
 === :select
 
