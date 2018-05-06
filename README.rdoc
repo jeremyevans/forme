@@ -740,7 +740,7 @@ These options are supported by all of the input types:
 :class :: A class to use.  Unlike other options, this is combined with the
           classes set in the :attr hash.
 :dasherize_data :: Automatically replace underscores with hyphens for symbol
-                   data attribute names in the `:data` hash. Defaults to
+                   data attribute names in the +:data+ hash. Defaults to
                    +false+.
 :data :: A hash of data-* attributes for the resulting tag.  Keys in this hash
          will have attributes created with data- prepended to the attribute name.
