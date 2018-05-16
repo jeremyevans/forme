@@ -1,5 +1,9 @@
 === master
 
+* Add Roda forme_route_csrf plugin using route_csrf plugin for request-specific CSRF tokens (jeremyevans)
+
+* Add forme_default_request_method as a method to check for object forms, setting the default form method (jeremyevans)
+
 * Support :dasherize_data input option to convert underscores to dashes for :data hash symbol keys (janko-m) (#29)
 
 * Omit labels for hidden inputs in Sequel plugin (janko-m) (#27)

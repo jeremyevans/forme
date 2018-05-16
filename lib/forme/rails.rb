@@ -20,7 +20,7 @@ module Forme
 
     # Add CSRF token tag by default for POST forms
     add_hidden_tag do |tag|
-      if (form = tag.form) && (template = form.template) && template.protect_against_forgery? && tag.attr[:method].to_s.upcase == 'POST'
+      if (form = tag.form) && (template = form.template) && template.protect_against_forgery? && (tag.attr[:method] || tag.attr['method']).to_s.upcase == 'POST'
         {template.request_forgery_protection_token=>template.form_authenticity_token}
       end
     end

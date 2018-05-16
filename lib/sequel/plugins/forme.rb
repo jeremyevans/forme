@@ -21,7 +21,6 @@ module Sequel # :nodoc:
         # Use the post method by default for Sequel forms, unless
         # overridden with the :method attribute.
         def form(attr={}, &block)
-          attr = {:method=>:post}.merge(attr)
           attr[:class] = ::Forme.merge_classes(attr[:class], "forme", obj.forme_namespace)
           super(attr, &block)
         end
@@ -491,6 +490,10 @@ module Sequel # :nodoc:
         # Return <tt>Forme::Input</tt> instance based on the given arguments.
         def forme_input(form, field, opts)
           SequelInput.new(self, form, field, opts).input
+        end
+
+        def forme_default_request_method
+          'post'
         end
 
         # Use the underscored model name as the default namespace.

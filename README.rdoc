@@ -693,12 +693,45 @@ plugins:
 
 forme_i18n :: Handles translations for labels using i18n.
 
-= ERB Support
+= Roda Support
+
+Forme ships with two Roda plugins, forme and forme_route_csrf.  For new code, it is
+recommended to use forme_route_csrf, as that uses Roda's route_csrf plugin, which
+supports more secure request-specific CSRF tokens.  In both cases, usage in ERB
+templates is the same:
+
+  <% form(@obj, :action=>'/foo') do |f| %>
+    <%= f.input(:field) %>
+    <% f.tag(:fieldset) do %>
+      <%= f.input(:field_two) %>
+    <% end %>
+  <% end %>
+
+The forme_route_csrf plugin's +form+ method supports the following options
+in addition to the default +Forme.form+ options:
+
+:csrf :: Set to force whether a CSRF tag should be included.  By default, a CSRF
+         tag is included if the form's method is one of the request methods checked
+         by the Roda route_csrf plugin.
+:use_request_specific_token :: Set whether to force the use of a request specific
+                               CSRF token.  By default, uses a request specific
+                               CSRF token unless the Roda route_csrf plugin has been
+                               configured to support non-request specific tokens.
+
+The forme plugin does not require any csrf plugin, but will transparently use
+Rack::Csrf if it is available. If Rack::Csrf is available a CSRF tag if the form's
+method is +POST+, with no configuration ability.
+
+Both plugins also support the following option:
+
+:output :: The object that the form output should be injected into when
+           injecting output (+@_out_buf+ by default).
+
+= Sinatra Support
 
 Forme ships with a ERB extension that you can get by <tt>require "forme/erb"</tt> and using
-<tt>including Forme::ERB::Helper</tt>.  This is tested to support ERB templates in both the
-Sinatra and Roda web frameworks.  It allows you to use the following API in your erb
-templates:
+<tt>including Forme::ERB::Helper</tt>.  This is tested to support ERB templates in Sinatra.
+It allows you to use the following API in your erb templates:
 
   <% form(@obj, :action=>'/foo') do |f| %>
     <%= f.input(:field) %>
@@ -723,7 +756,7 @@ in your Rails forms:
     <% end %>
   <% end %>
 
-This has been tested on Rails 3.2-4.1, but should hopefully work on Rails 3.0+.
+This has been tested on Rails 3.2-5.2.
 
 = Input Types and Options
 

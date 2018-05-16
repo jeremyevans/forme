@@ -103,6 +103,9 @@ module Forme
 
     # Create a form tag with the given attributes.
     def form(attr={}, &block)
+      if obj && !attr[:method] && !attr['method'] && obj.respond_to?(:forme_default_request_method)
+        attr = attr.merge('method'=>obj.forme_default_request_method)
+      end
       tag(:form, attr, method(:hidden_form_tags), &block)
     end
 
