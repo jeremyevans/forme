@@ -3,7 +3,6 @@ spec = Gem::Specification.new do |s|
   s.name = 'forme'
   s.version = Forme.version.dup
   s.platform = Gem::Platform::RUBY
-  s.has_rdoc = true
   s.extra_rdoc_files = ["README.rdoc", "CHANGELOG", "MIT-LICENSE"]
   s.rdoc_options += ["--quiet", "--line-numbers", "--inline-source", '--title', 'Forme: HTML forms library', '--main', 'README.rdoc']
   s.summary = "HTML forms library"
