@@ -604,7 +604,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "should format bigdecimals in standard notation" do
-    @f.tag(:div, :foo=>BigDecimal.new('10000.010')).to_s.must_equal '<div foo="10000.01"></div>'
+    @f.tag(:div, :foo=>BigDecimal('10000.010')).to_s.must_equal '<div foo="10000.01"></div>'
   end
 
   it "inputs should accept a :wrapper option to use a custom wrapper" do
