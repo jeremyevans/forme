@@ -316,6 +316,7 @@ module Forme
       copy_options_to_attributes(ATTRIBUTE_OPTIONS)
       copy_boolean_options_to_attributes(ATTRIBUTE_BOOLEAN_OPTIONS)
       handle_key_option
+      handle_errors_option
 
       Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
       Forme.attr_classes(@attr, 'error') if @opts[:error]
@@ -344,6 +345,14 @@ module Forme
             id += "_#{suffix}"
           end
           @attr[:id] = id
+        end
+      end
+    end
+
+    def handle_errors_option
+      if key = @opts[:key]
+        if !@attr.has_key?(:error) && !@attr.has_key?("error") && (errors = @form.opts[:errors])
+          set_error_from_namespaced_errors(namespaces, errors, key)
         end
       end
     end
@@ -384,6 +393,16 @@ module Forme
       end
 
       @attr[:value] = values.fetch(key){values.fetch(key.to_s){return}}
+    end
+
+    def set_error_from_namespaced_errors(namespaces, errors, key)
+      namespaces.each do |ns|
+        e = errors[ns] || errors[ns.to_s]
+        return unless e
+        errors = e
+      end
+
+      @opts[:error] = errors.fetch(key){errors.fetch(key.to_s){return}}
     end
 
     # If :optgroups option is present, iterate over each of the groups

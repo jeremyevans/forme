@@ -890,6 +890,8 @@ the defaults for Inputs created via the form:
 
 :config :: The configuration to use, which automatically sets defaults
            for the transformers to use.
+:errors :: A Hash of errors from a previous form submission, used to set
+           default errors for inputs when the inputs use the :key option.
 :error_handler :: Sets the default error_handler for the form's inputs
 :helper :: Sets the default helper for the form's inputs
 :formatter :: Sets the default formatter for the form's inputs

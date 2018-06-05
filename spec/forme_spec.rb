@@ -114,6 +114,18 @@ describe "Forme plain forms" do
     end
   end
 
+  it "should consider form's :errors hash based on the :key option" do
+    @f.opts[:errors] = { 'foo' => 'must be present' }
+    @f.input(:text, :key=>"foo").to_s.must_equal "<input class=\"error\" id=\"foo\" name=\"foo\" type=\"text\"/><span class=\"error_message\">must be present</span>"
+  end
+
+  it "should consider form's :errors hash based on the :key option when using namespaces" do
+    @f.opts[:errors] = { 'bar' => { 'foo' => 'must be present' } }
+    @f.with_opts(:namespace=>['bar']) do
+      @f.input(:text, :key=>"foo").to_s.must_equal "<input class=\"error\" id=\"bar_foo\" name=\"bar[foo]\" type=\"text\"/><span class=\"error_message\">must be present</span>"
+    end
+  end
+
   it "should support a with_obj method that changes the object and namespace for the given block" do
     @f.with_obj([:a, :c], 'bar') do
       @f.input(:first).to_s.must_equal '<input id="bar_first" name="bar[first]" type="text" value="a"/>'
