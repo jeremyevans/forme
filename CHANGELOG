@@ -1,5 +1,7 @@
 === master
 
+* Add support for :errors form option for setting error information for multiple inputs, similar to :values form option (adam12) (#32)
+
 * Add Roda forme_route_csrf plugin using route_csrf plugin for request-specific CSRF tokens (jeremyevans)
 
 * Add forme_default_request_method as a method to check for object forms, setting the default form method (jeremyevans)
