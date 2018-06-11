@@ -30,12 +30,36 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2018-02-07 07:48:01 -0800</span>
+<span class='datetime'>2018-06-11 13:02:48 -0700</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h3 id="label-1.8.0+-282018-06-11-29">1.8.0 (2018-06-11)<span><a href="#label-1.8.0+-282018-06-11-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<ul><li>
+<p>Add support for :errors form option for setting error information for
+multiple inputs, similar to :values form option (adam12) (#32)</p>
+</li><li>
+<p>Add <a href="../classes/Roda.html">Roda</a> forme_route_csrf plugin using
+route_csrf plugin for request-specific CSRF tokens (jeremyevans)</p>
+</li><li>
+<p>Add forme_default_request_method as a method to check for object forms,
+setting the default form method (jeremyevans)</p>
+</li><li>
+<p>Support :dasherize_data input option to convert underscores to dashes for
+:data hash symbol keys (janko-m) (#29)</p>
+</li><li>
+<p>Omit labels for hidden inputs in <a
+href="../classes/Sequel.html">Sequel</a> plugin (janko-m) (#27)</p>
+</li><li>
+<p>Allow use of :type option for specifying input type when using an
+associated object that doesn&#39;t respond to forme_input (janko-m) (#25)</p>
+</li><li>
+<p>Ignore default values for <a href="../classes/Sequel.html">Sequel</a>
+inputs when type: :file option is used (janko-m) (#24)</p>
+</li></ul>
+
 <h3 id="label-1.7.0+-282018-02-07-29">1.7.0 (2018-02-07)<span><a href="#label-1.7.0+-282018-02-07-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
 <p>Have radioset and checkboxset inputs respect :error_attr option

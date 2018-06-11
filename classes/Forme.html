@@ -37,6 +37,9 @@ Forme
 <a href="../files/lib/forme/erb_rb.html">lib/forme/erb.rb</a>
 </li>
 <li class='other'>
+<a href="../files/lib/forme/erb_form_rb.html">lib/forme/erb_form.rb</a>
+</li>
+<li class='other'>
 <a href="../files/lib/forme/form_rb.html">lib/forme/form.rb</a>
 </li>
 <li class='other'>
@@ -143,12 +146,43 @@ a <code>Form</code> and have all of the transformers set from that.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
+<td class='context-item-name'>MAJOR</td>
+<td>=</td>
+<td class='context-item-value'>1</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'>
+<p>The major version of <a href="Forme.html">Forme</a>, updated only for major
+changes that are likely to require modification to apps using <a
+href="Forme.html">Forme</a>.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>MINOR</td>
+<td>=</td>
+<td class='context-item-value'>8</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'>
+<p>The minor version of <a href="Forme.html">Forme</a>, updated for new
+feature releases of <a href="Forme.html">Forme</a>.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
 <td class='context-item-name'>SHARED_WRAPPERS</td>
 <td>=</td>
 <td class='context-item-value'>[:tr, :table, :ol, :fieldset_ol]</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
 <p>Transformer symbols shared by wrapper and inputs_wrapper</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>TINY</td>
+<td>=</td>
+<td class='context-item-value'>0</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'>
+<p>The patch version of <a href="Forme.html">Forme</a>, updated only for bug
+fixes from the last feature release.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -175,10 +209,20 @@ or objects that respond to <code>call</code>.</p>
 <tr class='top-aligned-row context-row'>
 <td class='context-item-name'>VERSION</td>
 <td>=</td>
-<td class='context-item-value'>'1.7.0'.freeze</td>
+<td class='context-item-value'>"#{MAJOR}.#{MINOR}.#{TINY}".freeze</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
 <p>Version constant, use <code>Forme.version</code> instead.</p>
+</td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>VERSION_NUMBER</td>
+<td>=</td>
+<td class='context-item-value'>MAJOR*10000 + MINOR*100 + TINY</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'>
+<p>The full version of <a href="Forme.html">Forme</a> as a number (1.8.0 =&gt;
+10800)</p>
 </td>
 </tr>
 </table>
@@ -413,7 +457,7 @@ raise an <code>Error</code> if not.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-version-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-version-source'><span class="ruby-comment"># File lib/forme/version.rb, line 7</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">version</span>&#x000A;  <span class="ruby-constant">VERSION</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-version-source'><span class="ruby-comment"># File lib/forme/version.rb, line 21</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">version</span>&#x000A;  <span class="ruby-constant">VERSION</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

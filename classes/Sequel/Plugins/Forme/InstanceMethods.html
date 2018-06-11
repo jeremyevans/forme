@@ -40,6 +40,7 @@ Sequel::Plugins::Forme::InstanceMethods
 <h3>Public Instance</h3>
 <ol>
 <li><a href="#method-i-forme_config">forme_config</a></li>
+<li><a href="#method-i-forme_default_request_method">forme_default_request_method</a></li>
 <li><a href="#method-i-forme_form_class">forme_form_class</a></li>
 <li><a href="#method-i-forme_input">forme_input</a></li>
 <li><a href="#method-i-forme_namespace">forme_namespace</a></li>
@@ -88,7 +89,24 @@ specific code, such as support for nested attributes.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_config-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme_config-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 464</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_config</span>(<span class="ruby-identifier">form</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">namespaces</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">forme_namespace</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme_config-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 474</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_config</span>(<span class="ruby-identifier">form</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">namespaces</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">forme_namespace</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-forme_default_request_method'>
+<a name='method-i-forme_default_request_method'></a>
+<div class='synopsis'>
+<span class='name'>forme_default_request_method</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_default_request_method-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-forme_default_request_method-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 494</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_default_request_method</span>&#x000A;  <span class="ruby-string">&#39;post&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-forme_form_class'>
@@ -108,7 +126,7 @@ href="../../../Sequel.html">Sequel</a> form methods.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_form_class-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme_form_class-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 469</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_form_class</span>(<span class="ruby-identifier">base</span>)&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">klass</span> = <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-constant">FORM_CLASSES</span>[<span class="ruby-identifier">base</span>]}&#x000A;    <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">base</span>)&#x000A;    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">SequelForm</span>)&#x000A;    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">ERBSequelForm</span>) <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">base</span> <span class="ruby-operator">==</span> <span class="ruby-operator">::</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>&#x000A;    <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-constant">FORM_CLASSES</span>[<span class="ruby-identifier">base</span>] = <span class="ruby-identifier">klass</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">klass</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme_form_class-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 479</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_form_class</span>(<span class="ruby-identifier">base</span>)&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">klass</span> = <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-constant">FORM_CLASSES</span>[<span class="ruby-identifier">base</span>]}&#x000A;    <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">base</span>)&#x000A;    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">SequelForm</span>)&#x000A;    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">ERBSequelForm</span>) <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">base</span> <span class="ruby-operator">==</span> <span class="ruby-operator">::</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>&#x000A;    <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-constant">FORM_CLASSES</span>[<span class="ruby-identifier">base</span>] = <span class="ruby-identifier">klass</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">klass</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-forme_input'>
@@ -127,7 +145,7 @@ href="../../../Sequel.html">Sequel</a> form methods.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_input-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme_input-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 480</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_input</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-constant">SequelInput</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>).<span class="ruby-identifier">input</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme_input-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 490</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_input</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-constant">SequelInput</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>).<span class="ruby-identifier">input</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-forme_namespace'>
@@ -146,7 +164,7 @@ href="../../../Sequel.html">Sequel</a> form methods.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_namespace-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme_namespace-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 485</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_namespace</span>&#x000A;  <span class="ruby-identifier">model</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:underscore</span>, <span class="ruby-identifier">model</span>.<span class="ruby-identifier">name</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme_namespace-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 499</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_namespace</span>&#x000A;  <span class="ruby-identifier">model</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:underscore</span>, <span class="ruby-identifier">model</span>.<span class="ruby-identifier">name</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

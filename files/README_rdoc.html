@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2017-09-20 12:53:44 -0700</span>
+<span class='datetime'>2018-06-05 15:25:35 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -269,13 +269,18 @@ the argument and options:</p>
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:field</span>) <span class="ruby-comment"># &#39;&lt;input id=&quot;obj_field&quot; name=&quot;obj[field]&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</span></pre>
 
 <p>If the form has an associated object, and that object does not respond to
-<code>forme_iuput</code>, calls the method on the object (or uses [] if the
-object is a hash), and uses the result as the value:</p>
+<code>forme_input</code>, calls the method on the object (or uses [] if the
+object is a hash), and uses the result as the value for a text input:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>([<span class="ruby-value">:foo</span>])&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:first</span>) <span class="ruby-comment"># &#39;&lt;input id=&quot;first&quot; name=&quot;first&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</span></pre>
 
-<p>If the form does not have an assocaited object, uses the first argument as
-the input type:</p>
+<p>If the object does not respond to <code>forme_input</code>, you can change
+the type of the input via the <code>:type</code> option:</p>
+
+<pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:field</span>, <span class="ruby-value">:type</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:email</span>) <span class="ruby-comment"># &#39;&lt;input id=&quot;obj_field&quot; name=&quot;obj[field]&quot; type=&quot;email&quot; value=&quot;foo&quot;/&gt;&#39;</span></pre>
+
+<p>If the form does not have an associated object, the first argument is used
+as the input type:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:text</span>) <span class="ruby-comment"># &#39;&lt;input type=&quot;text&quot; /&gt;&#39;</span></pre>
 
@@ -418,7 +423,7 @@ otherwise.</p>
 <p>The value to use for the true input, &#39;t&#39; by default.</p>
 </td></tr></tbody></table>
 
-<h2 id="label-string">string<span><a href="#label-string">&para;</a> <a href="#top">&uarr;</a></span></h2>
+<h3 id="label-string">string<span><a href="#label-string">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:as </td><td>
 <p>Can be set to :textarea to use a textarea input. You can use the usual
 attributes hash or a stylesheet to  control the size of the textarea.</p>
@@ -645,13 +650,46 @@ additional <a href="../classes/Sequel.html">Sequel</a> plugins:</p>
 <p>Handles translations for labels using i18n.</p>
 </td></tr></tbody></table>
 
-<h1 id="label-ERB+Support">ERB Support<span><a href="#label-ERB+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-Roda+Support"><a href="../classes/Roda.html">Roda</a> Support<span><a href="#label-Roda+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p><a href="../classes/Forme.html">Forme</a> ships with two <a
+href="../classes/Roda.html">Roda</a> plugins, forme and forme_route_csrf. 
+For new code, it is recommended to use forme_route_csrf, as that uses
+Roda&#39;s route_csrf plugin, which supports more secure request-specific
+CSRF tokens.  In both cases, usage in ERB templates is the same:</p>
+
+<pre>&lt;% form(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;% f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
+
+<p>The forme_route_csrf plugin&#39;s <code>form</code> method supports the
+following options in addition to the default <code>Forme.form</code>
+options:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:csrf </td><td>
+<p>Set to force whether a CSRF tag should be included.  By default, a CSRF tag
+is included if the form&#39;s method is one of the request methods checked
+by the <a href="../classes/Roda.html">Roda</a> route_csrf plugin.</p>
+</td></tr><tr><td class='label'>:use_request_specific_token </td><td>
+<p>Set whether to force the use of a request specific CSRF token.  By default,
+uses a request specific CSRF token unless the <a
+href="../classes/Roda.html">Roda</a> route_csrf plugin has been configured
+to support non-request specific tokens.</p>
+</td></tr></tbody></table>
+
+<p>The forme plugin does not require any csrf plugin, but will transparently
+use Rack::Csrf if it is available. If Rack::Csrf is available a CSRF tag if
+the form&#39;s method is <code>POST</code>, with no configuration ability.</p>
+
+<p>Both plugins also support the following option:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:output </td><td>
+<p>The object that the form output should be injected into when injecting
+output (+@_out_buf+ by default).</p>
+</td></tr></tbody></table>
+
+<h1 id="label-Sinatra+Support">Sinatra Support<span><a href="#label-Sinatra+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
 <p><a href="../classes/Forme.html">Forme</a> ships with a ERB extension that
 you can get by <code>require &quot;forme/erb&quot;</code> and using
 <code>including Forme::ERB::Helper</code>.  This is tested to support ERB
-templates in both the Sinatra and <a href="../classes/Roda.html">Roda</a>
-web frameworks.  It allows you to use the following API in your erb
+templates in Sinatra. It allows you to use the following API in your erb
 templates:</p>
 
 <pre>&lt;% form(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;% f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
@@ -669,8 +707,7 @@ use the following API in your Rails forms:</p>
 
 <pre>&lt;%= forme(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;%= f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
 
-<p>This has been tested on Rails 3.2-4.1, but should hopefully work on Rails
-3.0+.</p>
+<p>This has been tested on Rails 3.2-5.2.</p>
 
 <h1 id="label-Input+Types+and+Options">Input Types and Options<span><a href="#label-Input+Types+and+Options">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
@@ -690,6 +727,9 @@ options that set attributes.</p>
 </td></tr><tr><td class='label'>:class </td><td>
 <p>A class to use.  Unlike other options, this is combined with the classes
 set in the :attr hash.</p>
+</td></tr><tr><td class='label'>:dasherize_data </td><td>
+<p>Automatically replace underscores with hyphens for symbol data attribute
+names in the <code>:data</code> hash. Defaults to <code>false</code>.</p>
 </td></tr><tr><td class='label'>:data </td><td>
 <p>A hash of data-* attributes for the resulting tag.  Keys in this hash will
 have attributes created with data- prepended to the attribute name.</p>
@@ -712,10 +752,15 @@ namespace for the form.</p>
 <p>Set a custom labeler, overriding the form&#39;s default</p>
 </td></tr><tr><td class='label'>:name </td><td>
 <p>The name attribute to use</p>
+</td></tr><tr><td class='label'>:obj </td><td>
+<p>Set the form object, overriding the form&#39;s default</p>
 </td></tr><tr><td class='label'>:placeholder </td><td>
 <p>The placeholder attribute to use</p>
 </td></tr><tr><td class='label'>:required </td><td>
 <p>Set the required attribute if true</p>
+</td></tr><tr><td class='label'>:type </td><td>
+<p>Override the type of the input when the form has an associated object but
+the object does not respond to <code>forme_input</code></p>
 </td></tr><tr><td class='label'>:value </td><td>
 <p>The value attribute to use for input tags, the content of the textarea for
 textarea tags, or the selected option(s) for select tags.</p>
@@ -756,10 +801,9 @@ symbol for the select field and string to use a string (:date default:
 <code>[:year, &#39;-&#39;, :month, &#39;-&#39;, :day]</code>) (:datetime
 default: <code>[:year, &#39;-&#39;, :month, &#39;-&#39;, :day, &#39; &#39;,&#x000A;:hour, &#39;:&#39;, :minute, &#39;:&#39;, :second]</code>)</p>
 </td></tr><tr><td class='label'>:select_options </td><td>
-<p>The options to use for the select boxes.  Should be a hash keyed by the</p>
+<p>The options to use for the select boxes.  Should be a hash keyed by the
+symbol used in order (e.g. <code>{:year=&gt;1970..2020}</code>)</p>
 </td></tr></tbody></table>
-
-<pre>symbol used in order (e.g. &lt;tt&gt;{:year=&gt;1970..2020}&lt;/tt&gt;)</pre>
 
 <h3 id="label-3Aselect">:select<span><a href="#label-3Aselect">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
@@ -847,6 +891,9 @@ set the defaults for Inputs created via the form:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:config </td><td>
 <p>The configuration to use, which automatically sets defaults for the
 transformers to use.</p>
+</td></tr><tr><td class='label'>:errors </td><td>
+<p>A Hash of errors from a previous form submission, used to set default
+errors for inputs when the inputs use the :key option.</p>
 </td></tr><tr><td class='label'>:error_handler </td><td>
 <p>Sets the default error_handler for the form&#39;s inputs</p>
 </td></tr><tr><td class='label'>:helper </td><td>
