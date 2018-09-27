@@ -186,9 +186,9 @@ module Forme
       copy_options_to_attributes([:size])
 
       os = process_select_optgroups(:_format_select_optgroup) do |label, value, sel, attrs|
-        if value || sel
-         attrs = attrs.dup
-          attrs[:value] = value if value
+        if !value.nil? || sel
+          attrs = attrs.dup
+          attrs[:value] = value unless value.nil?
           attrs[:selected] = :selected if sel
         end
         tag(:option, attrs, [label])
@@ -234,11 +234,13 @@ module Forme
       wrapper = Forme.transformer(:wrapper, wrapper)
 
       tags = process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
-        value ||= label
+        value = label if value.nil?
         label_attr = {:class=>:option}
         label_attr.merge!(@opts[:label_attr]) if @opts[:label_attr]
         r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>label_attr, :wrapper=>tag_wrapper, :labeler=>tag_labeler)
-        r_opts[:value] ||= value if value
+        if r_opts[:value].nil?
+          r_opts[:value] = value unless value.nil?
+        end
         r_opts[:checked] ||= :checked if sel
         r_opts[:formatter] = @opts[:formatter] if @opts[:formatter]
 
@@ -462,7 +464,7 @@ module Forme
             text = x
           end
 
-          yield [text, val, val ? cmp.call(val) : cmp.call(text), attr]
+          yield [text, val, !val.nil? ? cmp.call(val) : cmp.call(text), attr]
         end
       end
     end

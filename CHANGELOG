@@ -1,3 +1,7 @@
+=== master
+
+* Correctly handle :value=>false option and false option values in select, radioset, and checkboxset inputs (jeremyevans)
+
 === 1.8.0 (2018-06-11)
 
 * Add support for :errors form option for setting error information for multiple inputs, similar to :values form option (adam12) (#32)

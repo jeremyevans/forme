@@ -338,6 +338,10 @@ describe "Forme plain forms" do
     @f.input(:select, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<select><option value="1">a</option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
   end
 
+  it "should have select work with false values" do
+    @f.input(:select, :options=>[[1, true], [2, false]], :value=>false).to_s.must_equal '<select><option value="true">1</option><option selected="selected" value="false">2</option></select>'
+  end
+
   it "should create select tag with option groups" do
     @f.input(:select, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).to_s.must_equal '<select><optgroup label="d"><option value="1">a</option><option selected="selected" value="2">b</option></optgroup><optgroup label="e"><option value="3">c</option></optgroup></select>'
   end
@@ -391,6 +395,10 @@ describe "Forme plain forms" do
     @f.input(:radioset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'
   end
 
+  it "should have radioset work with false values" do
+    @f.input(:radioset, :options=>[[1, true], [2, false]], :value=>false).to_s.must_equal '<label class="option"><input type="radio" value="true"/> 1</label><label class="option"><input checked="checked" type="radio" value="false"/> 2</label>'
+  end
+
   it "should create set of radio buttons with options and values" do
     @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<label class="option"><input type="radio" value="1"/> a</label><label class="option"><input checked="checked" type="radio" value="2"/> b</label><label class="option"><input type="radio" value="3"/> c</label>'
   end
@@ -435,6 +443,10 @@ describe "Forme plain forms" do
 
   it "should create set of checkbox buttons with options and values" do
     @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
+  end
+
+  it "should have radioset work with false values" do
+    @f.input(:checkboxset, :options=>[[1, true], [2, false]], :value=>false).to_s.must_equal '<label class="option"><input type="checkbox" value="true"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="false"/> 2</label>'
   end
 
   it "should support :wrapper and :tag_wrapper for checkboxsets" do
