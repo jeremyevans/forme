@@ -198,12 +198,12 @@ class FormeDemo::App < Roda
     if ENV['FORME_DEMO_POST']
       r.post do
         r.is 'album' do
-          Album.last.update(r['album'])
+          Album.last.update(r['forme_demo/album'])
           r.redirect r.referrer
         end
 
         r.is 'artist' do
-          Artist.last.update(r['artist'])
+          Artist.last.update(r['forme_demo/artist'])
           r.redirect r.referrer
         end
       end
