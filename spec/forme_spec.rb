@@ -700,7 +700,7 @@ describe "Forme plain forms" do
   end
 
   it "inputs should accept a :formatter option to use a custom formatter" do
-    @f.input(:text, :formatter=>:readonly, :value=>'1', :label=>'Foo').to_s.must_equal '<label>Foo: <span>1</span></label>'
+    @f.input(:text, :formatter=>:readonly, :value=>'1', :label=>'Foo').to_s.must_equal '<label>Foo: <span class="readonly-text">1</span></label>'
     @f.input(:text, :formatter=>:default, :value=>'1', :label=>'Foo').to_s.must_equal '<label>Foo: <input type="text" value="1"/></label>'
   end
 
@@ -845,9 +845,9 @@ describe "Forme built-in custom" do
     Forme::Form.new(:formatter=>:disabled).input(:textarea, :disabled=>false).to_s.must_equal '<textarea></textarea>'
   end
 
-  it "formatter: readonly uses spans for most input fields and disables radio/checkbox fields" do
+  it "formatter: readonly uses spans for text input fields and disables radio/checkbox fields" do
     Forme::Form.new(:formatter=>:readonly).input(:textarea, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label>Foo: <span>Bar</span></label>"
-    Forme::Form.new(:formatter=>:readonly).input(:text, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label>Foo: <span>Bar</span></label>"
+    Forme::Form.new(:formatter=>:readonly).input(:text, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label>Foo: <span class=\"readonly-text\">Bar</span></label>"
     Forme::Form.new(:formatter=>:readonly).input(:radio, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label><input disabled=\"disabled\" type=\"radio\" value=\"Bar\"/> Foo</label>"
     Forme::Form.new(:formatter=>:readonly).input(:radio, :label=>"Foo", :value=>"Bar", :checked=>true).to_s.must_equal "<label><input checked=\"checked\" disabled=\"disabled\" type=\"radio\" value=\"Bar\"/> Foo</label>"
     Forme::Form.new(:formatter=>:readonly).input(:checkbox, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label><input disabled=\"disabled\" type=\"checkbox\" value=\"Bar\"/> Foo</label>"

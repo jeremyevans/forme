@@ -628,7 +628,7 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "inputs should accept a :formatter option to use a custom formatter" do
-    @f.input(:text, :formatter=>:readonly, :value=>'1', :label=>'Foo').to_s.must_equal '<div class="form-group"><label>Foo</label> <span>1</span></div>'
+    @f.input(:text, :formatter=>:readonly, :value=>'1', :label=>'Foo').to_s.must_equal '<div class="form-group"><label>Foo</label> <span class="readonly-text">1</span></div>'
     @f.input(:text, :formatter=>:default, :value=>'1', :label=>'Foo').to_s.must_equal  '<div class="form-group"><label>Foo</label> <input class="form-control" type="text" value="1"/></div>'
     @f.input(:text, :formatter=>:bs3_readonly, :value=>'1', :label=>'Foo').to_s.must_equal '<div class="form-group"><label>Foo</label> <input class="form-control" readonly="readonly" type="text" value="1"/></div>'
   end

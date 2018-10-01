@@ -1,5 +1,7 @@
 === master
 
+* Make readonly text input spans use the readonly-text class for easier styling (jeremyevans)
+
 * Add Forme.h for HTML escaping, using cgi/escape if available for faster escaping (jeremyevans)
 
 * Correctly handle :value=>false option and false option values in select, radioset, and checkboxset inputs (jeremyevans)
