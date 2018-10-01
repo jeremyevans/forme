@@ -1,5 +1,7 @@
 === master
 
+* Use div with nested p tags instead of spans for readonly textarea inputs (jeremyevans)
+
 * Make readonly text input spans use the readonly-text class for easier styling (jeremyevans)
 
 * Add Forme.h for HTML escaping, using cgi/escape if available for faster escaping (jeremyevans)

@@ -562,9 +562,20 @@ module Forme
       ''
     end
 
-    # Use a span with text instead of a text area.
+    # Format the text as separate paragraphs.
     def format_textarea
-      tag(:span, {}, @attr[:value])
+      text = @attr[:value]
+      case text
+      when nil, Forme::Raw
+        # nothing
+      when String
+        text = text.gsub(/\A[\r\n]+|[\r\n]+\z/, '').split(/(?:\r?\n)(?:\r?\n)+/).map do |t|
+          t = Forme.h(t)
+          t.gsub!(/\r?\n/, "<br />")
+          tag(:p, {}, Forme.raw(t))
+        end
+      end
+      tag(:div, {'class'=>'readonly-textarea'}, text)
     end
   end
 end

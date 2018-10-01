@@ -53,3 +53,6 @@ table caption {font-size: 20px; margin-bottom: 10px;}
 .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a {
   color: white;
 }
+
+div.readonly-textarea { display: inline-block;}
+div.readonly-textarea p:last-child { margin-bottom: 0;}

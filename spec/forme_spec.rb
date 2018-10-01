@@ -846,13 +846,22 @@ describe "Forme built-in custom" do
   end
 
   it "formatter: readonly uses spans for text input fields and disables radio/checkbox fields" do
-    Forme::Form.new(:formatter=>:readonly).input(:textarea, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label>Foo: <span>Bar</span></label>"
     Forme::Form.new(:formatter=>:readonly).input(:text, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label>Foo: <span class=\"readonly-text\">Bar</span></label>"
     Forme::Form.new(:formatter=>:readonly).input(:radio, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label><input disabled=\"disabled\" type=\"radio\" value=\"Bar\"/> Foo</label>"
     Forme::Form.new(:formatter=>:readonly).input(:radio, :label=>"Foo", :value=>"Bar", :checked=>true).to_s.must_equal "<label><input checked=\"checked\" disabled=\"disabled\" type=\"radio\" value=\"Bar\"/> Foo</label>"
     Forme::Form.new(:formatter=>:readonly).input(:checkbox, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label><input disabled=\"disabled\" type=\"checkbox\" value=\"Bar\"/> Foo</label>"
     Forme::Form.new(:formatter=>:readonly).input(:checkbox, :label=>"Foo", :value=>"Bar", :checked=>true).to_s.must_equal "<label><input checked=\"checked\" disabled=\"disabled\" type=\"checkbox\" value=\"Bar\"/> Foo</label>"
     Forme::Form.new(:formatter=>:readonly).input(:select, :label=>"Foo", :options=>[1, 2, 3], :value=>2).to_s.must_equal "<label>Foo: <span>2</span></label>"
+  end
+
+  it "formatter: readonly formats text into paragraphs for textarea inputs" do
+    Forme::Form.new(:formatter=>:readonly).input(:textarea, :label=>"Foo", :value=>"\n Bar\nBaz\n\nQuuz\n\n1\n2 \n").to_s.must_equal "<label>Foo: <div class=\"readonly-textarea\"><p> Bar<br />Baz</p><p>Quuz</p><p>1<br />2 </p></div></label>"
+  end
+
+  it "formatter: readonly does not format nil, raw string, or non-string inputs" do
+    Forme::Form.new(:formatter=>:readonly).input(:textarea, :label=>"Foo").to_s.must_equal "<label>Foo: <div class=\"readonly-textarea\"></div></label>"
+    Forme::Form.new(:formatter=>:readonly).input(:textarea, :label=>"Foo", :value=>Forme.raw("Bar\n\nBaz")).to_s.must_equal "<label>Foo: <div class=\"readonly-textarea\">Bar\n\nBaz</div></label>"
+    Forme::Form.new(:formatter=>:readonly).input(:textarea, :label=>"Foo", :value=>1).to_s.must_equal "<label>Foo: <div class=\"readonly-textarea\">1</div></label>"
   end
 
   it "formatter: readonly should ignore submit buttons" do
