@@ -8,12 +8,6 @@ module Forme
   class Serializer
     Forme.register_transformer(:serializer, :default, new)
 
-    # Borrowed from Rack::Utils, map of single character strings to html escaped versions.
-    ESCAPE_HTML = {"&" => "&amp;", "<" => "&lt;", ">" => "&gt;", "'" => "&#39;", '"' => "&quot;"}
-
-    # A regexp that matches all html characters requiring escaping.
-    ESCAPE_HTML_PATTERN = Regexp.union(*ESCAPE_HTML.keys)
-
     # Which tags are self closing (such tags ignore children).
     SELF_CLOSING = [:img, :input]
 
@@ -43,7 +37,7 @@ module Forme
       when Raw
         tag.to_s
       else
-        h tag
+        Forme.h(tag)
       end
     end
 
@@ -67,11 +61,6 @@ module Forme
     # Return a string in ISO format representing the +Time+ or +DateTime+ instance.
     def format_time(time)
       time.is_a?(Time) ? (time.strftime('%Y-%m-%dT%H:%M:%S') + sprintf(".%03d", time.usec)) : (time.strftime('%Y-%m-%dT%H:%M:%S.') + time.strftime('%N')[0...3])
-    end
-
-    # Escape ampersands, brackets and quotes to their HTML/XML entities.
-    def h(string)
-      string.to_s.gsub(ESCAPE_HTML_PATTERN){|c| ESCAPE_HTML[c] }
     end
 
     # Join attribute values that are arrays with spaces instead of an empty

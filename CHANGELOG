@@ -1,5 +1,7 @@
 === master
 
+* Add Forme.h for HTML escaping, using cgi/escape if available for faster escaping (jeremyevans)
+
 * Correctly handle :value=>false option and false option values in select, radioset, and checkboxset inputs (jeremyevans)
 
 === 1.8.0 (2018-06-11)
