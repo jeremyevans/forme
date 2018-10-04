@@ -1,5 +1,7 @@
 === master
 
+* Make forme_set Sequel plugin recognize default formatter changes set via with_opts (jeremyevans)
+
 * Use div with nested p tags instead of spans for readonly textarea inputs (jeremyevans)
 
 * Make readonly text input spans use the readonly-text class for easier styling (jeremyevans)

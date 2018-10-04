@@ -46,32 +46,74 @@ describe "Sequel forme_set plugin" do
     @ab.name.must_be_nil
   end
   
-  it "#forme_set should skip inputs with disabled/readonly formatter" do
-    @f.input(:name, :formatter=>:disabled)
-    @ab.forme_set(:name=>'Foo')
-    @ab.name.must_be_nil
-
-    @f.input(:name, :formatter=>:readonly)
-    @ab.forme_set(:name=>'Foo')
-    @ab.name.must_be_nil
+  it "#forme_set should skip inputs with disabled/readonly formatter set on input" do
+    [:disabled, :readonly, ::Forme::Formatter::Disabled, ::Forme::Formatter::ReadOnly].each do |formatter|
+      @f.input(:name, :formatter=>formatter)
+      @ab.forme_set(:name=>'Foo')
+      @ab.name.must_be_nil
+    end
 
     @f.input(:name, :formatter=>:default)
     @ab.forme_set(:name=>'Foo')
     @ab.name.must_equal 'Foo'
   end
   
-  it "#forme_set should skip inputs with disabled/readonly formatter" do
-    @f = Forme::Form.new(@ab, :formatter=>:disabled)
+  it "#forme_set should skip inputs with disabled/readonly formatter set on Form" do
+    [:disabled, :readonly, ::Forme::Formatter::Disabled, ::Forme::Formatter::ReadOnly].each do |formatter|
+      @f = Forme::Form.new(@ab, :formatter=>:disabled)
+      @f.input(:name)
+      @ab.forme_set(:name=>'Foo')
+      @ab.name.must_be_nil
+    end
+
+    @f = Forme::Form.new(@ab, :formatter=>:default)
     @f.input(:name)
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_equal 'Foo'
+  end
+  
+  it "#forme_set should skip inputs with disabled/readonly formatter set using with_opts" do
+    [:disabled, :readonly, ::Forme::Formatter::Disabled, ::Forme::Formatter::ReadOnly].each do |formatter|
+      @f.with_opts(:formatter=>formatter) do
+        @f.input(:name)
+      end
+      @ab.forme_set(:name=>'Foo')
+      @ab.name.must_be_nil
+    end
+
+    @f.with_opts(:formatter=>:default) do
+      @f.input(:name)
+    end
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_equal 'Foo'
+  end
+
+  it "#forme_set should prefer input formatter to with_opts formatter" do
+    @f.with_opts(:formatter=>:default) do
+      @f.input(:name, :formatter=>:readonly)
+    end
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_be_nil
+
+    @f.with_opts(:formatter=>:readonly) do
+      @f.input(:name, :formatter=>:default)
+    end
+    @ab.forme_set(:name=>'Foo')
+    @ab.name.must_equal 'Foo'
+  end
+
+  it "#forme_set should prefer with_opts formatter to form formatter" do
+    @f = Forme::Form.new(@ab, :formatter=>:default)
+    @f.with_opts(:formatter=>:readonly) do
+      @f.input(:name)
+    end
     @ab.forme_set(:name=>'Foo')
     @ab.name.must_be_nil
 
     @f = Forme::Form.new(@ab, :formatter=>:readonly)
-    @f.input(:name)
-    @ab.forme_set(:name=>'Foo')
-    @ab.name.must_be_nil
-
-    @f.input(:name, :formatter=>:default)
+    @f.with_opts(:formatter=>:default) do
+      @f.input(:name)
+    end
     @ab.forme_set(:name=>'Foo')
     @ab.name.must_equal 'Foo'
   end

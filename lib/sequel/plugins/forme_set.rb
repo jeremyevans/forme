@@ -48,7 +48,7 @@ module Sequel # :nodoc:
 
           forme_inputs.each do |field, input|
             opts = input.opts
-            next if SKIP_FORMATTERS.include?(opts.fetch(:formatter){input.form.opts[:formatter]})
+            next if SKIP_FORMATTERS.include?(opts.fetch(:formatter){input.form_opts[:formatter]})
 
             if attr = opts[:attr]
               name = attr[:name] || attr['name']
