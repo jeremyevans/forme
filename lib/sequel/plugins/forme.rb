@@ -207,6 +207,7 @@ module Sequel # :nodoc:
         # Update the attributes and options for any recognized validations
         def handle_validations(f)
           m = obj.model
+
           if m.respond_to?(:validation_reflections) and (vs = m.validation_reflections[f])
             attr = opts[:attr]
             vs.each do |type, options|
@@ -218,7 +219,7 @@ module Sequel # :nodoc:
                 attr[:title] = options[:title] unless attr.has_key?(:title)
               when :length
                 unless attr.has_key?(:maxlength)
-                  if max =(options[:maximum] || options[:is])
+                  if max = (options[:maximum] || options[:is])
                     attr[:maxlength] = max
                   elsif (w = options[:within]) && w.is_a?(Range)
                     attr[:maxlength] = if w.exclude_end? && w.end.is_a?(Integer)
@@ -442,6 +443,9 @@ module Sequel # :nodoc:
         # is overridden.
         def standard_input(type)
           type = opts.delete(:type) || type
+          if type.to_s =~ /\A(text|textarea|password|email|tel|url)\z/ && !opts[:attr].has_key?(:maxlength) && (sch = obj.db_schema[field]) && (max_length = sch[:max_length])
+            opts[:attr][:maxlength] = max_length
+          end
           opts[:value] = obj.send(field) unless opts.has_key?(:value)
           _input(type, opts)
         end

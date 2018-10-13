@@ -38,12 +38,12 @@ describe "Forme Bootstrap3 (BS3) forms" do
     
     describe 'from a Sequel model' do
       it "should create a correct input[:text] tag from Sequel model" do
-        @c.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" type="text" value="c"/></div>'
+        @c.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" type="text" value="c"/></div>'
       end
       
       it "should correctly handle an input[:text] tag from Sequel model with error" do
         @ac.errors.add(:name, 'name not valid')
-        @c.input(:name).to_s.must_equal '<div class="form-group has-error string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" type="text" value="c"/><span class="help-block with-errors">name not valid</span></div>'
+        @c.input(:name).to_s.must_equal '<div class="form-group has-error string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" type="text" value="c"/><span class="help-block with-errors">name not valid</span></div>'
       end
     end
   end
@@ -185,12 +185,12 @@ describe "Forme Bootstrap3 (BS3) forms" do
     
     describe 'from a Sequel model' do
       it "should create a correct input[:text] tag from Sequel model" do
-        @c.input(:name, :as=>:textarea).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" name="album[name]">c</textarea></div>'
+        @c.input(:name, :as=>:textarea).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" maxlength="255" name="album[name]">c</textarea></div>'
       end
       
       it "should correctly handle an input[:text] tag from Sequel model with error" do
         @ac.errors.add(:name, 'name not valid')
-        @c.input(:name, :as=>:textarea).to_s.must_equal '<div class="form-group has-error string"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" name="album[name]">c</textarea><span class="help-block with-errors">name not valid</span></div>'
+        @c.input(:name, :as=>:textarea).to_s.must_equal '<div class="form-group has-error string"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" maxlength="255" name="album[name]">c</textarea><span class="help-block with-errors">name not valid</span></div>'
       end
     end
   end

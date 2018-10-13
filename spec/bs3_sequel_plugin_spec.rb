@@ -31,18 +31,18 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should use a text field for strings" do
-    @b.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" type="text" value="b"/></div>'
-    @c.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" type="text" value="c"/></div>'
+    @b.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" type="text" value="b"/></div>'
+    @c.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" type="text" value="c"/></div>'
   end
 
   it "should allow :as=>:textarea to use a textarea" do
-    @b.input(:name, :as=>:textarea).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" name="album[name]">b</textarea></div>'
-    @c.input(:name, :as=>:textarea).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" name="album[name]">c</textarea></div>'
+    @b.input(:name, :as=>:textarea).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" maxlength="255" name="album[name]">b</textarea></div>'
+    @c.input(:name, :as=>:textarea).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" maxlength="255" name="album[name]">c</textarea></div>'
   end
 
   it "should allow :type=>:textarea to use a textarea" do
-    @b.input(:name, :type=>:textarea).to_s.must_equal '<div class="form-group"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" name="album[name]">b</textarea></div>'
-    @c.input(:name, :type=>:textarea).to_s.must_equal '<div class="form-group"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" name="album[name]">c</textarea></div>'
+    @b.input(:name, :type=>:textarea).to_s.must_equal '<div class="form-group"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" maxlength="255" name="album[name]">b</textarea></div>'
+    @c.input(:name, :type=>:textarea).to_s.must_equal '<div class="form-group"><label for="album_name">Name</label> <textarea class="form-control" id="album_name" maxlength="255" name="album[name]">c</textarea></div>'
   end
 
   it "should use number inputs for integers" do
@@ -65,22 +65,22 @@ describe "Forme Sequel::Model BS3 forms" do
   it "should include type as wrapper class" do
     @ab.values[:created_at] = DateTime.new(2011, 6, 5)
     f = Forme::Form.new(@ab, :config=>:bs3)
-    f.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" type="text" value="b"/></div>'
+    f.input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" type="text" value="b"/></div>'
     f.input(:release_date).to_s.must_equal '<div class="date form-group"><label for="album_release_date">Release date</label> <input class="form-control" id="album_release_date" name="album[release_date]" type="date" value="2011-06-05"/></div>'
     f.input(:created_at).to_s.must_equal '<div class="datetime form-group"><label for="album_created_at">Created at</label> <input class="form-control" id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000"/></div>'
   end
 
   it "should include required * in label if required" do
-    @b.input(:name, :required=>true).to_s.must_equal '<div class="form-group required string"><label for="album_name">Name<abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></div>'
+    @b.input(:name, :required=>true).to_s.must_equal '<div class="form-group required string"><label for="album_name">Name<abbr title="required">*</abbr></label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" required="required" type="text" value="b"/></div>'
   end
 
   it "should add required to label even if :label option specified" do
-    @b.input(:name, :required=>true, :label=>'Foo').to_s.must_equal '<div class="form-group required string"><label for="album_name">Foo<abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></div>'
+    @b.input(:name, :required=>true, :label=>'Foo').to_s.must_equal '<div class="form-group required string"><label for="album_name">Foo<abbr title="required">*</abbr></label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" required="required" type="text" value="b"/></div>'
   end
 
   it "should include required wrapper class if required" do
     f = Forme::Form.new(@ab, :config=>:bs3, :wrapper=>:li)
-    f.input(:name, :required=>true).to_s.must_equal '<li class="string required"><label for="album_name">Name<abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></li>'
+    f.input(:name, :required=>true).to_s.must_equal '<li class="string required"><label for="album_name">Name<abbr title="required">*</abbr></label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" required="required" type="text" value="b"/></li>'
   end
 
   it "should use a select box for tri-valued boolean fields" do
@@ -323,7 +323,7 @@ describe "Forme Sequel::Model BS3 forms" do
 
   it "should correctly show an error message if there is one" do
     @ab.errors.add(:name, 'tis not valid')
-    @b.input(:name).to_s.must_equal '<div class="form-group has-error string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" type="text" value="b"/><span class="help-block with-errors">tis not valid</span></div>'
+    @b.input(:name).to_s.must_equal '<div class="form-group has-error string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" type="text" value="b"/><span class="help-block with-errors">tis not valid</span></div>'
   end
 
   it "should correctly show an error message for many_to_one associations if there is one" do
@@ -357,90 +357,90 @@ describe "Forme Sequel::Model BS3 forms" do
 
   it "should add required attribute if the column doesn't support nil values" do
     def @ab.db_schema; h = super.dup; h[:name] = h[:name].merge(:allow_null=>false); h end
-    @b.input(:name).to_s.must_equal '<div class="form-group required string"><label for="album_name">Name<abbr title="required">*</abbr></label> <input class="form-control" id="album_name" name="album[name]" required="required" type="text" value="b"/></div>'
+    @b.input(:name).to_s.must_equal '<div class="form-group required string"><label for="album_name">Name<abbr title="required">*</abbr></label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" required="required" type="text" value="b"/></div>'
   end
 
   it "should use allow nested forms with many_to_one associations" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Artist</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Artist</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
   end
 
   it "should have #subform respect an :inputs option" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name])}.to_s.must_equal '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Artist</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name])}.to_s.must_equal '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Artist</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
   end
 
   it "should have #subform respect an :obj option overriding the object to use" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :obj=>Artist.new(:name=>'b'))}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Artist</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="b"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :obj=>Artist.new(:name=>'b'))}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Artist</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="b"/></div></fieldset></form>'
   end
 
   it "should have #subform respect a :legend option if :inputs is used" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :legend=>'Foo')}.to_s.must_equal '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Foo</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :legend=>'Foo')}.to_s.must_equal '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Foo</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
   end
 
   it "should have #subform respect a callable :legend option if :inputs is used" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :legend=>proc{|o| "Foo - #{o.name}"})}.to_s.must_equal '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Foo - a</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :legend=>proc{|o| "Foo - #{o.name}"})}.to_s.must_equal '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Foo - a</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
   end
 
   it "should not add hidden primary key field for new many_to_one associated objects" do
     @ab.associations[:artist] = Artist.new(:name=>'a')
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Artist</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Artist</legend><div class="form-group string"><label for="album_artist_attributes_name">Name</label> <input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></div></fieldset></form>'
   end
 
   it "should use allow nested forms with one_to_one associations" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:album_info, :obj=>AlbumInfo.new(:info=>'a')){f.input(:info)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Album info</legend><div class="form-group string"><label for="album_album_info_attributes_info">Info</label> <input class="form-control" id="album_album_info_attributes_info" name="album[album_info_attributes][info]" type="text" value="a"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:album_info, :obj=>AlbumInfo.new(:info=>'a')){f.input(:info)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Album info</legend><div class="form-group string"><label for="album_album_info_attributes_info">Info</label> <input class="form-control" id="album_album_info_attributes_info" maxlength="255" name="album[album_info_attributes][info]" type="text" value="a"/></div></fieldset></form>'
   end
 
   it "should use allow nested forms with one_to_many associations" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" maxlength="255" name="album[tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" maxlength="255" name="album[tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></form>'
   end
 
   it "should support :obj option for *_to_many associations" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks, :obj=>[Track.new(:name=>'x'), Track.load(:id=>5, :name=>'y')]){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="x"/></div></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="5"/><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="y"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks, :obj=>[Track.new(:name=>'x'), Track.load(:id=>5, :name=>'y')]){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" maxlength="255" name="album[tracks_attributes][0][name]" type="text" value="x"/></div></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="5"/><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" maxlength="255" name="album[tracks_attributes][1][name]" type="text" value="y"/></div></fieldset></form>'
   end
 
   it "should auto number legends when using subform with inputs for *_to_many associations" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks, :inputs=>[:name])}.to_s.must_equal '<form class="forme album" method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks, :inputs=>[:name])}.to_s.must_equal '<form class="forme album" method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" maxlength="255" name="album[tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" maxlength="255" name="album[tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></form>'
   end
 
   it "should support callable :legend option when using subform with inputs for *_to_many associations" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks, :inputs=>[:name], :legend=>proc{|o, i| "Track #{i} (#{o.name})"})}.to_s.must_equal '<form class="forme album" method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track 0 (m)</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track 1 (n)</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks, :inputs=>[:name], :legend=>proc{|o, i| "Track #{i} (#{o.name})"})}.to_s.must_equal '<form class="forme album" method="post"><input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track 0 (m)</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" maxlength="255" name="album[tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track 1 (n)</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" maxlength="255" name="album[tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></form>'
   end
 
   it "should not add hidden primary key field for nested forms with one_to_many associations with new objects" do
     @ab.associations[:tracks] = [Track.new(:name=>'m'), Track.new(:name=>'n')]
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tracks){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="album_tracks_attributes_0_name">Name</label> <input class="form-control" id="album_tracks_attributes_0_name" maxlength="255" name="album[tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="album_tracks_attributes_1_name">Name</label> <input class="form-control" id="album_tracks_attributes_1_name" maxlength="255" name="album[tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></form>'
   end
 
   it "should use allow nested forms with many_to_many associations" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tags){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><input id="album_tags_attributes_0_id" name="album[tags_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Tag #1</legend><div class="form-group string"><label for="album_tags_attributes_0_name">Name</label> <input class="form-control" id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></div></fieldset><input id="album_tags_attributes_1_id" name="album[tags_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Tag #2</legend><div class="form-group string"><label for="album_tags_attributes_1_name">Name</label> <input class="form-control" id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tags){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><input id="album_tags_attributes_0_id" name="album[tags_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Tag #1</legend><div class="form-group string"><label for="album_tags_attributes_0_name">Name</label> <input class="form-control" id="album_tags_attributes_0_name" maxlength="255" name="album[tags_attributes][0][name]" type="text" value="s"/></div></fieldset><input id="album_tags_attributes_1_id" name="album[tags_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Tag #2</legend><div class="form-group string"><label for="album_tags_attributes_1_name">Name</label> <input class="form-control" id="album_tags_attributes_1_name" maxlength="255" name="album[tags_attributes][1][name]" type="text" value="t"/></div></fieldset></form>'
   end
 
   it "should not add hidden primary key field for nested forms with many_to_many associations with new objects" do
     @ab.associations[:tags] = [Tag.new(:name=>'s'), Tag.new(:name=>'t')]
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tags){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Tag #1</legend><div class="form-group string"><label for="album_tags_attributes_0_name">Name</label> <input class="form-control" id="album_tags_attributes_0_name" name="album[tags_attributes][0][name]" type="text" value="s"/></div></fieldset><fieldset class="inputs"><legend>Tag #2</legend><div class="form-group string"><label for="album_tags_attributes_1_name">Name</label> <input class="form-control" id="album_tags_attributes_1_name" name="album[tags_attributes][1][name]" type="text" value="t"/></div></fieldset></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:tags){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><fieldset class="inputs"><legend>Tag #1</legend><div class="form-group string"><label for="album_tags_attributes_0_name">Name</label> <input class="form-control" id="album_tags_attributes_0_name" maxlength="255" name="album[tags_attributes][0][name]" type="text" value="s"/></div></fieldset><fieldset class="inputs"><legend>Tag #2</legend><div class="form-group string"><label for="album_tags_attributes_1_name">Name</label> <input class="form-control" id="album_tags_attributes_1_name" maxlength="255" name="album[tags_attributes][1][name]" type="text" value="t"/></div></fieldset></form>'
   end
 
   it "should handle multiple nested levels" do
-    Forme.form(Artist[1], {},{:config=>:bs3}){|f| f.subform(:albums){f.input(:name); f.subform(:tracks){f.input(:name)}}}.to_s.to_s.must_equal '<form class="forme artist" method="post"><input id="artist_albums_attributes_0_id" name="artist[albums_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Album #1</legend><div class="form-group string"><label for="artist_albums_attributes_0_name">Name</label> <input class="form-control" id="artist_albums_attributes_0_name" name="artist[albums_attributes][0][name]" type="text" value="b"/></div><input id="artist_albums_attributes_0_tracks_attributes_0_id" name="artist[albums_attributes][0][tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="artist_albums_attributes_0_tracks_attributes_0_name">Name</label> <input class="form-control" id="artist_albums_attributes_0_tracks_attributes_0_name" name="artist[albums_attributes][0][tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><input id="artist_albums_attributes_0_tracks_attributes_1_id" name="artist[albums_attributes][0][tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="artist_albums_attributes_0_tracks_attributes_1_name">Name</label> <input class="form-control" id="artist_albums_attributes_0_tracks_attributes_1_name" name="artist[albums_attributes][0][tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></fieldset></form>'
+    Forme.form(Artist[1], {},{:config=>:bs3}){|f| f.subform(:albums){f.input(:name); f.subform(:tracks){f.input(:name)}}}.to_s.to_s.must_equal '<form class="forme artist" method="post"><input id="artist_albums_attributes_0_id" name="artist[albums_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Album #1</legend><div class="form-group string"><label for="artist_albums_attributes_0_name">Name</label> <input class="form-control" id="artist_albums_attributes_0_name" maxlength="255" name="artist[albums_attributes][0][name]" type="text" value="b"/></div><input id="artist_albums_attributes_0_tracks_attributes_0_id" name="artist[albums_attributes][0][tracks_attributes][0][id]" type="hidden" value="1"/><fieldset class="inputs"><legend>Track #1</legend><div class="form-group string"><label for="artist_albums_attributes_0_tracks_attributes_0_name">Name</label> <input class="form-control" id="artist_albums_attributes_0_tracks_attributes_0_name" maxlength="255" name="artist[albums_attributes][0][tracks_attributes][0][name]" type="text" value="m"/></div></fieldset><input id="artist_albums_attributes_0_tracks_attributes_1_id" name="artist[albums_attributes][0][tracks_attributes][1][id]" type="hidden" value="2"/><fieldset class="inputs"><legend>Track #2</legend><div class="form-group string"><label for="artist_albums_attributes_0_tracks_attributes_1_name">Name</label> <input class="form-control" id="artist_albums_attributes_0_tracks_attributes_1_name" maxlength="255" name="artist[albums_attributes][0][tracks_attributes][1][name]" type="text" value="n"/></div></fieldset></fieldset></form>'
   end
 
   it "should have #subform :grid option create a grid" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
 
   it "should have #subform :grid option respect :inputs_opts option to pass options to inputs" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :inputs_opts=>{:attr=>{:class=>'foo'}})}.to_s.must_equal '<form class="forme album" method="post"><table class="foo"><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :inputs_opts=>{:attr=>{:class=>'foo'}})}.to_s.must_equal '<form class="forme album" method="post"><table class="foo"><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
 
   it "should have #subform :grid option handle :legend and :labels options" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>'Foo', :labels=>%w'Bar')}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Foo</caption><thead><tr><th>Bar</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>'Foo', :labels=>%w'Bar')}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Foo</caption><thead><tr><th>Bar</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
 
   it "should have #subform :grid option handle :legend and :labels nil values" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>nil, :labels=>nil)}.to_s.must_equal '<form class="forme album" method="post"><table><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :legend=>nil, :labels=>nil)}.to_s.must_equal '<form class="forme album" method="post"><table><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
 
   it "should have #subform :grid option handle :skip_primary_key option" do
-    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :skip_primary_key=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
+    Forme.form(@ab, {},{:config=>:bs3}){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :skip_primary_key=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><tr><td class="string"><input class="form-control" id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
   
 end
@@ -452,22 +452,22 @@ describe "Forme Sequel plugin default input types based on column names" do
   end
 
   it "should use password input with no value for string columns with name password" do
-    f(:password).to_s.must_equal '<div class="form-group string"><label for="test_password">Password</label> <input class="form-control" id="test_password" name="test[password]" type="password"/></div>'
+    f(:password).to_s.must_equal '<div class="form-group string"><label for="test_password">Password</label> <input class="form-control" id="test_password" maxlength="255" name="test[password]" type="password"/></div>'
   end  
 
   it "should use email input for string columns with name email" do
-    f(:email).to_s.must_equal '<div class="form-group string"><label for="test_email">Email</label> <input class="form-control" id="test_email" name="test[email]" type="email" value="foo"/></div>'
+    f(:email).to_s.must_equal '<div class="form-group string"><label for="test_email">Email</label> <input class="form-control" id="test_email" maxlength="255" name="test[email]" type="email" value="foo"/></div>'
   end
 
   it "should use tel input for string columns with name phone or fax" do
-    f(:phone).to_s.must_equal '<div class="form-group string"><label for="test_phone">Phone</label> <input class="form-control" id="test_phone" name="test[phone]" type="tel" value="foo"/></div>'
-    f(:fax).to_s.must_equal '<div class="form-group string"><label for="test_fax">Fax</label> <input class="form-control" id="test_fax" name="test[fax]" type="tel" value="foo"/></div>'
+    f(:phone).to_s.must_equal '<div class="form-group string"><label for="test_phone">Phone</label> <input class="form-control" id="test_phone" maxlength="255" name="test[phone]" type="tel" value="foo"/></div>'
+    f(:fax).to_s.must_equal '<div class="form-group string"><label for="test_fax">Fax</label> <input class="form-control" id="test_fax" maxlength="255" name="test[fax]" type="tel" value="foo"/></div>'
   end
 
   it "should use url input for string columns with name url, uri, or website" do
-    f(:url).to_s.must_equal '<div class="form-group string"><label for="test_url">Url</label> <input class="form-control" id="test_url" name="test[url]" type="url" value="foo"/></div>'
-    f(:uri).to_s.must_equal '<div class="form-group string"><label for="test_uri">Uri</label> <input class="form-control" id="test_uri" name="test[uri]" type="url" value="foo"/></div>'
-    f(:website).to_s.must_equal '<div class="form-group string"><label for="test_website">Website</label> <input class="form-control" id="test_website" name="test[website]" type="url" value="foo"/></div>'
+    f(:url).to_s.must_equal '<div class="form-group string"><label for="test_url">Url</label> <input class="form-control" id="test_url" maxlength="255" name="test[url]" type="url" value="foo"/></div>'
+    f(:uri).to_s.must_equal '<div class="form-group string"><label for="test_uri">Uri</label> <input class="form-control" id="test_uri" maxlength="255" name="test[uri]" type="url" value="foo"/></div>'
+    f(:website).to_s.must_equal '<div class="form-group string"><label for="test_website">Website</label> <input class="form-control" id="test_website" maxlength="255" name="test[website]" type="url" value="foo"/></div>'
   end
 end 
 
@@ -491,11 +491,11 @@ describe "Forme Sequel::Model validation parsing" do
   end
 
   it "should turn format into a pattern" do
-    f(:validates_format_of, :name, :with=>/[A-z]+/).input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" pattern="[A-z]+" type="text"/></div>'
+    f(:validates_format_of, :name, :with=>/[A-z]+/).input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" pattern="[A-z]+" type="text"/></div>'
   end
 
   it "should respect :title option for format" do
-    f(:validates_format_of, :name, :with=>/[A-z]+/, :title=>'Foo').input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" pattern="[A-z]+" title="Foo" type="text"/></div>'
+    f(:validates_format_of, :name, :with=>/[A-z]+/, :title=>'Foo').input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" pattern="[A-z]+" title="Foo" type="text"/></div>'
   end
 
   it "should use maxlength for length :maximum, :is, and :within" do
@@ -506,18 +506,18 @@ describe "Forme Sequel::Model validation parsing" do
   end
 
   it "should turn numericality into a pattern" do
-    f(:validates_numericality_of, :name).input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" pattern="^[+\-]?\d+(\.\d+)?$" title="must be a number" type="text"/></div>'
+    f(:validates_numericality_of, :name).input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" pattern="^[+\-]?\d+(\.\d+)?$" title="must be a number" type="text"/></div>'
   end
 
   it "should turn numericality :only_integer into a pattern" do
-    f(:validates_numericality_of, :name, :only_integer=>true).input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" pattern="^[+\-]?\d+$" title="must be a number" type="text"/></div>'
+    f(:validates_numericality_of, :name, :only_integer=>true).input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" pattern="^[+\-]?\d+$" title="must be a number" type="text"/></div>'
   end
 
   it "should respect :title option for numericality" do
-    f(:validates_numericality_of, :name, :title=>'Foo').input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" pattern="^[+\-]?\d+(\.\d+)?$" title="Foo" type="text"/></div>'
+    f(:validates_numericality_of, :name, :title=>'Foo').input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" pattern="^[+\-]?\d+(\.\d+)?$" title="Foo" type="text"/></div>'
   end
 
   it "should respect :placeholder option for any validation" do
-    f(:validates_uniqueness_of, :name, :placeholder=>'must be unique').input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" name="album[name]" placeholder="must be unique" type="text"/></div>'
+    f(:validates_uniqueness_of, :name, :placeholder=>'must be unique').input(:name).to_s.must_equal '<div class="form-group string"><label for="album_name">Name</label> <input class="form-control" id="album_name" maxlength="255" name="album[name]" placeholder="must be unique" type="text"/></div>'
   end
 end

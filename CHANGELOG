@@ -1,5 +1,7 @@
 === master
 
+* Automatically add maxlength attributes to text and textarea inputs in the Sequel plugin based on maximum database column length (jeremyevans)
+
 * Make forme_set Sequel plugin recognize default formatter changes set via with_opts (jeremyevans)
 
 * Use div with nested p tags instead of spans for readonly textarea inputs (jeremyevans)
