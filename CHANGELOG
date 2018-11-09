@@ -1,4 +1,4 @@
-=== master
+=== 1.9.0 (2018-11-14)
 
 * Automatically add maxlength attributes to text and textarea inputs in the Sequel plugin based on maximum database column length (jeremyevans)
 
