@@ -30,12 +30,34 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2018-06-11 13:02:48 -0700</span>
+<span class='datetime'>2018-11-16 10:26:56 -0800</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h3 id="label-1.9.0+-282018-11-16-29">1.9.0 (2018-11-16)<span><a href="#label-1.9.0+-282018-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<ul><li>
+<p>Automatically add maxlength attributes to text and textarea inputs in the
+<a href="../classes/Sequel.html">Sequel</a> plugin based on maximum
+database column length (jeremyevans)</p>
+</li><li>
+<p>Make forme_set <a href="../classes/Sequel.html">Sequel</a> plugin recognize
+default formatter changes set via with_opts (jeremyevans)</p>
+</li><li>
+<p>Use div with nested p tags instead of spans for readonly textarea inputs
+(jeremyevans)</p>
+</li><li>
+<p>Make readonly text input spans use the readonly-text class for easier
+styling (jeremyevans)</p>
+</li><li>
+<p>Add <a href="../classes/Forme.html#method-c-h">Forme.h</a> for HTML
+escaping, using cgi/escape if available for faster escaping (jeremyevans)</p>
+</li><li>
+<p>Correctly handle :value=&gt;false option and false option values in select,
+radioset, and checkboxset inputs (jeremyevans)</p>
+</li></ul>
+
 <h3 id="label-1.8.0+-282018-06-11-29">1.8.0 (2018-06-11)<span><a href="#label-1.8.0+-282018-06-11-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
 <p>Add support for :errors form option for setting error information for

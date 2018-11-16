@@ -97,6 +97,7 @@ Forme
 <li><a href="#attribute-c-default_add_blank_prompt">default_add_blank_prompt</a></li>
 <li><a href="#attribute-c-default_config">default_config</a></li>
 <li><a href="#method-c-form">form</a></li>
+<li><a href="#method-c-h">h</a></li>
 <li><a href="#method-c-merge_classes">merge_classes</a></li>
 <li><a href="#method-c-raw">raw</a></li>
 <li><a href="#method-c-register_config">register_config</a></li>
@@ -111,6 +112,7 @@ Forme
 <div id='class-list'>
 <h2>Classes and Modules</h2>
 <ol>
+<li><a href="Forme/CGI.html">Forme::CGI</a></li>
 <li><a href="Forme/ERB.html">Forme::ERB</a></li>
 <li><a href="Forme/Rails.html">Forme::Rails</a></li>
 <li><a href="Forme/Raw.html">Forme::Raw</a></li>
@@ -135,6 +137,13 @@ Forme
 <div class='name-list'>
 <table summary='Constants'>
 <tr class='top-aligned-row context-row'>
+<td class='context-item-name'>CGI</td>
+<td>=</td>
+<td class='context-item-value'>Object.new</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
 <td class='context-item-name'>CONFIGURATIONS</td>
 <td>=</td>
 <td class='context-item-value'>{:default=>{}}</td>
@@ -144,6 +153,13 @@ Forme
 transformers, so that you can specify a single :config option when creating
 a <code>Form</code> and have all of the transformers set from that.</p>
 </td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>ESCAPE_TABLE</td>
+<td>=</td>
+<td class='context-item-value'>{'&' => '&amp;', '<' => '&lt;', '>' => '&gt;', '"' => '&quot;', "'" => '&#39;'}.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
 </tr>
 <tr class='top-aligned-row context-row'>
 <td class='context-item-name'>MAJOR</td>
@@ -159,7 +175,7 @@ href="Forme.html">Forme</a>.</p>
 <tr class='top-aligned-row context-row'>
 <td class='context-item-name'>MINOR</td>
 <td>=</td>
-<td class='context-item-value'>8</td>
+<td class='context-item-value'>9</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
 <p>The minor version of <a href="Forme.html">Forme</a>, updated for new
@@ -273,7 +289,7 @@ given <code>classes</code>.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-attr_classes-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-attr_classes-source'><span class="ruby-comment"># File lib/forme.rb, line 72</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;  <span class="ruby-identifier">attr</span>[<span class="ruby-value">:class</span>] = <span class="ruby-identifier">merge_classes</span>(<span class="ruby-identifier">attr</span>[<span class="ruby-value">:class</span>], <span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-attr_classes-source'><span class="ruby-comment"># File lib/forme.rb, line 97</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;  <span class="ruby-identifier">attr</span>[<span class="ruby-value">:class</span>] = <span class="ruby-identifier">merge_classes</span>(<span class="ruby-identifier">attr</span>[<span class="ruby-value">:class</span>], <span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-form'>
@@ -292,7 +308,24 @@ given <code>classes</code>.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-form-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-form-source'><span class="ruby-comment"># File lib/forme.rb, line 67</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">form</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-form-source'><span class="ruby-comment"># File lib/forme.rb, line 92</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">form</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-h'>
+<a name='method-c-h'></a>
+<div class='synopsis'>
+<span class='name'>h</span>
+<span class='arguments'>(value)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-h-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-h-source'><span class="ruby-comment"># File lib/forme.rb, line 16</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">h</span>(<span class="ruby-identifier">value</span>)&#x000A;  <span class="ruby-constant">CGI</span>.<span class="ruby-identifier">escapeHTML</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-merge_classes'>
@@ -311,7 +344,7 @@ given <code>classes</code>.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-merge_classes-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-merge_classes-source'><span class="ruby-comment"># File lib/forme.rb, line 77</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">merge_classes</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;  <span class="ruby-identifier">classes</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-merge_classes-source'><span class="ruby-comment"># File lib/forme.rb, line 102</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">merge_classes</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">classes</span>)&#x000A;  <span class="ruby-identifier">classes</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-raw'>
@@ -331,7 +364,7 @@ string, which will disable automatic escaping for that string.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-raw-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-raw-source'><span class="ruby-comment"># File lib/forme.rb, line 83</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">raw</span>(<span class="ruby-identifier">s</span>)&#x000A;  <span class="ruby-constant">RawString</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-raw-source'><span class="ruby-comment"># File lib/forme.rb, line 108</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">raw</span>(<span class="ruby-identifier">s</span>)&#x000A;  <span class="ruby-constant">RawString</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-register_config'>
@@ -351,7 +384,7 @@ hash maps transformer type symbols to transformer name symbols.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-register_config-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-register_config-source'><span class="ruby-comment"># File lib/forme.rb, line 60</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">register_config</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">hash</span>)&#x000A;  <span class="ruby-constant">CONFIGURATIONS</span>[<span class="ruby-identifier">type</span>] = <span class="ruby-constant">CONFIGURATIONS</span>[<span class="ruby-identifier">hash</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:base</span>, <span class="ruby-value">:default</span>)].<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">hash</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-register_config-source'><span class="ruby-comment"># File lib/forme.rb, line 85</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">register_config</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">hash</span>)&#x000A;  <span class="ruby-constant">CONFIGURATIONS</span>[<span class="ruby-identifier">type</span>] = <span class="ruby-constant">CONFIGURATIONS</span>[<span class="ruby-identifier">hash</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:base</span>, <span class="ruby-value">:default</span>)].<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">hash</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-register_transformer'>
@@ -382,7 +415,7 @@ instance of that class should be used for each transformation.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-register_transformer-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-register_transformer-source'><span class="ruby-comment"># File lib/forme.rb, line 52</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">register_transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">sym</span>, <span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-string">&quot;Not a valid transformer type&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">TRANSFORMERS</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-string">&quot;Must provide either block or obj, not both&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-constant">TRANSFORMERS</span>[<span class="ruby-identifier">type</span>][<span class="ruby-identifier">sym</span>] = <span class="ruby-identifier">obj</span><span class="ruby-operator">||</span><span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-register_transformer-source'><span class="ruby-comment"># File lib/forme.rb, line 77</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">register_transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">sym</span>, <span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-string">&quot;Not a valid transformer type&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">TRANSFORMERS</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-string">&quot;Must provide either block or obj, not both&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-constant">TRANSFORMERS</span>[<span class="ruby-identifier">type</span>][<span class="ruby-identifier">sym</span>] = <span class="ruby-identifier">obj</span><span class="ruby-operator">||</span><span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-transform'>
@@ -403,7 +436,7 @@ without modifying it.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-transform-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-transform-source'><span class="ruby-comment"># File lib/forme.rb, line 89</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">transform</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">trans_name</span>, <span class="ruby-identifier">default_opts</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">trans</span> = <span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">trans_name</span>, <span class="ruby-identifier">default_opts</span>)&#x000A;    <span class="ruby-identifier">trans</span>.<span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">case</span> <span class="ruby-identifier">type</span>&#x000A;    <span class="ruby-keyword">when</span> <span class="ruby-value">:inputs_wrapper</span>&#x000A;      <span class="ruby-keyword">yield</span>&#x000A;    <span class="ruby-keyword">when</span> <span class="ruby-value">:labeler</span>, <span class="ruby-value">:error_handler</span>, <span class="ruby-value">:wrapper</span>, <span class="ruby-value">:helper</span>, <span class="ruby-value">:set_wrapper</span>, <span class="ruby-value">:tag_wrapper</span>&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;No matching #{type}: #{trans_name.inspect}&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-transform-source'><span class="ruby-comment"># File lib/forme.rb, line 114</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">transform</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">trans_name</span>, <span class="ruby-identifier">default_opts</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">trans</span> = <span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">trans_name</span>, <span class="ruby-identifier">default_opts</span>)&#x000A;    <span class="ruby-identifier">trans</span>.<span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">case</span> <span class="ruby-identifier">type</span>&#x000A;    <span class="ruby-keyword">when</span> <span class="ruby-value">:inputs_wrapper</span>&#x000A;      <span class="ruby-keyword">yield</span>&#x000A;    <span class="ruby-keyword">when</span> <span class="ruby-value">:labeler</span>, <span class="ruby-value">:error_handler</span>, <span class="ruby-value">:wrapper</span>, <span class="ruby-value">:helper</span>, <span class="ruby-value">:set_wrapper</span>, <span class="ruby-value">:tag_wrapper</span>&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;No matching #{type}: #{trans_name.inspect}&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-transformer'>
@@ -438,7 +471,7 @@ raise an <code>Error</code> if not.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-transformer-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-transformer-source'><span class="ruby-comment"># File lib/forme.rb, line 112</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">trans</span>, <span class="ruby-identifier">default_opts</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-keyword">case</span> <span class="ruby-identifier">trans</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Symbol</span>&#x000A;    <span class="ruby-identifier">type</span> = <span class="ruby-value">:wrapper</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:set_wrapper</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:tag_wrapper</span>&#x000A;    <span class="ruby-constant">TRANSFORMERS</span>[<span class="ruby-identifier">type</span>][<span class="ruby-identifier">trans</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.map(&amp;:inspect).join(&#39;, &#39;)})&quot;</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Hash</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">trans</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">type</span>)&#x000A;      <span class="ruby-keyword">if</span> <span class="ruby-identifier">v</span> = <span class="ruby-identifier">trans</span>[<span class="ruby-identifier">type</span>]&#x000A;        <span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">v</span>, <span class="ruby-identifier">default_opts</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">default_opts</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>&#x000A;    <span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">default_opts</span>[<span class="ruby-identifier">type</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">default_opts</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">trans</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:call</span>)&#x000A;      <span class="ruby-identifier">trans</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;#{type} #{trans.inspect} must respond to #call&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-transformer-source'><span class="ruby-comment"># File lib/forme.rb, line 137</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">trans</span>, <span class="ruby-identifier">default_opts</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-keyword">case</span> <span class="ruby-identifier">trans</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Symbol</span>&#x000A;    <span class="ruby-identifier">type</span> = <span class="ruby-value">:wrapper</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:set_wrapper</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:tag_wrapper</span>&#x000A;    <span class="ruby-constant">TRANSFORMERS</span>[<span class="ruby-identifier">type</span>][<span class="ruby-identifier">trans</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;invalid #{type}: #{trans.inspect} (valid #{type}s: #{TRANSFORMERS[type].keys.map(&amp;:inspect).join(&#39;, &#39;)})&quot;</span>)&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Hash</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">trans</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">type</span>)&#x000A;      <span class="ruby-keyword">if</span> <span class="ruby-identifier">v</span> = <span class="ruby-identifier">trans</span>[<span class="ruby-identifier">type</span>]&#x000A;        <span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">v</span>, <span class="ruby-identifier">default_opts</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">default_opts</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>&#x000A;    <span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">default_opts</span>[<span class="ruby-identifier">type</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">default_opts</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">trans</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:call</span>)&#x000A;      <span class="ruby-identifier">trans</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-node">&quot;#{type} #{trans.inspect} must respond to #call&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-version'>

@@ -1,8 +1,8 @@
-Mon, 11 Jun 2018 13:15:53 -0700
+Fri, 16 Nov 2018 10:29:53 -0800
 README.rdoc	Tue, 05 Jun 2018 15:25:35 -0700
-CHANGELOG	Mon, 11 Jun 2018 13:02:48 -0700
+CHANGELOG	Fri, 16 Nov 2018 10:26:56 -0800
 MIT-LICENSE	Mon, 11 Jun 2018 13:02:48 -0700
-lib/forme.rb	Thu, 28 Jan 2016 16:17:13 -0800
+lib/forme.rb	Tue, 02 Oct 2018 08:12:53 -0700
 lib/forme/bs3.rb	Thu, 17 Nov 2016 18:12:07 -0800
 lib/forme/erb.rb	Wed, 23 May 2018 11:01:09 -0700
 lib/forme/erb_form.rb	Wed, 23 May 2018 11:01:09 -0700
@@ -13,15 +13,15 @@ lib/forme/raw.rb	Thu, 28 Jan 2016 16:17:13 -0800
 lib/forme/sinatra.rb	Thu, 28 Jan 2016 16:17:13 -0800
 lib/forme/tag.rb	Thu, 28 Jan 2016 16:17:13 -0800
 lib/forme/transformers/error_handler.rb	Thu, 28 Jan 2016 16:17:13 -0800
-lib/forme/transformers/formatter.rb	Tue, 05 Jun 2018 15:25:35 -0700
+lib/forme/transformers/formatter.rb	Tue, 02 Oct 2018 08:12:53 -0700
 lib/forme/transformers/helper.rb	Thu, 28 Jan 2016 16:17:13 -0800
 lib/forme/transformers/inputs_wrapper.rb	Wed, 11 Jan 2017 15:12:44 -0800
 lib/forme/transformers/labeler.rb	Tue, 07 Jun 2016 15:21:00 -0700
-lib/forme/transformers/serializer.rb	Thu, 25 May 2017 11:53:09 -0700
+lib/forme/transformers/serializer.rb	Tue, 02 Oct 2018 08:12:53 -0700
 lib/forme/transformers/wrapper.rb	Thu, 17 Nov 2016 18:12:07 -0800
-lib/forme/version.rb	Mon, 11 Jun 2018 13:02:48 -0700
+lib/forme/version.rb	Fri, 09 Nov 2018 15:51:37 -0800
 lib/roda/plugins/forme.rb	Thu, 28 Jan 2016 16:17:13 -0800
 lib/roda/plugins/forme_route_csrf.rb	Wed, 23 May 2018 11:01:09 -0700
-lib/sequel/plugins/forme.rb	Wed, 23 May 2018 11:01:09 -0700
+lib/sequel/plugins/forme.rb	Tue, 16 Oct 2018 08:15:13 -0700
 lib/sequel/plugins/forme_i18n.rb	Mon, 22 Feb 2016 12:39:36 -0800
-lib/sequel/plugins/forme_set.rb	Mon, 19 Sep 2016 16:51:14 -0700
+lib/sequel/plugins/forme_set.rb	Thu, 04 Oct 2018 14:54:36 -0700
