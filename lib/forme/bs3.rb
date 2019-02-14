@@ -214,7 +214,7 @@ module Forme
           yield
         end
       else
-        form.tag(:fieldset, attr, &Proc.new)
+        form.tag(:fieldset, attr, &block)
       end
     end
   end

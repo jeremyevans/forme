@@ -59,7 +59,7 @@ module Forme
       ins = opts[:inputs]
       button = opts[:button]
       if ins || button
-        block = Proc.new do |form|
+        block = proc do |form|
           form._inputs(ins, opts) if ins
           yield form if block_given?
           form.emit(form.button(button)) if button

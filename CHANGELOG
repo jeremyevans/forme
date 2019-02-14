@@ -1,3 +1,7 @@
+=== master
+
+* Avoid calling Proc.new with an implicit block, which is deprecated starting in ruby 2.7 (jeremyevans)
+
 === 1.9.0 (2018-11-16)
 
 * Automatically add maxlength attributes to text and textarea inputs in the Sequel plugin based on maximum database column length (jeremyevans)

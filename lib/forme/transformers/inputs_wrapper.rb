@@ -10,7 +10,7 @@ module Forme
     # Wrap the inputs in a <fieldset>.  If the :legend
     # option is given, add a <legend> tag as the first
     # child of the fieldset.
-    def call(form, opts)
+    def call(form, opts, &block)
       attr = opts[:attr] ? opts[:attr].dup : {}
       Forme.attr_classes(attr, 'inputs')
       if legend = opts[:legend]
@@ -19,7 +19,7 @@ module Forme
           yield
         end
       else
-        form.tag(:fieldset, attr, &Proc.new)
+        form.tag(:fieldset, attr, &block)
       end
     end
   end
