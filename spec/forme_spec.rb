@@ -461,6 +461,10 @@ describe "Forme plain forms" do
     @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :tag_labeler=>:explicit).to_s.must_equal '<input type="checkbox" value="1"/><label class="option label-after">a</label><input type="checkbox" value="2"/><label class="option label-after">b</label><input type="checkbox" value="3"/><label class="option label-after">c</label>'
   end
 
+  it "should support custom :labeler for checkboxsets" do
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :label=>'foo', :labeler=>lambda{|tag, input| input.tag(:div, {}, tag)}).to_s.must_equal '<div><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label></div>'
+  end
+
   it "should create set of checkbox buttons with options and values with hashes" do
     @f.input(:checkboxset, :options=>[[:a, {:attr=>{:foo=>1}}], [:b, {:class=>'foo', :value=>2}], [:c, {:id=>:baz}]], :selected=>2).to_s.must_equal '<label class="option"><input foo="1" type="checkbox" value="a"/> a</label><label class="option"><input checked="checked" class="foo" type="checkbox" value="2"/> b</label><label class="option"><input id="baz" type="checkbox" value="c"/> c</label>'
   end

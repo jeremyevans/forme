@@ -224,9 +224,7 @@ module Forme
       if @opts[:error]
         @opts[:set_error] = @opts.delete(:error)
       end
-      if @opts[:label]
-        @opts[:set_label] = @opts.delete(:label)
-      end
+      @opts[:labeler] ||= :span
 
       tag_wrapper = Forme.transformer(:tag_wrapper, @opts.delete(:tag_wrapper), @input.form_opts) || :default
       tag_labeler = Forme.transformer(:labeler, @opts.delete(:tag_labeler), @input.form_opts) || :default
@@ -262,13 +260,7 @@ module Forme
         _add_set_error(tags)
       end
 
-      tags.unshift(set_label) if @opts[:set_label]
-
       tags
-    end
-
-    def set_label
-      form._tag(:span, {:class=>:label}, @opts[:set_label])
     end
 
     def _add_set_error(tags)

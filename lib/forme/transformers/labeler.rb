@@ -77,4 +77,15 @@ module Forme
       t
     end
   end
+
+  class Labeler::Span
+    Forme.register_transformer(:labeler, :span, new)
+
+    def call(tag, input)
+      label_attr = input.opts[:label_attr]
+      label_attr = label_attr ? label_attr.dup : {}
+      Forme.attr_classes(label_attr, "label")
+      [input.tag(:span, label_attr, input.opts[:label]), tag]
+    end
+  end
 end
