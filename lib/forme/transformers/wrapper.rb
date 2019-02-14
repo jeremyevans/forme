@@ -23,7 +23,7 @@ module Forme
       input.tag(@type, input.opts[:wrapper_attr], super)
     end
 
-    [:li, :p, :div, :span, :td].each do |x|
+    [:li, :p, :div, :span, :td, :fieldset].each do |x|
       Forme.register_transformer(:wrapper, x, new(x))
     end
   end

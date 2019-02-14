@@ -88,4 +88,12 @@ module Forme
       [input.tag(:span, label_attr, input.opts[:label]), tag]
     end
   end
+
+  class Labeler::Legend
+    Forme.register_transformer(:labeler, :legend, new)
+
+    def call(tag, input)
+      [input.tag(:legend, input.opts[:label_attr], input.opts[:label]), tag]
+    end
+  end
 end

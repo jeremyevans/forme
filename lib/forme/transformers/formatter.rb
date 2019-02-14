@@ -228,11 +228,12 @@ module Forme
       tag_labeler = Forme.transformer(:labeler, @opts.delete(:tag_labeler), @input.form_opts) || :default
       wrapper = @opts.fetch(:wrapper){@opts[:wrapper] = @input.form_opts[:set_wrapper] || @input.form_opts[:wrapper]}
       wrapper = Forme.transformer(:wrapper, wrapper)
+      tag_label_attr = @opts[:tag_label_attr] || @opts[:label_attr]
 
       process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
         value = label if value.nil?
         label_attr = {:class=>:option}
-        label_attr.merge!(@opts[:label_attr]) if @opts[:label_attr]
+        label_attr.merge!(tag_label_attr) if tag_label_attr
         r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>label_attr, :wrapper=>tag_wrapper, :labeler=>tag_labeler, :error=>nil, :error_attr=>nil)
         if r_opts[:value].nil?
           r_opts[:value] = value unless value.nil?

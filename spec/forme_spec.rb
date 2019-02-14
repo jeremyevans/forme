@@ -461,6 +461,14 @@ describe "Forme plain forms" do
     @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :label=>'foo').to_s.must_equal '<span class="label">foo</span><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
   end
 
+  it "should support fieldset/legend for checkboxsets" do
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :label=>'foo', :labeler=>:legend, :wrapper=>:fieldset).to_s.must_equal '<fieldset><legend>foo</legend><label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label></fieldset>'
+  end
+
+  it "should support legend with attributes for checkboxsets" do
+    @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :label=>'foo', :label_attr=>{:class=>"baz"}, :tag_label_attr=>{:class=>"bar"}, :labeler=>:legend, :wrapper=>:fieldset).to_s.must_equal '<fieldset><legend class="baz">foo</legend><label class="bar"><input type="checkbox" value="1"/> a</label><label class="bar"><input type="checkbox" value="2"/> b</label><label class="bar"><input type="checkbox" value="3"/> c</label></fieldset>'
+  end
+
   it "should support :tag_labeler for checkboxsets" do
     @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :tag_labeler=>:explicit).to_s.must_equal '<input type="checkbox" value="1"/><label class="option label-after">a</label><input type="checkbox" value="2"/><label class="option label-after">b</label><input type="checkbox" value="3"/><label class="option label-after">c</label>'
   end

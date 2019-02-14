@@ -1,5 +1,9 @@
 === master
 
+* Support :fieldset wrapper and :legend labeler, can be used for accessible radioset/checkboxset (jeremyevans)
+
+* Support :tag_label_attr option for radioset and checkbox set for label attributes for each radio/checkbox label (jeremyevans)
+
 * Support custom :error_handler in radioset and checkboxset inputs (jeremyevans)
 
 * Support custom :labeler in radioset and checkboxset inputs (jeremyevans)
