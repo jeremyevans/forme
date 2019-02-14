@@ -17,4 +17,19 @@ module Forme
       [tag, input.tag(:span, attr, input.opts[:error])]
     end
   end
+
+  class ErrorHandler::Set < ErrorHandler
+    Forme.register_transformer(:error_handler, :set, new)
+
+    def call(tag, input)
+      last_tag = tag
+      last_tag = last_tag.last while last_tag.is_a?(Array)
+      return super unless last_tag.is_a?(Input)
+
+      last_tag.opts[:error] = input.opts[:error]
+      last_tag.opts[:error_attr] = input.opts[:error_attr] if input.opts[:error_attr]
+      last_tag.opts[:error_handler] = :default
+      tag
+    end
+  end
 end

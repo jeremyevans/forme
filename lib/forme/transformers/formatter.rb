@@ -221,21 +221,19 @@ module Forme
       key = @opts[:key]
       name = @opts[:name]
       id = @opts[:id]
-      if @opts[:error]
-        @opts[:set_error] = @opts.delete(:error)
-      end
       @opts[:labeler] ||= :span
+      @opts[:error_handler] ||= :set
 
       tag_wrapper = Forme.transformer(:tag_wrapper, @opts.delete(:tag_wrapper), @input.form_opts) || :default
       tag_labeler = Forme.transformer(:labeler, @opts.delete(:tag_labeler), @input.form_opts) || :default
       wrapper = @opts.fetch(:wrapper){@opts[:wrapper] = @input.form_opts[:set_wrapper] || @input.form_opts[:wrapper]}
       wrapper = Forme.transformer(:wrapper, wrapper)
 
-      tags = process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
+      process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
         value = label if value.nil?
         label_attr = {:class=>:option}
         label_attr.merge!(@opts[:label_attr]) if @opts[:label_attr]
-        r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>label_attr, :wrapper=>tag_wrapper, :labeler=>tag_labeler)
+        r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>label_attr, :wrapper=>tag_wrapper, :labeler=>tag_labeler, :error=>nil, :error_attr=>nil)
         if r_opts[:value].nil?
           r_opts[:value] = value unless value.nil?
         end
@@ -254,23 +252,6 @@ module Forme
         end
 
         form._input(type, r_opts)
-      end
-
-      if @opts[:set_error]
-        _add_set_error(tags)
-      end
-
-      tags
-    end
-
-    def _add_set_error(tags)
-      if (last_input = tags.last) && last_input.is_a?(Input)
-        last_input.opts[:error] = @opts[:set_error]
-        last_input.opts[:error_attr] = @opts[:error_attr] if @opts[:error_attr]
-      else
-        attr = @opts[:error_attr] || {}
-        Forme.attr_classes(attr, 'error_message')
-        tags << form._tag(:span, attr, [@opts[:set_error]])
       end
     end
 

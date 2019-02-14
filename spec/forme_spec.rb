@@ -436,6 +436,10 @@ describe "Forme plain forms" do
     @f.input(:radioset, :options=>[1, 2, 3], :selected=>2, :error=>'foo', :error_attr=>{'bar'=>'baz'}).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input class="error" type="radio" value="3"/> 3</label><span bar="baz" class="error_message">foo</span>'
   end
 
+  it "should support custom error_handler for set of radio buttons" do
+    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2, :error=>'foo', :error_attr=>{'bar'=>'baz'}, :error_handler=>lambda{|tag, input| input.tag(:div, {}, tag)}).to_s.must_equal '<div><label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label></div>'
+  end
+
   it "should create set of checkbox buttons" do
     @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
     @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'

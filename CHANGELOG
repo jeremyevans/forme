@@ -1,5 +1,7 @@
 === master
 
+* Support custom :error_handler in radioset and checkboxset inputs (jeremyevans)
+
 * Support custom :labeler in radioset and checkboxset inputs (jeremyevans)
 
 * Avoid calling Proc.new with an implicit block, which is deprecated starting in ruby 2.7 (jeremyevans)
