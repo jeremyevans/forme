@@ -11,7 +11,11 @@ else
 end
 
 platforms :ruby do
-  gem 'sqlite3'
+  if RUBY_VERSION < '1.9'
+    gem 'sqlite3', '< 1.4'
+  else
+    gem 'sqlite3'
+  end
 end
 
 platforms :jruby do
