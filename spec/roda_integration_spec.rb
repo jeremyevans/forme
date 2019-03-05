@@ -20,7 +20,15 @@ rescue LoadError
 end
 
 class FormeRodaTest < Roda
-  use Rack::Session::Cookie, :secret => "__a_very_long_string__"
+  opts[:check_dynamic_arity] = opts[:check_arity] = :warn
+  
+  if defined?(Roda::RodaVersionNumber) && Roda::RodaVersionNumber >= 30100
+    require 'roda/session_middleware'
+    opts[:sessions_convert_symbols] = true
+    use RodaSessionMiddleware, :secret=>SecureRandom.random_bytes(64), :key=>'rack.session'
+  else
+    use Rack::Session::Cookie, :secret => "__a_very_long_string__"
+  end
 
   def erb(s, opts={})
     render(opts.merge(:inline=>s))
