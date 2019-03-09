@@ -61,7 +61,6 @@ module Forme
       @attr = attr ? attr.dup : {}
       @opts = input.opts
       normalize_options
-
       tag = if html = input.opts[:html]
         html = html.call(input) if html.respond_to?(:call)
         form.raw(html)
@@ -295,7 +294,19 @@ module Forme
       handle_errors_option
 
       Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
-      Forme.attr_classes(@attr, 'error') if @opts[:error]
+
+      if @opts[:error]
+        Forme.attr_classes(@attr, 'error')
+        @attr["aria-invalid"] = "true"
+        if @opts.fetch(:error_handler, true)
+          unless @opts[:error_id]
+            if id = @attr[:id] || @attr['id']
+              error_id = @attr['aria-describedby'] ||= "#{id}_error_message"
+              @opts[:error_id] = error_id
+            end
+          end
+        end
+      end
 
       if data = opts[:data]
         data.each do |k, v|

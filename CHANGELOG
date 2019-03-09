@@ -1,5 +1,9 @@
 === master
 
+* Add aria-describedby to all inputs with errors where possible for better accessibility (jeremyevans)
+
+* Add aria-invalid to all inputs with errors for better accessibility (jeremyevans)
+
 * Support :fieldset wrapper and :legend labeler, can be used for accessible radioset/checkboxset (jeremyevans)
 
 * Support :tag_label_attr option for radioset and checkbox set for label attributes for each radio/checkbox label (jeremyevans)

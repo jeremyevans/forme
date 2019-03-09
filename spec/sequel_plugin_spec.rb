@@ -134,7 +134,7 @@ describe "Forme Sequel::Model forms" do
   
   it "should handle errors on radio buttons for boolean fields if :as=>:radio is used" do
     @ab.errors.add(:platinum, 'foo')
-    @b.input(:platinum, :as=>:radio).to_s.must_equal '<span class="label">Platinum</span><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input checked="checked" class="error" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label><span class="error_message">foo</span>'
+    @b.input(:platinum, :as=>:radio).to_s.must_equal '<span class="label">Platinum</span><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input aria-describedby="album_platinum_no_error_message" aria-invalid="true" checked="checked" class="error" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label><span class="error_message" id="album_platinum_no_error_message">foo</span>'
   end
   
   it "should handle Raw :label options if :as=>:radio is used" do
@@ -272,8 +272,8 @@ describe "Forme Sequel::Model forms" do
 
   it "should handle an error message on the underlying column for pg_array_to_many associations" do
     @ab.errors.add(:atag_ids, 'tis not valid')
-    @b.input(:atags).to_s.must_equal '<label>Atags: <select class="error" id="album_atag_ids" multiple="multiple" name="album[atag_ids][]"><option selected="selected" value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label><span class="error_message">tis not valid</span>'
-    @b.input(:atags, :as=>:checkbox).to_s.must_equal '<span class="label">Atags</span><label class="option"><input checked="checked" id="album_atag_ids_1" name="album[atag_ids][]" type="checkbox" value="1"/> s</label><label class="option"><input checked="checked" id="album_atag_ids_2" name="album[atag_ids][]" type="checkbox" value="2"/> t</label><label class="option"><input class="error" id="album_atag_ids_3" name="album[atag_ids][]" type="checkbox" value="3"/> u</label><span class="error_message">tis not valid</span>'
+    @b.input(:atags).to_s.must_equal '<label>Atags: <select aria-describedby="album_atag_ids_error_message" aria-invalid="true" class="error" id="album_atag_ids" multiple="multiple" name="album[atag_ids][]"><option selected="selected" value="1">s</option><option selected="selected" value="2">t</option><option value="3">u</option></select></label><span class="error_message" id="album_atag_ids_error_message">tis not valid</span>'
+    @b.input(:atags, :as=>:checkbox).to_s.must_equal '<span class="label">Atags</span><label class="option"><input checked="checked" id="album_atag_ids_1" name="album[atag_ids][]" type="checkbox" value="1"/> s</label><label class="option"><input checked="checked" id="album_atag_ids_2" name="album[atag_ids][]" type="checkbox" value="2"/> t</label><label class="option"><input aria-describedby="album_atag_ids_3_error_message" aria-invalid="true" class="error" id="album_atag_ids_3" name="album[atag_ids][]" type="checkbox" value="3"/> u</label><span class="error_message" id="album_atag_ids_3_error_message">tis not valid</span>'
   end
   
   it "should use a regular select box for *_to_many associations if multiple if false" do
@@ -318,7 +318,7 @@ describe "Forme Sequel::Model forms" do
 
   it "should handle errors on methods not backed by columns" do
     @ab.errors.add(:artist_name, 'foo')
-    @b.input(:artist_name).to_s.must_equal '<label>Artist name: <input class="error" id="album_artist_name" name="album[artist_name]" type="text" value="a"/></label><span class="error_message">foo</span>'
+    @b.input(:artist_name).to_s.must_equal '<label>Artist name: <input aria-describedby="album_artist_name_error_message" aria-invalid="true" class="error" id="album_artist_name" name="album[artist_name]" type="text" value="a"/></label><span class="error_message" id="album_artist_name_error_message">foo</span>'
   end
 
   it "should respect a :type option with a schema type as the input type for methods not backed by columns" do
@@ -333,12 +333,12 @@ describe "Forme Sequel::Model forms" do
 
   it "should correctly show an error message if there is one" do
     @ab.errors.add(:name, 'tis not valid')
-    @b.input(:name).to_s.must_equal '<label>Name: <input class="error" id="album_name" maxlength="255" name="album[name]" type="text" value="b"/></label><span class="error_message">tis not valid</span>'
+    @b.input(:name).to_s.must_equal '<label>Name: <input aria-describedby="album_name_error_message" aria-invalid="true" class="error" id="album_name" maxlength="255" name="album[name]" type="text" value="b"/></label><span class="error_message" id="album_name_error_message">tis not valid</span>'
   end
   
   it "should correctly show an error message for many_to_one associations if there is one" do
     @ab.errors.add(:artist_id, 'tis not valid')
-    @b.input(:artist).to_s.must_equal '<label>Artist: <select class="error" id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label><span class="error_message">tis not valid</span>'
+    @b.input(:artist).to_s.must_equal '<label>Artist: <select aria-describedby="album_artist_id_error_message" aria-invalid="true" class="error" id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label><span class="error_message" id="album_artist_id_error_message">tis not valid</span>'
   end
   
   it "should raise an error for unhandled associations" do

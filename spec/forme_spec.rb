@@ -116,13 +116,13 @@ describe "Forme plain forms" do
 
   it "should consider form's :errors hash based on the :key option" do
     @f.opts[:errors] = { 'foo' => 'must be present' }
-    @f.input(:text, :key=>"foo").to_s.must_equal "<input class=\"error\" id=\"foo\" name=\"foo\" type=\"text\"/><span class=\"error_message\">must be present</span>"
+    @f.input(:text, :key=>"foo").to_s.must_equal "<input aria-describedby=\"foo_error_message\" aria-invalid=\"true\" class=\"error\" id=\"foo\" name=\"foo\" type=\"text\"/><span class=\"error_message\" id=\"foo_error_message\">must be present</span>"
   end
 
   it "should consider form's :errors hash based on the :key option when using namespaces" do
     @f.opts[:errors] = { 'bar' => { 'foo' => 'must be present' } }
     @f.with_opts(:namespace=>['bar']) do
-      @f.input(:text, :key=>"foo").to_s.must_equal "<input class=\"error\" id=\"bar_foo\" name=\"bar[foo]\" type=\"text\"/><span class=\"error_message\">must be present</span>"
+      @f.input(:text, :key=>"foo").to_s.must_equal "<input aria-describedby=\"bar_foo_error_message\" aria-invalid=\"true\" class=\"error\" id=\"bar_foo\" name=\"bar[foo]\" type=\"text\"/><span class=\"error_message\" id=\"bar_foo_error_message\">must be present</span>"
     end
   end
 
@@ -433,7 +433,7 @@ describe "Forme plain forms" do
   end
 
   it "should create set of radio buttons with :error and :error_attr options" do
-    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2, :error=>'foo', :error_attr=>{'bar'=>'baz'}).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input class="error" type="radio" value="3"/> 3</label><span bar="baz" class="error_message">foo</span>'
+    @f.input(:radioset, :options=>[1, 2, 3], :selected=>2, :error=>'foo', :error_attr=>{'bar'=>'baz'}).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input aria-invalid="true" class="error" type="radio" value="3"/> 3</label><span bar="baz" class="error_message">foo</span>'
   end
 
   it "should support custom error_handler for set of radio buttons" do
@@ -507,7 +507,7 @@ describe "Forme plain forms" do
   end
 
   it "should respect the :error option for checkbox sets" do
-    @f.input(:checkboxset, :options=>[1, 2, 3], :error=>'foo', :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input class="error" type="checkbox" value="3"/> 3</label><span class="error_message">foo</span>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :error=>'foo', :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input aria-invalid="true" class="error" type="checkbox" value="3"/> 3</label><span class="error_message">foo</span>'
   end
 
   it "should create set of checkbox buttons with fieldsets and legends for optgroups" do
@@ -574,19 +574,23 @@ describe "Forme plain forms" do
   end
 
   it "should automatically note the input has errors if :error option is used" do
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.must_equal '<input class="error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo').to_s.must_equal '<input aria-invalid="true" class="error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
   end
 
   it "should add an error message after the label" do
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :label=>"Foo").to_s.must_equal '<label>Foo: <input class="error" type="text" value="foo"/></label><span class="error_message">Bad Stuff!</span>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :label=>"Foo").to_s.must_equal '<label>Foo: <input aria-invalid="true" class="error" type="text" value="foo"/></label><span class="error_message">Bad Stuff!</span>'
   end
 
   it "should add to existing :class option if :error option is used" do
-    @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo').to_s.must_equal '<input class="bar error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
+    @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo').to_s.must_equal '<input aria-invalid="true" class="bar error" type="text" value="foo"/><span class="error_message">Bad Stuff!</span>'
   end
 
   it "should respect :error_attr option for setting the attributes for the error message span" do
-    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<input class="error" type="text" value="foo"/><span class="foo error_message">Bad Stuff!</span>'
+    @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<input aria-invalid="true" class="error" type="text" value="foo"/><span class="foo error_message">Bad Stuff!</span>'
+  end
+
+  it "should use aria-describedby and aria-invalid tags for errors with where the id attribute can be determined" do
+    @f.input(:text, :error=>'Bad Stuff!', :id=>:bar, :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<input aria-describedby="bar_error_message" aria-invalid="true" class="error" id="bar" type="text" value="foo"/><span class="foo error_message" id="bar_error_message">Bad Stuff!</span>'
   end
 
   it "#open should return an opening tag" do
@@ -712,7 +716,7 @@ describe "Forme plain forms" do
   end
 
   it "inputs should have helper displayed inside wrapper, after error" do
-    @f.input(:text, :help=>"List type of foo", :error=>'bad', :wrapper=>:li).to_s.must_equal '<li><input class="error" type="text"/><span class="error_message">bad</span><span class="helper">List type of foo</span></li>'
+    @f.input(:text, :help=>"List type of foo", :error=>'bad', :wrapper=>:li).to_s.must_equal '<li><input aria-invalid="true" class="error" type="text"/><span class="error_message">bad</span><span class="helper">List type of foo</span></li>'
   end
 
   it "inputs should accept a :formatter option to use a custom formatter" do
@@ -745,7 +749,7 @@ describe "Forme plain forms" do
   end
 
   it "inputs should accept a :error_handler option to use a custom error_handler" do
-    @f.input(:textarea, :error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}, :error=>'bar', :id=>:foo).to_s.must_equal '<textarea class="error" id="foo"></textarea>!!! bar'
+    @f.input(:textarea, :error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}, :error=>'bar', :id=>:foo).to_s.must_equal '<textarea aria-describedby="foo_error_message" aria-invalid="true" class="error" id="foo"></textarea>!!! bar'
   end
 
   it "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do
@@ -761,7 +765,7 @@ describe "Forme plain forms" do
   end
 
   it "inputs should accept a :error_handler=>nil option to not use an error_handler" do
-    @f.input(:textarea, :error_handler=>nil, :error=>'bar', :id=>:foo).to_s.must_equal '<textarea class="error" id="foo"></textarea>'
+    @f.input(:textarea, :error_handler=>nil, :error=>'bar', :id=>:foo).to_s.must_equal '<textarea aria-invalid="true" class="error" id="foo"></textarea>'
   end
 
   it "#inputs should accept a :inputs_wrapper=>nil option to not use an inputs_wrapper" do
@@ -835,7 +839,7 @@ describe "Forme custom" do
   end
 
   it "error_handlers can be specified as a proc" do
-    Forme::Form.new(:error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}).input(:textarea, :name=>'foo', :error=>'bar').to_s.must_equal '<textarea class="error" name="foo"></textarea>!!! bar'
+    Forme::Form.new(:error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}).input(:textarea, :name=>'foo', :error=>'bar').to_s.must_equal '<textarea aria-invalid="true" class="error" name="foo"></textarea>!!! bar'
   end
 
   it "wrappers can be specified as a proc" do
@@ -893,7 +897,7 @@ describe "Forme built-in custom" do
   end
 
   it "labeler: explicit should handle tags with errors" do
-    Forme::Form.new(:labeler=>:explicit).input(:text, :error=>'Bad Stuff!', :value=>'f', :id=>'foo', :label=>'bar').to_s.must_equal '<label class="label-before" for="foo">bar</label><input class="error" id="foo" type="text" value="f"/><span class="error_message">Bad Stuff!</span>'
+    Forme::Form.new(:labeler=>:explicit).input(:text, :error=>'Bad Stuff!', :value=>'f', :id=>'foo', :label=>'bar').to_s.must_equal '<label class="label-before" for="foo">bar</label><input aria-describedby="foo_error_message" aria-invalid="true" class="error" id="foo" type="text" value="f"/><span class="error_message" id="foo_error_message">Bad Stuff!</span>'
   end
 
   it "wrapper: li wraps tag in an li" do
@@ -931,7 +935,7 @@ describe "Forme built-in custom" do
   end
 
   it "wrapper: trtd should use at most 2 td tags" do
-    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo', :error=>'Bar').to_s.must_equal '<tr><td><label class="label-before" for="foo">Foo</label></td><td><textarea class="error" id="foo"></textarea><span class="error_message">Bar</span></td></tr>'
+    Forme::Form.new(:wrapper=>:trtd, :labeler=>:explicit).input(:textarea, :id=>'foo', :label=>'Foo', :error=>'Bar').to_s.must_equal '<tr><td><label class="label-before" for="foo">Foo</label></td><td><textarea aria-describedby="foo_error_message" aria-invalid="true" class="error" id="foo"></textarea><span class="error_message" id="foo_error_message">Bar</span></td></tr>'
   end
 
   it "wrapper: trtd should handle inputs with label after" do

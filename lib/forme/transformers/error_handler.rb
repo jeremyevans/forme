@@ -14,6 +14,13 @@ module Forme
       attr = input.opts[:error_attr]
       attr = attr ? attr.dup : {}
       Forme.attr_classes(attr, 'error_message')
+
+      if id = input.opts[:error_id]
+        unless attr['id'] || attr[:id]
+          attr['id'] = id
+        end
+      end
+
       [tag, input.tag(:span, attr, input.opts[:error])]
     end
   end
