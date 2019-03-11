@@ -29,13 +29,12 @@ module Forme
     Forme.register_transformer(:error_handler, :set, new)
 
     def call(tag, input)
-      last_tag = tag
-      last_tag = last_tag.last while last_tag.is_a?(Array)
-      return super unless last_tag.is_a?(Input)
+      return super unless last_input = input.opts[:last_input]
 
-      last_tag.opts[:error] = input.opts[:error]
-      last_tag.opts[:error_attr] = input.opts[:error_attr] if input.opts[:error_attr]
-      last_tag.opts[:error_handler] = :default
+      last_input.opts[:error] = input.opts[:error]
+      last_input.opts[:error_attr] = input.opts[:error_attr] if input.opts[:error_attr]
+      last_input.opts[:error_handler] = :default
+
       tag
     end
   end
