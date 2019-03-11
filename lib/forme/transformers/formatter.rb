@@ -229,7 +229,9 @@ module Forme
       wrapper = Forme.transformer(:wrapper, wrapper)
       tag_label_attr = @opts[:tag_label_attr] || @opts[:label_attr]
 
-      process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
+      first_input = nil
+      last_input = nil
+      ret = process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
         value = label if value.nil?
         label_attr = {:class=>:option}
         label_attr.merge!(tag_label_attr) if tag_label_attr
@@ -251,8 +253,15 @@ module Forme
           r_opts[:key_id] ||= value
         end
 
-        form._input(type, r_opts)
+        input = form._input(type, r_opts)
+        first_input ||= input
+        last_input = input
       end
+
+      @opts[:first_input] = first_input
+      @opts[:last_input] = last_input
+
+      ret
     end
 
     # Formats a textarea.  Respects the following options:
