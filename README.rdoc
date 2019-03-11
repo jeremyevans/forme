@@ -981,6 +981,7 @@ Forme ships with a bunch of built-in transformers that you can use:
 
 === +error_handler+
 
+:after_legend :: designed for usage with :legend labeler, putting error message after legend, adding error for first input in the set
 :default :: modifies tag to add an error class and adds a span with the error message
 :set :: default error_handler for checkboxset and radioset inputs, that adds an error to the last input in the set
 
