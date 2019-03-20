@@ -157,9 +157,10 @@ module Forme
       ops = ops.merge(@opts[:select_options]) if @opts[:select_options]
       first_input = true
       format = DATE_SELECT_FORMAT
+      @opts[:select_labels] ||= {}
       order.map do |x|
         next x if x.is_a?(String)
-        opts = @opts.merge(:label=>nil, :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :value=>values[x], :options=>ops[x].map{|y| [sprintf(format, y), y]})
+        opts = @opts.merge(:label=>@opts[:select_labels][x], :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :value=>values[x], :options=>ops[x].map{|y| [sprintf(format, y), y]})
         opts[:id] = if first_input
           first_input = false
           id

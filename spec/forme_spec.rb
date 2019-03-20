@@ -301,6 +301,10 @@ describe "Forme plain forms" do
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5)).to_s.must_equal %{<select id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
   end
 
+  it "should use labels for select boxes for dates if the :as=>:select and :select_labels options are given" do
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :select_labels=>{:year=>'Y', :month=>'M', :day=>'D'}, :labeler=>:explicit).to_s.must_equal %{<label class="label-before" for="bar">Y</label><select id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<label class="label-before" for="bar_month">M</label><select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<label class="label-before" for="bar_day">D</label><select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
+  end
+
   it "should allow ordering date select boxes via :order" do
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :order=>[:month, '/', :day, '/', :year]).to_s.must_equal %{<select id="bar" name="foo[month]">#{sel(1..12, 6)}</select>/<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>/<select id="bar_year" name="foo[year]">#{sel(1900..2050, 2011)}</select>}
   end
