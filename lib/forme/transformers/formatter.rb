@@ -535,8 +535,11 @@ module Forme
     end
 
     # Use a span with text instead of an input field.
+    # For hidden inputs, do not show anything
     def _format_input(type)
-      tag(:span, {'class'=>'readonly-text'}, @attr[:value])
+      unless type.to_s == 'hidden'
+        tag(:span, {'class'=>'readonly-text'}, @attr[:value])
+      end
     end
 
     # Disabled radio button inputs.

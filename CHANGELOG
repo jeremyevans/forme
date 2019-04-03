@@ -1,5 +1,7 @@
 === master
 
+* Make readonly formatter ignore hidden inputs (jeremyevans)
+
 * Add :select_labels for date inputs using :as=>:select to use labels for the inputs for better accessibility (jeremyevans)
 
 * Add :after_legend error_handler for adding error message after legend when using :legend labeler (jeremyevans)

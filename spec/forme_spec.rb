@@ -882,6 +882,10 @@ describe "Forme built-in custom" do
     Forme::Form.new(:formatter=>:readonly).input(:select, :label=>"Foo", :options=>[1, 2, 3], :value=>2).to_s.must_equal "<label>Foo: <span>2</span></label>"
   end
 
+  it "formatter: readonly removes hidden inputs" do
+    Forme::Form.new(:formatter=>:readonly).input(:hidden, :value=>"Bar").to_s.must_equal ""
+  end
+
   it "formatter: readonly formats text into paragraphs for textarea inputs" do
     Forme::Form.new(:formatter=>:readonly).input(:textarea, :label=>"Foo", :value=>"\n Bar\nBaz\n\nQuuz\n\n1\n2 \n").to_s.must_equal "<label>Foo: <div class=\"readonly-textarea\"><p> Bar<br />Baz</p><p>Quuz</p><p>1<br />2 </p></div></label>"
   end
