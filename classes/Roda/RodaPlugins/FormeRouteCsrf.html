@@ -62,15 +62,14 @@ Roda::RodaPlugins::FormeRouteCsrf
 </div>
 <div class='description'>
 
-<p>Require the render plugin, since forme template integration only makes
-sense with it.</p>
+<p>Require the render plugin, since forme template integration only makes sense with it.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/forme_route_csrf.rb, line 9</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:route_csrf</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_route_csrf.rb</span>&#x000A;<span class="line-num">10</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">11</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">12</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:route_csrf</span>&#x000A;<span class="line-num">13</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -67,8 +67,7 @@ Roda::RodaPlugins::Forme
 <td class='context-item-value'>::Forme::ERB::Helper</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
-<p>This is the module used to add the <a href="Forme.html">Forme</a>
-integration to ERB.</p>
+<p>This is the module used to add the <a href="Forme.html"><code>Forme</code></a> integration to ERB.</p>
 </td>
 </tr>
 </table>
@@ -85,15 +84,14 @@ integration to ERB.</p>
 </div>
 <div class='description'>
 
-<p>Require the render plugin, since forme template integration only makes
-sense with it.</p>
+<p>Require the render plugin, since forme template integration only makes sense with it.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/forme.rb, line 9</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme.rb</span>&#x000A;<span class="line-num">10</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">11</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">12</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

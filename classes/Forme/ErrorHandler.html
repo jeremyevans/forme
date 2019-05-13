@@ -45,9 +45,7 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Default error handler used by the library, using an “error” class for the
-input field and a span tag with an “error_message” class for the error
-message.</p>
+<p>Default error handler used by the library, using an “error” class for the input field and a span tag with an “error_message” class for the error message.</p>
 
 <p>Registered as :default.</p>
 </div>
@@ -59,6 +57,13 @@ message.</p>
 </ol>
 </div>
 <div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="ErrorHandler/AfterLegend.html">Forme::ErrorHandler::AfterLegend</a></li>
+<li><a href="ErrorHandler/Set.html">Forme::ErrorHandler::Set</a></li>
+</ol>
 </div>
 <div id='section'>
 <div id='methods'>
@@ -79,7 +84,7 @@ message.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/error_handler.rb, line 12</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_attr</span>]&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;error_message&#39;</span>)&#x000A;  [<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error</span>])]&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/forme/transformers/error_handler.rb</span>&#x000A;<span class="line-num">13</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;<span class="line-num">14</span>   [<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">error_tag</span>(<span class="ruby-identifier">input</span>)]&#x000A;<span class="line-num">15</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -35,11 +35,7 @@ Sequel::Plugins::FormeSet
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The forme_set plugin makes the model instance keep track of which form
-inputs have been added for it. It adds a forme_set method to handle the
-intake of submitted data from the form.  For more complete control, it also
-adds a forme_parse method that returns a hash of information that can be
-used to modify and validate the object.</p>
+<p>The forme_set plugin makes the model instance keep track of which form inputs have been added for it. It adds a forme_set method to handle the intake of submitted data from the form.  For more complete control, it also adds a forme_parse method that returns a hash of information that can be used to modify and validate the object.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -89,7 +85,7 @@ used to modify and validate the object.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-apply-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-apply-source'><span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb, line 13</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">apply</span>(<span class="ruby-identifier">model</span>)&#x000A;  <span class="ruby-identifier">model</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:forme</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-apply-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>&#x000A;<span class="line-num">14</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">apply</span>(<span class="ruby-identifier">model</span>)&#x000A;<span class="line-num">15</span>   <span class="ruby-identifier">model</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:forme</span>&#x000A;<span class="line-num">16</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

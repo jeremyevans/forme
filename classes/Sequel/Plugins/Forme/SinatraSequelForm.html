@@ -35,9 +35,7 @@ Sequel::Plugins::Forme::SinatraSequelForm
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Helper module used for <a href="../../../Sequel.html">Sequel</a> forms
-using ERB template integration.  Necessary for proper subform handling when
-using such forms with partials.</p>
+<p>Helper module used for <a href="../../../Sequel.html"><code>Sequel</code></a> forms using ERB template integration.  Necessary for proper subform handling when using such forms with partials.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -60,15 +58,14 @@ using such forms with partials.</p>
 </div>
 <div class='description'>
 
-<p>Capture the inside of the inputs, injecting it into the template if a block
-is given, or returning it as a string if not.</p>
+<p>Capture the inside of the inputs, injecting it into the template if a block is given, or returning it as a string if not.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-subform-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-subform-source'><span class="ruby-comment"># File lib/sequel/plugins/forme.rb, line 458</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">subform</span>(<span class="ruby-operator">*</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">capture</span>{<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-subform-source'>    <span class="ruby-comment"># File lib/sequel/plugins/forme.rb</span>&#x000A;<span class="line-num">459</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">subform</span>(<span class="ruby-operator">*</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">460</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">461</span>     <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;<span class="line-num">462</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">463</span>     <span class="ruby-identifier">capture</span>{<span class="ruby-keyword">super</span>}&#x000A;<span class="line-num">464</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">465</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

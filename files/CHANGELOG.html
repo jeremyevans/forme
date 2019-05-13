@@ -30,98 +30,96 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2018-11-16 10:26:56 -0800</span>
+<span class='datetime'>2019-05-13 13:55:07 -0700</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h3 id="label-1.10.0+-282019-05-13-29">1.10.0 (2019-05-13)<span><a href="#label-1.10.0+-282019-05-13-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<ul><li>
+<p>Make readonly formatter ignore hidden inputs (jeremyevans)</p>
+</li><li>
+<p>Add :select_labels for date inputs using :as=&gt;:select to use labels for the inputs for better accessibility (jeremyevans)</p>
+</li><li>
+<p>Add :after_legend error_handler for adding error message after legend when using :legend labeler (jeremyevans)</p>
+</li><li>
+<p>Add aria-describedby to all inputs with errors where possible for better accessibility (jeremyevans)</p>
+</li><li>
+<p>Add aria-invalid to all inputs with errors for better accessibility (jeremyevans)</p>
+</li><li>
+<p>Support :fieldset wrapper and :legend labeler, can be used for accessible radioset/checkboxset (jeremyevans)</p>
+</li><li>
+<p>Support :tag_label_attr option for radioset and checkbox set for label attributes for each radio/checkbox label (jeremyevans)</p>
+</li><li>
+<p>Support custom :error_handler in radioset and checkboxset inputs (jeremyevans)</p>
+</li><li>
+<p>Support custom :labeler in radioset and checkboxset inputs (jeremyevans)</p>
+</li><li>
+<p>Avoid calling Proc.new with an implicit block, which is deprecated starting in ruby 2.7 (jeremyevans)</p>
+</li></ul>
+
 <h3 id="label-1.9.0+-282018-11-16-29">1.9.0 (2018-11-16)<span><a href="#label-1.9.0+-282018-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Automatically add maxlength attributes to text and textarea inputs in the
-<a href="../classes/Sequel.html">Sequel</a> plugin based on maximum
-database column length (jeremyevans)</p>
+<p>Automatically add maxlength attributes to text and textarea inputs in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin based on maximum database column length (jeremyevans)</p>
 </li><li>
-<p>Make forme_set <a href="../classes/Sequel.html">Sequel</a> plugin recognize
-default formatter changes set via with_opts (jeremyevans)</p>
+<p>Make forme_set <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin recognize default formatter changes set via with_opts (jeremyevans)</p>
 </li><li>
-<p>Use div with nested p tags instead of spans for readonly textarea inputs
-(jeremyevans)</p>
+<p>Use div with nested p tags instead of spans for readonly textarea inputs (jeremyevans)</p>
 </li><li>
-<p>Make readonly text input spans use the readonly-text class for easier
-styling (jeremyevans)</p>
+<p>Make readonly text input spans use the readonly-text class for easier styling (jeremyevans)</p>
 </li><li>
-<p>Add <a href="../classes/Forme.html#method-c-h">Forme.h</a> for HTML
-escaping, using cgi/escape if available for faster escaping (jeremyevans)</p>
+<p>Add <a href="../classes/Forme.html#method-c-h"><code>Forme.h</code></a> for HTML escaping, using cgi/escape if available for faster escaping (jeremyevans)</p>
 </li><li>
-<p>Correctly handle :value=&gt;false option and false option values in select,
-radioset, and checkboxset inputs (jeremyevans)</p>
+<p>Correctly handle :value=&gt;false option and false option values in select, radioset, and checkboxset inputs (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-1.8.0+-282018-06-11-29">1.8.0 (2018-06-11)<span><a href="#label-1.8.0+-282018-06-11-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Add support for :errors form option for setting error information for
-multiple inputs, similar to :values form option (adam12) (#32)</p>
+<p>Add support for :errors form option for setting error information for multiple inputs, similar to :values form option (adam12) (#32)</p>
 </li><li>
-<p>Add <a href="../classes/Roda.html">Roda</a> forme_route_csrf plugin using
-route_csrf plugin for request-specific CSRF tokens (jeremyevans)</p>
+<p>Add <a href="../classes/Roda.html"><code>Roda</code></a> forme_route_csrf plugin using route_csrf plugin for request-specific CSRF tokens (jeremyevans)</p>
 </li><li>
-<p>Add forme_default_request_method as a method to check for object forms,
-setting the default form method (jeremyevans)</p>
+<p>Add forme_default_request_method as a method to check for object forms, setting the default form method (jeremyevans)</p>
 </li><li>
-<p>Support :dasherize_data input option to convert underscores to dashes for
-:data hash symbol keys (janko-m) (#29)</p>
+<p>Support :dasherize_data input option to convert underscores to dashes for :data hash symbol keys (janko-m) (#29)</p>
 </li><li>
-<p>Omit labels for hidden inputs in <a
-href="../classes/Sequel.html">Sequel</a> plugin (janko-m) (#27)</p>
+<p>Omit labels for hidden inputs in <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (janko-m) (#27)</p>
 </li><li>
-<p>Allow use of :type option for specifying input type when using an
-associated object that doesn&#39;t respond to forme_input (janko-m) (#25)</p>
+<p>Allow use of :type option for specifying input type when using an associated object that doesn&#39;t respond to forme_input (janko-m) (#25)</p>
 </li><li>
-<p>Ignore default values for <a href="../classes/Sequel.html">Sequel</a>
-inputs when type: :file option is used (janko-m) (#24)</p>
+<p>Ignore default values for <a href="../classes/Sequel.html"><code>Sequel</code></a> inputs when type: :file option is used (janko-m) (#24)</p>
 </li></ul>
 
 <h3 id="label-1.7.0+-282018-02-07-29">1.7.0 (2018-02-07)<span><a href="#label-1.7.0+-282018-02-07-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Have radioset and checkboxset inputs respect :error_attr option
-(jeremyevans)</p>
+<p>Have radioset and checkboxset inputs respect :error_attr option (jeremyevans)</p>
 </li><li>
-<p>Add :tag_labeler option for checkboxsets and radiosets for the labeler to
-use for individual elements (jeremyevans)</p>
+<p>Add :tag_labeler option for checkboxsets and radiosets for the labeler to use for individual elements (jeremyevans)</p>
 </li><li>
-<p>Use milliseconds instead of microseconds for serializing Time and DateTime
-values, since that&#39;s what datetime-local inputs support (jeremyevans)</p>
+<p>Use milliseconds instead of microseconds for serializing Time and DateTime values, since that&#39;s what datetime-local inputs support (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-1.6.0+-282017-05-03-29">1.6.0 (2017-05-03)<span><a href="#label-1.6.0+-282017-05-03-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Use thead/tbody tags for table inputs_wrapper transformer and <a
-href="../classes/Sequel.html">Sequel</a> plugin subform :grid option
-(jeremyevans)</p>
+<p>Use thead/tbody tags for table inputs_wrapper transformer and <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin subform :grid option (jeremyevans)</p>
 </li><li>
-<p>Do not create a hidden input for checkboxes when using disabled/readonly
-formatters (jeremyevans)</p>
+<p>Do not create a hidden input for checkboxes when using disabled/readonly formatters (jeremyevans)</p>
 </li><li>
-<p>Add support for overriding forme_namespace on the Sequel::Model instance to
-change forme&#39;s namespacing (mwpastore, jeremyevans) (#17)</p>
+<p>Add support for overriding forme_namespace on the Sequel::Model instance to change forme&#39;s namespacing (mwpastore, jeremyevans) (#17)</p>
 </li><li>
-<p>Allow :label_attr for checkboxset and radioset to set attributes for
-individual labels in the set (jeremyevans)</p>
+<p>Allow :label_attr for checkboxset and radioset to set attributes for individual labels in the set (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-1.5.0+-282016-08-09-29">1.5.0 (2016-08-09)<span><a href="#label-1.5.0+-282016-08-09-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Add forme_set <a href="../classes/Sequel.html">Sequel</a> plugin, for
-handling the intake of submitted params based on form fields (jeremyevans)</p>
+<p>Add forme_set <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin, for handling the intake of submitted params based on form fields (jeremyevans)</p>
 </li><li>
-<p>Only add csrf tag in forme/erb support if there is a current session in the
-environment (jeremyevans)</p>
+<p>Only add csrf tag in forme/erb support if there is a current session in the environment (jeremyevans)</p>
 </li><li>
 <p>Fix frozen string literal issue in explicit labeler (jeremyevans)</p>
 </li><li>
-<p>Add forme_i18n <a href="../classes/Sequel.html">Sequel</a> plugin, for
-internalization support (badosu) (#15)</p>
+<p>Add forme_i18n <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin, for internalization support (badosu) (#15)</p>
 </li></ul>
 
 <h3 id="label-1.4.0+-282016-02-01-29">1.4.0 (2016-02-01)<span><a href="#label-1.4.0+-282016-02-01-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
@@ -130,340 +128,234 @@ internalization support (badosu) (#15)</p>
 </li><li>
 <p>Respect :formatter option for radioset and checkboxset inputs (jeremyevans)</p>
 </li><li>
-<p>Add support for running with –enable-frozen-string-literal on ruby 2.3
-(jeremyevans)</p>
+<p>Add support for running with –enable-frozen-string-literal on ruby 2.3 (jeremyevans)</p>
 </li><li>
-<p>Integrate with the <a href="../classes/Sequel.html">Sequel</a>
-association_pks plugin in the <a href="../classes/Sequel.html">Sequel</a>
-plugin (jeremyevans)</p>
+<p>Integrate with the <a href="../classes/Sequel.html"><code>Sequel</code></a> association_pks plugin in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Do not add required * to label if :label=&gt;nil in the <a
-href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+<p>Do not add required * to label if :label=&gt;nil in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Add forme/bs3 library for Bootstrap 3 support (kematzy, jeremyevans) (#12,
-#14)</p>
+<p>Add forme/bs3 library for Bootstrap 3 support (kematzy, jeremyevans) (#12, #14)</p>
 </li><li>
-<p>Support an :html option in the default formatter to override the HTML
-created (jeremyevans)</p>
+<p>Support an :html option in the default formatter to override the HTML created (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-1.3.0+-282015-04-17-29">1.3.0 (2015-04-17)<span><a href="#label-1.3.0+-282015-04-17-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Support option groups in select, checkboxset, and radioset inputs via
-:optgroups option (jeremyevans)</p>
+<p>Support option groups in select, checkboxset, and radioset inputs via :optgroups option (jeremyevans)</p>
 </li><li>
-<p>Support :select_options option for date/datetime :as=&gt;:select, for
-setting specific options in each select field (jeremyevans)</p>
+<p>Support :select_options option for date/datetime :as=&gt;:select, for setting specific options in each select field (jeremyevans)</p>
 </li><li>
-<p>The id for first select input for date/datetime :as=&gt;:select is now the
-same as the :id option/attribute (jeremyevans)</p>
+<p>The id for first select input for date/datetime :as=&gt;:select is now the same as the :id option/attribute (jeremyevans)</p>
 </li><li>
-<p>Support :order option for date/datetime :as=&gt;:select inputs, so you can
-order select boxes day/month/year or month/day/year (jeremyevans)</p>
+<p>Support :order option for date/datetime :as=&gt;:select inputs, so you can order select boxes day/month/year or month/day/year (jeremyevans)</p>
 </li><li>
-<p>Add helper transformer type, for adding help text next to fields
-(jeremyevans)</p>
+<p>Add helper transformer type, for adding help text next to fields (jeremyevans)</p>
 </li><li>
-<p>Support :skip_primary_key option to not add hidden primary key fields for
-existing associated objects in subform in the <a
-href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+<p>Support :skip_primary_key option to not add hidden primary key fields for existing associated objects in subform in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Support :blank_attr option for select/radioset/checkboxset inputs
-(jeremyevans)</p>
+<p>Support :blank_attr option for select/radioset/checkboxset inputs (jeremyevans)</p>
 </li><li>
-<p>Support :blank_position=&gt;:after option for select/radioset/checkboxset
-inputs (jeremyevans)</p>
+<p>Support :blank_position=&gt;:after option for select/radioset/checkboxset inputs (jeremyevans)</p>
 </li><li>
-<p>Respect existing :add_blank option when using select tags for boolean
-fields in the <a href="../classes/Sequel.html">Sequel</a> plugin
-(jeremyevans)</p>
+<p>Respect existing :add_blank option when using select tags for boolean fields in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
 <p>Use type=datetime-local for datetime types (jeremyevans)</p>
 </li><li>
-<p>Handle error messages on the underlying column in pg_array_to_many
-associations (jeremyevans)</p>
+<p>Handle error messages on the underlying column in pg_array_to_many associations (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-1.2.0+-282014-11-06-29">1.2.0 (2014-11-06)<span><a href="#label-1.2.0+-282014-11-06-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Support pg_array_to_many associations in the <a
-href="../classes/Sequel.html">Sequel</a> plugin, treating them similarly to
-other *_to_many associations (jeremyevans)</p>
+<p>Support pg_array_to_many associations in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin, treating them similarly to other *_to_many associations (jeremyevans)</p>
 </li><li>
-<p>When using :grid option to subform in the <a
-href="../classes/Sequel.html">Sequel</a> plugin, :inputs_opts can be used
-to pass options to the InputsWrapper (jeremyevans)</p>
+<p>When using :grid option to subform in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin, :inputs_opts can be used to pass options to the InputsWrapper (jeremyevans)</p>
 </li><li>
-<p>Support :error_attr option for inputs, for setting attributes to use for
-error message span (jeremyevans)</p>
+<p>Support :error_attr option for inputs, for setting attributes to use for error message span (jeremyevans)</p>
 </li><li>
-<p>Make explicit labeler use label-before and label-after classes specifying
-the label position (jeremyevans)</p>
+<p>Make explicit labeler use label-before and label-after classes specifying the label position (jeremyevans)</p>
 </li><li>
 <p>Support :size option for select inputs (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-1.1.0+-282014-09-07-29">1.1.0 (2014-09-07)<span><a href="#label-1.1.0+-282014-09-07-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Make form without a block in the ERB integration still use hidden tags if
-method is post (jeremyevans)</p>
+<p>Make form without a block in the ERB integration still use hidden tags if method is post (jeremyevans)</p>
 </li><li>
-<p>Add <a href="../classes/Forme/RawString.html">Forme::RawString</a> class,
-<a href="../classes/Forme.html#method-c-raw">Forme.raw</a>, and Form#raw
-for creating raw strings, so you don&#39;t need to use extend(Forme::Raw)
-(jeremyevans)</p>
+<p>Add <a href="../classes/Forme/RawString.html"><code>Forme::RawString</code></a> class, <a href="../classes/Forme.html#method-c-raw"><code>Forme.raw</code></a>, and Form#raw for creating raw strings, so you don&#39;t need to use extend(Forme::Raw) (jeremyevans)</p>
 </li><li>
-<p>Allow using nil as explicit transformer value when creating a Form, to
-disable default transformer (jeremyevans)</p>
+<p>Allow using nil as explicit transformer value when creating a Form, to disable default transformer (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-1.0.0+-282014-07-30-29">1.0.0 (2014-07-30)<span><a href="#label-1.0.0+-282014-07-30-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
 <p>Add roda plugin for forme (jeremyevans)</p>
 </li><li>
-<p>Move forme/sinatra to forme/erb, since it is ERB and not Sinatra specific
-(jeremyevans)</p>
+<p>Move forme/sinatra to forme/erb, since it is ERB and not Sinatra specific (jeremyevans)</p>
 </li><li>
-<p>Do not extend objects at runtime when using the <a
-href="../classes/Sequel.html">Sequel</a> support (jeremyevans)</p>
+<p>Do not extend objects at runtime when using the <a href="../classes/Sequel.html"><code>Sequel</code></a> support (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-0.10.0+-282014-07-01-29">0.10.0 (2014-07-01)<span><a href="#label-0.10.0+-282014-07-01-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Use [] instead of send to get input value for object forms if object is a
-hash (jeremyevans)</p>
+<p>Use [] instead of send to get input value for object forms if object is a hash (jeremyevans)</p>
 </li><li>
-<p>Add Form#each_obj, for iterating over an Enumerable of objects, using
-with_obj for each object (jeremyevans)</p>
+<p>Add Form#each_obj, for iterating over an Enumerable of objects, using with_obj for each object (jeremyevans)</p>
 </li><li>
-<p>Add Form#with_obj, for changing a Form&#39;s object and namespace
-temporarily (jeremyevans)</p>
+<p>Add Form#with_obj, for changing a Form&#39;s object and namespace temporarily (jeremyevans)</p>
 </li><li>
-<p>Support changing the namespace for a Form temporarily using
-with_opts(:namespace=&gt;[&#39;ns1&#39;, &#39;ns2&#39;]) (jeremyevans)</p>
+<p>Support changing the namespace for a Form temporarily using with_opts(:namespace=&gt;[&#39;ns1&#39;, &#39;ns2&#39;]) (jeremyevans)</p>
 </li><li>
-<p>Use current namespace for form object inputs if :id/:name/:key is not
-specified (jeremyevans)</p>
+<p>Use current namespace for form object inputs if :id/:name/:key is not specified (jeremyevans)</p>
 </li><li>
-<p>Remove SequelForm#nested_associations accessor methods, no longer necessary
-(jeremyevans)</p>
+<p>Remove SequelForm#nested_associations accessor methods, no longer necessary (jeremyevans)</p>
 </li><li>
-<p>Support changing the object for a Form temporarily using
-with_opts(:obj=&gt;new_obj) (jeremyevans)</p>
+<p>Support changing the object for a Form temporarily using with_opts(:obj=&gt;new_obj) (jeremyevans)</p>
 </li><li>
-<p>Add :table, :tr, :ol, and :fieldset_ol wrappers, which automatically set
-wrapper and inputs_wrapper appropriately (jeremyevans)</p>
+<p>Add :table, :tr, :ol, and :fieldset_ol wrappers, which automatically set wrapper and inputs_wrapper appropriately (jeremyevans)</p>
 </li><li>
-<p>Add subform :grid option in <a href="../classes/Sequel.html">Sequel</a>
-plugin, for more compact editing of nested *_to_many associations
-(jeremyevans)</p>
+<p>Add subform :grid option in <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin, for more compact editing of nested *_to_many associations (jeremyevans)</p>
 </li><li>
-<p>Make table inputs_wrapper accept a :labels option and automatically set up
-th tags with the labels for each column (jeremyevans)</p>
+<p>Make table inputs_wrapper accept a :labels option and automatically set up th tags with the labels for each column (jeremyevans)</p>
 </li><li>
-<p>Form#inputs now accepts a :nested_inputs_wrapper option to set default
-inputs_wrapper transformer inside the block (jeremyevans)</p>
+<p>Form#inputs now accepts a :nested_inputs_wrapper option to set default inputs_wrapper transformer inside the block (jeremyevans)</p>
 </li><li>
-<p>Add tr inputs_wrapper and td wrapper, for horizontal layout of inputs
-inside a table (jeremyevans)</p>
+<p>Add tr inputs_wrapper and td wrapper, for horizontal layout of inputs inside a table (jeremyevans)</p>
 </li><li>
-<p>Form#inputs now accepts transformer options (e.g :wrapper) and
-automatically calls with_opts (jeremyevans)</p>
+<p>Form#inputs now accepts transformer options (e.g :wrapper) and automatically calls with_opts (jeremyevans)</p>
 </li><li>
 <p>Remove Form#format and Form#serialize (jeremyevans)</p>
 </li><li>
-<p>Remove Form#{formatter,labeler,error_handler,wrapper,inputs_wrapper}
-accessors (jeremyevans)</p>
+<p>Remove Form#{formatter,labeler,error_handler,wrapper,inputs_wrapper} accessors (jeremyevans)</p>
 </li><li>
-<p>Add Form.with_opts method to override opts for the given block
-(jeremyevans)</p>
+<p>Add Form.with_opts method to override opts for the given block (jeremyevans)</p>
 </li><li>
 <p>Remove Form#use_serializer and Serializer module (jeremyevans)</p>
 </li><li>
-<p>table inputs_wrapper now respects the :legend and :legend_attr options,
-using a caption (jeremyevans)</p>
+<p>table inputs_wrapper now respects the :legend and :legend_attr options, using a caption (jeremyevans)</p>
 </li><li>
-<p>ol, div, and table inputs_wrappers now respect the :attr option
-(jeremyevans)</p>
+<p>ol, div, and table inputs_wrappers now respect the :attr option (jeremyevans)</p>
 </li><li>
-<p>Make subform always use the inputs_wrapper, even if :inputs is not given
-(jeremyevans)</p>
+<p>Make subform always use the inputs_wrapper, even if :inputs is not given (jeremyevans)</p>
 </li><li>
-<p>Allow input_defaults to work with symbol keys for inputs that use symbol
-types (jeremyevans)</p>
+<p>Allow input_defaults to work with symbol keys for inputs that use symbol types (jeremyevans)</p>
 </li><li>
-<p>Support Form :values option, for automatically setting value attributes for
-inputs from submitted params (jeremyevans)</p>
+<p>Support Form :values option, for automatically setting value attributes for inputs from submitted params (jeremyevans)</p>
 </li><li>
-<p>Support :autofocus option for setting autofocus attribute, similar to
-:required and :disabled (jeremyevans)</p>
+<p>Support :autofocus option for setting autofocus attribute, similar to :required and :disabled (jeremyevans)</p>
 </li><li>
-<p>Add <a
-href="../classes/Forme.html#attribute-c-default_add_blank_prompt">Forme.default_add_blank_prompt</a>
-for setting default prompt used for :add_blank option (jeremyevans)</p>
+<p>Add <a href="../classes/Forme.html#attribute-c-default_add_blank_prompt"><code>Forme.default_add_blank_prompt</code></a> for setting default prompt used for :add_blank option (jeremyevans)</p>
 </li><li>
 <p>Support radioset and checkboxset Input types (jeremyevans)</p>
 </li><li>
-<p>Support :key and :key_id options for Inputs, for automatically setting
-name/id attributes based on current namespace (jeremyevans)</p>
+<p>Support :key and :key_id options for Inputs, for automatically setting name/id attributes based on current namespace (jeremyevans)</p>
 </li><li>
-<p>Move namespace handling from <a href="../classes/Sequel.html">Sequel</a>
-plugin into the core (jeremyevans)</p>
+<p>Move namespace handling from <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin into the core (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-0.9.2+-282014-04-10-29">0.9.2 (2014-04-10)<span><a href="#label-0.9.2+-282014-04-10-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Make association_select_options compatible with <a
-href="../classes/Sequel.html">Sequel</a> 4.10+ (jeremyevans)</p>
+<p>Make association_select_options compatible with <a href="../classes/Sequel.html"><code>Sequel</code></a> 4.10+ (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-0.9.1+-282013-12-18-29">0.9.1 (2013-12-18)<span><a href="#label-0.9.1+-282013-12-18-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Use a tri-valued select box by default for boolean inputs with
-:required=&gt;false option (jeremyevans)</p>
+<p>Use a tri-valued select box by default for boolean inputs with :required=&gt;false option (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-0.9.0+-282013-12-13-29">0.9.0 (2013-12-13)<span><a href="#label-0.9.0+-282013-12-13-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Support :input_defaults Form option for setting defaults for inputs by type
-(jeremyevans)</p>
+<p>Support :input_defaults Form option for setting defaults for inputs by type (jeremyevans)</p>
 </li><li>
-<p>Make html_usa serializer convert date/datetime inputs to text for better
-compatibility (jeremyevans)</p>
+<p>Make html_usa serializer convert date/datetime inputs to text for better compatibility (jeremyevans)</p>
 </li><li>
-<p>Format BigDecimal in standard notation instead of default scientific
-notation (jeremyevans)</p>
+<p>Format BigDecimal in standard notation instead of default scientific notation (jeremyevans)</p>
 </li><li>
 <p>Make trtd wrapper always have labels on left side (jeremyevans)</p>
 </li><li>
 <p>Make trtd wrapper always use 2 cells (jeremyevans)</p>
 </li><li>
-<p>Use regular (not-multiple) select box for *_to_many associations for
-:multiple=&gt;false option (jeremyevans)</p>
+<p>Use regular (not-multiple) select box for *_to_many associations for :multiple=&gt;false option (jeremyevans)</p>
 </li><li>
-<p>Associtions in the <a href="../classes/Sequel.html">Sequel</a> plugin now
-support a :dataset option to specify dataset to use for options
-(jeremyevans)</p>
+<p>Associtions in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin now support a :dataset option to specify dataset to use for options (jeremyevans)</p>
 </li><li>
-<p>The :name_method option used for associations in the <a
-href="../classes/Sequel.html">Sequel</a> plugin now allows for arbitrary
-callables (jeremyevans)</p>
+<p>The :name_method option used for associations in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin now allows for arbitrary callables (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-0.8.0+-282013-10-30-29">0.8.0 (2013-10-30)<span><a href="#label-0.8.0+-282013-10-30-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>form calls without block or :inputs or :button options are now handled
-correctly in the Sinatra integration (jeremyevans)</p>
+<p>form calls without block or :inputs or :button options are now handled correctly in the Sinatra integration (jeremyevans)</p>
 </li><li>
-<p>CSRF token tags are now automatically added to forms in Rails and Sinatra
-if using rack_csrf (jeremyevans) (#5)</p>
+<p>CSRF token tags are now automatically added to forms in Rails and Sinatra if using rack_csrf (jeremyevans) (#5)</p>
 </li><li>
-<p>Form objects now support a :hidden_tags option for automatically adding
-hidden tags (jeremyevans)</p>
+<p>Form objects now support a :hidden_tags option for automatically adding hidden tags (jeremyevans)</p>
 </li><li>
-<p><a href="../classes/Sequel.html">Sequel</a> many_to_one associations with
-existing and required values no longer have a blank option added by default
-(jeremyevans)</p>
+<p><a href="../classes/Sequel.html"><code>Sequel</code></a> many_to_one associations with existing and required values no longer have a blank option added by default (jeremyevans)</p>
 </li><li>
-<p><a
-href="../classes/ActiveSupport/SafeBuffer.html">ActiveSupport::SafeBuffer</a>
-objects are now automatically treated as raw in the Rails integration
-(jeremyevans)</p>
+<p><a href="../classes/ActiveSupport/SafeBuffer.html"><code>ActiveSupport::SafeBuffer</code></a> objects are now automatically treated as raw in the Rails integration (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-0.7.0+-282012-05-02-29">0.7.0 (2012-05-02)<span><a href="#label-0.7.0+-282012-05-02-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Support :label_position option in both of the labelers, can be set to
-:before or :after to override the default (jeremyevans)</p>
+<p>Support :label_position option in both of the labelers, can be set to :before or :after to override the default (jeremyevans)</p>
 </li><li>
 <p>Add Rails integration (jeremyevans)</p>
 </li><li>
-<p>Make explicit labeler put label after checkboxes and radio buttons instead
-of before (jeremyevans)</p>
+<p>Make explicit labeler put label after checkboxes and radio buttons instead of before (jeremyevans)</p>
 </li><li>
-<p>Make implicit labeler not include hidden checkbox inside label
-(jeremyevans)</p>
+<p>Make implicit labeler not include hidden checkbox inside label (jeremyevans)</p>
 </li><li>
-<p>Recognize :cols and :rows options as attributes for textarea inputs in the
-default formatter (jeremyevans)</p>
+<p>Recognize :cols and :rows options as attributes for textarea inputs in the default formatter (jeremyevans)</p>
 </li><li>
-<p>Recognize :size and :maxlength options as attributes for text inputs in the
-default formatter (jeremyevans)</p>
+<p>Recognize :size and :maxlength options as attributes for text inputs in the default formatter (jeremyevans)</p>
 </li><li>
-<p>Recognize :style option as attributes in the default formatter
-(jeremyevans)</p>
+<p>Recognize :style option as attributes in the default formatter (jeremyevans)</p>
 </li><li>
-<p>Join attribute values specified as arrays with spaces instead of the empty
-string (jeremyevans)</p>
+<p>Join attribute values specified as arrays with spaces instead of the empty string (jeremyevans)</p>
 </li><li>
 <p>Make Sinatra ERB integration work with partials (jeremyevans)</p>
 </li><li>
-<p>Add id attributes for association :as=&gt;:radio or :as=&gt;:checkbox
-fields (jeremyevans)</p>
+<p>Add id attributes for association :as=&gt;:radio or :as=&gt;:checkbox fields (jeremyevans)</p>
 </li><li>
-<p>Add an html class attribute for radio/checkbox labels in :as=&gt;:radio or
-:as=&gt;:checkbox fields (jeremyevans)</p>
+<p>Add an html class attribute for radio/checkbox labels in :as=&gt;:radio or :as=&gt;:checkbox fields (jeremyevans)</p>
 </li><li>
-<p>Wrap text acting as a label in a span with class label for :as=&gt;:radio
-or :as=&gt;:checkbox fields (jeremyevans)</p>
+<p>Wrap text acting as a label in a span with class label for :as=&gt;:radio or :as=&gt;:checkbox fields (jeremyevans)</p>
 </li><li>
-<p>Support overriding the true/false label and values for select boolean
-fields in the <a href="../classes/Sequel.html">Sequel</a> plugin
-(jeremyevans)</p>
+<p>Support overriding the true/false label and values for select boolean fields in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-0.6.0+-282011-08-01-29">0.6.0 (2011-08-01)<span><a href="#label-0.6.0+-282011-08-01-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
-<p>Fix wrapping for :as=&gt;:radio boolean fields to handle them like
-association :as=&gt;:radio fields (jeremyevans)</p>
+<p>Fix wrapping for :as=&gt;:radio boolean fields to handle them like association :as=&gt;:radio fields (jeremyevans)</p>
 </li><li>
-<p>Fix handling of Raw :label option in for association fields with
-:as=&gt;:radio and :as=&gt;:checkbox in the <a
-href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+<p>Fix handling of Raw :label option in for association fields with :as=&gt;:radio and :as=&gt;:checkbox in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Use label text for :as=&gt;:radio boolean fields in the <a
-href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+<p>Use label text for :as=&gt;:radio boolean fields in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Support overriding the true/false label and values for :as=&gt;:radio
-boolean fields in the <a href="../classes/Sequel.html">Sequel</a> plugin
-(jeremyevans)</p>
+<p>Support overriding the true/false label and values for :as=&gt;:radio boolean fields in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Allow overriding the type of input for schema columns and associations in
-the <a href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+<p>Allow overriding the type of input for schema columns and associations in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Add the label before the error option, so the error always comes after the
-label (jeremyevans)</p>
+<p>Add the label before the error option, so the error always comes after the label (jeremyevans)</p>
 </li><li>
-<p>Always add error class to formatted input tag, regardless of error_handler
-(jeremyevans)</p>
+<p>Always add error class to formatted input tag, regardless of error_handler (jeremyevans)</p>
 </li><li>
-<p>Add labels to inputs for fields that the object doesn&#39;t respond to in
-the <a href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+<p>Add labels to inputs for fields that the object doesn&#39;t respond to in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Allow customization for non-schema columns that the object responds to in
-the <a href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+<p>Allow customization for non-schema columns that the object responds to in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Handle errors on all inputs in the <a
-href="../classes/Sequel.html">Sequel</a> plugin, not just those backed by
-columns (jeremyevans)</p>
+<p>Handle errors on all inputs in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin, not just those backed by columns (jeremyevans)</p>
 </li><li>
 <p>Fix default error_handler if input yields an area of tags (jeremyevans)</p>
 </li><li>
-<p>Support :as=&gt;:radio option for boolean fields in the <a
-href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+<p>Support :as=&gt;:radio option for boolean fields in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
-<p>Allow specifying label attributes with :label_attr in labelers
-(jeremyevans)</p>
+<p>Allow specifying label attributes with :label_attr in labelers (jeremyevans)</p>
 </li><li>
-<p>Allow Form#inputs to be called with a single options hash argument
-(jeremyevans)</p>
+<p>Allow Form#inputs to be called with a single options hash argument (jeremyevans)</p>
 </li><li>
-<p>Handle unrecognized fields in the <a
-href="../classes/Sequel.html">Sequel</a> plugin if a :type option is given
-(jeremyevans)</p>
+<p>Handle unrecognized fields in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin if a :type option is given (jeremyevans)</p>
 </li><li>
-<p>Add required * to label even if :label is already specified in the <a
-href="../classes/Sequel.html">Sequel</a> plugin (jeremyevans)</p>
+<p>Add required * to label even if :label is already specified in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-0.5.0+-282011-07-01-29">0.5.0 (2011-07-01)<span><a href="#label-0.5.0+-282011-07-01-29">&para;</a> <a href="#top">&uarr;</a></span></h3>

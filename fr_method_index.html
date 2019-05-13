@@ -4330,10 +4330,10 @@ Object.extend(Element.ClassNames.prototype, Enumerable);
 
 Element.addMethods();
 var search_index = [
-  { method: 'add_hidden_tag', module: 'forme::erb', html: '<a href="classes/Forme/ERB.html#method-c-add_hidden_tag"><span class="method_name">::add_hidden_tag</span> <span class="module_name">(Forme::ERB)</span></a>' },
   { method: 'add_hidden_tag', module: 'forme::rails', html: '<a href="classes/Forme/Rails.html#method-c-add_hidden_tag"><span class="method_name">::add_hidden_tag</span> <span class="module_name">(Forme::Rails)</span></a>' },
-  { method: 'apply', module: 'sequel::plugins::formeset', html: '<a href="classes/Sequel/Plugins/FormeSet.html#method-c-apply"><span class="method_name">::apply</span> <span class="module_name">(Sequel::Plugins::FormeSet)</span></a>' },
+  { method: 'add_hidden_tag', module: 'forme::erb', html: '<a href="classes/Forme/ERB.html#method-c-add_hidden_tag"><span class="method_name">::add_hidden_tag</span> <span class="module_name">(Forme::ERB)</span></a>' },
   { method: 'apply', module: 'sequel::plugins::formei18n', html: '<a href="classes/Sequel/Plugins/FormeI18n.html#method-c-apply"><span class="method_name">::apply</span> <span class="module_name">(Sequel::Plugins::FormeI18n)</span></a>' },
+  { method: 'apply', module: 'sequel::plugins::formeset', html: '<a href="classes/Sequel/Plugins/FormeSet.html#method-c-apply"><span class="method_name">::apply</span> <span class="module_name">(Sequel::Plugins::FormeSet)</span></a>' },
   { method: 'attr_classes', module: 'forme', html: '<a href="classes/Forme.html#method-c-attr_classes"><span class="method_name">::attr_classes</span> <span class="module_name">(Forme)</span></a>' },
   { method: 'call', module: 'forme::formatter', html: '<a href="classes/Forme/Formatter.html#method-c-call"><span class="method_name">::call</span> <span class="module_name">(Forme::Formatter)</span></a>' },
   { method: 'form', module: 'forme', html: '<a href="classes/Forme.html#method-c-form"><span class="method_name">::form</span> <span class="module_name">(Forme)</span></a>' },
@@ -4342,41 +4342,43 @@ var search_index = [
   { method: 'load_dependencies', module: 'roda::rodaplugins::formeroutecsrf', html: '<a href="classes/Roda/RodaPlugins/FormeRouteCsrf.html#method-c-load_dependencies"><span class="method_name">::load_dependencies</span> <span class="module_name">(Roda::RodaPlugins::FormeRouteCsrf)</span></a>' },
   { method: 'load_dependencies', module: 'roda::rodaplugins::forme', html: '<a href="classes/Roda/RodaPlugins/Forme.html#method-c-load_dependencies"><span class="method_name">::load_dependencies</span> <span class="module_name">(Roda::RodaPlugins::Forme)</span></a>' },
   { method: 'merge_classes', module: 'forme', html: '<a href="classes/Forme.html#method-c-merge_classes"><span class="method_name">::merge_classes</span> <span class="module_name">(Forme)</span></a>' },
-  { method: 'new', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
-  { method: 'new', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
-  { method: 'new', module: 'forme::tag', html: '<a href="classes/Forme/Tag.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Tag)</span></a>' },
-  { method: 'new', module: 'sequel::plugins::forme::sequelinput', html: '<a href="classes/Sequel/Plugins/Forme/SequelInput.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Sequel::Plugins::Forme::SequelInput)</span></a>' },
-  { method: 'new', module: 'forme::input', html: '<a href="classes/Forme/Input.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Input)</span></a>' },
-  { method: 'new', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
-  { method: 'new', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'new', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'new', module: 'forme::wrapper::tag', html: '<a href="classes/Forme/Wrapper/Tag.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Wrapper::Tag)</span></a>' },
+  { method: 'new', module: 'sequel::plugins::forme::sequelinput', html: '<a href="classes/Sequel/Plugins/Forme/SequelInput.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Sequel::Plugins::Forme::SequelInput)</span></a>' },
+  { method: 'new', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
+  { method: 'new', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
+  { method: 'new', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
+  { method: 'new', module: 'forme::input', html: '<a href="classes/Forme/Input.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Input)</span></a>' },
+  { method: 'new', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Form)</span></a>' },
+  { method: 'new', module: 'forme::tag', html: '<a href="classes/Forme/Tag.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Tag)</span></a>' },
   { method: 'raw', module: 'forme', html: '<a href="classes/Forme.html#method-c-raw"><span class="method_name">::raw</span> <span class="module_name">(Forme)</span></a>' },
   { method: 'register_config', module: 'forme', html: '<a href="classes/Forme.html#method-c-register_config"><span class="method_name">::register_config</span> <span class="module_name">(Forme)</span></a>' },
   { method: 'register_transformer', module: 'forme', html: '<a href="classes/Forme.html#method-c-register_transformer"><span class="method_name">::register_transformer</span> <span class="module_name">(Forme)</span></a>' },
   { method: 'transform', module: 'forme', html: '<a href="classes/Forme.html#method-c-transform"><span class="method_name">::transform</span> <span class="module_name">(Forme)</span></a>' },
   { method: 'transformer', module: 'forme', html: '<a href="classes/Forme.html#method-c-transformer"><span class="method_name">::transformer</span> <span class="module_name">(Forme)</span></a>' },
   { method: 'version', module: 'forme', html: '<a href="classes/Forme.html#method-c-version"><span class="method_name">::version</span> <span class="module_name">(Forme)</span></a>' },
-  { method: '<<', module: 'forme::tag', html: '<a href="classes/Forme/Tag.html#method-i-3C-3C"><span class="method_name">#&lt;&lt;</span> <span class="module_name">(Forme::Tag)</span></a>' },
   { method: '<<', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-3C-3C"><span class="method_name">#&lt;&lt;</span> <span class="module_name">(Forme::Form)</span></a>' },
+  { method: '<<', module: 'forme::tag', html: '<a href="classes/Forme/Tag.html#method-i-3C-3C"><span class="method_name">#&lt;&lt;</span> <span class="module_name">(Forme::Tag)</span></a>' },
   { method: '_input', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-_input"><span class="method_name">#_input</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: '_tag', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-_tag"><span class="method_name">#_tag</span> <span class="module_name">(Forme::Form)</span></a>' },
-  { method: 'button', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-button"><span class="method_name">#button</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
   { method: 'button', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-button"><span class="method_name">#button</span> <span class="module_name">(Forme::Form)</span></a>' },
-  { method: 'call', module: 'forme::errorhandler::bootstrap3', html: '<a href="classes/Forme/ErrorHandler/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler::Bootstrap3)</span></a>' },
-  { method: 'call', module: 'forme::wrapper::tablerow', html: '<a href="classes/Forme/Wrapper/TableRow.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::TableRow)</span></a>' },
-  { method: 'call', module: 'forme::serializer', html: '<a href="classes/Forme/Serializer.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer)</span></a>' },
+  { method: 'button', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-button"><span class="method_name">#button</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
   { method: 'call', module: 'forme::wrapper', html: '<a href="classes/Forme/Wrapper.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper)</span></a>' },
-  { method: 'call', module: 'forme::wrapper::tag', html: '<a href="classes/Forme/Wrapper/Tag.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::Tag)</span></a>' },
+  { method: 'call', module: 'forme::serializer::plaintext', html: '<a href="classes/Forme/Serializer/PlainText.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer::PlainText)</span></a>' },
   { method: 'call', module: 'forme::wrapper::bootstrap3', html: '<a href="classes/Forme/Wrapper/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::Bootstrap3)</span></a>' },
   { method: 'call', module: 'forme::labeler::explicit', html: '<a href="classes/Forme/Labeler/Explicit.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Explicit)</span></a>' },
-  { method: 'call', module: 'forme::errorhandler', html: '<a href="classes/Forme/ErrorHandler.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler)</span></a>' },
-  { method: 'call', module: 'forme::labeler', html: '<a href="classes/Forme/Labeler.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler)</span></a>' },
-  { method: 'call', module: 'forme::helper', html: '<a href="classes/Forme/Helper.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Helper)</span></a>' },
-  { method: 'call', module: 'forme::labeler::bootstrap3', html: '<a href="classes/Forme/Labeler/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Bootstrap3)</span></a>' },
-  { method: 'call', module: 'forme::serializer::plaintext', html: '<a href="classes/Forme/Serializer/PlainText.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer::PlainText)</span></a>' },
   { method: 'call', module: 'forme::serializer::bootstrap3', html: '<a href="classes/Forme/Serializer/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer::Bootstrap3)</span></a>' },
   { method: 'call', module: 'forme::serializer::americantime', html: '<a href="classes/Forme/Serializer/AmericanTime.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer::AmericanTime)</span></a>' },
+  { method: 'call', module: 'forme::serializer', html: '<a href="classes/Forme/Serializer.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer)</span></a>' },
+  { method: 'call', module: 'forme::wrapper::tag', html: '<a href="classes/Forme/Wrapper/Tag.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::Tag)</span></a>' },
+  { method: 'call', module: 'forme::errorhandler::set', html: '<a href="classes/Forme/ErrorHandler/Set.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler::Set)</span></a>' },
+  { method: 'call', module: 'forme::errorhandler::bootstrap3', html: '<a href="classes/Forme/ErrorHandler/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler::Bootstrap3)</span></a>' },
+  { method: 'call', module: 'forme::formatter', html: '<a href="classes/Forme/Formatter.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Formatter)</span></a>' },
+  { method: 'call', module: 'forme::helper', html: '<a href="classes/Forme/Helper.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Helper)</span></a>' },
+  { method: 'call', module: 'forme::errorhandler::afterlegend', html: '<a href="classes/Forme/ErrorHandler/AfterLegend.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler::AfterLegend)</span></a>' },
+  { method: 'call', module: 'forme::errorhandler', html: '<a href="classes/Forme/ErrorHandler.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler)</span></a>' },
+  { method: 'call', module: 'forme::labeler::span', html: '<a href="classes/Forme/Labeler/Span.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Span)</span></a>' },
+  { method: 'call', module: 'forme::labeler::legend', html: '<a href="classes/Forme/Labeler/Legend.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Legend)</span></a>' },
   { method: 'call', module: 'forme::inputswrapper', html: '<a href="classes/Forme/InputsWrapper.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper)</span></a>' },
   { method: 'call', module: 'forme::inputswrapper::bootstrap3', html: '<a href="classes/Forme/InputsWrapper/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::Bootstrap3)</span></a>' },
   { method: 'call', module: 'forme::inputswrapper::bs3table', html: '<a href="classes/Forme/InputsWrapper/Bs3Table.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::Bs3Table)</span></a>' },
@@ -4385,7 +4387,9 @@ var search_index = [
   { method: 'call', module: 'forme::inputswrapper::ol', html: '<a href="classes/Forme/InputsWrapper/OL.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::OL)</span></a>' },
   { method: 'call', module: 'forme::inputswrapper::tr', html: '<a href="classes/Forme/InputsWrapper/TR.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::TR)</span></a>' },
   { method: 'call', module: 'forme::inputswrapper::table', html: '<a href="classes/Forme/InputsWrapper/Table.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::Table)</span></a>' },
-  { method: 'call', module: 'forme::formatter', html: '<a href="classes/Forme/Formatter.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Formatter)</span></a>' },
+  { method: 'call', module: 'forme::labeler', html: '<a href="classes/Forme/Labeler.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler)</span></a>' },
+  { method: 'call', module: 'forme::labeler::bootstrap3', html: '<a href="classes/Forme/Labeler/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Bootstrap3)</span></a>' },
+  { method: 'call', module: 'forme::wrapper::tablerow', html: '<a href="classes/Forme/Wrapper/TableRow.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::TableRow)</span></a>' },
   { method: 'close', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-close"><span class="method_name">#close</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'each_obj', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-each_obj"><span class="method_name">#each_obj</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'emit', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-i-emit"><span class="method_name">#emit</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
@@ -4393,54 +4397,54 @@ var search_index = [
   { method: 'emit', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-emit"><span class="method_name">#emit</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'emit', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-emit"><span class="method_name">#emit</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
   { method: 'form', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
-  { method: 'form', module: 'sequel::plugins::forme::sequelform', html: '<a href="classes/Sequel/Plugins/Forme/SequelForm.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Sequel::Plugins::Forme::SequelForm)</span></a>' },
-  { method: 'form', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
   { method: 'form', module: 'roda::rodaplugins::formeroutecsrf::instancemethods', html: '<a href="classes/Roda/RodaPlugins/FormeRouteCsrf/InstanceMethods.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Roda::RodaPlugins::FormeRouteCsrf::InstanceMethods)</span></a>' },
   { method: 'form', module: 'forme::erb::helper', html: '<a href="classes/Forme/ERB/Helper.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Helper)</span></a>' },
+  { method: 'form', module: 'forme::erb::helper', html: '<a href="classes/Forme/ERB/Helper.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Helper)</span></a>' },
+  { method: 'form', module: 'forme::erb::helper', html: '<a href="classes/Forme/ERB/Helper.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Helper)</span></a>' },
+  { method: 'form', module: 'forme::erb::helper', html: '<a href="classes/Forme/ERB/Helper.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Helper)</span></a>' },
   { method: 'form', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::Form)</span></a>' },
-  { method: 'form', module: 'forme::erb::helper', html: '<a href="classes/Forme/ERB/Helper.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Helper)</span></a>' },
-  { method: 'form', module: 'forme::erb::helper', html: '<a href="classes/Forme/ERB/Helper.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Helper)</span></a>' },
-  { method: 'form', module: 'forme::erb::helper', html: '<a href="classes/Forme/ERB/Helper.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Helper)</span></a>' },
+  { method: 'form', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
+  { method: 'form', module: 'sequel::plugins::forme::sequelform', html: '<a href="classes/Sequel/Plugins/Forme/SequelForm.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Sequel::Plugins::Forme::SequelForm)</span></a>' },
   { method: 'format', module: 'forme::input', html: '<a href="classes/Forme/Input.html#method-i-format"><span class="method_name">#format</span> <span class="module_name">(Forme::Input)</span></a>' },
   { method: 'forme', module: 'forme::rails::erb', html: '<a href="classes/Forme/Rails/ERB.html#method-i-forme"><span class="method_name">#forme</span> <span class="module_name">(Forme::Rails::ERB)</span></a>' },
   { method: 'forme_config', module: 'sequel::plugins::forme::instancemethods', html: '<a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_config"><span class="method_name">#forme_config</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a>' },
   { method: 'forme_default_request_method', module: 'sequel::plugins::forme::instancemethods', html: '<a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_default_request_method"><span class="method_name">#forme_default_request_method</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a>' },
-  { method: 'forme_form_class', module: 'sequel::plugins::forme::instancemethods', html: '<a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_form_class"><span class="method_name">#forme_form_class</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a>' },
   { method: 'forme_form_class', module: 'sequel::plugins::formei18n::instancemethods', html: '<a href="classes/Sequel/Plugins/FormeI18n/InstanceMethods.html#method-i-forme_form_class"><span class="method_name">#forme_form_class</span> <span class="module_name">(Sequel::Plugins::FormeI18n::InstanceMethods)</span></a>' },
-  { method: 'forme_input', module: 'sequel::plugins::forme::instancemethods', html: '<a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a>' },
-  { method: 'forme_input', module: 'sequel::plugins::formeset::instancemethods', html: '<a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a>' },
+  { method: 'forme_form_class', module: 'sequel::plugins::forme::instancemethods', html: '<a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_form_class"><span class="method_name">#forme_form_class</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a>' },
   { method: 'forme_input', module: 'sequel::plugins::formei18n::instancemethods', html: '<a href="classes/Sequel/Plugins/FormeI18n/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::FormeI18n::InstanceMethods)</span></a>' },
+  { method: 'forme_input', module: 'sequel::plugins::formeset::instancemethods', html: '<a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a>' },
+  { method: 'forme_input', module: 'sequel::plugins::forme::instancemethods', html: '<a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a>' },
   { method: 'forme_inputs', module: 'sequel::plugins::formeset::instancemethods', html: '<a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_inputs"><span class="method_name">#forme_inputs</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a>' },
   { method: 'forme_namespace', module: 'sequel::plugins::forme::instancemethods', html: '<a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_namespace"><span class="method_name">#forme_namespace</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a>' },
   { method: 'forme_parse', module: 'sequel::plugins::formeset::instancemethods', html: '<a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_parse"><span class="method_name">#forme_parse</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a>' },
   { method: 'forme_set', module: 'sequel::plugins::formeset::instancemethods', html: '<a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_set"><span class="method_name">#forme_set</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a>' },
   { method: 'forme_validations', module: 'sequel::plugins::formeset::instancemethods', html: '<a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_validations"><span class="method_name">#forme_validations</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a>' },
   { method: 'humanize', module: 'sequel::plugins::forme::sequelform', html: '<a href="classes/Sequel/Plugins/Forme/SequelForm.html#method-i-humanize"><span class="method_name">#humanize</span> <span class="module_name">(Sequel::Plugins::Forme::SequelForm)</span></a>' },
-  { method: 'input', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-input"><span class="method_name">#input</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
   { method: 'input', module: 'sequel::plugins::forme::sequelinput', html: '<a href="classes/Sequel/Plugins/Forme/SequelInput.html#method-i-input"><span class="method_name">#input</span> <span class="module_name">(Sequel::Plugins::Forme::SequelInput)</span></a>' },
+  { method: 'input', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-input"><span class="method_name">#input</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
   { method: 'input', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-input"><span class="method_name">#input</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'inputs', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-inputs"><span class="method_name">#inputs</span> <span class="module_name">(Forme::Form)</span></a>' },
-  { method: 'inputs', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-inputs"><span class="method_name">#inputs</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
   { method: 'inputs', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-i-inputs"><span class="method_name">#inputs</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
+  { method: 'inputs', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-inputs"><span class="method_name">#inputs</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
   { method: 'inputs', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-i-inputs"><span class="method_name">#inputs</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
   { method: 'namespaces', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-namespaces"><span class="method_name">#namespaces</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'obj', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-obj"><span class="method_name">#obj</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'open', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-open"><span class="method_name">#open</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'raw', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-raw"><span class="method_name">#raw</span> <span class="module_name">(Forme::Form)</span></a>' },
-  { method: 'raw_output', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-raw_output"><span class="method_name">#raw_output</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'raw_output', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-raw_output"><span class="method_name">#raw_output</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
+  { method: 'raw_output', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-raw_output"><span class="method_name">#raw_output</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'serialize_close', module: 'forme::serializer', html: '<a href="classes/Forme/Serializer.html#method-i-serialize_close"><span class="method_name">#serialize_close</span> <span class="module_name">(Forme::Serializer)</span></a>' },
   { method: 'serialize_open', module: 'forme::serializer', html: '<a href="classes/Forme/Serializer.html#method-i-serialize_open"><span class="method_name">#serialize_open</span> <span class="module_name">(Forme::Serializer)</span></a>' },
+  { method: 'subform', module: 'sequel::plugins::forme::erbsequelform', html: '<a href="classes/Sequel/Plugins/Forme/ERBSequelForm.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::Forme::ERBSequelForm)</span></a>' },
   { method: 'subform', module: 'sequel::plugins::forme::sequelform', html: '<a href="classes/Sequel/Plugins/Forme/SequelForm.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::Forme::SequelForm)</span></a>' },
-  { method: 'subform', module: 'sequel::plugins::forme::erbsequelform', html: '<a href="classes/Sequel/Plugins/Forme/ERBSequelForm.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::Forme::ERBSequelForm)</span></a>' },
-  { method: 'subform', module: 'sequel::plugins::forme::erbsequelform', html: '<a href="classes/Sequel/Plugins/Forme/ERBSequelForm.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::Forme::ERBSequelForm)</span></a>' },
   { method: 'subform', module: 'sequel::plugins::formei18n::sequelformi18n', html: '<a href="classes/Sequel/Plugins/FormeI18n/SequelFormI18n.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::FormeI18n::SequelFormI18n)</span></a>' },
-  { method: 'tag', module: 'forme::tag', html: '<a href="classes/Forme/Tag.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Tag)</span></a>' },
-  { method: 'tag', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
-  { method: 'tag', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
+  { method: 'subform', module: 'sequel::plugins::forme::erbsequelform', html: '<a href="classes/Sequel/Plugins/Forme/ERBSequelForm.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::Forme::ERBSequelForm)</span></a>' },
   { method: 'tag', module: 'forme::form', html: '<a href="classes/Forme/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Form)</span></a>' },
   { method: 'tag', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
+  { method: 'tag', module: 'forme::rails::form', html: '<a href="classes/Forme/Rails/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Rails::Form)</span></a>' },
+  { method: 'tag', module: 'forme::tag', html: '<a href="classes/Forme/Tag.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Tag)</span></a>' },
   { method: 'tag', module: 'forme::input', html: '<a href="classes/Forme/Input.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Input)</span></a>' },
+  { method: 'tag', module: 'forme::erb::form', html: '<a href="classes/Forme/ERB/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::ERB::Form)</span></a>' },
   { method: 'to_s', module: 'forme::tag', html: '<a href="classes/Forme/Tag.html#method-i-to_s"><span class="method_name">#to_s</span> <span class="module_name">(Forme::Tag)</span></a>' },
   { method: 'to_s', module: 'forme::input', html: '<a href="classes/Forme/Input.html#method-i-to_s"><span class="method_name">#to_s</span> <span class="module_name">(Forme::Input)</span></a>' },
   { method: 'validate', module: 'sequel::plugins::formeset::instancemethods', html: '<a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-validate"><span class="method_name">#validate</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a>' },
@@ -4566,10 +4570,10 @@ function performSearch() {
 <li><a href="classes/Forme/Rails/Form.html#attribute-i-template"><span class="method_name">#template</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
 <li><a href="classes/Forme/Tag.html#attribute-i-type"><span class="method_name">#type</span> <span class="module_name">(Forme::Tag)</span></a></li>
 <li><a href="classes/Forme/Input.html#attribute-i-type"><span class="method_name">#type</span> <span class="module_name">(Forme::Input)</span></a></li>
-<li><a href="classes/Forme/ERB.html#method-c-add_hidden_tag"><span class="method_name">::add_hidden_tag</span> <span class="module_name">(Forme::ERB)</span></a></li>
 <li><a href="classes/Forme/Rails.html#method-c-add_hidden_tag"><span class="method_name">::add_hidden_tag</span> <span class="module_name">(Forme::Rails)</span></a></li>
-<li><a href="classes/Sequel/Plugins/FormeSet.html#method-c-apply"><span class="method_name">::apply</span> <span class="module_name">(Sequel::Plugins::FormeSet)</span></a></li>
+<li><a href="classes/Forme/ERB.html#method-c-add_hidden_tag"><span class="method_name">::add_hidden_tag</span> <span class="module_name">(Forme::ERB)</span></a></li>
 <li><a href="classes/Sequel/Plugins/FormeI18n.html#method-c-apply"><span class="method_name">::apply</span> <span class="module_name">(Sequel::Plugins::FormeI18n)</span></a></li>
+<li><a href="classes/Sequel/Plugins/FormeSet.html#method-c-apply"><span class="method_name">::apply</span> <span class="module_name">(Sequel::Plugins::FormeSet)</span></a></li>
 <li><a href="classes/Forme.html#method-c-attr_classes"><span class="method_name">::attr_classes</span> <span class="module_name">(Forme)</span></a></li>
 <li><a href="classes/Forme/Formatter.html#method-c-call"><span class="method_name">::call</span> <span class="module_name">(Forme::Formatter)</span></a></li>
 <li><a href="classes/Forme.html#method-c-form"><span class="method_name">::form</span> <span class="module_name">(Forme)</span></a></li>
@@ -4578,40 +4582,42 @@ function performSearch() {
 <li><a href="classes/Roda/RodaPlugins/FormeRouteCsrf.html#method-c-load_dependencies"><span class="method_name">::load_dependencies</span> <span class="module_name">(Roda::RodaPlugins::FormeRouteCsrf)</span></a></li>
 <li><a href="classes/Roda/RodaPlugins/Forme.html#method-c-load_dependencies"><span class="method_name">::load_dependencies</span> <span class="module_name">(Roda::RodaPlugins::Forme)</span></a></li>
 <li><a href="classes/Forme.html#method-c-merge_classes"><span class="method_name">::merge_classes</span> <span class="module_name">(Forme)</span></a></li>
-<li><a href="classes/Forme/Rails/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
-<li><a href="classes/Forme/ERB/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::ERB::Form)</span></a></li>
-<li><a href="classes/Forme/Tag.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Tag)</span></a></li>
-<li><a href="classes/Sequel/Plugins/Forme/SequelInput.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Sequel::Plugins::Forme::SequelInput)</span></a></li>
-<li><a href="classes/Forme/Input.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Input)</span></a></li>
-<li><a href="classes/Forme/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Wrapper/Tag.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Wrapper::Tag)</span></a></li>
+<li><a href="classes/Sequel/Plugins/Forme/SequelInput.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Sequel::Plugins::Forme::SequelInput)</span></a></li>
+<li><a href="classes/Forme/ERB/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::ERB::Form)</span></a></li>
+<li><a href="classes/Forme/Rails/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
+<li><a href="classes/Forme/Input.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Input)</span></a></li>
+<li><a href="classes/Forme/Form.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Form)</span></a></li>
+<li><a href="classes/Forme/Tag.html#method-c-new"><span class="method_name">::new</span> <span class="module_name">(Forme::Tag)</span></a></li>
 <li><a href="classes/Forme.html#method-c-raw"><span class="method_name">::raw</span> <span class="module_name">(Forme)</span></a></li>
 <li><a href="classes/Forme.html#method-c-register_config"><span class="method_name">::register_config</span> <span class="module_name">(Forme)</span></a></li>
 <li><a href="classes/Forme.html#method-c-register_transformer"><span class="method_name">::register_transformer</span> <span class="module_name">(Forme)</span></a></li>
 <li><a href="classes/Forme.html#method-c-transform"><span class="method_name">::transform</span> <span class="module_name">(Forme)</span></a></li>
 <li><a href="classes/Forme.html#method-c-transformer"><span class="method_name">::transformer</span> <span class="module_name">(Forme)</span></a></li>
 <li><a href="classes/Forme.html#method-c-version"><span class="method_name">::version</span> <span class="module_name">(Forme)</span></a></li>
-<li><a href="classes/Forme/Tag.html#method-i-3C-3C"><span class="method_name">#&lt;&lt;</span> <span class="module_name">(Forme::Tag)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-3C-3C"><span class="method_name">#&lt;&lt;</span> <span class="module_name">(Forme::Form)</span></a></li>
+<li><a href="classes/Forme/Tag.html#method-i-3C-3C"><span class="method_name">#&lt;&lt;</span> <span class="module_name">(Forme::Tag)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-_input"><span class="method_name">#_input</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-_tag"><span class="method_name">#_tag</span> <span class="module_name">(Forme::Form)</span></a></li>
-<li><a href="classes/Forme/Rails/Form.html#method-i-button"><span class="method_name">#button</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-button"><span class="method_name">#button</span> <span class="module_name">(Forme::Form)</span></a></li>
-<li><a href="classes/Forme/ErrorHandler/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler::Bootstrap3)</span></a></li>
-<li><a href="classes/Forme/Wrapper/TableRow.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::TableRow)</span></a></li>
-<li><a href="classes/Forme/Serializer.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer)</span></a></li>
+<li><a href="classes/Forme/Rails/Form.html#method-i-button"><span class="method_name">#button</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
 <li><a href="classes/Forme/Wrapper.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper)</span></a></li>
-<li><a href="classes/Forme/Wrapper/Tag.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::Tag)</span></a></li>
+<li><a href="classes/Forme/Serializer/PlainText.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer::PlainText)</span></a></li>
 <li><a href="classes/Forme/Wrapper/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::Bootstrap3)</span></a></li>
 <li><a href="classes/Forme/Labeler/Explicit.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Explicit)</span></a></li>
-<li><a href="classes/Forme/ErrorHandler.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler)</span></a></li>
-<li><a href="classes/Forme/Labeler.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler)</span></a></li>
-<li><a href="classes/Forme/Helper.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Helper)</span></a></li>
-<li><a href="classes/Forme/Labeler/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Bootstrap3)</span></a></li>
-<li><a href="classes/Forme/Serializer/PlainText.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer::PlainText)</span></a></li>
 <li><a href="classes/Forme/Serializer/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer::Bootstrap3)</span></a></li>
 <li><a href="classes/Forme/Serializer/AmericanTime.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer::AmericanTime)</span></a></li>
+<li><a href="classes/Forme/Serializer.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Serializer)</span></a></li>
+<li><a href="classes/Forme/Wrapper/Tag.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::Tag)</span></a></li>
+<li><a href="classes/Forme/ErrorHandler/Set.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler::Set)</span></a></li>
+<li><a href="classes/Forme/ErrorHandler/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler::Bootstrap3)</span></a></li>
+<li><a href="classes/Forme/Formatter.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Formatter)</span></a></li>
+<li><a href="classes/Forme/Helper.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Helper)</span></a></li>
+<li><a href="classes/Forme/ErrorHandler/AfterLegend.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler::AfterLegend)</span></a></li>
+<li><a href="classes/Forme/ErrorHandler.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::ErrorHandler)</span></a></li>
+<li><a href="classes/Forme/Labeler/Span.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Span)</span></a></li>
+<li><a href="classes/Forme/Labeler/Legend.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Legend)</span></a></li>
 <li><a href="classes/Forme/InputsWrapper.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper)</span></a></li>
 <li><a href="classes/Forme/InputsWrapper/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::Bootstrap3)</span></a></li>
 <li><a href="classes/Forme/InputsWrapper/Bs3Table.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::Bs3Table)</span></a></li>
@@ -4620,53 +4626,55 @@ function performSearch() {
 <li><a href="classes/Forme/InputsWrapper/OL.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::OL)</span></a></li>
 <li><a href="classes/Forme/InputsWrapper/TR.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::TR)</span></a></li>
 <li><a href="classes/Forme/InputsWrapper/Table.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::InputsWrapper::Table)</span></a></li>
-<li><a href="classes/Forme/Formatter.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Formatter)</span></a></li>
+<li><a href="classes/Forme/Labeler.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler)</span></a></li>
+<li><a href="classes/Forme/Labeler/Bootstrap3.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Labeler::Bootstrap3)</span></a></li>
+<li><a href="classes/Forme/Wrapper/TableRow.html#method-i-call"><span class="method_name">#call</span> <span class="module_name">(Forme::Wrapper::TableRow)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-close"><span class="method_name">#close</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-each_obj"><span class="method_name">#each_obj</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/ERB/Form.html#method-i-emit"><span class="method_name">#emit</span> <span class="module_name">(Forme::ERB::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-emit"><span class="method_name">#emit</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Rails/Form.html#method-i-emit"><span class="method_name">#emit</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
 <li><a href="classes/Forme/ERB/Form.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Form)</span></a></li>
-<li><a href="classes/Sequel/Plugins/Forme/SequelForm.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Sequel::Plugins::Forme::SequelForm)</span></a></li>
 <li><a href="classes/Roda/RodaPlugins/FormeRouteCsrf/InstanceMethods.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Roda::RodaPlugins::FormeRouteCsrf::InstanceMethods)</span></a></li>
 <li><a href="classes/Forme/ERB/Helper.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::ERB::Helper)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Forme::Form)</span></a></li>
+<li><a href="classes/Sequel/Plugins/Forme/SequelForm.html#method-i-form"><span class="method_name">#form</span> <span class="module_name">(Sequel::Plugins::Forme::SequelForm)</span></a></li>
 <li><a href="classes/Forme/Input.html#method-i-format"><span class="method_name">#format</span> <span class="module_name">(Forme::Input)</span></a></li>
 <li><a href="classes/Forme/Rails/ERB.html#method-i-forme"><span class="method_name">#forme</span> <span class="module_name">(Forme::Rails::ERB)</span></a></li>
 <li><a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_config"><span class="method_name">#forme_config</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a></li>
 <li><a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_default_request_method"><span class="method_name">#forme_default_request_method</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a></li>
-<li><a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_form_class"><span class="method_name">#forme_form_class</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a></li>
 <li><a href="classes/Sequel/Plugins/FormeI18n/InstanceMethods.html#method-i-forme_form_class"><span class="method_name">#forme_form_class</span> <span class="module_name">(Sequel::Plugins::FormeI18n::InstanceMethods)</span></a></li>
-<li><a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a></li>
-<li><a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a></li>
+<li><a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_form_class"><span class="method_name">#forme_form_class</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a></li>
 <li><a href="classes/Sequel/Plugins/FormeI18n/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::FormeI18n::InstanceMethods)</span></a></li>
+<li><a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a></li>
+<li><a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_input"><span class="method_name">#forme_input</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a></li>
 <li><a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_inputs"><span class="method_name">#forme_inputs</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a></li>
 <li><a href="classes/Sequel/Plugins/Forme/InstanceMethods.html#method-i-forme_namespace"><span class="method_name">#forme_namespace</span> <span class="module_name">(Sequel::Plugins::Forme::InstanceMethods)</span></a></li>
 <li><a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_parse"><span class="method_name">#forme_parse</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a></li>
 <li><a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_set"><span class="method_name">#forme_set</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a></li>
 <li><a href="classes/Sequel/Plugins/FormeSet/InstanceMethods.html#method-i-forme_validations"><span class="method_name">#forme_validations</span> <span class="module_name">(Sequel::Plugins::FormeSet::InstanceMethods)</span></a></li>
 <li><a href="classes/Sequel/Plugins/Forme/SequelForm.html#method-i-humanize"><span class="method_name">#humanize</span> <span class="module_name">(Sequel::Plugins::Forme::SequelForm)</span></a></li>
-<li><a href="classes/Forme/Rails/Form.html#method-i-input"><span class="method_name">#input</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
 <li><a href="classes/Sequel/Plugins/Forme/SequelInput.html#method-i-input"><span class="method_name">#input</span> <span class="module_name">(Sequel::Plugins::Forme::SequelInput)</span></a></li>
+<li><a href="classes/Forme/Rails/Form.html#method-i-input"><span class="method_name">#input</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-input"><span class="method_name">#input</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-inputs"><span class="method_name">#inputs</span> <span class="module_name">(Forme::Form)</span></a></li>
-<li><a href="classes/Forme/Rails/Form.html#method-i-inputs"><span class="method_name">#inputs</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
 <li><a href="classes/Forme/ERB/Form.html#method-i-inputs"><span class="method_name">#inputs</span> <span class="module_name">(Forme::ERB::Form)</span></a></li>
+<li><a href="classes/Forme/Rails/Form.html#method-i-inputs"><span class="method_name">#inputs</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-namespaces"><span class="method_name">#namespaces</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-obj"><span class="method_name">#obj</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-open"><span class="method_name">#open</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Form.html#method-i-raw"><span class="method_name">#raw</span> <span class="module_name">(Forme::Form)</span></a></li>
-<li><a href="classes/Forme/Form.html#method-i-raw_output"><span class="method_name">#raw_output</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Rails/Form.html#method-i-raw_output"><span class="method_name">#raw_output</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
+<li><a href="classes/Forme/Form.html#method-i-raw_output"><span class="method_name">#raw_output</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/Serializer.html#method-i-serialize_close"><span class="method_name">#serialize_close</span> <span class="module_name">(Forme::Serializer)</span></a></li>
 <li><a href="classes/Forme/Serializer.html#method-i-serialize_open"><span class="method_name">#serialize_open</span> <span class="module_name">(Forme::Serializer)</span></a></li>
-<li><a href="classes/Sequel/Plugins/Forme/SequelForm.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::Forme::SequelForm)</span></a></li>
 <li><a href="classes/Sequel/Plugins/Forme/ERBSequelForm.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::Forme::ERBSequelForm)</span></a></li>
+<li><a href="classes/Sequel/Plugins/Forme/SequelForm.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::Forme::SequelForm)</span></a></li>
 <li><a href="classes/Sequel/Plugins/FormeI18n/SequelFormI18n.html#method-i-subform"><span class="method_name">#subform</span> <span class="module_name">(Sequel::Plugins::FormeI18n::SequelFormI18n)</span></a></li>
-<li><a href="classes/Forme/Tag.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Tag)</span></a></li>
+<li><a href="classes/Forme/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Form)</span></a></li>
 <li><a href="classes/Forme/ERB/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::ERB::Form)</span></a></li>
 <li><a href="classes/Forme/Rails/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Rails::Form)</span></a></li>
-<li><a href="classes/Forme/Form.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Form)</span></a></li>
+<li><a href="classes/Forme/Tag.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Tag)</span></a></li>
 <li><a href="classes/Forme/Input.html#method-i-tag"><span class="method_name">#tag</span> <span class="module_name">(Forme::Input)</span></a></li>
 <li><a href="classes/Forme/Tag.html#method-i-to_s"><span class="method_name">#to_s</span> <span class="module_name">(Forme::Tag)</span></a></li>
 <li><a href="classes/Forme/Input.html#method-i-to_s"><span class="method_name">#to_s</span> <span class="module_name">(Forme::Input)</span></a></li>

@@ -56,20 +56,16 @@ Sequel::Plugins::FormeI18n::SequelFormI18n
 </div>
 <div class='description'>
 
-<p>Checks if there&#39;s a translation for the
-&#39;models.&lt;table_name&gt;.&lt;association&gt;&#39; key and merge it to
-the options with the :legend key</p>
+<p>Checks if there&#39;s a translation for the &#39;models.&lt;table_name&gt;.&lt;association&gt;&#39; key and merge it to the options with the :legend key</p>
 
-<p>Calls the original <a
-href="../Forme/SequelForm.html">Sequel::Plugins::Forme::SequelForm</a>
-method</p>
+<p>Calls the original <a href="../Forme/SequelForm.html"><code>Sequel::Plugins::Forme::SequelForm</code></a> method</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-subform-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-subform-source'><span class="ruby-comment"># File lib/sequel/plugins/forme_i18n.rb, line 14</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">subform</span>(<span class="ruby-identifier">association</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">i18n_key</span> = <span class="ruby-node">&quot;models.#{obj.class.table_name}.#{association}&quot;</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">i18n_key</span>)&#x000A;    <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend</span>] = <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-identifier">i18n_key</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-subform-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_i18n.rb</span>&#x000A;<span class="line-num">14</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">subform</span>(<span class="ruby-identifier">association</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">15</span>   <span class="ruby-identifier">i18n_key</span> = <span class="ruby-node">&quot;models.#{obj.class.table_name}.#{association}&quot;</span>&#x000A;<span class="line-num">16</span> &#x000A;<span class="line-num">17</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">i18n_key</span>)&#x000A;<span class="line-num">18</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend</span>] = <span class="ruby-constant">I18n</span>.<span class="ruby-identifier">t</span>(<span class="ruby-identifier">i18n_key</span>)&#x000A;<span class="line-num">19</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">20</span> &#x000A;<span class="line-num">21</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">22</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

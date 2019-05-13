@@ -39,8 +39,7 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Low level abstract tag form, where each instance represents a html tag with
-attributes and children.</p>
+<p>Low level abstract tag form, where each instance represents a html tag with attributes and children.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -81,8 +80,7 @@ attributes and children.</p>
 </td>
 <td class='context-item-value'>[R]</td>
 <td class='context-item-desc'>
-<p>An array instance representing the children of the receiver, or possibly
-<code>nil</code> if the receiver has no children.</p>
+<p>An array instance representing the children of the receiver, or possibly <code>nil</code> if the receiver has no children.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -117,15 +115,14 @@ attributes and children.</p>
 </div>
 <div class='description'>
 
-<p>Set the <code>form</code>, <code>type</code>, <code>attr</code>, and
-<code>children</code>.</p>
+<p>Set the <code>form</code>, <code>type</code>, <code>attr</code>, and <code>children</code>.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/tag.rb, line 20</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span>, <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, (<span class="ruby-identifier">attr</span><span class="ruby-operator">||</span>{})&#x000A;  <span class="ruby-ivar">@children</span> = <span class="ruby-identifier">parse_children</span>(<span class="ruby-identifier">children</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/forme/tag.rb</span>&#x000A;<span class="line-num">21</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">22</span>   <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span>, <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, (<span class="ruby-identifier">attr</span><span class="ruby-operator">||</span>{})&#x000A;<span class="line-num">23</span>   <span class="ruby-ivar">@children</span> = <span class="ruby-identifier">parse_children</span>(<span class="ruby-identifier">children</span>)&#x000A;<span class="line-num">24</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -145,7 +142,7 @@ attributes and children.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-3C-3C-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-3C-3C-source'><span class="ruby-comment"># File lib/forme/tag.rb, line 26</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;&lt;</span>(<span class="ruby-identifier">child</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">children</span>&#x000A;    <span class="ruby-identifier">children</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">child</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-ivar">@children</span> = [<span class="ruby-identifier">child</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-3C-3C-source'>   <span class="ruby-comment"># File lib/forme/tag.rb</span>&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;&lt;</span>(<span class="ruby-identifier">child</span>)&#x000A;<span class="line-num">28</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">children</span>&#x000A;<span class="line-num">29</span>     <span class="ruby-identifier">children</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">child</span>&#x000A;<span class="line-num">30</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">31</span>     <span class="ruby-ivar">@children</span> = [<span class="ruby-identifier">child</span>]&#x000A;<span class="line-num">32</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-tag'>
@@ -157,15 +154,14 @@ attributes and children.</p>
 </div>
 <div class='description'>
 
-<p>Create a new <code>Tag</code> instance with the given arguments and block
-related to the receiver&#39;s <code>form</code>.</p>
+<p>Create a new <code>Tag</code> instance with the given arguments and block related to the receiver&#39;s <code>form</code>.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-tag-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/tag.rb, line 36</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-tag-source'>   <span class="ruby-comment"># File lib/forme/tag.rb</span>&#x000A;<span class="line-num">37</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">38</span>   <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">39</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-to_s'>
@@ -184,7 +180,7 @@ related to the receiver&#39;s <code>form</code>.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-to_s-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/forme/tag.rb, line 41</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>&#x000A;  <span class="ruby-identifier">form</span>.<span class="ruby-identifier">raw_output</span>(<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:serializer</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form</span>.<span class="ruby-identifier">opts</span>, <span class="ruby-keyword">self</span>))&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-to_s-source'>   <span class="ruby-comment"># File lib/forme/tag.rb</span>&#x000A;<span class="line-num">42</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>&#x000A;<span class="line-num">43</span>   <span class="ruby-identifier">form</span>.<span class="ruby-identifier">raw_output</span>(<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:serializer</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form</span>.<span class="ruby-identifier">opts</span>, <span class="ruby-keyword">self</span>))&#x000A;<span class="line-num">44</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

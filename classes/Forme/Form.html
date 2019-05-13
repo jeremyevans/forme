@@ -41,10 +41,7 @@ Superclass:
 <div id='description'>
 <p>The <code>Form</code> class is the main entry point to the library.</p>
 
-<p>Using the <code>form</code>, <code>input</code>, <code>tag</code>, and
-<code>inputs</code> methods, one can easily build  an abstract syntax tree
-of <code>Tag</code> and <code>Input</code> instances, which can be
-serialized to a string using <code>to_s</code>.</p>
+<p>Using the <code>form</code>, <code>input</code>, <code>tag</code>, and <code>inputs</code> methods, one can easily build  an abstract syntax tree of <code>Tag</code> and <code>Input</code> instances, which can be serialized to a string using <code>to_s</code>.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -102,8 +99,7 @@ serialized to a string using <code>to_s</code>.</p>
 </td>
 <td class='context-item-value'>[R]</td>
 <td class='context-item-desc'>
-<p>Set the default options for inputs by type.  This should be a hash with
-input type keys and values that are hashes of input options.</p>
+<p>Set the default options for inputs by type.  This should be a hash with input type keys and values that are hashes of input options.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -121,9 +117,7 @@ input type keys and values that are hashes of input options.</p>
 </td>
 <td class='context-item-value'>[R]</td>
 <td class='context-item-desc'>
-<p>The <code>serializer</code> determines how <code>Tag</code> objects are
-transformed into strings. Must respond to <code>call</code> or be a
-registered symbol.</p>
+<p>The <code>serializer</code> determines how <code>Tag</code> objects are transformed into strings. Must respond to <code>call</code> or be a registered symbol.</p>
 </td>
 </tr>
 </table>
@@ -140,25 +134,19 @@ registered symbol.</p>
 </div>
 <div class='description'>
 
-<p>Create a <code>Form</code> instance and yield it to the block, injecting
-the opening form tag before yielding and the closing form tag after
-yielding.</p>
+<p>Create a <code>Form</code> instance and yield it to the block, injecting the opening form tag before yielding and the closing form tag after yielding.</p>
 
 <p>Argument Handling:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>No args </td><td>
-<p>Creates a <code>Form</code> object with no options and not associated to an
-<code>obj</code>, and with no attributes in the opening tag.</p>
+<p>Creates a <code>Form</code> object with no options and not associated to an <code>obj</code>, and with no attributes in the opening tag.</p>
 </td></tr><tr><td class='label'>1 hash arg </td><td>
-<p>Treated as opening form tag attributes, creating a <code>Form</code> object
-with no options.</p>
+<p>Treated as opening form tag attributes, creating a <code>Form</code> object with no options.</p>
 </td></tr><tr><td class='label'>1 non-hash arg </td><td>
-<p>Treated as the <code>Form</code>&#39;s <code>obj</code>, with empty options
-and no attributes in the opening tag.</p>
+<p>Treated as the <code>Form</code>&#39;s <code>obj</code>, with empty options and no attributes in the opening tag.</p>
 </td></tr><tr><td class='label'>2 hash args </td><td>
 <p>First hash is opening attributes, second hash is <code>Form</code> options.</p>
 </td></tr><tr><td class='label'>1 non-hash arg, 1-2 hash args </td><td>
-<p>First argument is <code>Form</code>&#39;s obj, second is opening
-attributes, third if provided is <code>Form</code>&#39;s options.</p>
+<p>First argument is <code>Form</code>&#39;s obj, second is opening attributes, third if provided is <code>Form</code>&#39;s options.</p>
 </td></tr></tbody></table>
 
 </div>
@@ -166,7 +154,7 @@ attributes, third if provided is <code>Form</code>&#39;s options.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-form-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-form-source'><span class="ruby-comment"># File lib/forme/form.rb, line 48</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">form</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">f</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-string">&quot;Can&#39;t provide 3 hash arguments to form&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">attr</span>&#x000A;    <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">obj</span>&#x000A;    <span class="ruby-identifier">new</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">ins</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:inputs</span>]&#x000A;  <span class="ruby-identifier">button</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:button</span>]&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">ins</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">button</span>&#x000A;    <span class="ruby-identifier">block</span> = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">form</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_inputs</span>(<span class="ruby-identifier">ins</span>, <span class="ruby-identifier">opts</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">ins</span>&#x000A;      <span class="ruby-keyword">yield</span> <span class="ruby-identifier">form</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;      <span class="ruby-identifier">form</span>.<span class="ruby-identifier">emit</span>(<span class="ruby-identifier">form</span>.<span class="ruby-identifier">button</span>(<span class="ruby-identifier">button</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">button</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-form-source'>   <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">49</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">form</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">50</span>   <span class="ruby-identifier">f</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;<span class="line-num">51</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">Error</span>, <span class="ruby-string">&quot;Can&#39;t provide 3 hash arguments to form&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">empty?</span>&#x000A;<span class="line-num">52</span>     <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">attr</span>&#x000A;<span class="line-num">53</span>     <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">obj</span>&#x000A;<span class="line-num">54</span>     <span class="ruby-identifier">new</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">55</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">56</span>     <span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">57</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">58</span> &#x000A;<span class="line-num">59</span>   <span class="ruby-identifier">ins</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:inputs</span>]&#x000A;<span class="line-num">60</span>   <span class="ruby-identifier">button</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:button</span>]&#x000A;<span class="line-num">61</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">ins</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">button</span>&#x000A;<span class="line-num">62</span>     <span class="ruby-identifier">block</span> = <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">form</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">63</span>       <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_inputs</span>(<span class="ruby-identifier">ins</span>, <span class="ruby-identifier">opts</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">ins</span>&#x000A;<span class="line-num">64</span>       <span class="ruby-keyword">yield</span> <span class="ruby-identifier">form</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;<span class="line-num">65</span>       <span class="ruby-identifier">form</span>.<span class="ruby-identifier">emit</span>(<span class="ruby-identifier">form</span>.<span class="ruby-identifier">button</span>(<span class="ruby-identifier">button</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">button</span>&#x000A;<span class="line-num">66</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">67</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">68</span> &#x000A;<span class="line-num">69</span>   <span class="ruby-identifier">f</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">70</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-new'>
@@ -178,15 +166,14 @@ attributes, third if provided is <code>Form</code>&#39;s options.</p>
 </div>
 <div class='description'>
 
-<p>Use appropriate <a href="Form.html">Form</a> subclass for object based on
-the current class, if the object responds to <code>forme_form_class</code>.</p>
+<p>Use appropriate <a href="Form.html"><code>Form</code></a> subclass for object based on the current class, if the object responds to <code>forme_form_class</code>.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/form.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">new</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:forme_form_class</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:_forme_form_class_set</span>]&#x000A;    <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_form_class</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-value">:_forme_form_class_set</span><span class="ruby-operator">=&gt;</span><span class="ruby-keyword">true</span>))&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">new</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num">26</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:forme_form_class</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:_forme_form_class_set</span>]&#x000A;<span class="line-num">27</span>     <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_form_class</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-value">:_forme_form_class_set</span><span class="ruby-operator">=&gt;</span><span class="ruby-keyword">true</span>))&#x000A;<span class="line-num">28</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">29</span>     <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">30</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-new'>
@@ -200,8 +187,7 @@ the current class, if the object responds to <code>forme_form_class</code>.</p>
 
 <p>Creates a <code>Form</code> object. Arguments:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>obj </td><td>
-<p>Sets the obj for the form.  If a hash, is merged with the <code>opts</code>
-argument to set the opts.</p>
+<p>Sets the obj for the form.  If a hash, is merged with the <code>opts</code> argument to set the opts.</p>
 </td></tr><tr><td class='label'>opts </td><td>
 <p>A hash of options for the form</p>
 </td></tr></tbody></table>
@@ -211,7 +197,7 @@ argument to set the opts.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/form.rb, line 75</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">:</span> {<span class="ruby-value">:obj</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">obj</span>})&#x000A;  <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>] = <span class="ruby-constant">Array</span>(<span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>])&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:forme_config</span>)&#x000A;    <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_config</span>(<span class="ruby-keyword">self</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">config</span> = <span class="ruby-constant">CONFIGURATIONS</span>[<span class="ruby-ivar">@opts</span>[<span class="ruby-value">:config</span>]<span class="ruby-operator">||</span><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">default_config</span>]&#x000A;  <span class="ruby-identifier">copy_inputs_wrapper_from_wrapper</span>(<span class="ruby-ivar">@opts</span>)&#x000A;&#x000A;  <span class="ruby-constant">TRANSFORMER_TYPES</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">case</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">t</span>]&#x000A;    <span class="ruby-keyword">when</span> <span class="ruby-constant">Symbol</span>&#x000A;      <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">t</span>] = <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">t</span>, <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">t</span>], <span class="ruby-ivar">@opts</span>)&#x000A;    <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>&#x000A;      <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">t</span>)&#x000A;        <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">t</span>] = <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">t</span>, <span class="ruby-identifier">config</span>, <span class="ruby-ivar">@opts</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-ivar">@serializer</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:serializer</span>]&#x000A;  <span class="ruby-ivar">@input_defaults</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:input_defaults</span>] <span class="ruby-operator">||</span> {}&#x000A;  <span class="ruby-ivar">@hidden_tags</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:hidden_tags</span>]&#x000A;  <span class="ruby-ivar">@nesting</span> = []&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num"> 76</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num"> 77</span>   <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">:</span> {<span class="ruby-value">:obj</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">obj</span>})&#x000A;<span class="line-num"> 78</span>   <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>] = <span class="ruby-constant">Array</span>(<span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>])&#x000A;<span class="line-num"> 79</span> &#x000A;<span class="line-num"> 80</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:forme_config</span>)&#x000A;<span class="line-num"> 81</span>     <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_config</span>(<span class="ruby-keyword">self</span>)&#x000A;<span class="line-num"> 82</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num"> 83</span> &#x000A;<span class="line-num"> 84</span>   <span class="ruby-identifier">config</span> = <span class="ruby-constant">CONFIGURATIONS</span>[<span class="ruby-ivar">@opts</span>[<span class="ruby-value">:config</span>]<span class="ruby-operator">||</span><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">default_config</span>]&#x000A;<span class="line-num"> 85</span>   <span class="ruby-identifier">copy_inputs_wrapper_from_wrapper</span>(<span class="ruby-ivar">@opts</span>)&#x000A;<span class="line-num"> 86</span> &#x000A;<span class="line-num"> 87</span>   <span class="ruby-constant">TRANSFORMER_TYPES</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num"> 88</span>     <span class="ruby-keyword">case</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">t</span>]&#x000A;<span class="line-num"> 89</span>     <span class="ruby-keyword">when</span> <span class="ruby-constant">Symbol</span>&#x000A;<span class="line-num"> 90</span>       <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">t</span>] = <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">t</span>, <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">t</span>], <span class="ruby-ivar">@opts</span>)&#x000A;<span class="line-num"> 91</span>     <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num"> 92</span>       <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">t</span>)&#x000A;<span class="line-num"> 93</span>         <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">t</span>] = <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transformer</span>(<span class="ruby-identifier">t</span>, <span class="ruby-identifier">config</span>, <span class="ruby-ivar">@opts</span>)&#x000A;<span class="line-num"> 94</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num"> 95</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num"> 96</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num"> 97</span> &#x000A;<span class="line-num"> 98</span>   <span class="ruby-ivar">@serializer</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:serializer</span>]&#x000A;<span class="line-num"> 99</span>   <span class="ruby-ivar">@input_defaults</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:input_defaults</span>] <span class="ruby-operator">||</span> {}&#x000A;<span class="line-num">100</span>   <span class="ruby-ivar">@hidden_tags</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:hidden_tags</span>]&#x000A;<span class="line-num">101</span>   <span class="ruby-ivar">@nesting</span> = []&#x000A;<span class="line-num">102</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -224,15 +210,14 @@ argument to set the opts.</p>
 </div>
 <div class='description'>
 
-<p>Add the <code>Input</code>/<code>Tag</code> instance given to the currently
-open tag.</p>
+<p>Add the <code>Input</code>/<code>Tag</code> instance given to the currently open tag.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-3C-3C-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-3C-3C-source'><span class="ruby-comment"># File lib/forme/form.rb, line 282</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;&lt;</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span> = <span class="ruby-ivar">@nesting</span>.<span class="ruby-identifier">last</span>&#x000A;    <span class="ruby-identifier">n</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-3C-3C-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">283</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&lt;&lt;</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="line-num">284</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span> = <span class="ruby-ivar">@nesting</span>.<span class="ruby-identifier">last</span>&#x000A;<span class="line-num">285</span>     <span class="ruby-identifier">n</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>&#x000A;<span class="line-num">286</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">287</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-_input'>
@@ -244,15 +229,14 @@ open tag.</p>
 </div>
 <div class='description'>
 
-<p>Create a new <code>Input</code> associated with the receiver with the given
-arguments, doing no other processing.</p>
+<p>Create a new <code>Input</code> associated with the receiver with the given arguments, doing no other processing.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-_input-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-_input-source'><span class="ruby-comment"># File lib/forme/form.rb, line 162</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_input</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>)&#x000A;  <span class="ruby-constant">Input</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-_input-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">163</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_input</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>)&#x000A;<span class="line-num">164</span>   <span class="ruby-constant">Input</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>)&#x000A;<span class="line-num">165</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-_tag'>
@@ -264,15 +248,14 @@ arguments, doing no other processing.</p>
 </div>
 <div class='description'>
 
-<p>Create a <code>Tag</code> associated to the receiver with the given
-arguments and block, doing no other processing.</p>
+<p>Create a <code>Tag</code> associated to the receiver with the given arguments and block, doing no other processing.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-_tag-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-_tag-source'><span class="ruby-comment"># File lib/forme/form.rb, line 239</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-_tag-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">240</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">241</span>   <span class="ruby-constant">Tag</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">242</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-button'>
@@ -284,15 +267,14 @@ arguments and block, doing no other processing.</p>
 </div>
 <div class='description'>
 
-<p>Creates a :submit <code>Input</code> with the given opts, adding it to the
-list of children for the currently open tag.</p>
+<p>Creates a :submit <code>Input</code> with the given opts, adding it to the list of children for the currently open tag.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-button-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-button-source'><span class="ruby-comment"># File lib/forme/form.rb, line 274</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">button</span>(<span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">opts</span> = {<span class="ruby-value">:value</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">opts</span>} <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;  <span class="ruby-identifier">input</span> = <span class="ruby-identifier">_input</span>(<span class="ruby-value">:submit</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">input</span>&#x000A;  <span class="ruby-identifier">input</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-button-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">275</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">button</span>(<span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num">276</span>   <span class="ruby-identifier">opts</span> = {<span class="ruby-value">:value</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">opts</span>} <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;<span class="line-num">277</span>   <span class="ruby-identifier">input</span> = <span class="ruby-identifier">_input</span>(<span class="ruby-value">:submit</span>, <span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">278</span>   <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">input</span>&#x000A;<span class="line-num">279</span>   <span class="ruby-identifier">input</span>&#x000A;<span class="line-num">280</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-close'>
@@ -304,15 +286,14 @@ list of children for the currently open tag.</p>
 </div>
 <div class='description'>
 
-<p>Returns a string representing the closing of the form tag, for serializers
-that support closing tags.</p>
+<p>Returns a string representing the closing of the form tag, for serializers that support closing tags.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-close-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-close-source'><span class="ruby-comment"># File lib/forme/form.rb, line 233</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">close</span>&#x000A;  <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">_tag</span>(<span class="ruby-value">:form</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_close</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-close-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">234</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">close</span>&#x000A;<span class="line-num">235</span>   <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">_tag</span>(<span class="ruby-value">:form</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_close</span>)&#x000A;<span class="line-num">236</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-each_obj'>
@@ -324,16 +305,14 @@ that support closing tags.</p>
 </div>
 <div class='description'>
 
-<p>Calls the block for each object in objs, using <a
-href="Form.html#method-i-with_obj">#with_obj</a> with the given namespace
-and an index namespace (starting at 0).</p>
+<p>Calls the block for each object in objs, using <a href="Form.html#method-i-with_obj"><code>with_obj</code></a> with the given namespace and an index namespace (starting at 0).</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-each_obj-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-each_obj-source'><span class="ruby-comment"># File lib/forme/form.rb, line 290</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each_obj</span>(<span class="ruby-identifier">objs</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">objs</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">with_obj</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-constant">Array</span>(<span class="ruby-identifier">namespace</span>) <span class="ruby-operator">+</span> [<span class="ruby-identifier">i</span>]) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-keyword">yield</span> <span class="ruby-identifier">obj</span>, <span class="ruby-identifier">i</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-each_obj-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">291</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each_obj</span>(<span class="ruby-identifier">objs</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">292</span>   <span class="ruby-identifier">objs</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">293</span>     <span class="ruby-identifier">with_obj</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-constant">Array</span>(<span class="ruby-identifier">namespace</span>) <span class="ruby-operator">+</span> [<span class="ruby-identifier">i</span>]) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">294</span>       <span class="ruby-keyword">yield</span> <span class="ruby-identifier">obj</span>, <span class="ruby-identifier">i</span>&#x000A;<span class="line-num">295</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">296</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">297</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-emit'>
@@ -345,17 +324,14 @@ and an index namespace (starting at 0).</p>
 </div>
 <div class='description'>
 
-<p>Empty method designed to ease integration with other libraries where <a
-href="../Forme.html">Forme</a> is used in template code and some output
-implicitly created by <a href="../Forme.html">Forme</a> needs to be
-injected into the template output.</p>
+<p>Empty method designed to ease integration with other libraries where <a href="../Forme.html"><code>Forme</code></a> is used in template code and some output implicitly created by <a href="../Forme.html"><code>Forme</code></a> needs to be injected into the template output.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-emit-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-emit-source'><span class="ruby-comment"># File lib/forme/form.rb, line 114</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">emit</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-emit-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">115</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">emit</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="line-num">116</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-form'>
@@ -374,7 +350,7 @@ injected into the template output.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-form-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-form-source'><span class="ruby-comment"># File lib/forme/form.rb, line 104</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">form</span>(<span class="ruby-identifier">attr</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">attr</span>[<span class="ruby-value">:method</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;method&#39;</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:forme_default_request_method</span>)&#x000A;    <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-string">&#39;method&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_default_request_method</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tag</span>(<span class="ruby-value">:form</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">method</span>(<span class="ruby-value">:hidden_form_tags</span>), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-form-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">105</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">form</span>(<span class="ruby-identifier">attr</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">106</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">attr</span>[<span class="ruby-value">:method</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;method&#39;</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:forme_default_request_method</span>)&#x000A;<span class="line-num">107</span>     <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-string">&#39;method&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_default_request_method</span>)&#x000A;<span class="line-num">108</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">109</span>   <span class="ruby-identifier">tag</span>(<span class="ruby-value">:form</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">method</span>(<span class="ruby-value">:hidden_form_tags</span>), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">110</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-input'>
@@ -386,28 +362,18 @@ injected into the template output.</p>
 </div>
 <div class='description'>
 
-<p>Creates an <code>Input</code> with the given <code>field</code> and
-<code>opts</code> associated with the receiver, and add it to the list of
-children to the currently open tag.</p>
+<p>Creates an <code>Input</code> with the given <code>field</code> and <code>opts</code> associated with the receiver, and add it to the list of children to the currently open tag.</p>
 
-<p>If the form is associated with an <code>obj</code>, or the :obj key exists
-in the <code>opts</code> argument, treats the <code>field</code> as a call
-to the <code>obj</code>.  If <code>obj</code> responds to
-<code>forme_input</code>, that method is called with the <code>field</code>
-and a copy of <code>opts</code>.  Otherwise, the field is used as a method
-call on the <code>obj</code> and a text input is created with the result.</p>
+<p>If the form is associated with an <code>obj</code>, or the :obj key exists in the <code>opts</code> argument, treats the <code>field</code> as a call to the <code>obj</code>.  If <code>obj</code> responds to <code>forme_input</code>, that method is called with the <code>field</code> and a copy of <code>opts</code>.  Otherwise, the field is used as a method call on the <code>obj</code> and a text input is created with the result.</p>
 
-<p>If no <code>obj</code> is associated with the receiver, <code>field</code>
-represents an input type (e.g. <code>:text</code>, <code>:textarea</code>,
-<code>:select</code>), and an input is created directly with the
-<code>field</code> and <code>opts</code>.</p>
+<p>If no <code>obj</code> is associated with the receiver, <code>field</code> represents an input type (e.g. <code>:text</code>, <code>:textarea</code>, <code>:select</code>), and an input is created directly with the <code>field</code> and <code>opts</code>.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-input-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-input-source'><span class="ruby-comment"># File lib/forme/form.rb, line 130</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">input</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:obj</span>)&#x000A;    <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>&#x000A;    <span class="ruby-identifier">obj</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:obj</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">obj</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">obj</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">input</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:forme_input</span>)&#x000A;      <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_input</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>)&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>&#x000A;      <span class="ruby-identifier">opts</span>[<span class="ruby-value">:key</span>] = <span class="ruby-identifier">field</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:key</span>)&#x000A;      <span class="ruby-identifier">type</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:type</span>) <span class="ruby-operator">||</span> <span class="ruby-value">:text</span>&#x000A;      <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:value</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:file</span>&#x000A;        <span class="ruby-identifier">opts</span>[<span class="ruby-value">:value</span>] = <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;          <span class="ruby-identifier">obj</span>[<span class="ruby-identifier">field</span>]&#x000A;        <span class="ruby-keyword">else</span>&#x000A;          <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">field</span>)&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-identifier">_input</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">opts</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">_input</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">input</span>&#x000A;  <span class="ruby-identifier">input</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-input-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">131</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">input</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num">132</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:obj</span>)&#x000A;<span class="line-num">133</span>     <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">134</span>     <span class="ruby-identifier">obj</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:obj</span>)&#x000A;<span class="line-num">135</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">136</span>     <span class="ruby-identifier">obj</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">obj</span>&#x000A;<span class="line-num">137</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">138</span>   <span class="ruby-identifier">input</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>&#x000A;<span class="line-num">139</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:forme_input</span>)&#x000A;<span class="line-num">140</span>       <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_input</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>)&#x000A;<span class="line-num">141</span>     <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">142</span>       <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">143</span>       <span class="ruby-identifier">opts</span>[<span class="ruby-value">:key</span>] = <span class="ruby-identifier">field</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:key</span>)&#x000A;<span class="line-num">144</span>       <span class="ruby-identifier">type</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:type</span>) <span class="ruby-operator">||</span> <span class="ruby-value">:text</span>&#x000A;<span class="line-num">145</span>       <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:value</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:file</span>&#x000A;<span class="line-num">146</span>         <span class="ruby-identifier">opts</span>[<span class="ruby-value">:value</span>] = <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;<span class="line-num">147</span>           <span class="ruby-identifier">obj</span>[<span class="ruby-identifier">field</span>]&#x000A;<span class="line-num">148</span>         <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">149</span>           <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">field</span>)&#x000A;<span class="line-num">150</span>         <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">151</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">152</span>       <span class="ruby-identifier">_input</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">153</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">154</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">155</span>     <span class="ruby-identifier">_input</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">156</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">157</span>   <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">input</span>&#x000A;<span class="line-num">158</span>   <span class="ruby-identifier">input</span>&#x000A;<span class="line-num">159</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-inputs'>
@@ -419,26 +385,15 @@ represents an input type (e.g. <code>:text</code>, <code>:textarea</code>,
 </div>
 <div class='description'>
 
-<p>Creates a tag using the <code>inputs_wrapper</code> (a fieldset by
-default), calls input on each element of <code>inputs</code>, and yields if
-given a block. You can use array arguments if you want inputs to be created
-with specific options:</p>
+<p>Creates a tag using the <code>inputs_wrapper</code> (a fieldset by default), calls input on each element of <code>inputs</code>, and yields if given a block. You can use array arguments if you want inputs to be created with specific options:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>([<span class="ruby-value">:field1</span>, <span class="ruby-value">:field2</span>])&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>([[<span class="ruby-value">:field1</span>, {<span class="ruby-value">:name</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;foo&#39;</span>}], <span class="ruby-value">:field2</span>])</pre>
 
-<p>The given <code>opts</code> are passed to the <code>inputs_wrapper</code>,
-and the default <code>inputs_wrapper</code> supports a <code>:legend</code>
-option that is used to set the legend for the fieldset.</p>
+<p>The given <code>opts</code> are passed to the <code>inputs_wrapper</code>, and the default <code>inputs_wrapper</code> supports a <code>:legend</code> option that is used to set the legend for the fieldset.</p>
 
-<p><code>opts</code> can also include transformer options itself (e.g.
-:wrapper), which override the form&#39;s current transformer options for
-the duration of the block. The exception is the :inputs_wrapper transformer
-option, which affects the wrapper to use for this inputs call.  You can use
-the :nested_inputs_wrapper option to set the default :inputs_wrapper option
-for the duration of the block.</p>
+<p><code>opts</code> can also include transformer options itself (e.g. :wrapper), which override the form&#39;s current transformer options for the duration of the block. The exception is the :inputs_wrapper transformer option, which affects the wrapper to use for this inputs call.  You can use the :nested_inputs_wrapper option to set the default :inputs_wrapper option for the duration of the block.</p>
 
-<p>This can also be called with a single hash argument to just use an options
-hash:</p>
+<p>This can also be called with a single hash argument to just use an options hash:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>(<span class="ruby-value">:legend</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;Foo&#39;</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -451,7 +406,7 @@ hash:</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inputs-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-inputs-source'><span class="ruby-comment"># File lib/forme/form.rb, line 195</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inputs</span>(<span class="ruby-identifier">inputs</span>=[], <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">_inputs</span>(<span class="ruby-identifier">inputs</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-inputs-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">196</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inputs</span>(<span class="ruby-identifier">inputs</span>=[], <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">197</span>   <span class="ruby-identifier">_inputs</span>(<span class="ruby-identifier">inputs</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">198</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-namespaces'>
@@ -463,15 +418,14 @@ hash:</p>
 </div>
 <div class='description'>
 
-<p>The namespaces if any for the receiver&#39;s inputs.  This can be used to
-automatically setup namespaced class and id attributes.</p>
+<p>The namespaces if any for the receiver&#39;s inputs.  This can be used to automatically setup namespaced class and id attributes.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-namespaces-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-namespaces-source'><span class="ruby-comment"># File lib/forme/form.rb, line 252</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">namespaces</span>&#x000A;  <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-namespaces-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">253</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">namespaces</span>&#x000A;<span class="line-num">254</span>   <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>]&#x000A;<span class="line-num">255</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-obj'>
@@ -483,17 +437,14 @@ automatically setup namespaced class and id attributes.</p>
 </div>
 <div class='description'>
 
-<p>The object associated with this form, if any. If the <code>Form</code> has
-an associated obj, then calls to <code>input</code> are assumed to be
-accessing fields of the object instead to directly representing input
-types.</p>
+<p>The object associated with this form, if any. If the <code>Form</code> has an associated obj, then calls to <code>input</code> are assumed to be accessing fields of the object instead to directly representing input types.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-obj-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-obj-source'><span class="ruby-comment"># File lib/forme/form.rb, line 246</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">obj</span>&#x000A;  <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:obj</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-obj-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">247</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">obj</span>&#x000A;<span class="line-num">248</span>   <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:obj</span>]&#x000A;<span class="line-num">249</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-open'>
@@ -505,15 +456,14 @@ types.</p>
 </div>
 <div class='description'>
 
-<p>Returns a string representing the opening of the form tag for serializers
-that support opening tags.</p>
+<p>Returns a string representing the opening of the form tag for serializers that support opening tags.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-open-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-open-source'><span class="ruby-comment"># File lib/forme/form.rb, line 227</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">open</span>(<span class="ruby-identifier">attr</span>)&#x000A;  <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">_tag</span>(<span class="ruby-value">:form</span>, <span class="ruby-identifier">attr</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_open</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-open-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">228</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">open</span>(<span class="ruby-identifier">attr</span>)&#x000A;<span class="line-num">229</span>   <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">_tag</span>(<span class="ruby-value">:form</span>, <span class="ruby-identifier">attr</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">serializer</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:serialize_open</span>)&#x000A;<span class="line-num">230</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-raw'>
@@ -525,15 +475,14 @@ that support opening tags.</p>
 </div>
 <div class='description'>
 
-<p>Return a new string that will not be html escaped by the default
-serializer.</p>
+<p>Return a new string that will not be html escaped by the default serializer.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-raw-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-raw-source'><span class="ruby-comment"># File lib/forme/form.rb, line 299</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">raw</span>(<span class="ruby-identifier">s</span>)&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-raw-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">300</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">raw</span>(<span class="ruby-identifier">s</span>)&#x000A;<span class="line-num">301</span>   <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">s</span>)&#x000A;<span class="line-num">302</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-raw_output'>
@@ -545,16 +494,14 @@ serializer.</p>
 </div>
 <div class='description'>
 
-<p>Marks the string as containing already escaped output.  Returns string
-given by default, but subclasses for specific web frameworks can handle
-automatic html escaping by overriding this.</p>
+<p>Marks the string as containing already escaped output.  Returns string given by default, but subclasses for specific web frameworks can handle automatic html escaping by overriding this.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-raw_output-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-raw_output-source'><span class="ruby-comment"># File lib/forme/form.rb, line 306</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">raw_output</span>(<span class="ruby-identifier">s</span>)&#x000A;  <span class="ruby-identifier">s</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-raw_output-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">307</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">raw_output</span>(<span class="ruby-identifier">s</span>)&#x000A;<span class="line-num">308</span>   <span class="ruby-identifier">s</span>&#x000A;<span class="line-num">309</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-tag'>
@@ -566,17 +513,14 @@ automatic html escaping by overriding this.</p>
 </div>
 <div class='description'>
 
-<p>Creates a <code>Tag</code> associated to the receiver with the given
-arguments. Add the tag to the the list of children for the currently open
-tag. If a block is given, make this tag the currently open tag while inside
-the block.</p>
+<p>Creates a <code>Tag</code> associated to the receiver with the given arguments. Add the tag to the the list of children for the currently open tag. If a block is given, make this tag the currently open tag while inside the block.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-tag-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/form.rb, line 260</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>)&#x000A;  <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-identifier">nest</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-identifier">tag</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-tag-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">261</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">262</span>   <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>)&#x000A;<span class="line-num">263</span>   <span class="ruby-keyword">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>&#x000A;<span class="line-num">264</span>   <span class="ruby-identifier">nest</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">265</span>   <span class="ruby-identifier">tag</span>&#x000A;<span class="line-num">266</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-with_obj'>
@@ -588,15 +532,14 @@ the block.</p>
 </div>
 <div class='description'>
 
-<p>Temporarily override the given object and namespace for the form.  Any
-given namespaces are appended to the form&#39;s current namespace.</p>
+<p>Temporarily override the given object and namespace for the form.  Any given namespaces are appended to the form&#39;s current namespace.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-with_obj-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-with_obj-source'><span class="ruby-comment"># File lib/forme/form.rb, line 312</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">with_obj</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">with_opts</span>(<span class="ruby-value">:obj</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">obj</span>, <span class="ruby-value">:namespace</span><span class="ruby-operator">=&gt;</span><span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>]<span class="ruby-operator">+</span><span class="ruby-constant">Array</span>(<span class="ruby-identifier">namespace</span>)) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">yield</span> <span class="ruby-identifier">obj</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-with_obj-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">313</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">with_obj</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">314</span>   <span class="ruby-identifier">with_opts</span>(<span class="ruby-value">:obj</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">obj</span>, <span class="ruby-value">:namespace</span><span class="ruby-operator">=&gt;</span><span class="ruby-ivar">@opts</span>[<span class="ruby-value">:namespace</span>]<span class="ruby-operator">+</span><span class="ruby-constant">Array</span>(<span class="ruby-identifier">namespace</span>)) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">315</span>     <span class="ruby-keyword">yield</span> <span class="ruby-identifier">obj</span>&#x000A;<span class="line-num">316</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">317</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-with_opts'>
@@ -608,16 +551,14 @@ given namespaces are appended to the form&#39;s current namespace.</p>
 </div>
 <div class='description'>
 
-<p>Temporarily override the opts for the form for the duration of the block.
-This merges the given opts with the form&#39;s current opts, restoring the
-previous opts before returning.</p>
+<p>Temporarily override the opts for the form for the duration of the block. This merges the given opts with the form&#39;s current opts, restoring the previous opts before returning.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-with_opts-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-with_opts-source'><span class="ruby-comment"># File lib/forme/form.rb, line 321</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">with_opts</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">orig_opts</span> = <span class="ruby-ivar">@opts</span>&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">copy_inputs_wrapper_from_wrapper</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-ivar">@opts</span>)&#x000A;  <span class="ruby-keyword">yield</span>&#x000A;<span class="ruby-keyword">ensure</span>&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">orig_opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-with_opts-source'>    <span class="ruby-comment"># File lib/forme/form.rb</span>&#x000A;<span class="line-num">322</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">with_opts</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">323</span>   <span class="ruby-identifier">orig_opts</span> = <span class="ruby-ivar">@opts</span>&#x000A;<span class="line-num">324</span>   <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">325</span>   <span class="ruby-identifier">copy_inputs_wrapper_from_wrapper</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-ivar">@opts</span>)&#x000A;<span class="line-num">326</span>   <span class="ruby-keyword">yield</span>&#x000A;<span class="line-num">327</span> <span class="ruby-keyword">ensure</span>&#x000A;<span class="line-num">328</span>   <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">orig_opts</span>&#x000A;<span class="line-num">329</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

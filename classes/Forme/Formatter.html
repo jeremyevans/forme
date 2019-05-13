@@ -45,12 +45,9 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The default formatter used by the library.  Any custom formatters should
-probably inherit from this formatter unless they have very special needs.</p>
+<p>The default formatter used by the library.  Any custom formatters should probably inherit from this formatter unless they have very special needs.</p>
 
-<p>Unlike most other transformers which are registered as instances and use a
-functional style, this class is registered as a class due to the large
-amount of state it uses.</p>
+<p>Unlike most other transformers which are registered as instances and use a functional style, this class is registered as a class due to the large amount of state it uses.</p>
 
 <p>Registered as :default.</p>
 </div>
@@ -90,9 +87,7 @@ amount of state it uses.</p>
 <td class='context-item-value'>[:autofocus, :required, :disabled]</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
-<p>Options copied from the options hash into the attributes hash, where a true
-value in the options hash sets the attribute value to the same name as the
-key.</p>
+<p>Options copied from the options hash into the attributes hash, where a true value in the options hash sets the attribute value to the same name as the key.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -101,10 +96,7 @@ key.</p>
 <td class='context-item-value'>[:name, :id, :placeholder, :value, :style]</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
-<p>These options are copied directly from the options hash to the the
-attributes hash, so they don&#39;t need to be specified in the :attr
-option.  However, they can be specified in both places, and if so, the
-:attr option version takes precedence.</p>
+<p>These options are copied directly from the options hash to the the attributes hash, so they don&#39;t need to be specified in the :attr option.  However, they can be specified in both places, and if so, the :attr option version takes precedence.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -113,11 +105,9 @@ option.  However, they can be specified in both places, and if so, the
 <td class='context-item-value'>Hash.new(0)</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
-<p>Used to specify the value of the hidden input created for checkboxes. Since
-the default for an unspecified checkbox value is 1, the default is</p>
+<p>Used to specify the value of the hidden input created for checkboxes. Since the default for an unspecified checkbox value is 1, the default is</p>
 <ol><li>
-<p>If the checkbox value is &#39;t&#39;, the hidden value is &#39;f&#39;,
-since that is</p>
+<p>If the checkbox value is &#39;t&#39;, the hidden value is &#39;f&#39;, since that is</p>
 </li></ol>
 
 <p>common usage for boolean values.</p>
@@ -164,9 +154,7 @@ since that is</p>
 </td>
 <td class='context-item-value'>[R]</td>
 <td class='context-item-desc'>
-<p>The attributes to to set on the lower level <code>Tag</code> form returned.
-This are derived from the <code>input</code>&#39;s <code>opts</code>, but
-some processing is done on them.</p>
+<p>The attributes to to set on the lower level <code>Tag</code> form returned. This are derived from the <code>input</code>&#39;s <code>opts</code>, but some processing is done on them.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -175,8 +163,7 @@ some processing is done on them.</p>
 </td>
 <td class='context-item-value'>[R]</td>
 <td class='context-item-desc'>
-<p>The <code>Form</code> instance for the receiver, taken from the
-<code>input</code>.</p>
+<p>The <code>Form</code> instance for the receiver, taken from the <code>input</code>.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -185,9 +172,7 @@ some processing is done on them.</p>
 </td>
 <td class='context-item-value'>[R]</td>
 <td class='context-item-desc'>
-<p>The <code>Input</code> instance for the receiver.  This is what the
-receiver converts to the lower level <code>Tag</code> form (or an array of
-them).</p>
+<p>The <code>Input</code> instance for the receiver.  This is what the receiver converts to the lower level <code>Tag</code> form (or an array of them).</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -220,7 +205,7 @@ them).</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-call-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-call-source'><span class="ruby-comment"># File lib/forme/transformers/formatter.rb, line 26</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">new</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-call-source'>   <span class="ruby-comment"># File lib/forme/transformers/formatter.rb</span>&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">input</span>)&#x000A;<span class="line-num">28</span>   <span class="ruby-identifier">new</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>)&#x000A;<span class="line-num">29</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -233,18 +218,14 @@ them).</p>
 </div>
 <div class='description'>
 
-<p>Transform the <code>input</code> into a <code>Tag</code> instance (or an
-array of them), wrapping it with the <code>form</code>&#39;s wrapper, and
-the form&#39;s <code>error_handler</code> and <code>labeler</code> if the
-<code>input</code> has an <code>:error</code> or <code>:label</code>
-options.</p>
+<p>Transform the <code>input</code> into a <code>Tag</code> instance (or an array of them), wrapping it with the <code>form</code>&#39;s wrapper, and the form&#39;s <code>error_handler</code> and <code>labeler</code> if the <code>input</code> has an <code>:error</code> or <code>:label</code> options.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-call-source'><span class="ruby-comment"># File lib/forme/transformers/formatter.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-ivar">@input</span> = <span class="ruby-identifier">input</span>&#x000A;  <span class="ruby-ivar">@form</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">form</span>&#x000A;  <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>]&#x000A;  <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;  <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-identifier">normalize_options</span>&#x000A;&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">html</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:html</span>]&#x000A;    <span class="ruby-identifier">html</span> = <span class="ruby-identifier">html</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">html</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:call</span>)&#x000A;    <span class="ruby-identifier">form</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">html</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">convert_to_tag</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_label</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:label</span>]&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_error</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:error</span>]&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap</span>(<span class="ruby-value">:helper</span>, <span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:help</span>]&#x000A;  <span class="ruby-identifier">wrap_tag</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/forme/transformers/formatter.rb</span>&#x000A;<span class="line-num">57</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">input</span>)&#x000A;<span class="line-num">58</span>   <span class="ruby-ivar">@input</span> = <span class="ruby-identifier">input</span>&#x000A;<span class="line-num">59</span>   <span class="ruby-ivar">@form</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">form</span>&#x000A;<span class="line-num">60</span>   <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>]&#x000A;<span class="line-num">61</span>   <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;<span class="line-num">62</span>   <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">63</span>   <span class="ruby-identifier">normalize_options</span>&#x000A;<span class="line-num">64</span>   <span class="ruby-identifier">tag</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">html</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:html</span>]&#x000A;<span class="line-num">65</span>     <span class="ruby-identifier">html</span> = <span class="ruby-identifier">html</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">input</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">html</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:call</span>)&#x000A;<span class="line-num">66</span>     <span class="ruby-identifier">form</span>.<span class="ruby-identifier">raw</span>(<span class="ruby-identifier">html</span>)&#x000A;<span class="line-num">67</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">68</span>     <span class="ruby-identifier">convert_to_tag</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>)&#x000A;<span class="line-num">69</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">70</span>   <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_label</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:label</span>]&#x000A;<span class="line-num">71</span>   <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap_tag_with_error</span>(<span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:error</span>]&#x000A;<span class="line-num">72</span>   <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">wrap</span>(<span class="ruby-value">:helper</span>, <span class="ruby-identifier">tag</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:help</span>]&#x000A;<span class="line-num">73</span>   <span class="ruby-identifier">wrap_tag</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="line-num">74</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

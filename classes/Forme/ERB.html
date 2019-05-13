@@ -54,7 +54,6 @@ Forme::ERB
 <h2>Classes and Modules</h2>
 <ol>
 <li><a href="ERB/Helper.html">Forme::ERB::Helper</a></li>
-<li><a href="ERB/Rack.html">Forme::ERB::Rack</a></li>
 <li><a href="ERB/Form.html">Forme::ERB::Form</a></li>
 </ol>
 </div>
@@ -84,20 +83,14 @@ Forme::ERB
 </div>
 <div class='description'>
 
-<p>Add a hidden tag proc that will be used for all forms created via <a
-href="ERB/Helper.html#method-i-form">Forme::ERB::Helper#form</a>. The block
-is yielded the <a href="Tag.html">Forme::Tag</a> object for the form tag.
-The block should return either nil if hidden tag should be added, or a <a
-href="Tag.html">Forme::Tag</a> object (or an array of them), or a hash with
-keys specifying the name of the tags and the values specifying the values
-of the tags .</p>
+<p>Add a hidden tag proc that will be used for all forms created via <a href="ERB/Helper.html#method-i-form"><code>Forme::ERB::Helper#form</code></a>. The block is yielded the <a href="Tag.html"><code>Forme::Tag</code></a> object for the form tag. The block should return either nil if hidden tag should be added, or a <a href="Tag.html"><code>Forme::Tag</code></a> object (or an array of them), or a hash with keys specifying the name of the tags and the values specifying the values of the tags .</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-add_hidden_tag-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-add_hidden_tag-source'><span class="ruby-comment"># File lib/forme/erb.rb, line 12</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">add_hidden_tag</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-constant">HIDDEN_TAGS</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-add_hidden_tag-source'>   <span class="ruby-comment"># File lib/forme/erb.rb</span>&#x000A;<span class="line-num">13</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">add_hidden_tag</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">14</span>   <span class="ruby-constant">HIDDEN_TAGS</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">15</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

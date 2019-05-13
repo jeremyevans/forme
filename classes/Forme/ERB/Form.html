@@ -39,9 +39,7 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Subclass used when using <a href="../../Forme.html">Forme</a> <a
-href="../ERB.html">ERB</a> integration. Handles integrating into the view
-template so that methods with blocks can inject strings into the output.</p>
+<p>Subclass used when using <a href="../../Forme.html"><code>Forme</code></a> <a href="../ERB.html"><code>ERB</code></a> integration. Handles integrating into the view template so that methods with blocks can inject strings into the output.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -95,7 +93,7 @@ template so that methods with blocks can inject strings into the output.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/forme/erb_form.rb, line 15</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-ivar">@output</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:output</span>] <span class="ruby-operator">?</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:output</span>] <span class="ruby-operator">:</span> <span class="ruby-constant">String</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/forme/erb_form.rb</span>&#x000A;<span class="line-num">16</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-operator">*</span>)&#x000A;<span class="line-num">17</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">18</span>   <span class="ruby-ivar">@output</span> = <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:output</span>] <span class="ruby-operator">?</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-value">:output</span>] <span class="ruby-operator">:</span> <span class="ruby-constant">String</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="line-num">19</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -115,7 +113,7 @@ template so that methods with blocks can inject strings into the output.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-emit-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-emit-source'><span class="ruby-comment"># File lib/forme/erb_form.rb, line 21</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">emit</span>(<span class="ruby-identifier">tag</span>)&#x000A;  <span class="ruby-identifier">output</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-emit-source'>   <span class="ruby-comment"># File lib/forme/erb_form.rb</span>&#x000A;<span class="line-num">22</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">emit</span>(<span class="ruby-identifier">tag</span>)&#x000A;<span class="line-num">23</span>   <span class="ruby-identifier">output</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span>&#x000A;<span class="line-num">24</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-form'>
@@ -127,15 +125,14 @@ template so that methods with blocks can inject strings into the output.</p>
 </div>
 <div class='description'>
 
-<p>Capture the inside of the form, injecting it into the template if a block
-is given, or returning it as a string if not.</p>
+<p>Capture the inside of the form, injecting it into the template if a block is given, or returning it as a string if not.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-form-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-form-source'><span class="ruby-comment"># File lib/forme/erb_form.rb, line 37</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">form</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-form-source'>   <span class="ruby-comment"># File lib/forme/erb_form.rb</span>&#x000A;<span class="line-num">38</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">form</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">39</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">40</span>     <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;<span class="line-num">41</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">42</span>     <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">43</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">44</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-inputs'>
@@ -147,15 +144,14 @@ is given, or returning it as a string if not.</p>
 </div>
 <div class='description'>
 
-<p>Capture the inside of the inputs, injecting it into the template if a block
-is given, or returning it as a string if not.</p>
+<p>Capture the inside of the inputs, injecting it into the template if a block is given, or returning it as a string if not.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inputs-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-inputs-source'><span class="ruby-comment"># File lib/forme/erb_form.rb, line 27</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inputs</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">capture</span>{<span class="ruby-keyword">super</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-inputs-source'>   <span class="ruby-comment"># File lib/forme/erb_form.rb</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inputs</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">29</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">30</span>     <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>){<span class="ruby-keyword">super</span>}&#x000A;<span class="line-num">31</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">32</span>     <span class="ruby-identifier">capture</span>{<span class="ruby-keyword">super</span>}&#x000A;<span class="line-num">33</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">34</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-tag'>
@@ -167,16 +163,14 @@ is given, or returning it as a string if not.</p>
 </div>
 <div class='description'>
 
-<p>If a block is given, inject an opening tag into the output, inject any
-given children into the output, yield to the block, inject a closing tag
-into the output. If a block is not given, just return the tag created.</p>
+<p>If a block is given, inject an opening tag into the output, inject any given children into the output, yield to the block, inject a closing tag into the output. If a block is not given, just return the tag created.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-tag-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-tag-source'><span class="ruby-comment"># File lib/forme/erb_form.rb, line 49</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">tag</span>))&#x000A;      <span class="ruby-constant">Array</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">children</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">c</span>)}&#x000A;      <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span>&#x000A;      <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">tag</span>))&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">tag</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-tag-source'>   <span class="ruby-comment"># File lib/forme/erb_form.rb</span>&#x000A;<span class="line-num">50</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=[], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">51</span>   <span class="ruby-identifier">tag</span> = <span class="ruby-identifier">_tag</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">children</span>)&#x000A;<span class="line-num">52</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">53</span>     <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">block</span>) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">54</span>       <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serialize_open</span>(<span class="ruby-identifier">tag</span>))&#x000A;<span class="line-num">55</span>       <span class="ruby-constant">Array</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">children</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">c</span>)}&#x000A;<span class="line-num">56</span>       <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span>&#x000A;<span class="line-num">57</span>       <span class="ruby-identifier">emit</span>(<span class="ruby-identifier">serialize_close</span>(<span class="ruby-identifier">tag</span>))&#x000A;<span class="line-num">58</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">59</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">60</span>     <span class="ruby-identifier">tag</span>&#x000A;<span class="line-num">61</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">62</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

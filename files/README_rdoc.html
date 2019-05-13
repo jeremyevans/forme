@@ -30,16 +30,15 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2018-06-05 15:25:35 -0700</span>
+<span class='datetime'>2019-03-20 16:06:20 -0700</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<h1 id="label-Forme"><a href="../classes/Forme.html">Forme</a><span><a href="#label-Forme">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-Forme"><a href="../classes/Forme.html"><code>Forme</code></a><span><a href="#label-Forme">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p><a href="../classes/Forme.html">Forme</a> is a HTML forms library for ruby
-with the following goals:</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> is a HTML forms library for ruby with the following goals:</p>
 <ol><li>
 <p>Have no external dependencies</p>
 </li><li>
@@ -52,94 +51,44 @@ with the following goals:</p>
 
 <h1 id="label-Introduction">Introduction<span><a href="#label-Introduction">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p><a href="../classes/Forme.html">Forme</a> is designed to make creating HTML
-forms easier.  Flexibility and simplicity are primary objectives.  The
-basic usage involves creating a <code>Forme::Form</code> instance, and
-calling <code>input</code> and <code>tag</code> methods to return html
-strings for widgets, but it could also be used for serializing to other
-formats, or even as a DSL for a GUI application.</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> is designed to make creating HTML forms easier.  Flexibility and simplicity are primary objectives.  The basic usage involves creating a <code>Forme::Form</code> instance, and calling <code>input</code> and <code>tag</code> methods to return html strings for widgets, but it could also be used for serializing to other formats, or even as a DSL for a GUI application.</p>
 
-<p>In order to be flexible, <a href="../classes/Forme.html">Forme</a> stores
-tags in abstract form until output is requested.  There are two separate
-abstract <em>forms</em> that <a href="../classes/Forme.html">Forme</a>
-uses.  One is <code>Forme::Input</code>, and the other is
-<code>Forme::Tag</code>. <code>Forme::Input</code> is a high level abstract
-form, while <code>Forme::Tag</code> is a low level abstract form.</p>
+<p>In order to be flexible, <a href="../classes/Forme.html"><code>Forme</code></a> stores tags in abstract form until output is requested.  There are two separate abstract <em>forms</em> that <a href="../classes/Forme.html"><code>Forme</code></a> uses.  One is <code>Forme::Input</code>, and the other is <code>Forme::Tag</code>. <code>Forme::Input</code> is a high level abstract form, while <code>Forme::Tag</code> is a low level abstract form.</p>
 
-<p>The difference between <code>Forme::Input</code> and
-<code>Forme::Tag</code>  is that <code>Forme::Tag</code> directly
-represents the underlying html tag, containing a type, optional attributes,
-and children, while the <code>Forme::Input</code> is more abstract and
-attempts to be user friendly. For example, these both compile by default to
-the same select tag:</p>
+<p>The difference between <code>Forme::Input</code> and <code>Forme::Tag</code>  is that <code>Forme::Tag</code> directly represents the underlying html tag, containing a type, optional attributes, and children, while the <code>Forme::Input</code> is more abstract and attempts to be user friendly. For example, these both compile by default to the same select tag:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:select</span>, <span class="ruby-value">:options</span><span class="ruby-operator">=&gt;</span>[[<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-value">1</span>]])&#x000A;<span class="ruby-comment"># or</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:select</span>, {}, [<span class="ruby-identifier">f</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:option</span>, {<span class="ruby-value">:value</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">1</span>}, [<span class="ruby-string">&#39;foo&#39;</span>])])</pre>
 
-<p>The processing of high level <code>Forme::Input</code>s into raw html data
-is broken down to the following steps (called transformers):</p>
+<p>The processing of high level <code>Forme::Input</code>s into raw html data is broken down to the following steps (called transformers):</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'><code>Formatter</code> </td><td>
-<p>converts a <code>Forme::Input</code> instance into a
-<code>Forme::Tag</code> instance (or array of them).</p>
+<p>converts a <code>Forme::Input</code> instance into a <code>Forme::Tag</code> instance (or array of them).</p>
 </td></tr><tr><td class='label'><code>ErrorHandler</code> </td><td>
-<p>If the <code>Forme::Input</code> instance has a error, takes the formatted
-tag and marks it as having the error.</p>
+<p>If the <code>Forme::Input</code> instance has a error, takes the formatted tag and marks it as having the error.</p>
 </td></tr><tr><td class='label'><code>Helper</code> </td><td>
-<p>If the <code>Forme::Input</code> instance has any help text, adds the help
-text in a separate tag.</p>
+<p>If the <code>Forme::Input</code> instance has any help text, adds the help text in a separate tag.</p>
 </td></tr><tr><td class='label'><code>Labeler</code> </td><td>
-<p>If the <code>Forme::Input</code> instance has a label, takes the formatted
-output and labels it.</p>
+<p>If the <code>Forme::Input</code> instance has a label, takes the formatted output and labels it.</p>
 </td></tr><tr><td class='label'><code>Wrapper</code> </td><td>
-<p>Takes the output of the formatter, labeler, and error_handler transformers,
-and wraps it in another tag (or just returns it unmodified).</p>
+<p>Takes the output of the formatter, labeler, and error_handler transformers, and wraps it in another tag (or just returns it unmodified).</p>
 </td></tr><tr><td class='label'><code>Serializer</code> </td><td>
 <p>converts a <code>Forme::Tag</code> instance into an html string.</p>
 </td></tr></tbody></table>
 
-<p>Technically, only the <code>Serializer</code> is necessary.  The
-<code>Forme::Form#input</code> and <code>Forme::Form#tag</code> methods
-return <code>Input</code> and <code>Tag</code> objects.  These objects both
-have <code>to_s</code> defined to call the appropriate
-<code>Serializer</code> with themselves.  The <code>Serializer</code> calls
-the appropriate <code>Formatter</code> if it encounters an
-<code>Input</code> instance, and attempts to serialize the output of that
-(which is usually a <code>Tag</code> instance).  It is up to the
-<code>Formatter</code> to call the <code>Labeler</code>,
-<code>ErrorHandler</code>, <code>Helper</code>,  and/or
-<code>Wrapper</code>.</p>
+<p>Technically, only the <code>Serializer</code> is necessary.  The <code>Forme::Form#input</code> and <code>Forme::Form#tag</code> methods return <code>Input</code> and <code>Tag</code> objects.  These objects both have <code>to_s</code> defined to call the appropriate <code>Serializer</code> with themselves.  The <code>Serializer</code> calls the appropriate <code>Formatter</code> if it encounters an <code>Input</code> instance, and attempts to serialize the output of that (which is usually a <code>Tag</code> instance).  It is up to the <code>Formatter</code> to call the <code>Labeler</code>, <code>ErrorHandler</code>, <code>Helper</code>,  and/or <code>Wrapper</code>.</p>
 
-<p>The <code>Forme::Form</code> object takes the 6 transformers as options
-(:formatter, :labeler, :error_handler, :helper, :wrapper, :inputs_wrapper,
-and :serializer), all of which should be objects responding to
-<code>call</code> (so you can use +Proc+s) or be symbols registered with
-the library using <code>Forme.register_transformer</code>:</p>
+<p>The <code>Forme::Form</code> object takes the 6 transformers as options (:formatter, :labeler, :error_handler, :helper, :wrapper, :inputs_wrapper, and :serializer), all of which should be objects responding to <code>call</code> (so you can use +Proc+s) or be symbols registered with the library using <code>Forme.register_transformer</code>:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">register_transformer</span>(<span class="ruby-value">:wrapper</span>, <span class="ruby-value">:p</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:p</span>, {}, <span class="ruby-identifier">tag</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Most transformers are called with two arguments, <code>tag</code> and
-<code>input</code>.  <code>tag</code> is a <code>Forme::Tag</code>
-instance, and <code>input</code> is a <code>Forme::Input</code> instance. 
-The <code>Formatter</code> and <code>Serializer</code> transformers are the
-two exceptions, with <code>Formatter</code> being called with just an
-<code>input</code>, and <code>Serializer</code> potentionally being called
-with any object.  The <code>Serializer</code> will in general recursively
-call itself with children of the argument given.</p>
+<p>Most transformers are called with two arguments, <code>tag</code> and <code>input</code>.  <code>tag</code> is a <code>Forme::Tag</code> instance, and <code>input</code> is a <code>Forme::Input</code> instance.  The <code>Formatter</code> and <code>Serializer</code> transformers are the two exceptions, with <code>Formatter</code> being called with just an <code>input</code>, and <code>Serializer</code> potentionally being called with any object.  The <code>Serializer</code> will in general recursively call itself with children of the argument given.</p>
 
-<p>There is also an <code>InputsWrapper</code> transformer, that is called by
-<code>Forme::Form#inputs</code>.  It&#39;s used to wrap up a group of
-related options (in a fieldset by default).  It takes <code>form</code>
-(<code>Forme::Form</code> instance) and <code>input_opts</code>
-(<code>Hash</code>) arguments.</p>
+<p>There is also an <code>InputsWrapper</code> transformer, that is called by <code>Forme::Form#inputs</code>.  It&#39;s used to wrap up a group of related options (in a fieldset by default).  It takes <code>form</code> (<code>Forme::Form</code> instance) and <code>input_opts</code> (<code>Hash</code>) arguments.</p>
 
-<p>Most of the transformers can be overridden on a per instance basis by
-passing the appropriate option to <code>input</code> or
-<code>inputs</code>:</p>
+<p>Most of the transformers can be overridden on a per instance basis by passing the appropriate option to <code>input</code> or <code>inputs</code>:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:name</span>, <span class="ruby-value">:wrapper</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:p</span>)</pre>
 
-<p>Existing transformers can be easily extended (ie, to set the class
-attribute), by creating your own transformer and then calling the existing
-transformer.</p>
+<p>Existing transformers can be easily extended (ie, to set the class attribute), by creating your own transformer and then calling the existing transformer.</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">register_transformer</span>(<span class="ruby-value">:labeler</span>, <span class="ruby-value">:explicit</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label_attr</span>] <span class="ruby-operator">||=</span> { <span class="ruby-value">:class</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;label&#39;</span> }&#x000A;  <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Labeler</span><span class="ruby-operator">::</span><span class="ruby-constant">Explicit</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -153,44 +102,32 @@ transformer.</p>
 </td></tr><tr><td class='label'>RDoc </td><td>
 <p><a target="_top" href="http://forme.jeremyevans.net">forme.jeremyevans.net</a></p>
 </td></tr><tr><td class='label'>Source </td><td>
-<p><a
-href="https://github.com/jeremyevans/forme">github.com/jeremyevans/forme</a></p>
+<p><a href="https://github.com/jeremyevans/forme">github.com/jeremyevans/forme</a></p>
 </td></tr><tr><td class='label'>IRC </td><td>
 <p><a href="irc://irc.freenode.net/forme">irc.freenode.net/forme</a></p>
 </td></tr><tr><td class='label'>Google Group </td><td>
-<p><a
-href="https://groups.google.com/forum/#!forum/ruby-forme">groups.google.com/forum/#!forum/ruby-forme</a></p>
+<p><a href="https://groups.google.com/forum/#!forum/ruby-forme">groups.google.com/forum/#!forum/ruby-forme</a></p>
 </td></tr><tr><td class='label'>Bug Tracker </td><td>
-<p><a
-href="https://github.com/jeremyevans/forme/issues">github.com/jeremyevans/forme/issues</a></p>
+<p><a href="https://github.com/jeremyevans/forme/issues">github.com/jeremyevans/forme/issues</a></p>
 </td></tr></tbody></table>
 
 <h1 id="label-Basic+Usage">Basic Usage<span><a href="#label-Basic+Usage">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p>Without an object, <a href="../classes/Forme.html">Forme</a> is a simple
-form builder:</p>
+<p>Without an object, <a href="../classes/Forme.html"><code>Forme</code></a> is a simple form builder:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">open</span>(<span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>, <span class="ruby-value">:method</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:post</span>) <span class="ruby-comment"># &#39;&lt;form action=&quot;/foo&quot; method=&quot;post&quot;&gt;&#39;</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:textarea</span>, <span class="ruby-value">:value</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-value">:name</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-comment"># &#39;&lt;textarea name=&quot;bar&quot;&gt;foo&lt;/textarea&gt;&#39;</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:text</span>, <span class="ruby-value">:value</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-value">:name</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-comment"># &#39;&lt;input name=&quot;bar&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">close</span> <span class="ruby-comment"># &#39;&lt;/form&gt;&#39;</span></pre>
 
-<p>With an object, <code>Form#input</code> calls <code>forme_input</code> on
-the obj with the form, field, and options, which should return a
-<code>Forme::Input</code> or <code>Forme::Tag</code> instance.  Also, in
-<code>Form#initialize</code>, <code>forme_config</code> is called on object
-with the form if the object responds to it, allowing customization of the
-entire form based on the object.</p>
+<p>With an object, <code>Form#input</code> calls <code>forme_input</code> on the obj with the form, field, and options, which should return a <code>Forme::Input</code> or <code>Forme::Tag</code> instance.  Also, in <code>Form#initialize</code>, <code>forme_config</code> is called on object with the form if the object responds to it, allowing customization of the entire form based on the object.</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:field</span>) <span class="ruby-comment"># &#39;&lt;input id=&quot;obj_field&quot; name=&quot;obj[field]&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</span></pre>
 
-<p>If the object doesn&#39;t respond to <code>forme_input</code>, it falls
-back to creating text fields with the name and id set to the field name and
-the value set by calling the given method on the object (or using [] if the
-object is a hash).</p>
+<p>If the object doesn&#39;t respond to <code>forme_input</code>, it falls back to creating text fields with the name and id set to the field name and the value set by calling the given method on the object (or using [] if the object is a hash).</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>([<span class="ruby-value">:foo</span>])&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:first</span>) <span class="ruby-comment"># &#39;&lt;input id=&quot;first&quot; name=&quot;first&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</span></pre>
 
 <h1 id="label-DSL">DSL<span><a href="#label-DSL">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p><a href="../classes/Forme.html">Forme</a> comes with a DSL:</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> comes with a DSL:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:text</span>, <span class="ruby-value">:name</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;bar&#39;</span>)&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:fieldset</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:textarea</span>, <span class="ruby-value">:name</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;baz&#39;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A; <span class="ruby-identifier">f</span>.<span class="ruby-identifier">button</span>(<span class="ruby-string">&#39;Update&#39;</span>)&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># &lt;form action=&quot;/foo&quot;&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;input name=&quot;bar&quot; type=&quot;text&quot;/&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;fieldset&gt;</span>&#x000A;<span class="ruby-comment">#     &lt;textarea name=&quot;baz&quot;&gt;&lt;/textarea&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;/fieldset&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;input type=&quot;submit&quot; value=&quot;Update&quot;/&gt;</span>&#x000A;<span class="ruby-comment"># &lt;/form&gt;</span></pre>
 
@@ -202,98 +139,66 @@ object is a hash).</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>({<span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>},&#x000A;  <span class="ruby-value">:inputs</span><span class="ruby-operator">=&gt;</span>[[<span class="ruby-value">:text</span>, {<span class="ruby-value">:name</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;bar&#39;</span>}], [<span class="ruby-value">:textarea</span>, {<span class="ruby-value">:name</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;baz&#39;</span>}]])</pre>
 
-<h1 id="label-Forme-3A-3AForm+Creation"><a href="../classes/Forme/Form.html">Forme::Form</a> Creation<span><a href="#label-Forme-3A-3AForm+Creation">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-Forme-3A-3AForm+Creation"><a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> Creation<span><a href="#label-Forme-3A-3AForm+Creation">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p>As shown above, the general way to create <a
-href="../classes/Forme/Form.html">Forme::Form</a> instances is via the <a
-href="../classes/Forme.html#method-c-form">Forme.form</a> method. This
-method takes up to 3 arguments, and yields the <a
-href="../classes/Forme/Form.html">Forme::Form</a> object to the block (if
-given). Here are the argument styles that you can use for <a
-href="../classes/Forme.html#method-c-form">Forme.form</a>.</p>
+<p>As shown above, the general way to create <a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> instances is via the <a href="../classes/Forme.html#method-c-form"><code>Forme.form</code></a> method. This method takes up to 3 arguments, and yields the <a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> object to the block (if given). Here are the argument styles that you can use for <a href="../classes/Forme.html#method-c-form"><code>Forme.form</code></a>.</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>No args </td><td>
-<p>Creates a <code>Form</code> object with no options and not associated to an
-<code>obj</code>, and with no attributes in the opening tag.</p>
+<p>Creates a <code>Form</code> object with no options and not associated to an <code>obj</code>, and with no attributes in the opening tag.</p>
 </td></tr><tr><td class='label'>1 hash arg </td><td>
-<p>Treated as opening form tag attributes, creating a <code>Form</code> object
-with no options.</p>
+<p>Treated as opening form tag attributes, creating a <code>Form</code> object with no options.</p>
 </td></tr><tr><td class='label'>1 non-hash arg </td><td>
-<p>Treated as the <code>Form</code>&#39;s <code>obj</code>, with empty options
-and no attributes in the opening tag.</p>
+<p>Treated as the <code>Form</code>&#39;s <code>obj</code>, with empty options and no attributes in the opening tag.</p>
 </td></tr><tr><td class='label'>2 hash args </td><td>
 <p>First hash is opening attributes, second hash is <code>Form</code> options.</p>
 </td></tr><tr><td class='label'>1 non-hash arg, 1-2 hash args </td><td>
-<p>First argument is <code>Form</code>&#39;s obj, second is opening
-attributes, third if provided is <code>Form</code>&#39;s options.</p>
+<p>First argument is <code>Form</code>&#39;s obj, second is opening attributes, third if provided is <code>Form</code>&#39;s options.</p>
 </td></tr></tbody></table>
 
 <p>Examples:</p>
 
 <pre class="ruby"><span class="ruby-comment"># No arguments</span>&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span> &#x000A;&#x000A;<span class="ruby-comment"># 1 hash argument (attributes)</span>&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>)&#x000A;&#x000A;<span class="ruby-comment"># 1 non-hash argument (a reference object used when building the form)</span>&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>])&#x000A;&#x000A;<span class="ruby-comment"># 2 hash arguments (attributes, and options)</span>&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>({<span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>}, <span class="ruby-value">:values</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">params</span>)&#x000A;&#x000A;<span class="ruby-comment"># 1 non-hash argument, 1-2 hash arguments (ref obj, attributes, options)</span>&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>], <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>)&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>], {<span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>}, <span class="ruby-value">:values</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">params</span>)</pre>
 
-<p>If you want a <a href="../classes/Forme/Form.html">Forme::Form</a> instance
-where the reference object is a Hash, then you need to pass the hash object
-using the :obj option:</p>
+<p>If you want a <a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> instance where the reference object is a Hash, then you need to pass the hash object using the :obj option:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>({<span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>}, <span class="ruby-value">:obj</span><span class="ruby-operator">=&gt;</span>{<span class="ruby-value">:foo</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;bar&#39;</span>})</pre>
 
-<p>You can also create <a href="../classes/Forme/Form.html">Forme::Form</a>
-objects the normal ruby way using Forme::Form#new.  The difference between
-Forme::Form#new and <a
-href="../classes/Forme.html#method-c-form">Forme.form</a> is that <a
-href="../classes/Forme.html#method-c-form">Forme.form</a> includes the
-enclosing &lt;form&gt; tag, where Forme::Form#new does not.  Because of
-this, <a href="../classes/Forme/Form.html">Forme::Form</a> does not accept
-a hash of &lt;form&gt; tag attributes, so it has the following API:</p>
+<p>You can also create <a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> objects the normal ruby way using Forme::Form#new.  The difference between Forme::Form#new and <a href="../classes/Forme.html#method-c-form"><code>Forme.form</code></a> is that <a href="../classes/Forme.html#method-c-form"><code>Forme.form</code></a> includes the enclosing &lt;form&gt; tag, where Forme::Form#new does not.  Because of this, <a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> does not accept a hash of &lt;form&gt; tag attributes, so it has the following API:</p>
 
 <pre class="ruby"><span class="ruby-comment"># No arguments</span>&#x000A;<span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>&#x000A;&#x000A;<span class="ruby-comment"># 1 hash argument</span>&#x000A;<span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:values</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">params</span>)&#x000A;&#x000A;<span class="ruby-comment"># 1 non-hash argument</span>&#x000A;<span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>])&#x000A;&#x000A;<span class="ruby-comment"># 1 non-hash argument, 1-2 hash arguments</span>&#x000A;<span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>], <span class="ruby-value">:values</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">params</span>)</pre>
 
-<h1 id="label-Forme-3A-3AForm+Methods"><a href="../classes/Forme/Form.html">Forme::Form</a> Methods<span><a href="#label-Forme-3A-3AForm+Methods">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-Forme-3A-3AForm+Methods"><a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> Methods<span><a href="#label-Forme-3A-3AForm+Methods">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
 <h2 id="label-form">form<span><a href="#label-form">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>If you create a Form via Forme::Forme#new, you can use the form method to
-create a form tag:</p>
+<p>If you create a Form via Forme::Forme#new, you can use the form method to create a form tag:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">form</span>(<span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>)</pre>
 
-<p>This is what <a href="../classes/Forme.html#method-c-form">Forme.form</a>
-uses internally to create the &lt;form&gt; tag</p>
+<p>This is what <a href="../classes/Forme.html#method-c-form"><code>Forme.form</code></a> uses internally to create the &lt;form&gt; tag</p>
 
 <h2 id="label-input">input<span><a href="#label-input">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>This adds an input to the form.  If the form has an associated object, and
-that object responds to <code>forme_input</code>, calls forme_input with
-the argument and options:</p>
+<p>This adds an input to the form.  If the form has an associated object, and that object responds to <code>forme_input</code>, calls forme_input with the argument and options:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:field</span>) <span class="ruby-comment"># &#39;&lt;input id=&quot;obj_field&quot; name=&quot;obj[field]&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</span></pre>
 
-<p>If the form has an associated object, and that object does not respond to
-<code>forme_input</code>, calls the method on the object (or uses [] if the
-object is a hash), and uses the result as the value for a text input:</p>
+<p>If the form has an associated object, and that object does not respond to <code>forme_input</code>, calls the method on the object (or uses [] if the object is a hash), and uses the result as the value for a text input:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>([<span class="ruby-value">:foo</span>])&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:first</span>) <span class="ruby-comment"># &#39;&lt;input id=&quot;first&quot; name=&quot;first&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;&#39;</span></pre>
 
-<p>If the object does not respond to <code>forme_input</code>, you can change
-the type of the input via the <code>:type</code> option:</p>
+<p>If the object does not respond to <code>forme_input</code>, you can change the type of the input via the <code>:type</code> option:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:field</span>, <span class="ruby-value">:type</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:email</span>) <span class="ruby-comment"># &#39;&lt;input id=&quot;obj_field&quot; name=&quot;obj[field]&quot; type=&quot;email&quot; value=&quot;foo&quot;/&gt;&#39;</span></pre>
 
-<p>If the form does not have an associated object, the first argument is used
-as the input type:</p>
+<p>If the form does not have an associated object, the first argument is used as the input type:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span> = <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:text</span>) <span class="ruby-comment"># &#39;&lt;input type=&quot;text&quot; /&gt;&#39;</span></pre>
 
-<p>The second argument is an options hash.  See below for the supported input
-types and options.</p>
+<p>The second argument is an options hash.  See below for the supported input types and options.</p>
 
 <h2 id="label-tag">tag<span><a href="#label-tag">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>This adds a tag to the form.  If a block is given, yields to the block, and
-tags and inputs inside the block are placed inside the tag. The first
-argument is the type of tag to create, and the second argument if given
-should be a hash of tag attributes. This allows you to nest inputs inside
-tags:</p>
+<p>This adds a tag to the form.  If a block is given, yields to the block, and tags and inputs inside the block are placed inside the tag. The first argument is the type of tag to create, and the second argument if given should be a hash of tag attributes. This allows you to nest inputs inside tags:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:span</span>, <span class="ruby-value">:class</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&quot;foo&quot;</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:text</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -303,9 +208,7 @@ tags:</p>
 
 <h2 id="label-inputs">inputs<span><a href="#label-inputs">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>This wraps multiple inputs in a tag (it uses the inputs_wrapper transformer
-discussed below, so it uses a fieldset by default). You can give the inputs
-to add as an enumerable argument:</p>
+<p>This wraps multiple inputs in a tag (it uses the inputs_wrapper transformer discussed below, so it uses a fieldset by default). You can give the inputs to add as an enumerable argument:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>([<span class="ruby-value">:textarea</span>, [<span class="ruby-value">:text</span>, <span class="ruby-value">:value</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;a&#39;</span>]])&#x000A;<span class="ruby-comment"># &lt;fieldset&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;textarea&gt;&lt;/textarea&gt;</span>&#x000A;<span class="ruby-comment">#   &lt;input type=&quot;text&quot; value=&quot;a&quot;/&gt;</span>&#x000A;<span class="ruby-comment"># &lt;/fieldset&gt;</span></pre>
 
@@ -313,16 +216,9 @@ to add as an enumerable argument:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">inputs</span>([<span class="ruby-value">:textarea</span>]) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:text</span>, <span class="ruby-value">:value</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;a&#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Any options given are passed to the inputs_wrapper (so you can use options
-such as :legend to set a legend for the fieldset), and also to the the
-with_opts (so you can use options such as :wrapper to modify the default
-wrapper transformer for inputs inside the block). There is also one option
-specific to the inputs method:</p>
+<p>Any options given are passed to the inputs_wrapper (so you can use options such as :legend to set a legend for the fieldset), and also to the the with_opts (so you can use options such as :wrapper to modify the default wrapper transformer for inputs inside the block). There is also one option specific to the inputs method:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:nested_inputs_wrapper </td><td>
-<p>Sets the default inputs_wrapper to use for calls to inputs inside the
-block.  The reason for this option is that :inputs_wrapper option affects
-the current call to inputs, so if you want to use a different
-inputs_wrapper for nested calls, you need this option.</p>
+<p>Sets the default inputs_wrapper to use for calls to inputs inside the block.  The reason for this option is that :inputs_wrapper option affects the current call to inputs, so if you want to use a different inputs_wrapper for nested calls, you need this option.</p>
 </td></tr></tbody></table>
 
 <h2 id="label-button">button<span><a href="#label-button">&para;</a> <a href="#top">&uarr;</a></span></h2>
@@ -341,8 +237,7 @@ inputs_wrapper for nested calls, you need this option.</p>
 
 <h2 id="label-with_opts">with_opts<span><a href="#label-with_opts">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>This requires a block, and modifies the Form&#39;s options inside the
-block, restoring the options when the block returns:</p>
+<p>This requires a block, and modifies the Form&#39;s options inside the block, restoring the options when the block returns:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:text</span>)&#x000A;<span class="ruby-comment"># &lt;input type=&quot;text&quot;/&gt;</span>&#x000A;<span class="ruby-identifier">f</span>.<span class="ruby-identifier">with_opts</span>(<span class="ruby-value">:wrapper</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:li</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:text</span>)&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># &lt;li&gt;&lt;input type=&quot;text&quot;/&gt;&lt;/li&gt;</span></pre>
 
@@ -350,40 +245,25 @@ block, restoring the options when the block returns:</p>
 
 <h2 id="label-with_obj">with_obj<span><a href="#label-with_obj">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>This uses with_opts to change the Form&#39;s object temporarily, but it
-yields the object to the block, and also supports appending to the existing
-namespaces:</p>
+<p>This uses with_opts to change the Form&#39;s object temporarily, but it yields the object to the block, and also supports appending to the existing namespaces:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>([<span class="ruby-value">:foo</span>], <span class="ruby-value">:namespace</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;a&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:first</span>)&#x000A;  <span class="ruby-comment"># &lt;input id=&quot;a_first&quot; name=&quot;a[first]&quot; type=&quot;text&quot; value=&quot;foo&quot;/&gt;</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">with_obj</span>([<span class="ruby-string">&#39;foobar&#39;</span>], <span class="ruby-string">&#39;b&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:size</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">o</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">size</span>)&#x000A;    <span class="ruby-comment"># &lt;input id=&quot;a_b_first&quot; name=&quot;a[b][first]&quot; size=&quot;6&quot; type=&quot;text&quot; value=&quot;foobar&quot;/&gt;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
 <h2 id="label-each_obj">each_obj<span><a href="#label-each_obj">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>This allows you to provide an object-yielding enumerable. <a
-href="../classes/Forme.html">Forme</a> will call with_obj with each object
-in the enumerable.  It yields each object as well as the index of the
-object in the enumerable, and includes the index in the namespace:</p>
+<p>This allows you to provide an object-yielding enumerable. <a href="../classes/Forme.html"><code>Forme</code></a> will call with_obj with each object in the enumerable.  It yields each object as well as the index of the object in the enumerable, and includes the index in the namespace:</p>
 
 <pre class="ruby"><span class="ruby-identifier">objectlist</span> = [<span class="ruby-string">&#39;foobar&#39;</span>, [<span class="ruby-string">&#39;good&#39;</span>]]&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>([<span class="ruby-value">:foo</span>], <span class="ruby-value">:namespace</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;a&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">each_obj</span>(<span class="ruby-identifier">objectlist</span>, <span class="ruby-string">&#39;b&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:first</span>, <span class="ruby-value">:size</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">10</span><span class="ruby-operator">+</span><span class="ruby-identifier">i</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-comment"># &lt;input id=&quot;a_b_0_first&quot; name=&quot;a[b][0][first]&quot; size=&quot;10&quot; type=&quot;text&quot; value=&quot;foobar&quot;/&gt;</span>&#x000A;  <span class="ruby-comment"># &lt;input id=&quot;a_b_1_first&quot; name=&quot;a[b][1][first]&quot; size=&quot;11&quot; type=&quot;text&quot; value=&quot;good&quot;/&gt;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<h1 id="label-Sequel+Support"><a href="../classes/Sequel.html">Sequel</a> Support<span><a href="#label-Sequel+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-Sequel+Support"><a href="../classes/Sequel.html"><code>Sequel</code></a> Support<span><a href="#label-Sequel+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p><a href="../classes/Forme.html">Forme</a> ships with a <a
-href="../classes/Sequel.html">Sequel</a> plugin (use
-<code>Sequel::Model.plugin :forme</code> to enable), that makes
-Sequel::Model instances support the <code>forme_config</code> and
-<code>forme_input</code> methods and return customized inputs. An
-additional instance method, <code>forme_namespace</code> can optionally be
-defined to customize how model classnames are transformed into form classes
-and input IDs and names. This can be useful if your Sequel::Model classes
-are nested under a parent namespace. It falls back to the behaviour of
-Sequel::Model#underscore.</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with a <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (use <code>Sequel::Model.plugin :forme</code> to enable), that makes Sequel::Model instances support the <code>forme_config</code> and <code>forme_input</code> methods and return customized inputs. An additional instance method, <code>forme_namespace</code> can optionally be defined to customize how model classnames are transformed into form classes and input IDs and names. This can be useful if your Sequel::Model classes are nested under a parent namespace. It falls back to the behaviour of Sequel::Model#underscore.</p>
 
 <pre class="ruby"><span class="ruby-keyword">module</span> <span class="ruby-constant">Admin</span>&#x000A;  <span class="ruby-keyword">class</span> <span class="ruby-constant">Albums</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>&#x000A;    <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_namespace</span>&#x000A;      <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">tr</span>(<span class="ruby-string">&#39;/&#39;</span>, <span class="ruby-string">&#39;_&#39;</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
 <h2 id="label-Basics">Basics<span><a href="#label-Basics">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>The <a href="../classes/Sequel.html">Sequel</a> support handles inputs
-based on database columns, and automatically handles labels and errors.</p>
+<p>The <a href="../classes/Sequel.html"><code>Sequel</code></a> support handles inputs based on database columns, and automatically handles labels and errors.</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>], <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:copies_sold</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -391,28 +271,15 @@ based on database columns, and automatically handles labels and errors.</p>
 
 <pre>&lt;form action=&quot;/foo&quot; method=&quot;post&quot;&gt;&#x000A;  &lt;label&gt;Name: &lt;input id=&quot;album_name&quot; name=&quot;album[name]&quot; type=&quot;text&quot; value=&quot;Rising Force&quot;/&gt;&lt;/label&gt;&#x000A;  &lt;label&gt;Copies Sold: &lt;input id=&quot;album_copies_sold&quot; name=&quot;album[copies_sold]&quot; type=&quot;number&quot; value=&quot;100000&quot;/&gt;&lt;/label&gt;&#x000A;&lt;/form&gt;</pre>
 
-<p>The <a href="../classes/Forme.html">Forme</a> <a
-href="../classes/Sequel.html">Sequel</a> plugin also integerates with
-Sequel&#39;s validation reflection support with the
-<code>validation_class_methods</code> plugin that ships with <a
-href="../classes/Sequel.html">Sequel</a>.  It will add <code>pattern</code>
-and <code>maxlength</code> attributes based on the format, numericality,
-and length validations.</p>
+<p>The <a href="../classes/Forme.html"><code>Forme</code></a> <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin also integerates with Sequel&#39;s validation reflection support with the <code>validation_class_methods</code> plugin that ships with <a href="../classes/Sequel.html"><code>Sequel</code></a>.  It will add <code>pattern</code> and <code>maxlength</code> attributes based on the format, numericality, and length validations.</p>
 
 <h2 id="label-specialized+input+options">specialized input options<span><a href="#label-specialized+input+options">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>In addition to the default <a href="../classes/Forme.html">Forme</a>
-options, the <a href="../classes/Sequel.html">Sequel</a> support includes,
-for specific column types,  these additional options to the input method:</p>
+<p>In addition to the default <a href="../classes/Forme.html"><code>Forme</code></a> options, the <a href="../classes/Sequel.html"><code>Sequel</code></a> support includes, for specific column types,  these additional options to the input method:</p>
 
 <h3 id="label-boolean">boolean<span><a href="#label-boolean">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:as </td><td>
-<p>Can be set to :select, :radio, or :checkbox.  :select will use a select
-input with three options, a blank option, a true option, and a false
-option.  :radio will use two radio inputs, one for true and one for false. 
-:checkbox will use a single checkbox input. By default, uses :select if
-NULL values are allowed and the option is not required, and :checkbox
-otherwise.</p>
+<p>Can be set to :select, :radio, or :checkbox.  :select will use a select input with three options, a blank option, a true option, and a false option.  :radio will use two radio inputs, one for true and one for false.  :checkbox will use a single checkbox input. By default, uses :select if NULL values are allowed and the option is not required, and :checkbox otherwise.</p>
 </td></tr><tr><td class='label'>:false_label </td><td>
 <p>The value to use for the false label, &#39;No&#39; by default.</p>
 </td></tr><tr><td class='label'>:false_value </td><td>
@@ -425,15 +292,12 @@ otherwise.</p>
 
 <h3 id="label-string">string<span><a href="#label-string">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:as </td><td>
-<p>Can be set to :textarea to use a textarea input. You can use the usual
-attributes hash or a stylesheet to  control the size of the textarea.</p>
+<p>Can be set to :textarea to use a textarea input. You can use the usual attributes hash or a stylesheet to  control the size of the textarea.</p>
 </td></tr></tbody></table>
 
 <h2 id="label-associations">associations<span><a href="#label-associations">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>The <a href="../classes/Sequel.html">Sequel</a> support also handles
-associations, allowing you to change which objects are associated to the
-current object.</p>
+<p>The <a href="../classes/Sequel.html"><code>Sequel</code></a> support also handles associations, allowing you to change which objects are associated to the current object.</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>], <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:artist</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:tags</span>, <span class="ruby-value">:as</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:checkbox</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -441,86 +305,55 @@ current object.</p>
 
 <pre>&lt;form action=&quot;/foo&quot; method=&quot;post&quot;&gt;&#x000A;  &lt;label&gt;Name: &lt;input id=&quot;album_name&quot; name=&quot;album[name]&quot; type=&quot;text&quot; value=&quot;Blue Hawaii&quot;/&gt;&lt;/label&gt;&#x000A;  &lt;label&gt;Artist: &lt;select id=&quot;album_artist_id&quot; name=&quot;album[artist_id]&quot;&gt;&#x000A;    &lt;option selected=&quot;selected&quot; value=&quot;1&quot;&gt;Elvis Presley&lt;/option&gt;&#x000A;    &lt;option value=&quot;2&quot;&gt;The Beatles&lt;/option&gt;&#x000A;    &lt;option value=&quot;3&quot;&gt;The Monkeys&lt;/option&gt;&#x000A;  &lt;/select&gt;&lt;/label&gt;&#x000A;  &lt;span class=&quot;label&quot;&gt;Tags:&#x000A;    &lt;label&gt;&lt;input checked=&quot;checked&quot; id=&quot;album_tag_pks_1&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;1&quot;/&gt; Rock and Roll&lt;/label&gt;&#x000A;    &lt;label&gt;&lt;input id=&quot;album_tag_pks_2&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;2&quot;/&gt; Blues&lt;/label&gt;&#x000A;    &lt;label&gt;&lt;input id=&quot;album_tag_pks_3&quot; name=&quot;album[tag_pks][]&quot; type=&quot;checkbox&quot; value=&quot;3&quot;/&gt; Country&lt;/label&gt;&#x000A;  &lt;/span&gt;&#x000A;&lt;/form&gt;</pre>
 
-<p>For one_to_many and many_to_many associations, you will probably want to
-use the <code>association_pks</code> plugin that ships with <a
-href="../classes/Sequel.html">Sequel</a>.</p>
+<p>For one_to_many and many_to_many associations, you will probably want to use the <code>association_pks</code> plugin that ships with <a href="../classes/Sequel.html"><code>Sequel</code></a>.</p>
 
-<p>This also supports the pg_array_to_many association type that comes with
-Sequel&#39;s <code>pg_array_association</code> plugin.</p>
+<p>This also supports the pg_array_to_many association type that comes with Sequel&#39;s <code>pg_array_association</code> plugin.</p>
 
 <p>association input options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:as </td><td>
-<p>For many_to_one associations, set to :radio to use a series of radio
-buttons instead a select input.  For one_to_many, many_to_many, and
-pg_array_to_many associations, set to :checkbox to use a series of
-checkboxes instead of a multiple select input.</p>
+<p>For many_to_one associations, set to :radio to use a series of radio buttons instead a select input.  For one_to_many, many_to_many, and pg_array_to_many associations, set to :checkbox to use a series of checkboxes instead of a multiple select input.</p>
 </td></tr><tr><td class='label'>:dataset </td><td>
-<p>If a Dataset, uses the dataset to retrieve the options.  If a Proc or
-Method, calls the proc or method with the default dataset, and should
-return a modified dataset to use.</p>
+<p>If a Dataset, uses the dataset to retrieve the options.  If a Proc or Method, calls the proc or method with the default dataset, and should return a modified dataset to use.</p>
 </td></tr><tr><td class='label'>:options </td><td>
-<p>Specify the options to use for the input(s), instead of querying the
-database.</p>
+<p>Specify the options to use for the input(s), instead of querying the database.</p>
 </td></tr><tr><td class='label'>:name_method </td><td>
-<p>If a String or Symbol, treats it as a method name and calls it on each
-object returned by the dataset to get the text to use for the option. If
-not given, tries the following method names in order: :forme_name, :name,
-:title, :number. If given and not a String or Symbol, a callable object is
-assumed, and the value is called with each object and should return the
-text to use for the option.</p>
+<p>If a String or Symbol, treats it as a method name and calls it on each object returned by the dataset to get the text to use for the option. If not given, tries the following method names in order: :forme_name, :name, :title, :number. If given and not a String or Symbol, a callable object is assumed, and the value is called with each object and should return the text to use for the option.</p>
 </td></tr></tbody></table>
 
 <h2 id="label-subform">subform<span><a href="#label-subform">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>The <a href="../classes/Sequel.html">Sequel</a> support includes a method
-called subform, which can handle nested_attributes:</p>
+<p>The <a href="../classes/Sequel.html"><code>Sequel</code></a> support includes a method called subform, which can handle nested_attributes:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>], <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">subform</span> <span class="ruby-value">:artist</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">subform</span> <span class="ruby-value">:tracks</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:number</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>This adds an input for editing the artist&#39;s name after the album&#39;s
-inputs, as well as inputs for editing the number and name for all of the
-tracks in the album, creating a form similar to:</p>
+<p>This adds an input for editing the artist&#39;s name after the album&#39;s inputs, as well as inputs for editing the number and name for all of the tracks in the album, creating a form similar to:</p>
 
 <pre>&lt;form action=&quot;/foo&quot; method=&quot;post&quot;&gt;&#x000A;  &lt;label&gt;Name: &lt;input id=&quot;album_name&quot; name=&quot;album[name]&quot; type=&quot;text&quot; value=&quot;Blue Hawaii&quot;/&gt;&lt;/label&gt;&#x000A;&#x000A;  &lt;input id=&quot;album_artist_attributes_id&quot; name=&quot;album[artist_attributes][id]&quot; type=&quot;hidden&quot; value=&quot;1&quot;/&gt;&#x000A;  &lt;fieldset class=&quot;inputs&quot;&gt;&lt;legend&gt;Artist&lt;/legend&gt;&#x000A;    &lt;label&gt;Name: &lt;input id=&quot;album_artist_attributes_name&quot; name=&quot;album[artist_attributes][name]&quot; type=&quot;text&quot; value=&quot;Elvis Presley&quot;/&gt;&lt;/label&gt;&#x000A;  &lt;/fieldset&gt;&#x000A;&#x000A;  &lt;input id=&quot;album_tracks_attributes_0_id&quot; name=&quot;album[tracks_attributes][0][id]&quot; type=&quot;hidden&quot; value=&quot;1&quot;/&gt;&#x000A;  &lt;fieldset class=&quot;inputs&quot;&gt;&lt;legend&gt;Track #1&lt;/legend&gt;&#x000A;    &lt;label&gt;Number: &lt;input id=&quot;album_tracks_attributes_0_number&quot; name=&quot;album[tracks_attributes][0][number]&quot; type=&quot;number&quot; value=&quot;1&quot;/&gt;&lt;/label&gt;&#x000A;    &lt;label&gt;Name: &lt;input id=&quot;album_tracks_attributes_0_name&quot; name=&quot;album[tracks_attributes][0][name]&quot; type=&quot;text&quot; value=&quot;Blue Hawaii&quot;/&gt;&lt;/label&gt;&#x000A;  &lt;/fieldset&gt;&#x000A;  &lt;input id=&quot;album_tracks_attributes_1_id&quot; name=&quot;album[tracks_attributes][1][id]&quot; type=&quot;hidden&quot; value=&quot;2&quot;/&gt;&#x000A;  &lt;fieldset class=&quot;inputs&quot;&gt;&lt;legend&gt;Track #2&lt;/legend&gt;&#x000A;    &lt;label&gt;Number: &lt;input id=&quot;album_tracks_attributes_1_number&quot; name=&quot;album[tracks_attributes][1][number]&quot; type=&quot;number&quot; value=&quot;2&quot;/&gt;&lt;/label&gt;&#x000A;    &lt;label&gt;Name: &lt;input id=&quot;album_tracks_attributes_1_name&quot; name=&quot;album[tracks_attributes][1][name]&quot; type=&quot;text&quot; value=&quot;Almost Always True&quot;/&gt;&lt;/label&gt;&#x000A;  &lt;/fieldset&gt;&#x000A;&#x000A;&lt;/form&gt;</pre>
 
-<p><em>Note: blank lines added for clarity; they would not appear in the
-actual output</em></p>
+<p><em>Note: blank lines added for clarity; they would not appear in the actual output</em></p>
 
 <p>subform options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:inputs </td><td>
-<p>Automatically call <code>inputs</code> with the given values.  Using this,
-it is not required to pass a block to the method, though it will still work
-if you do.</p>
+<p>Automatically call <code>inputs</code> with the given values.  Using this, it is not required to pass a block to the method, though it will still work if you do.</p>
 </td></tr><tr><td class='label'>:inputs_opts </td><td>
-<p>When using the :grid option, this allows you to specify options to pass to
-the table InputsWrapper.</p>
+<p>When using the :grid option, this allows you to specify options to pass to the table InputsWrapper.</p>
 </td></tr><tr><td class='label'>:legend </td><td>
-<p>Overrides the default :legend used (which is based on the association
-name).  You can also use a proc as the value, which will called with each
-associated object (and the position in the associated object already for
-*_to_many associations), and should return the legend string to use for
-that object.</p>
+<p>Overrides the default :legend used (which is based on the association name).  You can also use a proc as the value, which will called with each associated object (and the position in the associated object already for *_to_many associations), and should return the legend string to use for that object.</p>
 </td></tr><tr><td class='label'>:grid </td><td>
-<p>Sets up a table with one row per associated object, and one column per
-field.</p>
+<p>Sets up a table with one row per associated object, and one column per field.</p>
 </td></tr><tr><td class='label'>:labels </td><td>
-<p>When using the :grid option, override the labels that would be created via
-the :inputs option.  If you are not providing an :inputs option or are
-using a block with additional inputs, you should specify this option.</p>
+<p>When using the :grid option, override the labels that would be created via the :inputs option.  If you are not providing an :inputs option or are using a block with additional inputs, you should specify this option.</p>
 </td></tr><tr><td class='label'>:skip_primary_key </td><td>
 <p>Skip adding a hidden primary key field for existing objects.</p>
 </td></tr></tbody></table>
 
 <h2 id="label-Handling+form+submissions">Handling form submissions<span><a href="#label-Handling+form+submissions">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>The <a href="../classes/Sequel.html">Sequel</a> forme plugin only handles
-creating the forms, it does not handle processing input submitted via
-forms.  For a form such as:</p>
+<p>The <a href="../classes/Sequel.html"><code>Sequel</code></a> forme plugin only handles creating the forms, it does not handle processing input submitted via forms.  For a form such as:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>], <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:copies_sold</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Input of the form will often be submitted as the following parameter hash
-(this depends on your web framework, but Rack works this way by default):</p>
+<p>Input of the form will often be submitted as the following parameter hash (this depends on your web framework, but Rack works this way by default):</p>
 
 <pre class="ruby">{<span class="ruby-string">&#39;album&#39;</span><span class="ruby-operator">=&gt;</span>{<span class="ruby-string">&#39;name&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;Rising Force&#39;</span>, <span class="ruby-string">&#39;copies_sold&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;100000&#39;</span>}}</pre>
 
@@ -528,12 +361,9 @@ forms.  For a form such as:</p>
 
 <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>], <span class="ruby-node">%w&#39;name copies_sold&#39;</span>)&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">save</span></pre>
 
-<p>Note that you have to specify the parameter names again as the second
-argument to set_fields.</p>
+<p>Note that you have to specify the parameter names again as the second argument to set_fields.</p>
 
-<p>Handling Submitted parameters becomes more complex as your forms become
-more complex. For example, if you are only displaying certain form fields
-in certain situations:</p>
+<p>Handling Submitted parameters becomes more complex as your forms become more complex. For example, if you are only displaying certain form fields in certain situations:</p>
 
 <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:copies_sold</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">released?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -541,61 +371,38 @@ in certain situations:</p>
 
 <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>], <span class="ruby-node">%w&#39;name&#39;</span>)&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>], <span class="ruby-node">%w&#39;copies_sold&#39;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">released?</span>&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">save</span></pre>
 
-<p>As you can see, you basically need to recreate the conditionals used when
-creating the form, so that that the processing of the form submission
-handles only the inputs that were displayed on the form.</p>
+<p>As you can see, you basically need to recreate the conditionals used when creating the form, so that that the processing of the form submission handles only the inputs that were displayed on the form.</p>
 
 <h3 id="label-forme_set+plugin">forme_set plugin<span><a href="#label-forme_set+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>The forme_set plugin is designed to make handling form submissions easier. 
-What it does is record the form fields that are used on the object, and
-then it uses those fields to handle input submitted for the object.  For
-example:</p>
+<p>The forme_set plugin is designed to make handling form submissions easier.  What it does is record the form fields that are used on the object, and then it uses those fields to handle input submitted for the object.  For example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:copies_sold</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">released?</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>])</pre>
 
-<p>If the album has been released, and the form would display the name and
-copies_sold inputs, then forme_set will accept input for both.  If the
-album has not been released, the form will only display the name input, so
-forme_set will only accept the name input.</p>
+<p>If the album has been released, and the form would display the name and copies_sold inputs, then forme_set will accept input for both.  If the album has not been released, the form will only display the name input, so forme_set will only accept the name input.</p>
 
 <p>So forme_set offers two advantages over using set_fields:</p>
 <ol><li>
 <p>DRYs up code as you don&#39;t have to specify the names twice</p>
 </li><li>
-<p>Simplifies complex form submissions by eliminating duplication of
-conditionals</p>
+<p>Simplifies complex form submissions by eliminating duplication of conditionals</p>
 </li></ol>
 
 <h4 id="label-Validations">Validations<span><a href="#label-Validations">&para;</a> <a href="#top">&uarr;</a></span></h4>
 
-<p>forme_set offers one additional advantage over using set_fields.  When
-dealing with associations, set_fields does not check that the value
-submitted for an input matches one of the available options displayed on
-the form.  For example, if you have a form such as:</p>
+<p>forme_set offers one additional advantage over using set_fields.  When dealing with associations, set_fields does not check that the value submitted for an input matches one of the available options displayed on the form.  For example, if you have a form such as:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:artist</span>, <span class="ruby-value">:dataset</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">ds</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ds</span>.<span class="ruby-identifier">where</span>{<span class="ruby-identifier">name</span> <span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;M&#39;</span>}}&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>The form will only display artists whose name is greater than &#39;M&#39;. 
-However, if you process input using:</p>
+<p>The form will only display artists whose name is greater than &#39;M&#39;.  However, if you process input using:</p>
 
 <pre class="ruby"><span class="ruby-identifier">album</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>], <span class="ruby-node">%w&#39;name artist_id&#39;</span>)</pre>
 
-<p>Then a malicious user can submit an artist_id for an artist whose name is
-not greater than &#39;M&#39;, and the value will be set.  In addition to
-setting values, forme_set also adds validations that the submitted values
-for associated objects match one of the options displayed on the form,
-which can increase security.</p>
+<p>Then a malicious user can submit an artist_id for an artist whose name is not greater than &#39;M&#39;, and the value will be set.  In addition to setting values, forme_set also adds validations that the submitted values for associated objects match one of the options displayed on the form, which can increase security.</p>
 
 <h4 id="label-Usage">Usage<span><a href="#label-Usage">&para;</a> <a href="#top">&uarr;</a></span></h4>
 
-<p>Because forme_set relies on creating form inputs using the same model
-instance that will be used for accepting input, using it often requires
-some code rearranging.  If you are storing <a
-href="../classes/Forme/Form.html">Forme::Form</a> objects and later using
-them on forms, it is fairly simple to move the Forme::Forme object creation
-to a method, that you can call both in the initial display and when
-processing the input:</p>
+<p>Because forme_set relies on creating form inputs using the same model instance that will be used for accepting input, using it often requires some code rearranging.  If you are storing <a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> objects and later using them on forms, it is fairly simple to move the Forme::Forme object creation to a method, that you can call both in the initial display and when processing the input:</p>
 
 <pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">album_form</span>(<span class="ruby-identifier">album</span>)&#x000A;  <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;    <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:copies_sold</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -607,103 +414,61 @@ processing the input:</p>
 
 <pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">album_form</span>(<span class="ruby-identifier">album</span>)&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>])</pre>
 
-<p>However, if you use Forme&#39;s ERB/Rails template integration (see below),
-and are inlining forms in your templates, unless you want to extract the <a
-href="../classes/Forme/Form.html">Forme::Form</a> creation to methods, you
-have to basically rerender the template when processing the input.  How you
-do this is specific to the web framework you are using, but is it similar
-to:</p>
+<p>However, if you use Forme&#39;s ERB/Rails template integration (see below), and are inlining forms in your templates, unless you want to extract the <a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> creation to methods, you have to basically rerender the template when processing the input.  How you do this is specific to the web framework you are using, but is it similar to:</p>
 
 <pre class="ruby"><span class="ruby-ivar">@album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">render</span> <span class="ruby-value">:template</span>&#x000A;<span class="ruby-ivar">@album</span>.<span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>])</pre>
 
 <h4 id="label-Caveats">Caveats<span><a href="#label-Caveats">&para;</a> <a href="#top">&uarr;</a></span></h4>
 
-<p>forme_set is not perfect, there are ways to use <a
-href="../classes/Forme.html">Forme</a> that forme_set will not handle
-correctly.  First, forme_set only works with forms that use model objects,
-and doesn&#39;t handle inputs where the :obj option is provided to change
-the input. Additionally, forme_set does not currently handle
-subform/nested_attributes.</p>
+<p>forme_set is not perfect, there are ways to use <a href="../classes/Forme.html"><code>Forme</code></a> that forme_set will not handle correctly.  First, forme_set only works with forms that use model objects, and doesn&#39;t handle inputs where the :obj option is provided to change the input. Additionally, forme_set does not currently handle subform/nested_attributes.</p>
 
-<p>In cases where forme_set does not handle things correctly, you can use
-forme_parse, which will return metadata that forme_set uses (forme_set
-calls forme_parse internally).  forme_parse returns a hash with the
-following keys:</p>
+<p>In cases where forme_set does not handle things correctly, you can use forme_parse, which will return metadata that forme_set uses (forme_set calls forme_parse internally).  forme_parse returns a hash with the following keys:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:values </td><td>
-<p>A hash of values that can be used to update the model, suitable for passing
-to Sequel::Model#set.</p>
+<p>A hash of values that can be used to update the model, suitable for passing to Sequel::Model#set.</p>
 </td></tr><tr><td class='label'>:validations </td><td>
-<p>A hash of values suitable for merging into forme_validations. Used to check
-that the submitted values for associated objects match one of the options
-for the input in the form.</p>
+<p>A hash of values suitable for merging into forme_validations. Used to check that the submitted values for associated objects match one of the options for the input in the form.</p>
 </td></tr></tbody></table>
 
-<p>It is possible to use forme_set for the values it can handle, and set other
-fields manually using set_fields.</p>
+<p>It is possible to use forme_set for the values it can handle, and set other fields manually using set_fields.</p>
 
-<h2 id="label-Other+Sequel+Plugins">Other <a href="../classes/Sequel.html">Sequel</a> Plugins<span><a href="#label-Other+Sequel+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h2>
+<h2 id="label-Other+Sequel+Plugins">Other <a href="../classes/Sequel.html"><code>Sequel</code></a> Plugins<span><a href="#label-Other+Sequel+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>In addition to the <a href="../classes/Sequel.html">Sequel</a> plugins
-mentioned above, <a href="../classes/Forme.html">Forme</a> also ships with
-additional <a href="../classes/Sequel.html">Sequel</a> plugins:</p>
+<p>In addition to the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugins mentioned above, <a href="../classes/Forme.html"><code>Forme</code></a> also ships with additional <a href="../classes/Sequel.html"><code>Sequel</code></a> plugins:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>forme_i18n </td><td>
 <p>Handles translations for labels using i18n.</p>
 </td></tr></tbody></table>
 
-<h1 id="label-Roda+Support"><a href="../classes/Roda.html">Roda</a> Support<span><a href="#label-Roda+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-Roda+Support"><a href="../classes/Roda.html"><code>Roda</code></a> Support<span><a href="#label-Roda+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p><a href="../classes/Forme.html">Forme</a> ships with two <a
-href="../classes/Roda.html">Roda</a> plugins, forme and forme_route_csrf. 
-For new code, it is recommended to use forme_route_csrf, as that uses
-Roda&#39;s route_csrf plugin, which supports more secure request-specific
-CSRF tokens.  In both cases, usage in ERB templates is the same:</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with two <a href="../classes/Roda.html"><code>Roda</code></a> plugins, forme and forme_route_csrf.  For new code, it is recommended to use forme_route_csrf, as that uses Roda&#39;s route_csrf plugin, which supports more secure request-specific CSRF tokens.  In both cases, usage in ERB templates is the same:</p>
 
 <pre>&lt;% form(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;% f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
 
-<p>The forme_route_csrf plugin&#39;s <code>form</code> method supports the
-following options in addition to the default <code>Forme.form</code>
-options:</p>
+<p>The forme_route_csrf plugin&#39;s <code>form</code> method supports the following options in addition to the default <code>Forme.form</code> options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:csrf </td><td>
-<p>Set to force whether a CSRF tag should be included.  By default, a CSRF tag
-is included if the form&#39;s method is one of the request methods checked
-by the <a href="../classes/Roda.html">Roda</a> route_csrf plugin.</p>
+<p>Set to force whether a CSRF tag should be included.  By default, a CSRF tag is included if the form&#39;s method is one of the request methods checked by the <a href="../classes/Roda.html"><code>Roda</code></a> route_csrf plugin.</p>
 </td></tr><tr><td class='label'>:use_request_specific_token </td><td>
-<p>Set whether to force the use of a request specific CSRF token.  By default,
-uses a request specific CSRF token unless the <a
-href="../classes/Roda.html">Roda</a> route_csrf plugin has been configured
-to support non-request specific tokens.</p>
+<p>Set whether to force the use of a request specific CSRF token.  By default, uses a request specific CSRF token unless the <a href="../classes/Roda.html"><code>Roda</code></a> route_csrf plugin has been configured to support non-request specific tokens.</p>
 </td></tr></tbody></table>
 
-<p>The forme plugin does not require any csrf plugin, but will transparently
-use Rack::Csrf if it is available. If Rack::Csrf is available a CSRF tag if
-the form&#39;s method is <code>POST</code>, with no configuration ability.</p>
+<p>The forme plugin does not require any csrf plugin, but will transparently use Rack::Csrf if it is available. If Rack::Csrf is available a CSRF tag if the form&#39;s method is <code>POST</code>, with no configuration ability.</p>
 
 <p>Both plugins also support the following option:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:output </td><td>
-<p>The object that the form output should be injected into when injecting
-output (+@_out_buf+ by default).</p>
+<p>The object that the form output should be injected into when injecting output (+@_out_buf+ by default).</p>
 </td></tr></tbody></table>
 
 <h1 id="label-Sinatra+Support">Sinatra Support<span><a href="#label-Sinatra+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p><a href="../classes/Forme.html">Forme</a> ships with a ERB extension that
-you can get by <code>require &quot;forme/erb&quot;</code> and using
-<code>including Forme::ERB::Helper</code>.  This is tested to support ERB
-templates in Sinatra. It allows you to use the following API in your erb
-templates:</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with a ERB extension that you can get by <code>require &quot;forme/erb&quot;</code> and using <code>including Forme::ERB::Helper</code>.  This is tested to support ERB templates in Sinatra. It allows you to use the following API in your erb templates:</p>
 
 <pre>&lt;% form(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;% f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
 
-<p>In order to this to work transparently, the ERB outvar needs to be
-<code>@_out_buf</code>.  If that is not the case, use the :output option to
-<code>form</code> to specify the outvar.</p>
+<p>In order to this to work transparently, the ERB outvar needs to be <code>@_out_buf</code>.  If that is not the case, use the :output option to <code>form</code> to specify the outvar.</p>
 
 <h1 id="label-Rails+Support">Rails Support<span><a href="#label-Rails+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p><a href="../classes/Forme.html">Forme</a> ships with a Rails extension that
-you can get by <code>require &quot;forme/rails&quot;</code> and using
-<code>helper Forme::Rails::ERB</code> in your controller.  If allows you to
-use the following API in your Rails forms:</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with a Rails extension that you can get by <code>require &quot;forme/rails&quot;</code> and using <code>helper Forme::Rails::ERB</code> in your controller.  If allows you to use the following API in your Rails forms:</p>
 
 <pre>&lt;%= forme(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;%= f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
 
@@ -711,28 +476,21 @@ use the following API in your Rails forms:</p>
 
 <h1 id="label-Input+Types+and+Options">Input Types and Options<span><a href="#label-Input+Types+and+Options">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p>These are the types and options supported by <a
-href="../classes/Forme/Input.html">Forme::Input</a> objects, usually
-created via <a
-href="../classes/Forme/Form.html#method-i-input">Forme::Form#input</a>:</p>
+<p>These are the types and options supported by <a href="../classes/Forme/Input.html"><code>Forme::Input</code></a> objects, usually created via <a href="../classes/Forme/Form.html#method-i-input"><code>Forme::Form#input</code></a>:</p>
 
 <h2 id="label-General+Options">General Options<span><a href="#label-General+Options">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>These options are supported by all of the input types:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:attr </td><td>
-<p>The attributes hash to use for the given tag, takes precedence over other
-options that set attributes.</p>
+<p>The attributes hash to use for the given tag, takes precedence over other options that set attributes.</p>
 </td></tr><tr><td class='label'>:autofocus </td><td>
 <p>Set the autofocus attribute if true</p>
 </td></tr><tr><td class='label'>:class </td><td>
-<p>A class to use.  Unlike other options, this is combined with the classes
-set in the :attr hash.</p>
+<p>A class to use.  Unlike other options, this is combined with the classes set in the :attr hash.</p>
 </td></tr><tr><td class='label'>:dasherize_data </td><td>
-<p>Automatically replace underscores with hyphens for symbol data attribute
-names in the <code>:data</code> hash. Defaults to <code>false</code>.</p>
+<p>Automatically replace underscores with hyphens for symbol data attribute names in the <code>:data</code> hash. Defaults to <code>false</code>.</p>
 </td></tr><tr><td class='label'>:data </td><td>
-<p>A hash of data-* attributes for the resulting tag.  Keys in this hash will
-have attributes created with data- prepended to the attribute name.</p>
+<p>A hash of data-* attributes for the resulting tag.  Keys in this hash will have attributes created with data- prepended to the attribute name.</p>
 </td></tr><tr><td class='label'>:disabled </td><td>
 <p>Set the disabled attribute if true</p>
 </td></tr><tr><td class='label'>:error </td><td>
@@ -744,8 +502,7 @@ have attributes created with data- prepended to the attribute name.</p>
 </td></tr><tr><td class='label'>:id </td><td>
 <p>The id attribute to use</p>
 </td></tr><tr><td class='label'>:key </td><td>
-<p>The base to use for the name and id attributes, based on the current
-namespace for the form.</p>
+<p>The base to use for the name and id attributes, based on the current namespace for the form.</p>
 </td></tr><tr><td class='label'>:label </td><td>
 <p>Set a label, invoking the labeler</p>
 </td></tr><tr><td class='label'>:labeler </td><td>
@@ -759,11 +516,9 @@ namespace for the form.</p>
 </td></tr><tr><td class='label'>:required </td><td>
 <p>Set the required attribute if true</p>
 </td></tr><tr><td class='label'>:type </td><td>
-<p>Override the type of the input when the form has an associated object but
-the object does not respond to <code>forme_input</code></p>
+<p>Override the type of the input when the form has an associated object but the object does not respond to <code>forme_input</code></p>
 </td></tr><tr><td class='label'>:value </td><td>
-<p>The value attribute to use for input tags, the content of the textarea for
-textarea tags, or the selected option(s) for select tags.</p>
+<p>The value attribute to use for input tags, the content of the textarea for textarea tags, or the selected option(s) for select tags.</p>
 </td></tr><tr><td class='label'>:wrapper </td><td>
 <p>Set a custom wrapper, overriding the form&#39;s default</p>
 </td></tr></tbody></table>
@@ -772,8 +527,7 @@ textarea tags, or the selected option(s) for select tags.</p>
 
 <h3 id="label-3Acheckbox">:checkbox<span><a href="#label-3Acheckbox">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>Creates an input tag with type checkbox, as well as a hidden input tag.
-Options:</p>
+<p>Creates an input tag with type checkbox, as well as a hidden input tag. Options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:checked </td><td>
 <p>Mark the checkbox as checked.</p>
 </td></tr><tr><td class='label'>:hidden_value </td><td>
@@ -791,77 +545,60 @@ Options:</p>
 
 <h3 id="label-3Adate+-2F+-3Adatetime">:date / :datetime<span><a href="#label-3Adate+-2F+-3Adatetime">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>By default, creates an input tag with type date or datetime.  With the
-:as=&gt;:select option, creates multiple select options. Options:</p>
+<p>By default, creates an input tag with type date or datetime.  With the :as=&gt;:select option, creates multiple select options. Options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:as </td><td>
 <p>When value is :select, uses 3 or 6 select boxes by default.</p>
 </td></tr><tr><td class='label'>:order </td><td>
-<p>The order of select boxes when using :as=&gt;:select.  Entries should be a
-symbol for the select field and string to use a string (:date default:
-<code>[:year, &#39;-&#39;, :month, &#39;-&#39;, :day]</code>) (:datetime
-default: <code>[:year, &#39;-&#39;, :month, &#39;-&#39;, :day, &#39; &#39;,&#x000A;:hour, &#39;:&#39;, :minute, &#39;:&#39;, :second]</code>)</p>
+<p>The order of select boxes when using :as=&gt;:select.  Entries should be a symbol for the select field and string to use a string (:date default: <code>[:year, &#39;-&#39;, :month, &#39;-&#39;, :day]</code>) (:datetime default: <code>[:year, &#39;-&#39;, :month, &#39;-&#39;, :day, &#39; &#39;, :hour, &#39;:&#39;, :minute, &#39;:&#39;, :second]</code>)</p>
+</td></tr><tr><td class='label'>:select_labels </td><td>
+<p>The labels to use for the select boxes.  Should be a hash keyed by the</p>
+
+<pre>symbol used in order.  By default, no labels are used.</pre>
 </td></tr><tr><td class='label'>:select_options </td><td>
-<p>The options to use for the select boxes.  Should be a hash keyed by the
-symbol used in order (e.g. <code>{:year=&gt;1970..2020}</code>)</p>
+<p>The options to use for the select boxes.  Should be a hash keyed by the symbol used in order (e.g. <code>{:year=&gt;1970..2020}</code>)</p>
 </td></tr></tbody></table>
 
 <h3 id="label-3Aselect">:select<span><a href="#label-3Aselect">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>Creates a select tag, containing option tags specified by the :options
-option.  Options:</p>
+<p>Creates a select tag, containing option tags specified by the :options option.  Options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:add_blank </td><td>
-<p>Add a blank option if true.  If the value is a string, use it as the text
-content of the blank option.  The default value can be set with <a
-href="../classes/Forme.html#attribute-c-default_add_blank_prompt">Forme.default_add_blank_prompt</a>,
-and defaults to the empty string.</p>
+<p>Add a blank option if true.  If the value is a string, use it as the text content of the blank option.  The default value can be set with <a href="../classes/Forme.html#attribute-c-default_add_blank_prompt"><code>Forme.default_add_blank_prompt</code></a>, and defaults to the empty string.</p>
 </td></tr><tr><td class='label'>:blank_attr </td><td>
 <p>If :add_blank is set, sets the attributes to use for the blank option.</p>
 </td></tr><tr><td class='label'>:blank_position </td><td>
-<p>If :add_blank is set, can be set to :after to add the prompt after the
-inputs, instead of before (which is the default).</p>
+<p>If :add_blank is set, can be set to :after to add the prompt after the inputs, instead of before (which is the default).</p>
 </td></tr><tr><td class='label'>:multiple </td><td>
 <p>Creates a multiple select box.</p>
 </td></tr><tr><td class='label'>:optgroups </td><td>
-<p>An enumerable of pairs with the first element being option group labels or
-a hash of option group attributes, and values being enumerables of options
-(as described by :options below).  Creates optgroup tags around the
-appropriate options. This overrides any options specified via :options.</p>
+<p>An enumerable of pairs with the first element being option group labels or a hash of option group attributes, and values being enumerables of options (as described by :options below).  Creates optgroup tags around the appropriate options. This overrides any options specified via :options.</p>
 </td></tr><tr><td class='label'>:options </td><td>
-<p>An enumerable of options used for creating option tags. If the :text_method
-and :value_method are not given and the entry is an  array, uses the first
-entry of the array as the text of the option, and the second entry of the
-array as the value of the option.</p>
+<p>An enumerable of options used for creating option tags. If the :text_method and :value_method are not given and the entry is an  array, uses the first entry of the array as the text of the option, and the second entry of the array as the value of the option.</p>
 </td></tr><tr><td class='label'>:selected </td><td>
-<p>The value that should be selected.  Any options that are equal to this
-value (or included in this value if a multiple select box), are set to
-selected.</p>
+<p>The value that should be selected.  Any options that are equal to this value (or included in this value if a multiple select box), are set to selected.</p>
 </td></tr><tr><td class='label'>:size </td><td>
 <p>Uses the size attribute on the tag</p>
 </td></tr><tr><td class='label'>:text_method </td><td>
-<p>If set, each entry in the array has this option called on it to get the
-text of the object.</p>
+<p>If set, each entry in the array has this option called on it to get the text of the object.</p>
 </td></tr><tr><td class='label'>:value </td><td>
 <p>Same as :selected, but has lower priority.</p>
 </td></tr><tr><td class='label'>:value_method </td><td>
-<p>If set (and :text_method is set), each entry in the array has this method
-called on it to get the value of the option.</p>
+<p>If set (and :text_method is set), each entry in the array has this method called on it to get the value of the option.</p>
 </td></tr></tbody></table>
 
 <h3 id="label-3Acheckboxset">:checkboxset<span><a href="#label-3Acheckboxset">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>Creates a set of checkbox inputs all using the same name.  Supports the
-same options as the select type, except that the :multiple option is
-assumed to be true.  Also supports the following options:</p>
+<p>Creates a set of checkbox inputs all using the same name.  Supports the same options as the select type, except that the :multiple option is assumed to be true.  Also supports the following options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:tag_wrapper </td><td>
 <p>The wrapper transformer for individual tags in the set</p>
 </td></tr><tr><td class='label'>:tag_labeler </td><td>
 <p>The labeler transformer for individual tags in the set</p>
+</td></tr><tr><td class='label'>:tag_label_attr </td><td>
+<p>The attributes to use for labels for individual tags in the set</p>
 </td></tr></tbody></table>
 
 <h3 id="label-3Aradioset">:radioset<span><a href="#label-3Aradioset">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>Creates a set of radio buttons all using the same name.  Supports the same
-options as the :checkboxset type.</p>
+<p>Creates a set of radio buttons all using the same name.  Supports the same options as the :checkboxset type.</p>
 
 <h3 id="label-3Atextarea">:textarea<span><a href="#label-3Atextarea">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
@@ -874,9 +611,7 @@ options as the :checkboxset type.</p>
 
 <h2 id="label-all+others">all others<span><a href="#label-all+others">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>Creates an input tag with the given type. This makes it easy to use inputs
-such as text and password, as well as newer HTML5 inputs such as number or
-email. Options:</p>
+<p>Creates an input tag with the given type. This makes it easy to use inputs such as text and password, as well as newer HTML5 inputs such as number or email. Options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:size </td><td>
 <p>Uses the size attribute on the tag</p>
 </td></tr><tr><td class='label'>:maxlength </td><td>
@@ -885,15 +620,11 @@ email. Options:</p>
 
 <h2 id="label-Form+options">Form options<span><a href="#label-Form+options">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>These are the options supported by <a
-href="../classes/Forme/Form.html">Forme::Form</a> object, mostly used to
-set the defaults for Inputs created via the form:</p>
+<p>These are the options supported by <a href="../classes/Forme/Form.html"><code>Forme::Form</code></a> object, mostly used to set the defaults for Inputs created via the form:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:config </td><td>
-<p>The configuration to use, which automatically sets defaults for the
-transformers to use.</p>
+<p>The configuration to use, which automatically sets defaults for the transformers to use.</p>
 </td></tr><tr><td class='label'>:errors </td><td>
-<p>A Hash of errors from a previous form submission, used to set default
-errors for inputs when the inputs use the :key option.</p>
+<p>A Hash of errors from a previous form submission, used to set default errors for inputs when the inputs use the :key option.</p>
 </td></tr><tr><td class='label'>:error_handler </td><td>
 <p>Sets the default error_handler for the form&#39;s inputs</p>
 </td></tr><tr><td class='label'>:helper </td><td>
@@ -903,31 +634,24 @@ errors for inputs when the inputs use the :key option.</p>
 </td></tr><tr><td class='label'>:hidden_tags </td><td>
 <p>Sets the hidden tags to automatically add to this form, see below.</p>
 </td></tr><tr><td class='label'>:input_defaults </td><td>
-<p>Sets the default options for each input type.  This should be a hash with
-input type keys, where the values are the hash of default options to use
-for the input type.</p>
+<p>Sets the default options for each input type.  This should be a hash with input type keys, where the values are the hash of default options to use for the input type. </p>
 </td></tr><tr><td class='label'>:inputs_wrapper </td><td>
 <p>Sets the default inputs_wrapper for the form</p>
 </td></tr><tr><td class='label'>:labeler </td><td>
 <p>Sets the default labeler for the form&#39;s inputs</p>
 </td></tr><tr><td class='label'>:namespace </td><td>
-<p>Sets the default namespace(s) to use for the form.  Namespacing will
-automatically create namespaced name and id attributes for inputs that use
-the :key option.</p>
+<p>Sets the default namespace(s) to use for the form.  Namespacing will automatically create namespaced name and id attributes for inputs that use the :key option.</p>
 </td></tr><tr><td class='label'>:obj </td><td>
 <p>Sets the default <code>obj</code> for the form&#39;s inputs.</p>
 </td></tr><tr><td class='label'>:serializer </td><td>
 <p>Sets the serializer for the form</p>
 </td></tr><tr><td class='label'>:values </td><td>
-<p>The values from a previous form submission, used to set default values for
-inputs when the inputs use the :key option.</p>
+<p>The values from a previous form submission, used to set default values for inputs when the inputs use the :key option.</p>
 </td></tr><tr><td class='label'>:wrapper </td><td>
 <p>Sets the default wrapper for the form&#39;s inputs</p>
 </td></tr></tbody></table>
 
-<p>For forms created by <a
-href="../classes/Forme.html#method-c-form">Forme.form</a>, the following
-options are supported:</p>
+<p>For forms created by <a href="../classes/Forme.html#method-c-form"><code>Forme.form</code></a>, the following options are supported:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:inputs </td><td>
 <p>An array of inputs to create inside the form, before yielding to the block.</p>
 </td></tr><tr><td class='label'>:button </td><td>
@@ -937,37 +661,26 @@ options are supported:</p>
 <h3 id="label-3Ahidden_tags">:hidden_tags<span><a href="#label-3Ahidden_tags">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>This should be an array, where elements are one of the following types:</p>
-<table class="rdoc-list note-list"><tbody><tr><td class='label'>String, Array, <a href="../classes/Forme/Tag.html">Forme::Tag</a> </td><td>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>String, Array, <a href="../classes/Forme/Tag.html"><code>Forme::Tag</code></a> </td><td>
 <p>Added directly as a child of the form tag.</p>
 </td></tr><tr><td class='label'>Hash </td><td>
-<p>Adds a hidden tag for each entry, with keys as the name of the hidden tag
-and values as the value of the hidden tag.</p>
+<p>Adds a hidden tag for each entry, with keys as the name of the hidden tag and values as the value of the hidden tag.</p>
 </td></tr><tr><td class='label'>Proc </td><td>
-<p>Will be called with the form tag object, and should return an instance of
-one of the handled types (or nil to not add a tag).</p>
+<p>Will be called with the form tag object, and should return an instance of one of the handled types (or nil to not add a tag).</p>
 </td></tr></tbody></table>
 
 <h1 id="label-Basic+Design">Basic Design<span><a href="#label-Basic+Design">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p>Internally, <a href="../classes/Forme.html">Forme</a> builds an abstract
-syntax tree of objects that represent the form.  The abstract syntax tree
-goes through a series of transformations that convert it from high level
-abstract forms to low level abstract forms and finally to strings.  Here
-are the main classes used by the library:</p>
+<p>Internally, <a href="../classes/Forme.html"><code>Forme</code></a> builds an abstract syntax tree of objects that represent the form.  The abstract syntax tree goes through a series of transformations that convert it from high level abstract forms to low level abstract forms and finally to strings.  Here are the main classes used by the library:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'><code>Forme::Form</code> </td><td>
 <p>main object</p>
 </td></tr><tr><td class='label'><code>Forme::Input</code> </td><td>
-<p>high level abstract tag (a single <code>Input</code> could represent a
-select box with a bunch of options)</p>
+<p>high level abstract tag (a single <code>Input</code> could represent a select box with a bunch of options)</p>
 </td></tr><tr><td class='label'><code>Forme::Tag</code> </td><td>
-<p>low level abstract tag representing an html tag (there would be a separate
-<code>Tag</code> for each option in a select box)</p>
+<p>low level abstract tag representing an html tag (there would be a separate <code>Tag</code> for each option in a select box)</p>
 </td></tr></tbody></table>
 
-<p>The group of objects that perform the transformations to the abstract
-syntax trees are known as transformers. Transformers use a functional
-style, and all use a <code>call</code>-based API, so you can use a
-<code>Proc</code> for any custom transformer.</p>
+<p>The group of objects that perform the transformations to the abstract syntax trees are known as transformers. Transformers use a functional style, and all use a <code>call</code>-based API, so you can use a <code>Proc</code> for any custom transformer.</p>
 
 <h2 id="label-Transformer+Types">Transformer Types<span><a href="#label-Transformer+Types">&para;</a> <a href="#top">&uarr;</a></span></h2>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'><code>serializer</code> </td><td>
@@ -986,33 +699,19 @@ style, and all use a <code>call</code>-based API, so you can use a
 <p>takes form, options hash, and block, wrapping block in a tag</p>
 </td></tr></tbody></table>
 
-<p>The <code>serializer</code> is the base of the transformations.  It turns
-<code>Tag</code> instances into strings.  If it comes across an
-<code>Input</code>, it calls the <code>formatter</code> on the
-<code>Input</code> to turn it into a <code>Tag</code>, and then serializes
-that <code>Tag</code>.  The <code>formatter</code> first converts the
-<code>Input</code> to a <code>Tag</code>, and then calls the
-<code>labeler</code>  if the <code>:label</code> option is set, the
-<code>error_handler</code> if the <code>:error</code> option is set, and
-the <code>helper</code> if the <code>:help</code> option is set .  Finally,
-it calls the <code>wrapper</code> to wrap the resulting tag before
-returning it.</p>
+<p>The <code>serializer</code> is the base of the transformations.  It turns <code>Tag</code> instances into strings.  If it comes across an <code>Input</code>, it calls the <code>formatter</code> on the <code>Input</code> to turn it into a <code>Tag</code>, and then serializes that <code>Tag</code>.  The <code>formatter</code> first converts the <code>Input</code> to a <code>Tag</code>, and then calls the <code>labeler</code>  if the <code>:label</code> option is set, the <code>error_handler</code> if the <code>:error</code> option is set, and the <code>helper</code> if the <code>:help</code> option is set .  Finally, it calls the <code>wrapper</code> to wrap the resulting tag before returning it.</p>
 
-<p>The <code>inputs_wrapper</code> is called by
-<code>Forme::Form#inputs</code> and serves to wrap a bunch of related
-inputs.</p>
+<p>The <code>inputs_wrapper</code> is called by <code>Forme::Form#inputs</code> and serves to wrap a bunch of related inputs.</p>
 
 <h2 id="label-Built-in+Transformers">Built-in Transformers<span><a href="#label-Built-in+Transformers">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p><a href="../classes/Forme.html">Forme</a> ships with a bunch of built-in
-transformers that you can use:</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with a bunch of built-in transformers that you can use:</p>
 
 <h3 id="label-serializer"><code>serializer</code><span><a href="#label-serializer">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:default </td><td>
 <p>returns HTML strings</p>
 </td></tr><tr><td class='label'>:html_usa </td><td>
-<p>returns HTML strings, formats dates and times in American format without
-timezones</p>
+<p>returns HTML strings, formats dates and times in American format without timezones</p>
 </td></tr><tr><td class='label'>:text </td><td>
 <p>returns plain text strings</p>
 </td></tr></tbody></table>
@@ -1023,13 +722,16 @@ timezones</p>
 </td></tr><tr><td class='label'>:disabled </td><td>
 <p>disables all resulting input tags</p>
 </td></tr><tr><td class='label'>:readonly </td><td>
-<p>uses <code>span</code> tags for most values, good for printable versions of
-forms</p>
+<p>uses <code>span</code> tags for most values, good for printable versions of forms</p>
 </td></tr></tbody></table>
 
 <h3 id="label-error_handler"><code>error_handler</code><span><a href="#label-error_handler">&para;</a> <a href="#top">&uarr;</a></span></h3>
-<table class="rdoc-list note-list"><tbody><tr><td class='label'>:default </td><td>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:after_legend </td><td>
+<p>designed for usage with :legend labeler, putting error message after legend, adding error for first input in the set</p>
+</td></tr><tr><td class='label'>:default </td><td>
 <p>modifies tag to add an error class and adds a span with the error message</p>
+</td></tr><tr><td class='label'>:set </td><td>
+<p>default error_handler for checkboxset and radioset inputs, that adds an error to the last input in the set</p>
 </td></tr></tbody></table>
 
 <p>This supports the following options:</p>
@@ -1051,14 +753,16 @@ forms</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:default </td><td>
 <p>uses implicit labels, where the tag is a child of the label tag</p>
 </td></tr><tr><td class='label'>:explicit </td><td>
-<p>uses explicit labels with the for attribute, where tag is a sibling of the
-label tag</p>
+<p>uses explicit labels with the for attribute, where tag is a sibling of the label tag</p>
+</td></tr><tr><td class='label'>:legend </td><td>
+<p>adds a legend before the tags, mostly useful for accessible checkboxset and radioset inputs</p>
+</td></tr><tr><td class='label'>:span </td><td>
+<p>default labeler for checkboxset and radioset inputs that adds a span before the tags</p>
 </td></tr></tbody></table>
 
-<p>Both of these respect the following options:</p>
+<p>The :default and :explicit labelers respect the following options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:label_position </td><td>
-<p>Can be set to :before or :after to place the label before or after the the
-input.</p>
+<p>Can be set to :before or :after to place the label before or after the the input.</p>
 </td></tr><tr><td class='label'>:label_attr </td><td>
 <p>A hash of attributes to use for the label tag</p>
 </td></tr></tbody></table>
@@ -1068,6 +772,8 @@ input.</p>
 <p>returns tag without wrapping</p>
 </td></tr><tr><td class='label'>:div </td><td>
 <p>wraps tag in div tag</p>
+</td></tr><tr><td class='label'>:fieldset </td><td>
+<p>wraps tags in a fieldset, mostly useful for accessible checkboxset and radioset inputs</p>
 </td></tr><tr><td class='label'>:fieldset_ol </td><td>
 <p>same as :li, but also sets <code>inputs_wrapper</code> to :fieldset_ol</p>
 </td></tr><tr><td class='label'>:li </td><td>
@@ -1085,8 +791,7 @@ input.</p>
 </td></tr><tr><td class='label'>:tr </td><td>
 <p>same as :td, but also sets <code>inputs_wrapper</code> to :tr</p>
 </td></tr><tr><td class='label'>:trtd </td><td>
-<p>wraps tag in a tr tag with a td for the label and a td for the tag, useful
-for lining up inputs with the :explicit labeler without CSS</p>
+<p>wraps tag in a tr tag with a td for the label and a td for the tag, useful for lining up inputs with the :explicit labeler without CSS</p>
 </td></tr></tbody></table>
 
 <p>All of these except for :default respect the following options:</p>
@@ -1114,11 +819,9 @@ for lining up inputs with the :explicit labeler without CSS</p>
 <p>A hash of attributes to use for the wrapping tag.</p>
 </td></tr></tbody></table>
 
-<p>The :default, :fieldset_ol, and :table inputs_wrappers support the
-following options:</p>
+<p>The :default, :fieldset_ol, and :table inputs_wrappers support the following options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:legend </td><td>
-<p>A text description for the inputs, using the legend tag for fieldsets and
-the caption tag for a table.</p>
+<p>A text description for the inputs, using the legend tag for fieldsets and the caption tag for a table.</p>
 </td></tr><tr><td class='label'>:legend_attr </td><td>
 <p>A hash of attributes for the legend/caption tag.</p>
 </td></tr></tbody></table>
@@ -1130,25 +833,20 @@ the caption tag for a table.</p>
 
 <h2 id="label-Configurations">Configurations<span><a href="#label-Configurations">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>You can associate a group of transformers into a configuration.  This
-allows you to specify a single :config option when creating a
-<code>Form</code> and have it automatically set all the related
-transformers.</p>
+<p>You can associate a group of transformers into a configuration.  This allows you to specify a single :config option when creating a <code>Form</code> and have it automatically set all the related transformers.</p>
 
 <p>There are a few configurations supported by default:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:default </td><td>
 <p>All <code>default</code> transformers</p>
 </td></tr><tr><td class='label'>:formtastic </td><td>
-<p><code>fieldset_ol</code> inputs_wrapper, <code>li</code> wrapper,
-<code>explicit</code> labeler</p>
+<p><code>fieldset_ol</code> inputs_wrapper, <code>li</code> wrapper, <code>explicit</code> labeler</p>
 </td></tr></tbody></table>
 
 <p>You can register and use your own configurations easily:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">register_config</span>(<span class="ruby-value">:mine</span>, <span class="ruby-value">:wrapper</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:li</span>, <span class="ruby-value">:inputs_wrapper</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:ol</span>, <span class="ruby-value">:serializer</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:html_usa</span>)&#x000A;<span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Form</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:config</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:mine</span>)</pre>
 
-<p>If you want to, you can base your configuration on an existing
-configuration:</p>
+<p>If you want to, you can base your configuration on an existing configuration:</p>
 
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">register_config</span>(<span class="ruby-value">:yours</span>, <span class="ruby-value">:base</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:mine</span>, <span class="ruby-value">:inputs_wrapper</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:fieldset_ol</span>)</pre>
 
@@ -1158,9 +856,7 @@ configuration:</p>
 
 <h3 id="label-Bootstrap+3+Support">Bootstrap 3 Support<span><a href="#label-Bootstrap+3+Support">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p><a href="../classes/Forme.html">Forme</a> ships with support for Bootstrap
-3 HTML formatting. This support is shipped in it&#39;s own file, so if you
-don&#39;t use it, you don&#39;t pay the memory penalty for loading it.</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with support for Bootstrap 3 HTML formatting. This support is shipped in it&#39;s own file, so if you don&#39;t use it, you don&#39;t pay the memory penalty for loading it.</p>
 
 <pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;forme/bs3&#39;</span>&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">default_config</span> = <span class="ruby-value">:bs3</span></pre>
 
@@ -1177,8 +873,7 @@ don&#39;t use it, you don&#39;t pay the memory penalty for loading it.</p>
 <p>padrino-helpers</p>
 </li></ol>
 
-<p>Forme&#39;s DSL draws a lot of inspiration from both Formtastic and
-simple_form.</p>
+<p>Forme&#39;s DSL draws a lot of inspiration from both Formtastic and simple_form.</p>
 
 <h1 id="label-License">License<span><a href="#label-License">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
