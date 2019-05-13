@@ -24,7 +24,7 @@ END
   s.add_development_dependency "sequel", '>= 4'
   s.add_development_dependency "roda"
   s.add_development_dependency "rack_csrf"
-  s.add_development_dependency "erubis"
+  s.add_development_dependency "erubi"
   s.add_development_dependency "tilt"
   s.add_development_dependency "sinatra"
   s.add_development_dependency "rails"
