@@ -20,6 +20,7 @@ class FormeRails < Rails::Application
     end
   end
   config.active_support.deprecation = :stderr
+  config.middleware.delete(ActionDispatch::HostAuthorization) if defined?(ActionDispatch::HostAuthorization)
   config.middleware.delete(ActionDispatch::ShowExceptions)
   config.middleware.delete(Rack::Lock)
   config.secret_key_base = 'foo'*15
