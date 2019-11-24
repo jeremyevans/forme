@@ -26,7 +26,7 @@ describe "Sequel forme_set plugin" do
   end
   
   it "#forme_set should handle different ways to specify parameter names" do
-    [{:attr=>{:name=>'foo'}}, {:attr=>{'name'=>:foo}}, {:name=>'foo'}, {:name=>'bar[foo]'}, {:key=>:foo}].each do |opts|
+    [{:attr=>{:name=>'foo'}}, {:attr=>{'name'=>:foo}}, {:name=>'foo'}, {:name=>'foo[]'}, {:name=>'bar[foo][]'}, {:name=>'bar[foo]'}, {:key=>:foo}].each do |opts|
       @f.input(:name, opts)
 
       @ab.forme_set(:name=>'Foo')

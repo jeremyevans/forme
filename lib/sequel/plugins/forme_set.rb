@@ -3,7 +3,7 @@
 module Sequel # :nodoc:
   module Plugins # :nodoc:
     # The forme_set plugin makes the model instance keep track of which form
-    # inputs have been added for it. It adds a forme_set method to handle
+    # inputs have been added for it. It adds a <tt>forme_set(params['model_name'])</tt> method to handle
     # the intake of submitted data from the form.  For more complete control,
     # it also adds a forme_parse method that returns a hash of information that can be
     # used to modify and validate the object.
@@ -47,34 +47,11 @@ module Sequel # :nodoc:
           validations = hash[:validations] = {}
 
           forme_inputs.each do |field, input|
-            opts = input.opts
-            next if SKIP_FORMATTERS.include?(opts.fetch(:formatter){input.form_opts[:formatter]})
-
-            if attr = opts[:attr]
-              name = attr[:name] || attr['name']
-            end
-            name ||= opts[:name] || opts[:key] || next
-
-            # Pull out last component of the name if there is one
-            column = (name =~ /\[([^\[\]]+)\]\z/ ? $1 : name)
-            column = column.to_s.sub(/\[\]\z/, '').to_sym
-
+            next unless column = forme_column_for_input(input)
             hash_values[column] = params[column] || params[column.to_s]
 
-            next unless ref = model.association_reflection(field)
-            next unless options = opts[:options]
-
-            values = if opts[:text_method]
-              value_method = opts[:value_method] || opts[:text_method]
-              options.map(&value_method)
-            else
-              options.map{|obj| obj.is_a?(Array) ? obj.last : obj}
-            end
-
-            if ref[:type] == :many_to_one && !opts[:required]
-              values << nil
-            end
-            validations[column] = [ref[:type] != :many_to_one ? :subset : :include, values]
+            next unless validation = forme_validation_for_input(field, input)
+            validations[column] = validation
           end
 
           hash
@@ -88,6 +65,7 @@ module Sequel # :nodoc:
           unless hash[:validations].empty?
             forme_validations.merge!(hash[:validations])
           end
+          nil
         end
 
         # Check associated values to ensure they match one of options in the form.
@@ -105,6 +83,8 @@ module Sequel # :nodoc:
                 !value || (value - values).empty?
               when :include
                 values.include?(value)
+              when :valid
+                values
               else
                 raise Forme::Error, "invalid type used in forme_validations"
               end
@@ -114,6 +94,46 @@ module Sequel # :nodoc:
               end
             end
           end
+        end
+
+        private
+
+        # Return the model column name to use for the given form input.
+        def forme_column_for_input(input)
+          opts = input.opts
+          return if SKIP_FORMATTERS.include?(opts.fetch(:formatter){input.form_opts[:formatter]})
+
+          if attr = opts[:attr]
+            name = attr[:name] || attr['name']
+          end
+          return unless name ||= opts[:name] || opts[:key]
+
+          # Pull out last component of the name if there is one
+          column = name.to_s.chomp('[]')
+          if column =~ /\[([^\[\]]+)\]\z/
+            $1
+          else
+            column
+          end.to_sym
+        end
+
+        # Return the validation metadata to use for the given field name and form input.
+        def forme_validation_for_input(field, input)
+          return unless ref = model.association_reflection(field)
+          opts = input.opts
+          return unless options = opts[:options]
+
+          values = if opts[:text_method]
+            value_method = opts[:value_method] || opts[:text_method]
+            options.map(&value_method)
+          else
+            options.map{|obj| obj.is_a?(Array) ? obj.last : obj}
+          end
+
+          if ref[:type] == :many_to_one && !opts[:required]
+            values << nil
+          end
+          [ref[:type] != :many_to_one ? :subset : :include, values]
         end
       end
     end

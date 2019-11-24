@@ -589,7 +589,7 @@ As you can see, you basically need to recreate the conditionals used when creati
 the form, so that that the processing of the form submission handles only the
 inputs that were displayed on the form.
 
-=== forme_set plugin
+=== forme_set Sequel plugin
 
 The forme_set plugin is designed to make handling form submissions easier.  What it does
 is record the form fields that are used on the object, and then it uses those fields
@@ -686,6 +686,88 @@ internally).  forme_parse returns a hash with the following keys:
 It is possible to use forme_set for the values it can handle, and set other fields manually
 using set_fields.
 
+=== forme_set Roda plugin
+
+The forme_set Roda plugin builds on the forme_set Sequel plugin and is designed to make
+handling form submissions even easier. This plugin uses a hidden form input to store which
+fields were used to build the form, as well as some other metadata.  It uses another hidden
+form input with an HMAC, so that on submission, if the HMAC matches, you can be sure that an
+attacker didn't add extra fields.
+
+There are a couple advantages to this plugin over using just the Sequel forme_set plugin.
+One is that you do not need to record the form fields when processing the submission of a
+form, since the information you need is included in the form submission. Another is that
+calling the forme_set method is simpler, since it can determine the necessary parameters.
+
+While you need code like this when using just the Sequel forme_set plugin:
+
+  album = Album[1]
+  Forme.form(album, :action=>'/foo') do |f|
+    f.input :name
+    f.input :copies_sold if album.released?
+  end
+  album.forme_set(params['album'])
+
+when you also use the Roda forme_set plugin, you can simplify it to:
+
+  album = Album[1]
+  forme_set(album)
+
+==== Validations
+
+The Roda forme_set plugin supports and uses the same validations as the Sequel forme_set
+plugin.  However, the Roda plugin is more accurate because it uses the options that were
+present on the form when it was originally built, instead of the options that would be
+present on the form when the form was submitted.  However, note that that can be a
+negative if you are dynamically adding values to both the database and the form between
+when the form was built and when it was submitted.
+
+==== Usage
+
+Because the Roda forme_set plugin includes the metadata needed to process the form in form
+submissions, you don't need to rearrange code to use it, or rerender templates.
+You can do:
+
+  album = Album[1]
+  forme_set(album)
+
+And the method will update the +album+ object using the appropriate form values. 
+
+Note that loading the Roda forme_set plugin requires you set a secret for the HMAC.  It
+is important that you keep this value secret, because if an attacker has access to this,
+they would be able to set arbitrary attributes for model objects.  In your Roda class,
+you can load the plugin via:
+
+  plugin :forme_set, ENV["APP_FORME_HMAC_SECRET"]
+
+==== Caveats
+
+The Roda forme_set plugin has basically the same caveats as Sequel forme_set plugin.
+Additionally, it has a couple other restrictions that the Sequel forme_set plugin
+does not have.
+
+First, the Roda forme_set plugin only handles a single object in forms,
+which must be provided when creating the form.  It does not handle multiple
+objects in the same form, and ignores any fields set for an object different
+from the one passed when creating the form.  You can use the Sequel forme_set
+plugin to handle form submissions involving multiple objects, or for the
+objects that were not passed when creating the form.
+
+Second, the Roda forme_set plugin does not handle cases where the field values
+are placed outside the forms default namespace.  The Sequel forme_set plugin
+can handle those issues, as long as all values are in the same namespace, since
+the Sequel forme_set plugin requires you pass in the specific hash to use (the
+Roda forme_set plugin use the form's namespace information and the submitted
+parameters to determine the hash to use).
+
+In cases where the Roda forme_set does not handle things correctly, you can use
+forme_parse, which will return metadata in the same format as the Sequel plugin
+forme_parse method.
+
+It is possible to use the Roda forme_set plugin for the submissions it can handle, the
+Sequel forme_set plugin for the submissions it can handle, and set other fields manually
+using the Sequel set_fields methods.
+
 == Other Sequel Plugins
 
 In addition to the Sequel plugins mentioned above, Forme also ships with additional Sequel
@@ -695,9 +777,9 @@ forme_i18n :: Handles translations for labels using i18n.
 
 = Roda Support
 
-Forme ships with two Roda plugins, forme and forme_route_csrf.  For new code, it is
-recommended to use forme_route_csrf, as that uses Roda's route_csrf plugin, which
-supports more secure request-specific CSRF tokens.  In both cases, usage in ERB
+Forme ships with three Roda plugins: forme_set (discussed above), forme, and forme_route_csrf.
+For new code, it is recommended to use forme_route_csrf, as that uses Roda's route_csrf
+plugin, which supports more secure request-specific CSRF tokens.  In both cases, usage in ERB
 templates is the same:
 
   <% form(@obj, :action=>'/foo') do |f| %>

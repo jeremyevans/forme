@@ -45,12 +45,26 @@ class Roda
               csrf_token
             end
 
+            options[:csrf] = [csrf_field, token]
             options[:hidden_tags] ||= []
             options[:hidden_tags] += [{csrf_field=>token}]
           end
 
           options[:output] = @_out_buf if block
-          ::Forme::ERB::Form.form(obj, attr, opts, &block)
+          _forme_form_options(options)
+          _forme_form_class.form(obj, attr, opts, &block)
+        end
+
+        private
+
+        # The class to use for forms
+        def _forme_form_class
+          ::Forme::ERB::Form
+        end
+
+        # The options to use for forms.  Any changes should mutate this hash to set options.
+        def _forme_form_options(options)
+          options
         end
       end
     end

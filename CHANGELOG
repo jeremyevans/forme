@@ -1,3 +1,7 @@
+=== master
+
+* Add Roda forme_set plugin, using HMACed form metadata to automatically handle submitted form parameters (jeremyevans)
+
 === 1.10.0 (2019-05-13)
 
 * Make readonly formatter ignore hidden inputs (jeremyevans)
