@@ -470,10 +470,10 @@ module Sequel # :nodoc:
         include SequelForm
       end
 
-      module InstanceMethods
-        MUTEX = Mutex.new
-        FORM_CLASSES = {::Forme::Form=>Form}
+      MUTEX = Mutex.new
+      FORM_CLASSES = {::Forme::Form=>Form}
 
+      module InstanceMethods
         # Configure the +form+ with support for <tt>Sequel::Model</tt>
         # specific code, such as support for nested attributes.
         def forme_config(form)
