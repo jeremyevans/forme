@@ -768,6 +768,13 @@ It is possible to use the Roda forme_set plugin for the submissions it can handl
 Sequel forme_set plugin for the submissions it can handle, and set other fields manually
 using the Sequel set_fields methods.
 
+Note that when using the Roda forme_set plugin with an existing form, you should first
+enable the Roda plugin without actually using the Roda forme_set method.  Do not
+start using the Roda forme_set method until all currently valid sessions were
+established after the Roda forme_set plugin was enabled.  Otherwise, sessions that
+access the form before the Roda forme_set plugin was enabled will not work if they
+submit the form after the Roda forme_set plugin is enabled.
+
 == Other Sequel Plugins
 
 In addition to the Sequel plugins mentioned above, Forme also ships with additional Sequel
