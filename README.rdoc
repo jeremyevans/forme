@@ -733,12 +733,12 @@ You can do:
 
 And the method will update the +album+ object using the appropriate form values. 
 
-Note that loading the Roda forme_set plugin requires you set a secret for the HMAC.  It
+Note that using the Roda forme_set plugin requires you set a secret for the HMAC.  It
 is important that you keep this value secret, because if an attacker has access to this,
 they would be able to set arbitrary attributes for model objects.  In your Roda class,
 you can load the plugin via:
 
-  plugin :forme_set, ENV["APP_FORME_HMAC_SECRET"]
+  plugin :forme_set, :secret => ENV["APP_FORME_HMAC_SECRET"]
 
 ==== Caveats
 

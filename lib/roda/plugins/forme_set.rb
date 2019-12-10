@@ -7,13 +7,13 @@ class Roda
   module RodaPlugins
     module FormeSet
       # Require the forme_route_csrf plugin.
-      def self.load_dependencies(app, _)
-        app.plugin :forme_route_csrf
+      def self.load_dependencies(app, _ = nil)
+        app.plugin :forme_route_csrf 
       end
 
       # Set the HMAC secret.
-      def self.configure(app, hmac_secret)
-        app.opts[:forme_set_hmac_secret] = hmac_secret
+      def self.configure(app, opts = OPTS)
+        app.opts[:forme_set_hmac_secret] = opts[:secret] || app.opts[:forme_set_hmac_secret]
       end
 
       # Error class raised for invalid form submissions.

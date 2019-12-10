@@ -127,7 +127,7 @@ else
     before do
       @app = Class.new(FormeRodaTest)
       @app.plugin :route_csrf, plugin_opts
-      @app.plugin(:forme_set, '1'*64)
+      @app.plugin(:forme_set, :secret=>'1'*64)
 
       @ab = Album.new
     end
