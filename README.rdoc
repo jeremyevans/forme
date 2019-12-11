@@ -740,6 +740,18 @@ you can load the plugin via:
 
   plugin :forme_set, :secret => ENV["APP_FORME_HMAC_SECRET"]
 
+By default, invalid form submissions will raise an exception.  If you want to change
+that behavior (i.e. to display a nice error page), pass a block when loading the plugin:
+
+  plugin :forme_set do |error_type, obj|
+    # ...
+  end
+
+The block arguments will be a symbol for the type of error (:missing_data, :missing_hmac,
+:hmac_mismatch, :csrf_mismatch, or :missing_namespace) and the object passed to +forme_set+.
+This block should raise or halt.  If it does not, the default behavior of raising an
+exception will be taken.
+
 ==== Caveats
 
 The Roda forme_set plugin has basically the same caveats as Sequel forme_set plugin.

@@ -203,6 +203,39 @@ else
       proc{forme_set(@ab, {"a"=>{"name"=>'Foo'}}, {}, :namespace=>'album'){|f| f.input(:name); f.input(:copies_sold)}}.must_raise Roda::RodaPlugins::FormeSet::Error
     end
 
+    it "#forme_set should call plugin block if there is an error with the form submission hmac not matching data" do
+      @app.plugin :forme_set do |error_type, _|
+        request.on{error_type.to_s}
+      end
+
+      h = forme_set(@ab, :name=>'Foo')
+      forme_call(h)[2].must_equal ['missing_data']
+
+      h = forme_set(@ab, :name=>'Foo'){|f| f.input(:name)}
+      hmac = h.delete("_forme_set_data_hmac")
+      forme_call(h)[2].must_equal ['missing_hmac']
+
+      forme_call(h.merge("_forme_set_data_hmac"=>hmac+'1'))[2].must_equal ['hmac_mismatch']
+
+      data = h["_forme_set_data"]
+      data.sub!(/"csrf":\["_csrf","./, "\"csrf\":[\"_csrf\",\"|")
+      hmac = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, '1'*64, data)
+      forme_call(h.merge("_forme_set_data_hmac"=>hmac))[2].must_equal ['csrf_mismatch']
+
+      h = forme_set(@ab, :name=>'Foo')
+      h.delete('album')
+      forme_call(h)[2].must_equal ['missing_namespace']
+    end
+
+    it "#forme_set should raise if plugin block does not raise or throw" do
+      @app.plugin :forme_set do |_, obj|
+        obj
+      end
+      h = forme_set(@ab, :name=>'Foo'){|f| f.input(:name)}
+      h.delete("_forme_set_data_hmac")
+      proc{forme_call(h)}.must_raise Roda::RodaPlugins::FormeSet::Error
+    end
+
     it "#forme_set should only set values in the form" do
       forme_set(@ab, :name=>'Foo')
       @ab.name.must_be_nil

@@ -12,13 +12,27 @@ class Roda
       end
 
       # Set the HMAC secret.
-      def self.configure(app, opts = OPTS)
+      def self.configure(app, opts = OPTS, &block)
         app.opts[:forme_set_hmac_secret] = opts[:secret] || app.opts[:forme_set_hmac_secret]
+
+        if block
+          app.send(:define_method, :_forme_set_handle_error, &block)
+          app.send(:private, :_forme_set_handle_error)
+        end
       end
 
       # Error class raised for invalid form submissions.
       class Error < StandardError
       end
+
+      # Map of error types to error messages
+      ERROR_MESSAGES = {
+        :missing_data=>"_forme_set_data parameter not submitted",
+        :missing_hmac=>"_forme_set_data_hmac parameter not submitted",
+        :hmac_mismatch=>"_forme_set_data_hmac does not match _forme_set_data",
+        :csrf_mismatch=>"_forme_set_data CSRF token does not match submitted CSRF token",
+        :missing_namespace=>"no content in expected namespace"
+      }.freeze
 
       # Forme::Form subclass that adds hidden fields with metadata that can be used
       # to automatically process form submissions.
@@ -118,6 +132,16 @@ class Roda
 
         private
 
+        # Raise error with message based on type
+        def _forme_set_handle_error(type, _obj)
+        end
+
+        # Raise error with message based on type
+        def _forme_parse_error(type, obj)
+          _forme_set_handle_error(type, obj)
+          raise Error, ERROR_MESSAGES[type]
+        end
+
         # Use form class that adds hidden fields for metadata.
         def _forme_form_class
           Form
@@ -132,14 +156,14 @@ class Roda
         # Internals of forme_parse_hmac and forme_set_hmac.
         def _forme_parse(obj)
           params = request.params
-          raise Error, "_forme_set_data parameter not submitted" unless data = params['_forme_set_data']
-          raise Error, "_forme_set_data_hmac parameter not submitted" unless hmac = params['_forme_set_data_hmac']
+          return _forme_parse_error(:missing_data, obj) unless data = params['_forme_set_data']
+          return _forme_parse_error(:missing_hmac, obj) unless hmac = params['_forme_set_data_hmac']
 
           data = data.to_s
           hmac = hmac.to_s
           actual = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, self.class.opts[:forme_set_hmac_secret], data)
           unless Rack::Utils.secure_compare(hmac.ljust(64), actual) && hmac.length == actual.length
-            raise Error, "_forme_set_data_hmac does not match _forme_set_data"
+            return _forme_parse_error(:hmac_mismatch, obj)
           end
 
           data = JSON.parse(data)
@@ -148,13 +172,13 @@ class Roda
             csrf_value = params[csrf_field].to_s
             hmac_csrf_value = hmac_csrf_value.to_s
             unless Rack::Utils.secure_compare(csrf_value.ljust(hmac_csrf_value.length), hmac_csrf_value) && csrf_value.length == hmac_csrf_value.length
-              raise Error, "_forme_set_data CSRF token does not match submitted CSRF token"
+              return _forme_parse_error(:csrf_mismatch, obj)
             end
           end
 
           namespaces = data['namespaces']
           namespaces.each do |key|
-            raise Error, "no content in namespaces: #{namespaces.inspect}" unless params = params[key]
+            return _forme_parse_error(:missing_namespace, obj) unless params = params[key]
           end
 
           if valid_values = data['valid_values']
