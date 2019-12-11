@@ -90,6 +90,7 @@ class Roda
             data['namespaces'] = @forme_namespaces
             data['csrf'] = @opts[:csrf]
             data['valid_values'] = valid_values unless valid_values.empty?
+            data['form_version'] = @opts[:form_version] if @opts[:form_version]
 
             data = data.to_json
             tags = []
@@ -106,25 +107,33 @@ class Roda
         # being submitted values for the object, and :validations key
         # being a hash of validation metadata for the object.
         def forme_parse(obj)
-          params, columns, validations = _forme_parse(obj)
+          h = _forme_parse(obj)
           
-          h = {}
+          params = h.delete(:params)
+          columns = h.delete(:columns)
+          h[:validations] ||= {}
+
+          values = h[:values] = {}
           columns.each do |col|
-            h[col.to_sym] = params[col]
+            values[col.to_sym] = params[col]
           end
 
-          {:values=>h, :validations=>validations||{}}
+          h
         end
 
         # Set fields on the object based on submitted parameters, as
         # well as validations for associated object values.
         def forme_set(obj)
-          params, columns, validations = _forme_parse(obj)
+          h = _forme_parse(obj)
 
-          obj.set_fields(params, columns)
+          obj.set_fields(h[:params], h[:columns])
 
-          if validations
-            obj.forme_validations.merge!(validations)
+          if h[:validations]
+            obj.forme_validations.merge!(h[:validations])
+          end
+
+          if block_given?
+            yield h[:form_version], obj
           end
 
           obj
@@ -195,7 +204,7 @@ class Roda
             end
           end
 
-          [params, data["columns"], validations]
+          {:params=>params, :columns=>data["columns"], :validations=>validations, :form_version=>data['form_version']}
         end
       end
     end
@@ -203,4 +212,3 @@ class Roda
     register_plugin(:forme_set, FormeSet)
   end
 end
-

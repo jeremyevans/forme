@@ -752,6 +752,64 @@ The block arguments will be a symbol for the type of error (:missing_data, :miss
 This block should raise or halt.  If it does not, the default behavior of raising an
 exception will be taken.
 
+=== Form Versions
+
+The Roda forme_set plugin supports form versions.  This allows you to gracefully handle
+changes to forms, processing submissions of the form generated before the change (if
+possible) as well as the processing submissions of the form generated after the change.
+
+For example, maybe you have an existing form with just an input for the name:
+
+  form(album) do |f|
+    f.input(:name)
+  end
+
+Then later, you want to add an input for the number of copies sold:
+
+  form(album) do |f|
+    f.input(:name)
+    f.input(:copies_sold)
+  end
+
+Using the Roda forme_set plugin, submissions of the old form would only set the
+name field, it wouldn't set the copies_sold field, since when the form was created,
+only the name field was used.
+
+You can handle this case be versioning the form when making changes to it:
+
+  form(album, {}, :form_version=>1) do |f|
+    f.input(:name)
+    f.input(:copies_sold)
+  end
+
+When you are processing the form submission with forme_set, you pass a block, which
+will be yielded the version for the form (nil if no version was set):
+
+  forme_set(album) do |version|
+    if version == nil
+      album.copies_sold = 0
+    end
+  end
+
+The block is also yielded the object passed for forme_set, useful if you don't keep
+a reference to it:
+
+  album = forme_set(Album.new) do |version, obj|
+    if version == nil
+      obj.copies_sold = 0
+    end
+  end
+
+You only need to support old versions of the form for as long as their could be
+active sessions that could use the old versions of the form.  As long you as
+are expiring sessions to prevent session fixation, you can remove the version
+handling after the expiration period has passed since the change to the form
+was made.
+
+Note that this issue with handling changes to forms is not specific to the Roda
+forme_set plugin, it affects pretty much all form submissions.  The Roda forme_set
+plugin just makes this issue easier to handle.
+
 ==== Caveats
 
 The Roda forme_set plugin has basically the same caveats as Sequel forme_set plugin.
@@ -774,7 +832,8 @@ parameters to determine the hash to use).
 
 In cases where the Roda forme_set does not handle things correctly, you can use
 forme_parse, which will return metadata in the same format as the Sequel plugin
-forme_parse method.
+forme_parse method, with the addition of a :form_version key in the hash for the
+form version.
 
 It is possible to use the Roda forme_set plugin for the submissions it can handle, the
 Sequel forme_set plugin for the submissions it can handle, and set other fields manually

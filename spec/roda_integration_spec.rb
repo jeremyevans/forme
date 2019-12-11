@@ -146,6 +146,7 @@ else
 
     def _forme_set(meth, obj, orig_hash, *form_args, &block)
       hash = {}
+      forme_set_block = orig_hash.delete(:forme_set_block)
       orig_hash.each{|k,v| hash[k.to_s] = v}
       album = @ab
       ret, form, data, hmac = nil
@@ -156,7 +157,7 @@ else
         end
         r.post do
           r.params.replace(env[:params])
-          ret = send(meth, album)
+          ret = send(meth, album, &forme_set_block)
           nil
         end
       end
@@ -250,6 +251,43 @@ else
       forme_set(@ab, 'name'=>'Bar', 'copies_sold'=>'1'){|f| f.input(:name); f.input(:copies_sold)}
       @ab.name.must_equal 'Bar'
       @ab.copies_sold.must_equal 1
+    end
+
+    it "#forme_set should handle form_versions" do
+      h = forme_set(@ab, {:name=>'Foo'}){|f| f.input(:name)}
+      @ab.name.must_equal 'Foo'
+
+      obj = nil
+      version = nil
+      name = nil
+      forme_set_block = proc do |v, o|
+        obj = o
+        name = o.name
+        version = v
+      end
+      h2 = forme_set(@ab, {:name=>'Foo', :forme_set_block=>forme_set_block}, {}, :form_version=>1){|f| f.input(:name)}
+      obj.must_be_same_as @ab
+      name.must_equal 'Foo'
+      version.must_equal 1
+
+      forme_call(h)
+      obj.must_be_same_as @ab
+      version.must_be_nil
+
+      h3 = forme_set(@ab, {:name=>'Bar', :forme_set_block=>forme_set_block}, {}, :form_version=>2){|f| f.input(:name)}
+      obj.must_be_same_as @ab
+      name.must_equal 'Bar'
+      version.must_equal 2
+
+      h['album']['name'] = 'Baz'
+      forme_call(h)
+      obj.must_be_same_as @ab
+      name.must_equal 'Baz'
+      version.must_be_nil
+
+      forme_call(h2)
+      obj.must_be_same_as @ab
+      version.must_equal 1
     end
 
     it "#forme_set should work for forms without blocks" do
@@ -404,13 +442,13 @@ else
     end
 
     it "#forme_parse should return hash with values and validations" do
-      forme_parse(@ab, :name=>'Foo'){|f| f.input(:name)}.must_equal(:values=>{:name=>'Foo'}, :validations=>{})
+      forme_parse(@ab, :name=>'Foo'){|f| f.input(:name)}.must_equal(:values=>{:name=>'Foo'}, :validations=>{}, :form_version=>nil)
 
       hash = forme_parse(@ab, :name=>'Foo', 'artist_id'=>'1') do |f|
         f.input(:name)
         f.input(:artist, :dataset=>proc{|ds| ds.exclude(:id=>1)})
       end
-      hash.must_equal(:values=>{:name=>'Foo', :artist_id=>'1'}, :validations=>{:artist_id=>[:valid, false]})
+      hash.must_equal(:values=>{:name=>'Foo', :artist_id=>'1'}, :validations=>{:artist_id=>[:valid, false]}, :form_version=>nil)
 
       @ab.set(hash[:values])
       @ab.valid?.must_equal true
@@ -420,11 +458,11 @@ else
       @ab.errors[:artist_id].must_equal ['invalid value submitted']
 
       @ab = Album.new
-      hash = forme_parse(@ab, :name=>'Foo', 'artist_id'=>'1') do |f|
+      hash = forme_parse(@ab, {:name=>'Foo', 'artist_id'=>'1'}, {}, :form_version=>1) do |f|
         f.input(:name)
         f.input(:artist, :dataset=>proc{|ds| ds.exclude(:id=>2)})
       end
-      hash.must_equal(:values=>{:name=>'Foo', :artist_id=>'1'}, :validations=>{:artist_id=>[:valid, true]})
+      hash.must_equal(:values=>{:name=>'Foo', :artist_id=>'1'}, :validations=>{:artist_id=>[:valid, true]}, :form_version=>1)
       @ab.set(hash[:values])
       @ab.valid?.must_equal true
 
