@@ -33,6 +33,8 @@ elsif RUBY_VERSION < '2.2'
   gem 'rails', '< 5'
   gem 'rack', '< 2'
   gem 'nokogiri', '< 1.7'
+elsif RUBY_VERSION < '2.3'
+  gem 'rails', '< 5.2'
 end
 
 if RUBY_VERSION < '2.2'
