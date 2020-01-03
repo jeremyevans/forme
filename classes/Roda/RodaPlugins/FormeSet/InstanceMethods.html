@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::FormeSet::InstanceMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::FormeSet::InstanceMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/forme_set_rb.html">lib/roda/plugins/forme_set.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-forme_parse">forme_parse</a></li>
+<li><a href="#method-i-forme_set">forme_set</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-forme_parse'>
+<a name='method-i-forme_parse'></a>
+<div class='synopsis'>
+<span class='name'>forme_parse</span>
+<span class='arguments'>(obj)</span>
+
+</div>
+<div class='description'>
+
+<p>Return hash based on submitted parameters, with :values key being submitted values for the object, and :validations key being a hash of validation metadata for the object.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_parse-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-forme_parse-source'>    <span class="ruby-comment"># File lib/roda/plugins/forme_set.rb</span>&#x000A;<span class="line-num">109</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_parse</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="line-num">110</span>   <span class="ruby-identifier">h</span> = <span class="ruby-identifier">_forme_parse</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="line-num">111</span>   &#x000A;<span class="line-num">112</span>   <span class="ruby-identifier">params</span> = <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:params</span>)&#x000A;<span class="line-num">113</span>   <span class="ruby-identifier">columns</span> = <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:columns</span>)&#x000A;<span class="line-num">114</span>   <span class="ruby-identifier">h</span>[<span class="ruby-value">:validations</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">115</span> &#x000A;<span class="line-num">116</span>   <span class="ruby-identifier">values</span> = <span class="ruby-identifier">h</span>[<span class="ruby-value">:values</span>] = {}&#x000A;<span class="line-num">117</span>   <span class="ruby-identifier">columns</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">col</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">118</span>     <span class="ruby-identifier">values</span>[<span class="ruby-identifier">col</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">col</span>]&#x000A;<span class="line-num">119</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">120</span> &#x000A;<span class="line-num">121</span>   <span class="ruby-identifier">h</span>&#x000A;<span class="line-num">122</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-forme_set'>
+<a name='method-i-forme_set'></a>
+<div class='synopsis'>
+<span class='name'>forme_set</span>
+<span class='arguments'>(obj)</span>
+
+</div>
+<div class='description'>
+
+<p>Set fields on the object based on submitted parameters, as well as validations for associated object values.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_set-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-forme_set-source'>    <span class="ruby-comment"># File lib/roda/plugins/forme_set.rb</span>&#x000A;<span class="line-num">126</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_set</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="line-num">127</span>   <span class="ruby-identifier">h</span> = <span class="ruby-identifier">_forme_parse</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="line-num">128</span> &#x000A;<span class="line-num">129</span>   <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">h</span>[<span class="ruby-value">:params</span>], <span class="ruby-identifier">h</span>[<span class="ruby-value">:columns</span>])&#x000A;<span class="line-num">130</span> &#x000A;<span class="line-num">131</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">:validations</span>]&#x000A;<span class="line-num">132</span>     <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_validations</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">h</span>[<span class="ruby-value">:validations</span>])&#x000A;<span class="line-num">133</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">134</span> &#x000A;<span class="line-num">135</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;<span class="line-num">136</span>     <span class="ruby-keyword">yield</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">:form_version</span>], <span class="ruby-identifier">obj</span>&#x000A;<span class="line-num">137</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">138</span> &#x000A;<span class="line-num">139</span>   <span class="ruby-identifier">obj</span>&#x000A;<span class="line-num">140</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2019-03-20 16:06:20 -0700</span>
+<span class='datetime'>2019-12-11 09:17:06 -0800</span>
 </div>
 </div>
 <div id='content'>
@@ -373,7 +373,7 @@ Last Update:
 
 <p>As you can see, you basically need to recreate the conditionals used when creating the form, so that that the processing of the form submission handles only the inputs that were displayed on the form.</p>
 
-<h3 id="label-forme_set+plugin">forme_set plugin<span><a href="#label-forme_set+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<h3 id="label-forme_set+Sequel+plugin">forme_set <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin<span><a href="#label-forme_set+Sequel+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>The forme_set plugin is designed to make handling form submissions easier.  What it does is record the form fields that are used on the object, and then it uses those fields to handle input submitted for the object.  For example:</p>
 
@@ -431,6 +431,86 @@ Last Update:
 
 <p>It is possible to use forme_set for the values it can handle, and set other fields manually using set_fields.</p>
 
+<h3 id="label-forme_set+Roda+plugin">forme_set <a href="../classes/Roda.html"><code>Roda</code></a> plugin<span><a href="#label-forme_set+Roda+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>The forme_set <a href="../classes/Roda.html"><code>Roda</code></a> plugin builds on the forme_set <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin and is designed to make handling form submissions even easier. This plugin uses a hidden form input to store which fields were used to build the form, as well as some other metadata.  It uses another hidden form input with an HMAC, so that on submission, if the HMAC matches, you can be sure that an attacker didn&#39;t add extra fields.</p>
+
+<p>There are a couple advantages to this plugin over using just the <a href="../classes/Sequel.html"><code>Sequel</code></a> forme_set plugin. One is that you do not need to record the form fields when processing the submission of a form, since the information you need is included in the form submission. Another is that calling the forme_set method is simpler, since it can determine the necessary parameters.</p>
+
+<p>While you need code like this when using just the <a href="../classes/Sequel.html"><code>Sequel</code></a> forme_set plugin:</p>
+
+<pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, <span class="ruby-value">:action</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:name</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span> <span class="ruby-value">:copies_sold</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">album</span>.<span class="ruby-identifier">released?</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">album</span>.<span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;album&#39;</span>])</pre>
+
+<p>when you also use the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin, you can simplify it to:</p>
+
+<pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">album</span>)</pre>
+
+<h4 id="label-Validations">Validations<span><a href="#label-Validations">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<p>The <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin supports and uses the same validations as the <a href="../classes/Sequel.html"><code>Sequel</code></a> forme_set plugin.  However, the <a href="../classes/Roda.html"><code>Roda</code></a> plugin is more accurate because it uses the options that were present on the form when it was originally built, instead of the options that would be present on the form when the form was submitted.  However, note that that can be a negative if you are dynamically adding values to both the database and the form between when the form was built and when it was submitted.</p>
+
+<h4 id="label-Usage">Usage<span><a href="#label-Usage">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<p>Because the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin includes the metadata needed to process the form in form submissions, you don&#39;t need to rearrange code to use it, or rerender templates. You can do:</p>
+
+<pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-value">1</span>]&#x000A;<span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">album</span>)</pre>
+
+<p>And the method will update the <code>album</code> object using the appropriate form values. </p>
+
+<p>Note that using the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin requires you set a secret for the HMAC.  It is important that you keep this value secret, because if an attacker has access to this, they would be able to set arbitrary attributes for model objects.  In your <a href="../classes/Roda.html"><code>Roda</code></a> class, you can load the plugin via:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:forme_set</span>, <span class="ruby-value">:secret</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&quot;APP_FORME_HMAC_SECRET&quot;</span>]</pre>
+
+<p>By default, invalid form submissions will raise an exception.  If you want to change that behavior (i.e. to display a nice error page), pass a block when loading the plugin:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:forme_set</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">error_type</span>, <span class="ruby-identifier">obj</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The block arguments will be a symbol for the type of error (:missing_data, :missing_hmac, :hmac_mismatch, :csrf_mismatch, or :missing_namespace) and the object passed to <code>forme_set</code>. This block should raise or halt.  If it does not, the default behavior of raising an exception will be taken.</p>
+
+<h3 id="label-Form+Versions">Form Versions<span><a href="#label-Form+Versions">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>The <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin supports form versions.  This allows you to gracefully handle changes to forms, processing submissions of the form generated before the change (if possible) as well as the processing submissions of the form generated after the change.</p>
+
+<p>For example, maybe you have an existing form with just an input for the name:</p>
+
+<pre class="ruby"><span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:name</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Then later, you want to add an input for the number of copies sold:</p>
+
+<pre class="ruby"><span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:name</span>)&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:copies_sold</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Using the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin, submissions of the old form would only set the name field, it wouldn&#39;t set the copies_sold field, since when the form was created, only the name field was used.</p>
+
+<p>You can handle this case be versioning the form when making changes to it:</p>
+
+<pre class="ruby"><span class="ruby-identifier">form</span>(<span class="ruby-identifier">album</span>, {}, <span class="ruby-value">:form_version</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">1</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:name</span>)&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:copies_sold</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>When you are processing the form submission with forme_set, you pass a block, which will be yielded the version for the form (nil if no version was set):</p>
+
+<pre class="ruby"><span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">album</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">version</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">version</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">nil</span>&#x000A;    <span class="ruby-identifier">album</span>.<span class="ruby-identifier">copies_sold</span> = <span class="ruby-value">0</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The block is also yielded the object passed for forme_set, useful if you don&#39;t keep a reference to it:</p>
+
+<pre class="ruby"><span class="ruby-identifier">album</span> = <span class="ruby-identifier">forme_set</span>(<span class="ruby-constant">Album</span>.<span class="ruby-identifier">new</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">version</span>, <span class="ruby-identifier">obj</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">version</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">nil</span>&#x000A;    <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">copies_sold</span> = <span class="ruby-value">0</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>You only need to support old versions of the form for as long as their could be active sessions that could use the old versions of the form.  As long you as are expiring sessions to prevent session fixation, you can remove the version handling after the expiration period has passed since the change to the form was made.</p>
+
+<p>Note that this issue with handling changes to forms is not specific to the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin, it affects pretty much all form submissions.  The <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin just makes this issue easier to handle.</p>
+
+<h4 id="label-Caveats">Caveats<span><a href="#label-Caveats">&para;</a> <a href="#top">&uarr;</a></span></h4>
+
+<p>The <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin has basically the same caveats as <a href="../classes/Sequel.html"><code>Sequel</code></a> forme_set plugin. Additionally, it has a couple other restrictions that the <a href="../classes/Sequel.html"><code>Sequel</code></a> forme_set plugin does not have.</p>
+
+<p>First, the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin only handles a single object in forms, which must be provided when creating the form.  It does not handle multiple objects in the same form, and ignores any fields set for an object different from the one passed when creating the form.  You can use the <a href="../classes/Sequel.html"><code>Sequel</code></a> forme_set plugin to handle form submissions involving multiple objects, or for the objects that were not passed when creating the form.</p>
+
+<p>Second, the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin does not handle cases where the field values are placed outside the forms default namespace.  The <a href="../classes/Sequel.html"><code>Sequel</code></a> forme_set plugin can handle those issues, as long as all values are in the same namespace, since the <a href="../classes/Sequel.html"><code>Sequel</code></a> forme_set plugin requires you pass in the specific hash to use (the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin use the form&#39;s namespace information and the submitted parameters to determine the hash to use).</p>
+
+<p>In cases where the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set does not handle things correctly, you can use forme_parse, which will return metadata in the same format as the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin forme_parse method, with the addition of a :form_version key in the hash for the form version.</p>
+
+<p>It is possible to use the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin for the submissions it can handle, the <a href="../classes/Sequel.html"><code>Sequel</code></a> forme_set plugin for the submissions it can handle, and set other fields manually using the <a href="../classes/Sequel.html"><code>Sequel</code></a> set_fields methods.</p>
+
+<p>Note that when using the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin with an existing form, you should first enable the <a href="../classes/Roda.html"><code>Roda</code></a> plugin without actually using the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set method.  Do not start using the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set method until all currently valid sessions were established after the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin was enabled.  Otherwise, sessions that access the form before the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin was enabled will not work if they submit the form after the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin is enabled.</p>
+
 <h2 id="label-Other+Sequel+Plugins">Other <a href="../classes/Sequel.html"><code>Sequel</code></a> Plugins<span><a href="#label-Other+Sequel+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>In addition to the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugins mentioned above, <a href="../classes/Forme.html"><code>Forme</code></a> also ships with additional <a href="../classes/Sequel.html"><code>Sequel</code></a> plugins:</p>
@@ -440,7 +520,7 @@ Last Update:
 
 <h1 id="label-Roda+Support"><a href="../classes/Roda.html"><code>Roda</code></a> Support<span><a href="#label-Roda+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
-<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with two <a href="../classes/Roda.html"><code>Roda</code></a> plugins, forme and forme_route_csrf.  For new code, it is recommended to use forme_route_csrf, as that uses Roda&#39;s route_csrf plugin, which supports more secure request-specific CSRF tokens.  In both cases, usage in ERB templates is the same:</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with three <a href="../classes/Roda.html"><code>Roda</code></a> plugins: forme_set (discussed above), forme, and forme_route_csrf. For new code, it is recommended to use forme_route_csrf, as that uses Roda&#39;s route_csrf plugin, which supports more secure request-specific CSRF tokens.  In both cases, usage in ERB templates is the same:</p>
 
 <pre>&lt;% form(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;&#x000A;  &lt;%= f.input(:field) %&gt;&#x000A;  &lt;% f.tag(:fieldset) do %&gt;&#x000A;    &lt;%= f.input(:field_two) %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
 

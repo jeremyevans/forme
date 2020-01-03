@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::FormeSet</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::FormeSet
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/forme_set_rb.html">lib/roda/plugins/forme_set.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-configure">configure</a></li>
+<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="FormeSet/InstanceMethods.html">Roda::RodaPlugins::FormeSet::InstanceMethods</a></li>
+<li><a href="FormeSet/Error.html">Roda::RodaPlugins::FormeSet::Error</a></li>
+<li><a href="FormeSet/Form.html">Roda::RodaPlugins::FormeSet::Form</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='constants-list'>
+<h2>Constants</h2>
+<div class='name-list'>
+<table summary='Constants'>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>ERROR_MESSAGES</td>
+<td>=</td>
+<td class='context-item-value'>{
+:missing_data=>"_forme_set_data parameter not submitted",
+:missing_hmac=>"_forme_set_data_hmac parameter not submitted",
+:hmac_mismatch=>"_forme_set_data_hmac does not match _forme_set_data",
+:csrf_mismatch=>"_forme_set_data CSRF token does not match submitted CSRF token",
+:missing_namespace=>"no content in expected namespace"
+}.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'>
+<p>Map of error types to error messages</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-configure'>
+<a name='method-c-configure'></a>
+<div class='synopsis'>
+<span class='name'>configure</span>
+<span class='arguments'>(app, opts = OPTS, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Set the HMAC secret.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_set.rb</span>&#x000A;<span class="line-num">15</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">16</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:forme_set_hmac_secret</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:secret</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:forme_set_hmac_secret</span>]&#x000A;<span class="line-num">17</span> &#x000A;<span class="line-num">18</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">19</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-value">:_forme_set_handle_error</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">20</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-value">:_forme_set_handle_error</span>)&#x000A;<span class="line-num">21</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">22</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-load_dependencies'>
+<a name='method-c-load_dependencies'></a>
+<div class='synopsis'>
+<span class='name'>load_dependencies</span>
+<span class='arguments'>(app, _ = nil)</span>
+
+</div>
+<div class='description'>
+
+<p>Require the forme_route_csrf plugin.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_set.rb</span>&#x000A;<span class="line-num">10</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_</span> = <span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">11</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:forme_route_csrf</span> &#x000A;<span class="line-num">12</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
