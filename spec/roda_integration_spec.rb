@@ -149,7 +149,7 @@ else
       forme_set_block = orig_hash.delete(:forme_set_block)
       orig_hash.each{|k,v| hash[k.to_s] = v}
       album = @ab
-      ret, form, data, hmac = nil
+      ret, _, data, hmac = nil
       
       @app.route do |r|
         r.get do
@@ -274,7 +274,7 @@ else
       obj.must_be_same_as @ab
       version.must_be_nil
 
-      h3 = forme_set(@ab, {:name=>'Bar', :forme_set_block=>forme_set_block}, {}, :form_version=>2){|f| f.input(:name)}
+      forme_set(@ab, {:name=>'Bar', :forme_set_block=>forme_set_block}, {}, :form_version=>2){|f| f.input(:name)}
       obj.must_be_same_as @ab
       name.must_equal 'Bar'
       version.must_equal 2
