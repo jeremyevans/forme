@@ -2,7 +2,7 @@ $:.unshift(File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), 'li
 
 if ENV['WARNING']
   require 'warning'
-  Warning.ignore([:missing_ivar, :not_reached])
+  Warning.ignore([:missing_ivar, :not_reached, :method_redefined])
 end
 
 if ENV['COVERAGE']
