@@ -1,3 +1,7 @@
+=== master
+
+* Make :select_options option for date/datetime selects support providing both option texts and option values using a 2 element array (jeremyevans)
+
 === 1.11.0 (2020-01-03)
 
 * Add Roda forme_set plugin, using HMACed form metadata to automatically handle submitted form parameters (jeremyevans)

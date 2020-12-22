@@ -983,9 +983,12 @@ creates multiple select options. Options:
           (:date default: <tt>[:year, '-', :month, '-', :day]</tt>)
           (:datetime default: <tt>[:year, '-', :month, '-', :day, ' ', :hour, ':', :minute, ':', :second]</tt>)
 :select_labels :: The labels to use for the select boxes.  Should be a hash keyed by the
-                   symbol used in order.  By default, no labels are used.
+                  symbol used (e.g. <tt>{:month=>'Month'}</tt>).  By default, no labels are used.
 :select_options :: The options to use for the select boxes.  Should be a hash keyed by the
-                   symbol used in order (e.g. <tt>{:year=>1970..2020}</tt>)
+                   symbol used in order (e.g. <tt>{:year=>1970..2020}</tt>).  The values
+                   can be a number used as both the value and the text of the option or
+                   an array with two elements, the first of which is the value for the option
+                   and the second of which is the text for the option.
 
 === :select
 

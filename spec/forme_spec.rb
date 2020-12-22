@@ -317,6 +317,10 @@ describe "Forme plain forms" do
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :select_options=>{:year=>1970..2020}).to_s.must_equal %{<select id="bar" name="foo[year]">#{sel(1970..2020, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
   end
 
+  it "should support :select_options with both values and text for dates when :as=>:select is given" do
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :select_options=>{:year=>[[2011, 'A'], [2012, 'B']]}).to_s.must_equal %{<select id="bar" name="foo[year]"><option selected="selected" value="2011">A</option><option value="2012">B</option></select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
+  end
+
   it "should have explicit labeler and trtd wrapper work with multiple select boxes for dates" do
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :wrapper=>:trtd, :labeler=>:explicit, :label=>'Baz').to_s.must_equal %{<tr><td><label class="label-before" for="bar">Baz</label></td><td><select id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select></td></tr>}
   end

@@ -160,7 +160,10 @@ module Forme
       @opts[:select_labels] ||= {}
       order.map do |x|
         next x if x.is_a?(String)
-        opts = @opts.merge(:label=>@opts[:select_labels][x], :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :value=>values[x], :options=>ops[x].map{|y| [sprintf(format, y), y]})
+        options = ops[x].map do |value, text|
+          [text || sprintf(format, value), value]
+        end
+        opts = @opts.merge(:label=>@opts[:select_labels][x], :wrapper=>nil, :error=>nil, :name=>"#{name}[#{x}]", :value=>values[x], :options=>options)
         opts[:id] = if first_input
           first_input = false
           id
