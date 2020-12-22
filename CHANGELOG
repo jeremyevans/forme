@@ -1,5 +1,7 @@
 === master
 
+* Avoid error when creating label text when using Sequel input on non-Sequel form without an explicit :label option (jeremyevans)
+
 * Make :select_options option for date/datetime selects support providing both option texts and option values using a 2 element array (jeremyevans)
 
 === 1.11.0 (2020-01-03)

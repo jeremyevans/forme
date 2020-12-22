@@ -453,6 +453,9 @@ describe "Forme Sequel::Model forms" do
     Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :skip_primary_key=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><tr><td class="string"><input id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
   
+  it "should handle non-Sequel forms with Sequel inputs" do
+    Forme.form{|f| f.input(:name, :obj=>@ab).to_s.must_equal '<label>Name: <input id="name" maxlength="255" name="name" type="text" value="b"/></label>'}
+  end
 end
 
 describe "Forme Sequel plugin default input types based on column names" do

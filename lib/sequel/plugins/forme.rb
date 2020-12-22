@@ -346,7 +346,7 @@ module Sequel # :nodoc:
 
         # Delegate to the +form+.
         def humanize(s)
-          form.humanize(s)
+          form.respond_to?(:humanize) ? form.humanize(s) : s.to_s.gsub(/_id$/, "").gsub(/_/, " ").capitalize
         end
 
         # If the column allows +NULL+ values, use a three-valued select
