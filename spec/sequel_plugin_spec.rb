@@ -331,6 +331,11 @@ describe "Forme Sequel::Model forms" do
     @b.input(:foo, :type=>:phone).to_s.must_equal '<label>Foo: <input id="album_foo" name="album[foo]" type="phone" value="bar"/></label>'
   end
 
+  it "should not override an explicit :error setting" do
+    @ab.errors.add(:name, 'tis not valid')
+    @b.input(:name, :error=>nil).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" type="text" value="b"/></label>'
+  end
+  
   it "should correctly show an error message if there is one" do
     @ab.errors.add(:name, 'tis not valid')
     @b.input(:name).to_s.must_equal '<label>Name: <input aria-describedby="album_name_error_message" aria-invalid="true" class="error" id="album_name" maxlength="255" name="album[name]" type="text" value="b"/></label><span class="error_message" id="album_name_error_message">tis not valid</span>'

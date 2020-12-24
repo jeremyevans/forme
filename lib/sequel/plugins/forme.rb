@@ -192,6 +192,7 @@ module Sequel # :nodoc:
 
         # Set the error option correctly if the field contains errors
         def handle_errors(f)
+          return if opts.has_key?(:error)
           if e = obj.errors.on(f)
             opts[:error] = e.join(', ')
           end
