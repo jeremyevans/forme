@@ -222,4 +222,11 @@ describe "Sequel forme_set plugin" do
     @ab.forme_validations[:name] = [:bar, []]
     proc{@ab.valid?}.must_raise Sequel::Plugins::Forme::Error
   end
+
+  it "should handle frozen instances as form inputs" do
+    @ab.freeze
+    @ab.forme_inputs.must_equal({})
+    @ab.forme_validations.must_equal({})
+    @f.input(:name).must_be_kind_of(Forme::Input)
+  end
 end

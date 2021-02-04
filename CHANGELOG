@@ -1,5 +1,7 @@
 === master
 
+* Make forme_set Sequel plugin handle frozen Sequel::Model instances (jeremyevans)
+
 * Do not override an error on a field when using the Sequel plugin if :error option is already given (jeremyevans)
 
 * Avoid error when creating label text when using Sequel input on non-Sequel form without an explicit :label option (jeremyevans)

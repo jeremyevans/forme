@@ -18,6 +18,7 @@ module Sequel # :nodoc:
       module InstanceMethods
         # Hash with column name symbol keys and Forme::SequelInput values
         def forme_inputs
+          return (@forme_inputs || {}) if frozen?
           @forme_inputs ||= {}
         end
 
@@ -25,12 +26,13 @@ module Sequel # :nodoc:
         # is a boolean flag, if true, the uploaded values should be a subset of the allowed values,
         # otherwise, there should be a single uploaded value that is a member of the allowed values.
         def forme_validations
+          return (@forme_validations || {}) if frozen?
           @forme_validations ||= {}
         end
 
         # Keep track of the inputs used.
         def forme_input(_form, field, _opts)
-          forme_inputs[field] = super
+          frozen? ? super : (forme_inputs[field] = super)
         end
 
         # Given the hash of submitted parameters, return a hash containing information on how to
