@@ -15,7 +15,7 @@ spec = Gem::Specification.new do |s|
     'bug_tracker_uri'   => 'https://github.com/jeremyevans/forme/issues',
     'changelog_uri'     => 'http://forme.jeremyevans.net/files/CHANGELOG.html',
     'documentation_uri' => 'http://forme.jeremyevans.net',
-    'mailing_list_uri'  => 'https://groups.google.com/forum/#!forum/ruby-forme',
+    'mailing_list_uri'  => 'https://github.com/jeremyevans/forme/discussions',
     'source_code_uri'   => 'https://github.com/jeremyevans/forme',
   }
   s.description = <<END

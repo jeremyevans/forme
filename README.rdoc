@@ -102,7 +102,7 @@ Demo Site :: http://forme-demo.jeremyevans.net
 RDoc :: http://forme.jeremyevans.net
 Source :: https://github.com/jeremyevans/forme
 IRC :: irc://irc.freenode.net/forme
-Google Group :: https://groups.google.com/forum/#!forum/ruby-forme
+Discussion Forum :: https://github.com/jeremyevans/forme/discussions
 Bug Tracker :: https://github.com/jeremyevans/forme/issues
 
 = Basic Usage
