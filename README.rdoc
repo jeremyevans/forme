@@ -101,7 +101,6 @@ by creating your own transformer and then calling the existing transformer.
 Demo Site :: http://forme-demo.jeremyevans.net
 RDoc :: http://forme.jeremyevans.net
 Source :: https://github.com/jeremyevans/forme
-IRC :: irc://irc.freenode.net/forme
 Discussion Forum :: https://github.com/jeremyevans/forme/discussions
 Bug Tracker :: https://github.com/jeremyevans/forme/issues
 
