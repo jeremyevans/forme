@@ -3,32 +3,36 @@ require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_helper.rb')
 
 require 'rubygems'
 begin
-require 'action_controller/railtie'
+  require 'action_controller/railtie'
+
+  begin
+    require 'active_pack/gem_version'
+  rescue LoadError
+  end
+  require 'forme/rails'
+
+  class FormeRails < Rails::Application
+    routes.append do
+      %w'index inputs_block inputs_block_wrapper nest nest_sep nest_inputs nest_seq hash legend combined noblock noblock_post safe_buffer'.each do |action|
+        get action, :controller=>'forme', :action=>action
+      end
+    end
+    config.active_support.deprecation = :stderr
+    config.middleware.delete(ActionDispatch::HostAuthorization) if defined?(ActionDispatch::HostAuthorization)
+    config.middleware.delete(ActionDispatch::ShowExceptions)
+    config.middleware.delete(Rack::Lock)
+    config.secret_key_base = 'foo'*15
+    config.secret_token = 'secret token'*15 if Rails.respond_to?(:version) && Rails.version < '5.2' 
+    config.eager_load = true
+    begin
+      initialize!
+    rescue NoMethodError
+      raise LoadError
+    end
+  end
 rescue LoadError
   warn "unable to load rails, skipping rails spec"
 else
-begin
-  require 'active_pack/gem_version'
-rescue LoadError
-end
-require 'forme/rails'
-
-class FormeRails < Rails::Application
-  routes.append do
-    %w'index inputs_block inputs_block_wrapper nest nest_sep nest_inputs nest_seq hash legend combined noblock noblock_post safe_buffer'.each do |action|
-      get action, :controller=>'forme', :action=>action
-    end
-  end
-  config.active_support.deprecation = :stderr
-  config.middleware.delete(ActionDispatch::HostAuthorization) if defined?(ActionDispatch::HostAuthorization)
-  config.middleware.delete(ActionDispatch::ShowExceptions)
-  config.middleware.delete(Rack::Lock)
-  config.secret_key_base = 'foo'*15
-  config.secret_token = 'secret token'*15 if Rails.respond_to?(:version) && Rails.version < '5.2' 
-  config.eager_load = true
-  initialize!
-end
-
 class FormeController < ActionController::Base
   helper Forme::Rails::ERB
 
