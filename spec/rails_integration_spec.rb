@@ -31,7 +31,7 @@ begin
     end
   end
 rescue LoadError
-  warn "unable to load rails, skipping rails spec"
+  warn "unable to load or setup rails, skipping rails spec"
 else
 class FormeController < ActionController::Base
   helper Forme::Rails::ERB
