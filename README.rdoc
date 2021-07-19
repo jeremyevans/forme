@@ -939,6 +939,7 @@ These options are supported by all of the input types:
 :disabled :: Set the disabled attribute if true
 :error :: Set an error message, invoking the error_handler
 :error_handler :: Set a custom error_handler, overriding the form's default
+:help :: Set help text to use, invoking the helper
 :helper :: Set a custom helper, overriding the form's default
 :id :: The id attribute to use
 :key :: The base to use for the name and id attributes, based on the current
