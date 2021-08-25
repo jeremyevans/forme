@@ -11,6 +11,18 @@ begin
   end
   require 'forme/rails'
 
+  if Rails.respond_to?(:version) && Rails.version.start_with?('4')
+    # Work around issue in backported openssl environments where
+    # secret is 64 bytes intead of 32 bytes
+    require 'active_support/message_encryptor'
+    ActiveSupport::MessageEncryptor.send :prepend, Module.new {
+      def initialize(secret, *signature_key_or_options)
+        secret = secret[0, 32]
+        super
+      end
+    }
+  end
+
   class FormeRails < Rails::Application
     routes.append do
       %w'index inputs_block inputs_block_wrapper nest nest_sep nest_inputs nest_seq hash legend combined noblock noblock_post safe_buffer'.each do |action|
