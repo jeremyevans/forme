@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2019-12-11 09:17:06 -0800</span>
+<span class='datetime'>2021-07-19 07:39:57 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -103,10 +103,8 @@ Last Update:
 <p><a target="_top" href="http://forme.jeremyevans.net">forme.jeremyevans.net</a></p>
 </td></tr><tr><td class='label'>Source </td><td>
 <p><a href="https://github.com/jeremyevans/forme">github.com/jeremyevans/forme</a></p>
-</td></tr><tr><td class='label'>IRC </td><td>
-<p><a href="irc://irc.freenode.net/forme">irc.freenode.net/forme</a></p>
-</td></tr><tr><td class='label'>Google Group </td><td>
-<p><a href="https://groups.google.com/forum/#!forum/ruby-forme">groups.google.com/forum/#!forum/ruby-forme</a></p>
+</td></tr><tr><td class='label'>Discussion Forum </td><td>
+<p><a href="https://github.com/jeremyevans/forme/discussions">github.com/jeremyevans/forme/discussions</a></p>
 </td></tr><tr><td class='label'>Bug Tracker </td><td>
 <p><a href="https://github.com/jeremyevans/forme/issues">github.com/jeremyevans/forme/issues</a></p>
 </td></tr></tbody></table>
@@ -577,6 +575,8 @@ Last Update:
 <p>Set an error message, invoking the error_handler</p>
 </td></tr><tr><td class='label'>:error_handler </td><td>
 <p>Set a custom error_handler, overriding the form&#39;s default</p>
+</td></tr><tr><td class='label'>:help </td><td>
+<p>Set help text to use, invoking the helper</p>
 </td></tr><tr><td class='label'>:helper </td><td>
 <p>Set a custom helper, overriding the form&#39;s default</p>
 </td></tr><tr><td class='label'>:id </td><td>
@@ -631,11 +631,9 @@ Last Update:
 </td></tr><tr><td class='label'>:order </td><td>
 <p>The order of select boxes when using :as=&gt;:select.  Entries should be a symbol for the select field and string to use a string (:date default: <code>[:year, &#39;-&#39;, :month, &#39;-&#39;, :day]</code>) (:datetime default: <code>[:year, &#39;-&#39;, :month, &#39;-&#39;, :day, &#39; &#39;, :hour, &#39;:&#39;, :minute, &#39;:&#39;, :second]</code>)</p>
 </td></tr><tr><td class='label'>:select_labels </td><td>
-<p>The labels to use for the select boxes.  Should be a hash keyed by the</p>
-
-<pre>symbol used in order.  By default, no labels are used.</pre>
+<p>The labels to use for the select boxes.  Should be a hash keyed by the symbol used (e.g. <code>{:month=&gt;&#39;Month&#39;}</code>).  By default, no labels are used.</p>
 </td></tr><tr><td class='label'>:select_options </td><td>
-<p>The options to use for the select boxes.  Should be a hash keyed by the symbol used in order (e.g. <code>{:year=&gt;1970..2020}</code>)</p>
+<p>The options to use for the select boxes.  Should be a hash keyed by the symbol used in order (e.g. <code>{:year=&gt;1970..2020}</code>).  The values can be a number used as both the value and the text of the option or an array with two elements, the first of which is the value for the option and the second of which is the text for the option.</p>
 </td></tr></tbody></table>
 
 <h3 id="label-3Aselect">:select<span><a href="#label-3Aselect">&para;</a> <a href="#top">&uarr;</a></span></h3>
@@ -652,7 +650,7 @@ Last Update:
 </td></tr><tr><td class='label'>:optgroups </td><td>
 <p>An enumerable of pairs with the first element being option group labels or a hash of option group attributes, and values being enumerables of options (as described by :options below).  Creates optgroup tags around the appropriate options. This overrides any options specified via :options.</p>
 </td></tr><tr><td class='label'>:options </td><td>
-<p>An enumerable of options used for creating option tags. If the :text_method and :value_method are not given and the entry is an  array, uses the first entry of the array as the text of the option, and the second entry of the array as the value of the option.</p>
+<p>An enumerable of options used for creating option tags. If the :text_method and :value_method are not given and the entry is an  array, uses the first entry of the array as the text of the option, and the last entry of the array as the value of the option. If the last entry of the array is a hash, uses the hash as the attributes for the option.</p>
 </td></tr><tr><td class='label'>:selected </td><td>
 <p>The value that should be selected.  Any options that are equal to this value (or included in this value if a multiple select box), are set to selected.</p>
 </td></tr><tr><td class='label'>:size </td><td>
