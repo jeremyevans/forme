@@ -1,7 +1,7 @@
 # frozen-string-literal: true
 
 require 'rack/utils'
-require 'forme/erb_form'
+require_relative '../../forme/erb_form'
 
 class Roda
   module RodaPlugins

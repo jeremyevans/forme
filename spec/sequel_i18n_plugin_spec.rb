@@ -1,8 +1,8 @@
-require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
+require_relative 'spec_helper'
 
 begin
   raise LoadError if defined?(JRUBY_VERSION) && /\A9\.2\./.match(JRUBY_VERSION)
-  require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_i18n_helper.rb')
+  require_relative 'sequel_i18n_helper'
 rescue LoadError
   warn "unable to load i18n, skipping i18n Sequel plugin spec"
 else

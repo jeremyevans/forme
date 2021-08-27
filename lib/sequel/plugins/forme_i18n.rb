@@ -1,5 +1,7 @@
+# frozen-string-literal: true
+
 require 'i18n'
-require 'sequel/plugins/forme'
+require_relative 'forme'
 
 module Sequel # :nodoc:
   module Plugins # :nodoc:

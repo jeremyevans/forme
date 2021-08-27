@@ -1,7 +1,6 @@
 # frozen-string-literal: true
 
-require 'forme'
-require 'thread'
+require_relative '../../forme'
 
 module Sequel # :nodoc:
   module Plugins # :nodoc:

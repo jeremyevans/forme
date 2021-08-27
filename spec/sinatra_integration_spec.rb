@@ -1,8 +1,7 @@
-require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
-require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_helper.rb')
-require File.join(File.dirname(File.expand_path(__FILE__)), 'erb_helper.rb')
+require_relative 'spec_helper'
+require_relative 'sequel_helper'
+require_relative 'erb_helper'
 
-require 'rubygems'
 begin
 require 'sinatra/base'
 require 'rack/csrf'
@@ -19,7 +18,7 @@ rescue LoadError
     require 'erb'
   end
 end
-require 'forme/sinatra'
+require_relative '../lib/forme/sinatra'
 class FormeSinatraTest < Sinatra::Base
   helpers(Forme::Sinatra::ERB)
   disable :show_exceptions

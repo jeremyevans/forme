@@ -1,6 +1,6 @@
 # frozen-string-literal: true
 
-require 'forme'
+require_relative '../forme'
 
 class ActiveSupport::SafeBuffer
   include Forme::Raw

@@ -1,6 +1,6 @@
 # frozen-string-literal: true
 
-require 'forme/erb_form'
+require_relative 'erb_form'
 
 module Forme
   module ERB 

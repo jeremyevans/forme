@@ -1,6 +1,6 @@
 # frozen-string-literal: true
 
-require 'forme/erb'
+require_relative '../../forme/erb'
 
 class Roda
   module RodaPlugins

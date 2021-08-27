@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'sequel'
 
 db_url = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' ? 'jdbc:sqlite::memory:' : 'sqlite:/'

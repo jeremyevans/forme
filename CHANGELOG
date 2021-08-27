@@ -1,3 +1,7 @@
+=== master
+
+* Drop support for Ruby 1.8 (jeremyevans)
+
 === 1.12.0 (2021-08-25)
 
 * Make forme_set Sequel plugin handle frozen Sequel::Model instances (jeremyevans)

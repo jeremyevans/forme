@@ -162,5 +162,16 @@ module Forme
   end
 end
 
-%w'form input tag raw version'.each{|f| require File.expand_path("../forme/#{f}", __FILE__)}
-%w'error_handler formatter helper inputs_wrapper labeler serializer wrapper'.each{|f| require File.expand_path("../forme/transformers/#{f}", __FILE__)}
+require_relative 'forme/form'
+require_relative 'forme/input'
+require_relative 'forme/tag'
+require_relative 'forme/raw'
+require_relative 'forme/version'
+
+require_relative 'forme/transformers/error_handler'
+require_relative 'forme/transformers/formatter'
+require_relative 'forme/transformers/helper'
+require_relative 'forme/transformers/inputs_wrapper'
+require_relative 'forme/transformers/labeler'
+require_relative 'forme/transformers/serializer'
+require_relative 'forme/transformers/wrapper'

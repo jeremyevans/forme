@@ -1,6 +1,6 @@
 # frozen-string-literal: true
 
-require 'forme/erb'
+require_relative 'erb'
 
 module Forme
   # For backwards compatibility only.  New code should

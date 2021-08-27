@@ -1,7 +1,6 @@
-require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
-require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_helper.rb')
+require_relative 'spec_helper'
+require_relative 'sequel_helper'
 
-require 'rubygems'
 begin
   require 'action_controller/railtie'
 
@@ -9,7 +8,7 @@ begin
     require 'active_pack/gem_version'
   rescue LoadError
   end
-  require 'forme/rails'
+  require_relative '../lib/forme/rails'
 
   if Rails.respond_to?(:version) && Rails.version.start_with?('4')
     # Work around issue in backported openssl environments where

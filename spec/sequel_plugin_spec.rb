@@ -1,5 +1,5 @@
-require File.join(File.dirname(File.expand_path(__FILE__)), 'spec_helper.rb')
-require File.join(File.dirname(File.expand_path(__FILE__)), 'sequel_helper.rb')
+require_relative 'spec_helper'
+require_relative 'sequel_helper'
 
 describe "Forme Sequel::Model forms" do
   before do
