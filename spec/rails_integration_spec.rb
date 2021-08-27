@@ -14,12 +14,11 @@ begin
     # Work around issue in backported openssl environments where
     # secret is 64 bytes intead of 32 bytes
     require 'active_support/message_encryptor'
-    ActiveSupport::MessageEncryptor.send :prepend, Module.new {
-      def initialize(secret, *signature_key_or_options)
-        secret = secret[0, 32]
-        super
-      end
-    }
+    def (ActiveSupport::MessageEncryptor).new(secret, *signature_key_or_options)
+      obj = allocate
+      obj.send(:initialize, secret[0, 32], *signature_key_or_options)
+      obj
+    end
   end
 
   class FormeRails < Rails::Application
