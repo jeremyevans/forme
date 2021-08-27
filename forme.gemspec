@@ -1,4 +1,4 @@
-require File.expand_path("../lib/forme/version", __FILE__)
+require_relative 'lib/forme/version'
 spec = Gem::Specification.new do |s|
   s.name = 'forme'
   s.version = Forme.version.dup
