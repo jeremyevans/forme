@@ -80,12 +80,26 @@ module Forme
       copy_options_to_attributes(ATTRIBUTE_OPTIONS)
       copy_boolean_options_to_attributes(ATTRIBUTE_BOOLEAN_OPTIONS)
       handle_key_option
+      handle_errors_option
 
       Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
-      # Forme.attr_classes(@attr, 'error') if @opts[:error]
+
+      if @opts[:error]
+        # Forme.attr_classes(@attr, 'error')
+        @attr["aria-invalid"] = "true"
+        if @opts.fetch(:error_handler, true)
+          unless @opts[:error_id]
+            if id = @attr[:id] || @attr['id']
+              error_id = @attr['aria-describedby'] ||= "#{id}_error_message"
+              @opts[:error_id] = error_id
+            end
+          end
+        end
+      end
 
       if data = opts[:data]
         data.each do |k, v|
+          k = k.to_s.tr("_", "-") if k.is_a?(Symbol) && input.opts[:dasherize_data]
           sym = :"data-#{k}"
           @attr[sym] = v unless @attr.has_key?(sym)
         end
