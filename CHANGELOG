@@ -1,5 +1,9 @@
 === master
 
+* Make bs3 formatter automatically setup aria-invalid and aria-describedby attributes for errors (waiting-for-dev) (#96)
+
+* Make bs3 formatter handle form-level :errors key (waiting-for-dev) (#96)
+
 * Drop support for Ruby 1.8 (jeremyevans)
 
 === 1.12.0 (2021-08-25)
