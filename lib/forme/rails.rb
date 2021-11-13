@@ -97,6 +97,12 @@ module Forme
         yield self if block_given?
         emit(serialize_close(tag))
       end
+
+      private
+
+      def subform_return_nil?
+        true
+      end
     end
 
     module ERB

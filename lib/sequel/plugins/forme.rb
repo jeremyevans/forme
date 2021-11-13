@@ -94,9 +94,26 @@ module Sequel # :nodoc:
             inputs_opts = opts[:inputs_opts] || {}
             inputs(inputs_opts.merge(:inputs_wrapper=>:table, :nested_inputs_wrapper=>:tr, :wrapper=>:td, :labeler=>nil, :labels=>labels, :legend=>legend), &contents)
           else
-            contents.call
-          end
-          nil
+            subform_contents = contents.call
+            if block && subform_emit_contents_for_block?
+              emit(subform_contents)
+            else
+              subform_contents
+            end
+          end.tap{return if subform_return_nil?}
+        end
+
+        private
+
+        # These are needed to handle the various ERB, erubi capture, and Rails integrations, all
+        # of which work slightly differently in terms of which content is emitted into templates.
+
+        def subform_emit_contents_for_block?
+          defined?(super) ? super : false
+        end
+
+        def subform_return_nil?
+          defined?(super) ? super : false
         end
       end
 
@@ -486,6 +503,7 @@ module Sequel # :nodoc:
             klass = Class.new(base)
             klass.send(:include, SequelForm)
             klass.send(:include, ERBSequelForm) if defined?(::Forme::ERB::Form) && base == ::Forme::ERB::Form
+            klass.send(:include, ERBSequelForm) if defined?(::Roda::RodaPlugins::FormeErubiCapture::Form) && base == ::Roda::RodaPlugins::FormeErubiCapture::Form
             MUTEX.synchronize{FORM_CLASSES[base] = klass}
           end
           klass

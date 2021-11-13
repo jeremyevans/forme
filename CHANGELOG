@@ -1,5 +1,7 @@
 === master
 
+* Add Roda forme_erubi_capture plugin to support erubi/capture_end <%|= form do %> <%| end %> tags (jeremyevans)
+
 * Make bs3 formatter automatically setup aria-invalid and aria-describedby attributes for errors (waiting-for-dev) (#96)
 
 * Make bs3 formatter handle form-level :errors key (waiting-for-dev) (#96)

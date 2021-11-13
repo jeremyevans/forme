@@ -854,7 +854,15 @@ forme_i18n :: Handles translations for labels using i18n.
 
 = Roda Support
 
-Forme ships with three Roda plugins: forme_set (discussed above), forme, and forme_route_csrf.
+Forme ships with multiple Roda plugins
+
+* forme_set (discussed above)
+* forme
+* forme_route_csrf
+* forme_erubi_capture
+
+== forme_route_csrf and forme plugins
+
 For new code, it is recommended to use forme_route_csrf, as that uses Roda's route_csrf
 plugin, which supports more secure request-specific CSRF tokens.  In both cases, usage in ERB
 templates is the same:
@@ -885,6 +893,26 @@ Both plugins also support the following option:
 
 :output :: The object that the form output should be injected into when
            injecting output (+@_out_buf+ by default).
+
+== forme_erubi_capture plugin
+
+The forme_erubi_capture plugin builds on the forme_route_csrf plugin, but it supports
+the erubi/capture_end engine, which allows this syntax:
+
+  <%|= form(@obj, :action=>'/foo') do |f| %>
+    <%= f.input(:field) %>
+    <%|= f.tag(:fieldset) do %>
+      <%= f.input(:field_two) %>
+    <%| end %>
+  <%| end %>
+
+If you use the forme_erubi_capture plugin, you need to manually set Roda to use the
+erubi/capture_end engine, which you can do via:
+
+  require 'erubi/capture_end'
+  app.plugin :render, :engine_opts=>{'erb'=>{:engine_class=>Erubi::CaptureEndEngine}}
+
+The forme_erubi_capture requires Roda 3.50.0+.
 
 = Sinatra Support
 

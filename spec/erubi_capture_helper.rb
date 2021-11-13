@@ -1,68 +1,68 @@
 require_relative 'shared_erb_specs'
 
-ERB_BLOCK = lambda do |r|
+ERUBI_CAPTURE_BLOCK = lambda do |r|
   r.get '' do
     erb <<END
-<% form([:foo, :bar], :action=>'/baz') do |f| %>
+<%|= form([:foo, :bar], :action=>'/baz') do |f| %>
   <p>FBB</p>
   <%= f.input(:first) %>
   <%= f.input(:last) %>
   <%= f.button('Save') %>
-<% end %>
+<%| end %>
 END
   end
 
   r.get 'inputs_block' do
     erb <<END
-<% form([:foo, :bar], :action=>'/baz') do |f| %><% f.inputs(:legend=>'FBB') do %>
+<%|= form([:foo, :bar], :action=>'/baz') do |f| %><%|= f.inputs(:legend=>'FBB') do %>
     <%= f.input(:last) %>
-  <% end %><% end %>
+  <%| end %><%| end %>
 END
   end
 
   r.get 'inputs_block_wrapper' do
     erb <<END
-<% form([:foo, :bar], {:action=>'/baz'}, :inputs_wrapper=>:fieldset_ol) do |f| %><% f.inputs(:legend=>'FBB') do %>
+<%|= form([:foo, :bar], {:action=>'/baz'}, :inputs_wrapper=>:fieldset_ol) do |f| %><%|= f.inputs(:legend=>'FBB') do %>
     <%= f.input(:last) %>
-  <% end %><% end %>
+  <%| end %><%| end %>
 END
   end
 
   r.get 'nest' do
     erb <<END
-<% form([:foo, :bar], :action=>'/baz') do |f| %>
+<%|= form([:foo, :bar], :action=>'/baz') do |f| %>
   <%= f.tag(:p, {}, 'FBB') %>
-  <% f.tag(:div) do %>
+  <%|= f.tag(:div) do %>
     <%= f.input(:first) %>
     <%= f.input(:last) %>
-  <% end %>
+  <%| end %>
 
-<% end %>
+<%| end %>
 END
   end
 
   r.get 'nest_sep' do
     @nest = <<END
   n1
-  <% f.tag(:div) do %>
+  <%|= f.tag(:div) do %>
     n2
     <%= f.input(:first) %>
     <%= f.input(:last) %>
     n3
-  <% end %>
+  <%| end %>
   n4
   <%= f.inputs([:first, :last], :legend=>'Foo') %>
   n5
 END
     erb <<END
 0
-<% form([:foo, :bar], :action=>'/baz') do |f| %>
+<%|= form([:foo, :bar], :action=>'/baz') do |f| %>
   1
   <%= f.tag(:p, {}, 'FBB') %>
   2
   <%= erb(@nest, :locals=>{:f=>f}) %>
   3
-<% end %>
+<%| end %>
 4
 END
   end
@@ -72,20 +72,20 @@ END
     @album.associations[:artist] = Artist.load(:name=>'A', :id=>2)
     @nest = <<END
   n1
-  <% f.subform(:artist) do %>
+  <%|= f.subform(:artist) do %>
     n2
     <%= f.input(:name2) %>
     n3
-  <% end %>
+  <%| end %>
   n4
 END
     erb <<END
 0
-<% form(@album, :action=>'/baz') do |f| %>
+<%|= form(@album, :action=>'/baz') do |f| %>
   1
   <%= erb(@nest, :locals=>{:f=>f}) %>
   3
-<% end %>
+<%| end %>
 4
 END
   end
@@ -95,48 +95,48 @@ END
     @album.associations[:artist] = Artist.load(:name=>'A', :id=>2)
     @nest = <<END
   n1
-  <% f.subform(:artist) do %>
+  <%|= f.subform(:artist) do %>
     n2
     <%= f.input(:name2) %>
     n3
-  <% end %>
+  <%| end %>
   n4
   <%= f.subform(:artist, :inputs=>[:name3], :legend=>'Bar') %>
   n5
 END
     erb <<END
 0
-<% form(@album, :action=>'/baz') do |f| %>
+<%|= form(@album, :action=>'/baz') do |f| %>
   1
   <%= f.subform(:artist, :inputs=>[:name], :legend=>'Foo') %>
   2
   <%= erb(@nest, :locals=>{:f=>f}) %>
   3
-<% end %>
+<%| end %>
 4
 END
   end
 
   r.get 'hash' do
-    erb "<% form({:action=>'/baz'}, :obj=>[:foo]) do |f| %> <%= f.input(:first) %> <% end %>"
+    erb "<%|= form({:action=>'/baz'}, :obj=>[:foo]) do |f| %> <%= f.input(:first) %> <%| end %>"
   end
 
   r.get 'legend' do
     erb <<END
-<% form([:foo, :bar], :action=>'/baz') do |f| %>
+<%|= form([:foo, :bar], :action=>'/baz') do |f| %>
   <p>FBB</p>
   <%= f.inputs([:first, :last], :legend=>'Foo') %>
   <p>FBB2</p>
-<% end %>
+<%| end %>
 END
   end
 
   r.get 'combined' do
     erb <<END
-<% form([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') do |f| %>
+<%|= form([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') do |f| %>
   <p>FBB</p>
   <%= f.input(:last) %>
-<% end %>
+<%| end %>
 END
   end
 
