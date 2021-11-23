@@ -1,6 +1,6 @@
 # frozen-string-literal: true
 
-require_relative '../../forme'
+require_relative '../../forme/template'
 
 class Roda
   module RodaPlugins
@@ -11,84 +11,43 @@ class Roda
         app.plugin :inject_erb
       end
 
-    # Subclass used when handling +form+ inside templates
-    # using this plugin.  Based on the Rails integration, since
-    # that has similar needs.
-    class Form < ::Forme::Form
-      def self.form(obj=nil, attr={}, opts={}, &block)
-        if block
-          super
-        else
-          # If no block is provided, don't need to use all of the
-          # capturing/emitting provided by this class, so fallback
-          # to using the ::Forme::Form
-          ::Forme::Form.form(obj, attr, opts, &block)
+      class Form < ::Forme::Template::Form
+        %w'inputs tag subform'.each do |meth|
+          class_eval(<<-END, __FILE__, __LINE__+1)
+            def #{meth}(*)
+              if block_given?
+                @scope.capture_erb do
+                  super
+                  @scope.instance_variable_get(@scope.render_opts[:template_opts][:outvar])
+                end
+              else
+                super
+              end
+            end
+          END
+        end
+        
+        def emit(tag)
+          @scope.inject_erb(tag)
         end
       end
-
-      def initialize(*)
-        super
-        @scope = @opts[:scope]
-      end
-
-      def emit(tag)
-        @scope.inject_erb(tag.to_s)
-      end
-
-      def inputs(*)
-        if block_given?
-          super
-        else
-          capture{super}
-        end
-      end
-      
-      def _inputs(inputs=[], opts={}) # :nodoc:
-        if block_given?
-          super 
-        else
-          emit(super)
-        end
-      end
-
-      def tag(type, attr={}, children=[], &block)
-        if block
-          capture{tag_(type, attr, children, &block)}
-        else
-          _tag(type, attr, children).to_s
-        end
-      end
-      
-      def tag_(type, attr={}, children=[]) # :nodoc:
-        tag = _tag(type, attr, children)
-        emit(serialize_open(tag))
-        Array(tag.children).each{|c| emit(c)}
-        yield self if block_given?
-        emit(serialize_close(tag))
-      end
-
-      private
-
-      # Ignore argument for compatibility with ERBSequelForm.
-      def capture(_=nil, &block)
-        @scope.capture_erb(&block)
-      end
-
-      def subform_emit_contents_for_block?
-        true
-      end
-    end
 
       module InstanceMethods
+        def form(*)
+          if block_given?
+            capture_erb do
+              super
+              instance_variable_get(render_opts[:template_opts][:outvar])
+            end
+          else
+            super
+          end
+        end
+
         private
 
         def _forme_form_class
           Form
-        end
-
-        def _forme_form_options(options)
-          options[:scope] = self
-          options
         end
       end
     end

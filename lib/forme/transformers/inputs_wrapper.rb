@@ -15,7 +15,7 @@ module Forme
       Forme.attr_classes(attr, 'inputs')
       if legend = opts[:legend]
         form.tag(:fieldset, attr) do
-          form.emit(form.tag(:legend, opts[:legend_attr], legend))
+          form.tag(:legend, opts[:legend_attr], legend)
           yield
         end
       else
@@ -32,7 +32,7 @@ module Forme
 
     # Wrap the inputs in a <fieldset> and a <ol> tag.
     def call(form, opts)
-      super(form, opts){form.tag_(:ol){yield}}
+      super(form, opts){form.tag(:ol){yield}}
     end
   end
 
@@ -83,12 +83,12 @@ module Forme
       attr = opts[:attr] ? opts[:attr].dup : {}
       form.tag(:table, attr) do
         if legend = opts[:legend]
-          form.emit(form.tag(:caption, opts[:legend_attr], legend))
+          form.tag(:caption, opts[:legend_attr], legend)
         end
 
         if (labels = opts[:labels]) && !labels.empty?
           form.tag(:thead) do
-            form.emit(form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)}))
+            form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)})
           end
         end
 

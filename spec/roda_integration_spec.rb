@@ -185,7 +185,11 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
       
       @app.route do |r|
         r.get do
-          form(*env[:args], &env[:block]).to_s
+          if @block = env[:block]
+            render(:inline=>'<% form(*env[:args]) do |f| %><%= @block.call(f) %><% end %>')
+          else
+            form(*env[:args])
+          end
         end
         r.post do
           r.params.replace(env[:params])

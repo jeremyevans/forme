@@ -1,7 +1,7 @@
 # frozen-string-literal: true
 
 require 'rack/utils'
-require_relative '../../forme/erb_form'
+require_relative '../../forme/template'
 
 class Roda
   module RodaPlugins
@@ -36,25 +36,17 @@ class Roda
 
       # Forme::Form subclass that adds hidden fields with metadata that can be used
       # to automatically process form submissions.
-      class Form < ::Forme::ERB::Form
+      class Form < ::Forme::Form
         def initialize(obj, opts=nil)
           super
           @forme_namespaces = @opts[:namespace]
         end
 
-        # Try adding hidden fields to all forms
+        # Try adding hidden HMAC fields to all forms
         def form(*)
-          if block_given?
-            super do |f|
-              yield f
-              hmac_hidden_fields
-            end
-          else
-            t = super
-            if tags = hmac_hidden_fields
-              tags.each{|tag| t << tag}
-            end
-            t
+          super do |f|
+            yield f if block_given?
+            hmac_hidden_fields
           end
         end
 
@@ -93,11 +85,8 @@ class Roda
             data['form_version'] = @opts[:form_version] if @opts[:form_version]
 
             data = data.to_json
-            tags = []
-            tags << tag(:input, :type=>:hidden, :name=>:_forme_set_data, :value=>data)
-            tags << tag(:input, :type=>:hidden, :name=>:_forme_set_data_hmac, :value=>OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, @opts[:roda].class.opts[:forme_set_hmac_secret], data))
-            tags.each{|tag| emit(tag)}
-            tags
+            tag(:input, :type=>:hidden, :name=>:_forme_set_data, :value=>data)
+            tag(:input, :type=>:hidden, :name=>:_forme_set_data_hmac, :value=>OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, @opts[:roda].class.opts[:forme_set_hmac_secret], data))
           end
         end
       end
@@ -152,14 +141,15 @@ class Roda
         end
 
         # Use form class that adds hidden fields for metadata.
-        def _forme_form_class
+        def _forme_wrapped_form_class
           Form
         end
 
         # Include a reference to the current scope to the form.  This reference is needed
         # to correctly construct the HMAC.
-        def _forme_form_options(options)
-          options.merge!(:roda=>self)
+        def _forme_form_options(obj, attr, opts)
+          super
+          opts[:roda] = self
         end
 
         # Internals of forme_parse_hmac and forme_set_hmac.

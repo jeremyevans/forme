@@ -20,6 +20,10 @@ module Forme
     # Must respond to +call+ or be a registered symbol.
     attr_reader :serializer
 
+    # The contents of the form as a string.  This should not be mutated by
+    # external code.
+    attr_reader :to_s
+
     # Use appropriate Form subclass for object based on the current class, if the
     # object responds to +forme_form_class+.
     def self.new(obj=nil, opts={})
@@ -28,6 +32,31 @@ module Forme
       else
         super
       end
+    end
+
+    # Parse the args given to #form and return Form instance, form tag attributes,
+    # and block for form.
+    def self.form_args(obj, attr, opts, &block)
+      f = if obj.is_a?(Hash)
+        raise Error, "Can't provide 3 hash arguments to form" unless opts.empty?
+        opts = attr
+        attr = obj
+        new(opts)
+      else
+        new(obj, opts)
+      end
+
+      ins = opts[:inputs]
+      button = opts[:button]
+      if ins || button
+        block = proc do |form|
+          form.inputs(ins, opts) if ins
+          yield form if block_given?
+          form.button(button) if button
+        end
+      end
+
+      [f, attr, block]
     end
 
     # Create a +Form+ instance and yield it to the block,
@@ -47,25 +76,7 @@ module Forme
     #                                  opening attributes, third if provided is
     #                                  +Form+'s options.
     def self.form(obj=nil, attr={}, opts={}, &block)
-      f = if obj.is_a?(Hash)
-        raise Error, "Can't provide 3 hash arguments to form" unless opts.empty?
-        opts = attr
-        attr = obj
-        new(opts)
-      else
-        new(obj, opts)
-      end
-
-      ins = opts[:inputs]
-      button = opts[:button]
-      if ins || button
-        block = proc do |form|
-          form._inputs(ins, opts) if ins
-          yield form if block_given?
-          form.emit(form.button(button)) if button
-        end
-      end
-
+      f, attr, block = form_args(obj, attr, opts, &block)
       f.form(attr, &block)
     end
 
@@ -98,7 +109,7 @@ module Forme
       @serializer = @opts[:serializer]
       @input_defaults = @opts[:input_defaults] || {}
       @hidden_tags = @opts[:hidden_tags]
-      @nesting = []
+      @to_s = String.new
     end
 
     # Create a form tag with the given attributes.
@@ -107,12 +118,6 @@ module Forme
         attr = attr.merge('method'=>obj.forme_default_request_method)
       end
       tag(:form, attr, method(:hidden_form_tags), &block)
-    end
-
-    # Empty method designed to ease integration with other libraries where
-    # Forme is used in template code and some output implicitly
-    # created by Forme needs to be injected into the template output.
-    def emit(tag)
     end
 
     # Creates an +Input+ with the given +field+ and +opts+ associated with
@@ -129,33 +134,36 @@ module Forme
     # type (e.g. <tt>:text</tt>, <tt>:textarea</tt>, <tt>:select</tt>), and
     # an input is created directly with the +field+ and +opts+.
     def input(field, opts={})
-      if opts.has_key?(:obj)
-        opts = opts.dup
-        obj = opts.delete(:obj)
-      else
-        obj = self.obj
-      end
-      input = if obj
-        if obj.respond_to?(:forme_input)
-          obj.forme_input(self, field, opts.dup)
-        else
+      content_added do
+        if opts.has_key?(:obj)
           opts = opts.dup
-          opts[:key] = field unless opts.has_key?(:key)
-          type = opts.delete(:type) || :text
-          unless opts.has_key?(:value) || type == :file
-            opts[:value] = if obj.is_a?(Hash)
-              obj[field]
-            else
-              obj.send(field)
-            end
-          end
-          _input(type, opts)
+          obj = opts.delete(:obj)
+        else
+          obj = self.obj
         end
-      else
-        _input(field, opts)
+
+        input = if obj
+          if obj.respond_to?(:forme_input)
+            obj.forme_input(self, field, opts.dup)
+          else
+            opts = opts.dup
+            opts[:key] = field unless opts.has_key?(:key)
+            type = opts.delete(:type) || :text
+            unless opts.has_key?(:value) || type == :file
+              opts[:value] = if obj.is_a?(Hash)
+                obj[field]
+              else
+                obj.send(field)
+              end
+            end
+            _input(type, opts)
+          end
+        else
+          _input(field, opts)
+        end
+
+        self << input
       end
-      self << input
-      input
     end
 
     # Create a new +Input+ associated with the receiver with the given
@@ -194,7 +202,7 @@ module Forme
     #     # ...
     #   end
     def inputs(inputs=[], opts={}, &block)
-      _inputs(inputs, opts, &block)
+      content_added{_inputs(inputs, opts, &block)}
     end
     
     # Internals of #inputs, should be used internally by the library, where #inputs
@@ -216,7 +224,7 @@ module Forme
       Forme.transform(:inputs_wrapper, opts, @opts, self, opts) do
         with_opts(form_opts) do
           inputs.each do |i|
-            emit(input(*i))
+            input(*i)
           end
           yield if block_given?
         end
@@ -259,31 +267,31 @@ module Forme
     # If a block is given, make this tag the currently open tag while inside
     # the block.
     def tag(*a, &block)
-      tag = _tag(*a)
-      self << tag
-      nest(tag, &block) if block
-      tag
-    end
-
-    # Aliased for tag.  Workaround for issue with rails plugin.
-    def tag_(*a, &block) # :nodoc:
-      tag(*a, &block)
+      content_added do
+        tag = _tag(*a)
+        if block
+          self << serialize_open(tag)
+          if children = tag.children
+            children.each{|child| self << child}
+          end
+          yield self
+          self << serialize_close(tag)
+        else
+          self << tag
+        end
+      end
     end
 
     # Creates a :submit +Input+ with the given opts, adding it to the list
     # of children for the currently open tag.
     def button(opts={})
       opts = {:value=>opts} if opts.is_a?(String)
-      input = _input(:submit, opts)
-      self << input
-      input
+      content_added{self << _input(:submit, opts)}
     end
 
     # Add the +Input+/+Tag+ instance given to the currently open tag.
     def <<(tag)
-      if n = @nesting.last
-        n << tag
-      end
+      @to_s << tag.to_s
     end
 
     # Calls the block for each object in objs, using with_obj with the given namespace
@@ -299,13 +307,6 @@ module Forme
     # Return a new string that will not be html escaped by the default serializer.
     def raw(s)
       Forme.raw(s)
-    end
-
-    # Marks the string as containing already escaped output.  Returns string given
-    # by default, but subclasses for specific web frameworks can handle automatic
-    # html escaping by overriding this.
-    def raw_output(s)
-      s
     end
 
     # Temporarily override the given object and namespace for the form.  Any given
@@ -367,24 +368,20 @@ module Forme
       end
     end
 
-    # Make the given tag the currently open tag, and yield.  After the
-    # block returns, make the previously open tag the currently open
-    # tag.
-    def nest(tag)
-      @nesting << tag
-      yield self
-    ensure
-      @nesting.pop
+    def content_added
+      offset = @to_s.length
+      yield
+      @to_s[offset, @to_s.length]
     end
 
     # Return a serialized opening tag for the given tag.
     def serialize_open(tag)
-      raw_output(serializer.serialize_open(tag)) if serializer.respond_to?(:serialize_open)
+      serializer.serialize_open(tag) if serializer.respond_to?(:serialize_open)
     end
 
     # Return a serialized closing tag for the given tag.
     def serialize_close(tag)
-      raw_output(serializer.serialize_close(tag)) if serializer.respond_to?(:serialize_close)
+      serializer.serialize_close(tag) if serializer.respond_to?(:serialize_close)
     end
   end
 end

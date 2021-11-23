@@ -632,17 +632,21 @@ describe "Forme plain forms" do
   end
 
   it "#tag should accept children as procs" do
-    @f.tag(:div, {:class=>"foo"}, lambda{|t| t.form.tag(:input, :class=>t.attr[:class])}).to_s.must_equal '<div class="foo"><input class="foo"/></div>'
+    @f.tag(:div, {:class=>"foo"}, lambda{|t| t.tag(:input, :class=>t.attr[:class])}).to_s.must_equal '<div class="foo"><input class="foo"/></div>'
   end
 
   it "#tag should accept children as methods" do
     o = Object.new
-    def o.foo(t) t.form.tag(:input, :class=>t.attr[:class]) end
+    def o.foo(t) t.tag(:input, :class=>t.attr[:class]) end
     @f.tag(:div, {:class=>"foo"}, o.method(:foo)).to_s.must_equal '<div class="foo"><input class="foo"/></div>'
   end
 
   it "should have an #inputs method for multiple inputs wrapped in a fieldset" do
     @f.inputs([:textarea, :text]).to_s.must_equal '<fieldset class="inputs"><textarea></textarea><input type="text"/></fieldset>'
+  end
+
+  it "should have an #inputs method for multiple inputs wrapped in a fieldset when using an empty block" do
+    @f.inputs([:textarea, :text]){}.to_s.must_equal '<fieldset class="inputs"><textarea></textarea><input type="text"/></fieldset>'
   end
 
   it "should have default #inputs method accept an :attr option" do
@@ -828,8 +832,12 @@ describe "Forme::Form :hidden_tags option " do
     Forme.form({}, :hidden_tags=>[lambda{|tag| {:a=>'b'}}]).to_s.must_equal '<form><input name="a" type="hidden" value="b"/></form>'
   end
 
+  it "should handle proc return hash when from takes a block" do
+    Forme.form({}, :hidden_tags=>[lambda{|tag| {:a=>'b'}}]){}.to_s.must_equal '<form><input name="a" type="hidden" value="b"/></form>'
+  end
+
   it "should handle proc return tag" do
-    Forme.form({:method=>'post'}, :hidden_tags=>[lambda{|tag| tag.form._tag(tag.attr[:method])}]).to_s.must_equal '<form method="post"><post></post></form>'
+    Forme.form({:method=>'post'}, :hidden_tags=>[lambda{|tag| tag.tag(tag.attr[:method])}]).to_s.must_equal '<form method="post"><post></post></form>'
   end
 
   it "should raise error for unhandled object" do
@@ -839,7 +847,7 @@ end
 
 describe "Forme custom" do
   it "formatters can be specified as a proc" do
-    Forme::Form.new(:formatter=>proc{|i| i.form._tag(:textarea, i.opts[:name]=>:name)}).input(:text, :name=>'foo').to_s.must_equal '<textarea foo="name"></textarea>'
+    Forme::Form.new(:formatter=>proc{|i| i.tag(:textarea, i.opts[:name]=>:name)}).input(:text, :name=>'foo').to_s.must_equal '<textarea foo="name"></textarea>'
   end
 
   it "serializers can be specified as a proc" do

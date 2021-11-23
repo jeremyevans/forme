@@ -40,7 +40,7 @@ module Forme
 
     # Return a string containing the serialized content of the receiver.
     def to_s
-      form.raw_output(Forme.transform(:serializer, @opts, @form.opts, self))
+      Forme.transform(:serializer, @opts, @form.opts, self)
     end
 
     private

@@ -539,12 +539,12 @@ describe "Forme Bootstrap3 (BS3) forms" do
   end
 
   it "#tag should accept children as procs" do
-    @f.tag(:div, {:class=>"foo"}, lambda{|t| t.form.tag(:input, :class=>t.attr[:class])}).to_s.must_equal '<div class="foo"><input class="form-control foo" type="text"/></div>'
+    @f.tag(:div, {:class=>"foo"}, lambda{|t| t.tag(:input, :class=>t.attr[:class])}).to_s.must_equal '<div class="foo"><input class="form-control foo" type="text"/></div>'
   end
 
   it "#tag should accept children as methods" do
     o = Object.new
-    def o.foo(t) t.form.tag(:input, :class=>t.attr[:class]) end
+    def o.foo(t) t.tag(:input, :class=>t.attr[:class]) end
     @f.tag(:div, {:class=>"foo"}, o.method(:foo)).to_s.must_equal '<div class="foo"><input class="form-control foo" type="text"/></div>'
   end
 

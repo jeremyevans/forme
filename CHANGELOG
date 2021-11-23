@@ -1,5 +1,15 @@
 === master
 
+* Passing a callable as the child of a tag should now not call methods that will modify the related form (such as Form#tag) (jeremyevans)
+
+* Change API for _forme_form_options private method used in template integrations (jeremyevans)
+
+* Remove Form#{nesting,tag_,raw_output,emit} (jeremyevans)
+
+* Make Form#{form,tag,input,inputs} return HTML string (jeremyevans)
+
+* Refactor internals, switch template integration to use delegation instead of inheritance (jeremyevans)
+
 * Add Roda forme_erubi_capture plugin to support erubi/capture_end <%|= form do %> <%| end %> tags (jeremyevans)
 
 * Make bs3 formatter automatically setup aria-invalid and aria-describedby attributes for errors (waiting-for-dev) (#96)

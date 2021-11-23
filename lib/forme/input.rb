@@ -32,7 +32,7 @@ module Forme
 
     # Return a string containing the serialized content of the receiver.
     def to_s
-      form.raw_output(Forme.transform(:serializer, @opts, @form_opts, self))
+      Forme.transform(:serializer, @opts, @form_opts, self)
     end
 
     # Transform the receiver into a lower level +Tag+ form (or an array

@@ -224,7 +224,7 @@ module Forme
       Forme.attr_classes(attr, 'inputs')
       if legend = opts[:legend]
         form.tag(:fieldset, attr) do
-          form.emit(form.tag(:legend, opts[:legend_attr], legend))
+          form.tag(:legend, opts[:legend_attr], legend)
           yield
         end
       else
@@ -244,11 +244,11 @@ module Forme
       attr = opts[:attr] ? opts[:attr].dup : { :class=>'table table-bordered'}
       form.tag(:table, attr) do
         if legend = opts[:legend]
-          form.emit(form.tag(:caption, opts[:legend_attr], legend))
+          form.tag(:caption, opts[:legend_attr], legend)
         end
 
         if (labels = opts[:labels]) && !labels.empty?
-          form.emit(form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)}))
+          form.tag(:tr, {}, labels.map{|l| form._tag(:th, {}, l)})
         end
 
         yield

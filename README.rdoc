@@ -6,91 +6,75 @@ Forme is a HTML forms library for ruby with the following goals:
 2. Have a simple API
 3. Support forms both with and without related objects
 4. Allow compiling down to different types of output
+5. Integrate easily into web frameworks
 
 = Introduction
 
 Forme is designed to make creating HTML forms easier.  Flexibility and
-simplicity are primary objectives.  The basic usage involves creating
-a <tt>Forme::Form</tt> instance, and calling +input+ and +tag+ methods
-to return html strings for widgets, but it could also be used for
-serializing to other formats, or even as a DSL for a GUI application.
+ease of use are the primary objectives.  Here's a basic example,
+showing usage without a related object:
 
-In order to be flexible, Forme stores tags in abstract form until
-output is requested.  There are two separate abstract <i>forms</i> that Forme
-uses.  One is <tt>Forme::Input</tt>, and the other is <tt>Forme::Tag</tt>.
-<tt>Forme::Input</tt> is a high level abstract form, while <tt>Forme::Tag</tt>
-is a low level abstract form.
-
-The difference between <tt>Forme::Input</tt> and <tt>Forme::Tag</tt> 
-is that <tt>Forme::Tag</tt> directly represents the underlying html
-tag, containing a type, optional attributes, and children, while the
-<tt>Forme::Input</tt> is more abstract and attempts to be user friendly.
-For example, these both compile by default to the same select tag:
-
-  f.input(:select, :options=>[['foo', 1]])
-  # or
-  f.tag(:select, {}, [f.tag(:option, {:value=>1}, ['foo'])])
-
-The processing of high level <tt>Forme::Input</tt>s into raw html
-data is broken down to the following steps (called transformers):
-
-+Formatter+ :: converts a <tt>Forme::Input</tt> instance into a
-               <tt>Forme::Tag</tt> instance (or array of them).
-+ErrorHandler+ :: If the <tt>Forme::Input</tt> instance has a error,
-                  takes the formatted tag and marks it as having the error.
-+Helper+ :: If the <tt>Forme::Input</tt> instance has any help text,
-            adds the help text in a separate tag.
-+Labeler+ :: If the <tt>Forme::Input</tt> instance has a label,
-             takes the formatted output and labels it.
-+Wrapper+ :: Takes the output of the formatter, labeler, and
-             error_handler transformers, and wraps it in another tag (or just
-             returns it unmodified).
-+Serializer+ :: converts a <tt>Forme::Tag</tt> instance into an
-                html string.
-
-Technically, only the +Serializer+ is necessary.  The <tt>Forme::Form#input</tt>
-and <tt>Forme::Form#tag</tt> methods return +Input+ and +Tag+ objects.  These objects
-both have +to_s+ defined to call the appropriate +Serializer+ with
-themselves.  The +Serializer+ calls the appropriate +Formatter+ if
-it encounters an +Input+ instance, and attempts to serialize the
-output of that (which is usually a +Tag+ instance).  It is up to
-the +Formatter+ to call the +Labeler+, +ErrorHandler+, +Helper+, 
-and/or +Wrapper+.
-
-The <tt>Forme::Form</tt> object takes the 6 transformers as options (:formatter,
-:labeler, :error_handler, :helper, :wrapper, :inputs_wrapper, and :serializer), all of which
-should be objects responding to +call+ (so you can use +Proc+s) or be symbols
-registered with the library using <tt>Forme.register_transformer</tt>:
-
-  Forme.register_transformer(:wrapper, :p) do |tag, input|
-    input.tag(:p, {}, tag)
+  Forme.form({:action=>'/foo'}) do |f|
+    f.input(:text, :name=>'bar')
+    f.tag(:fieldset) do
+      f.input(:textarea, :name=>'baz')
+    end
+   f.button('Update')
   end
 
-Most transformers are called with two arguments, +tag+ and +input+.  +tag+
-is a <tt>Forme::Tag</tt> instance, and +input+ is a <tt>Forme::Input</tt>
-instance.  The +Formatter+ and +Serializer+ transformers are the two
-exceptions, with +Formatter+ being called with just an +input+, and
-+Serializer+ potentionally being called with any object.  The +Serializer+
-will in general recursively call itself with children of the argument
-given.
+This results in the following HTML:
 
-There is also an +InputsWrapper+ transformer, that is called by
-<tt>Forme::Form#inputs</tt>.  It's used to wrap up a group of
-related options (in a fieldset by default).  It takes +form+
-(<tt>Forme::Form</tt> instance) and +input_opts+ (+Hash+) arguments.
+  <form action="/foo">
+    <input name="bar" type="text"/>
+    <fieldset>
+      <textarea name="baz"></textarea>
+    </fieldset>
+    <input type="submit" value="Update"/>
+  </form>
 
-Most of the transformers can be overridden on a per instance basis by
-passing the appropriate option to +input+ or +inputs+:
+Forme also supports forms that are associated with objects, and
+has specific support for Sequel::Model objects to allow easily building
+forms for such objects.  The Sequel support handles inputs based on
+database columns, and automatically handles labels and errors:
 
-  f.input(:name, :wrapper=>:p)
-
-Existing transformers can be easily extended (ie, to set the class attribute),
-by creating your own transformer and then calling the existing transformer.
-
-  Forme.register_transformer(:labeler, :explicit) do |tag, input|
-    input.opts[:label_attr] ||= { :class => 'label' }
-    Forme::Labeler::Explicit.new.call(tag, input)
+  Forme.form(Album[1], action: '/foo') do |f|
+    f.input :name
+    f.input :copies_sold
   end
+
+This results in the following HTML:
+
+  <form action="/foo" method="post">
+    <label>Name:
+      <input id="album_name" name="album[name]" type="text" value="Rising Force"/>
+    </label>
+    <label>Copies Sold:
+      <input id="album_copies_sold" name="album[copies_sold]" type="number" value="100000"/>
+    </label>
+  </form>
+
+In addition to integrating with Sequel, Form also integrates into
+three separate web frameworks, Roda, Rails, and Sinatra, allowing
+use of forms inside templates.  This is the most common usage of Forme.
+
+One distinct advantage of Forme over other form libraries is the use
+of an abstract syntax tree internally, allowing the same form code to
+compile to different HTML with different options.  For example, it
+allows using the exactly same form code to display a form you can modify
+as well as a read-only view, just by passing a single option when
+creating the form.  For example, with the first example in this section,
+if you pass the <tt>formatter: :readonly</tt> option, you get the
+following HTML instead:
+
+  <form action="/foo">
+    <span class="readonly-text"></span>
+    <fieldset>
+      <div class="readonly-textarea"></div>
+    </fieldset>
+  </form>
+
+This allows you to reuse the same form code in multiple context,
+which can save considerable development time.
 
 = Installation
 
@@ -104,9 +88,9 @@ Source :: https://github.com/jeremyevans/forme
 Discussion Forum :: https://github.com/jeremyevans/forme/discussions
 Bug Tracker :: https://github.com/jeremyevans/forme/issues
 
-= Basic Usage
+= Direct Instantiation
 
-Without an object, Forme is a simple form builder:
+While not typically done, you can instantiate Forme::Form objects directly and use them:
 
   f = Forme::Form.new
   f.open(:action=>'/foo', :method=>:post) # '<form action="/foo" method="post">'
@@ -129,47 +113,11 @@ on the object (or using #[] if the object is a hash).
   f = Forme::Form.new([:foo])
   f.input(:first) # '<input id="first" name="first" type="text" value="foo"/>'
 
-= DSL
-
-Forme comes with a DSL:
-
-  Forme.form(:action=>'/foo') do |f|
-    f.input(:text, :name=>'bar')
-    f.tag(:fieldset) do
-      f.input(:textarea, :name=>'baz')
-    end
-   f.button('Update')
-  end
-  # <form action="/foo">
-  #   <input name="bar" type="text"/>
-  #   <fieldset>
-  #     <textarea name="baz"></textarea>
-  #   </fieldset>
-  #   <input type="submit" value="Update"/>
-  # </form>
-
-You can wrap up multiple inputs with the <tt>:inputs</tt> method:
-
-  Forme.form(:action=>'/foo') do |f|
-    f.inputs([[:text, {:name=>'bar'}], [:textarea, {:name=>'baz'}]])
-  end
-  # <form action="/foo">
-  #   <fieldset class="inputs">
-  #     <input name="bar" type="text"/>
-  #     <textarea name="baz"></textarea>
-  #   </fieldset>
-  # </form>
-
-You can even do everything in a single method call:
-
-  Forme.form({:action=>'/foo'},
-    :inputs=>[[:text, {:name=>'bar'}], [:textarea, {:name=>'baz'}]])
-
 = Forme::Form Creation
 
-As shown above, the general way to create Forme::Form instances is via the Forme.form method.
-This method takes up to 3 arguments, and yields the Forme::Form object to the block (if given).
-Here are the argument styles that you can use for Forme.form.
++Forme.form+ takes up to 3 arguments, and yields the Forme::Form
+object to the block (if given).  Here are the argument styles that you can
+use for +Forme.form+.
 
 No args :: Creates a +Form+ object with no options and not associated
            to an +obj+, and with no attributes in the opening tag.
@@ -189,21 +137,21 @@ Examples:
   Forme.form 
 
   # 1 hash argument (attributes)
-  Forme.form(:action=>'/foo')
+  Forme.form(action: '/foo')
 
   # 1 non-hash argument (a reference object used when building the form)
   Forme.form(Album[1])
 
   # 2 hash arguments (attributes, and options)
-  Forme.form({:action=>'/foo'}, :values=>params)
+  Forme.form({action: '/foo'}, values: params)
 
   # 1 non-hash argument, 1-2 hash arguments (ref obj, attributes, options)
-  Forme.form(Album[1], :action=>'/foo')
-  Forme.form(Album[1], {:action=>'/foo'}, :values=>params)
+  Forme.form(Album[1], action: '/foo')
+  Forme.form(Album[1], {action: '/foo'}, values: params)
 
 If you want a Forme::Form instance where the reference object is a Hash, then you need to pass the hash object using the :obj option:
 
-  Forme.form({:action=>'/foo'}, :obj=>{:foo=>'bar'})
+  Forme.form({action: '/foo'}, obj: {foo: 'bar'})
 
 You can also create Forme::Form objects the normal ruby way using Forme::Form#new.  The
 difference between Forme::Form#new and Forme.form is that Forme.form includes the enclosing
@@ -214,13 +162,13 @@ a hash of <form> tag attributes, so it has the following API:
   Forme::Form.new
 
   # 1 hash argument 
-  Forme::Form.new(:values=>params)
+  Forme::Form.new(values: params)
 
   # 1 non-hash argument 
   Forme::Form.new(Album[1])
 
   # 1 non-hash argument, 1-2 hash arguments
-  Forme::Form.new(Album[1], :values=>params)
+  Forme::Form.new(Album[1], values: params)
 
 = Forme::Form Methods
 
@@ -229,9 +177,9 @@ a hash of <form> tag attributes, so it has the following API:
 If you create a Form via Forme::Forme#new, you can use the form method to create a form tag:
 
   f = Forme::Form.new
-  f.form(:action=>'/foo')
+  f.form(action: '/foo')
 
-This is what Forme.form uses internally to create the <form> tag
+This is what Forme.form uses internally to create the +<form>+ tag
 
 == input
 
@@ -284,8 +232,8 @@ Which results in a form similar to the following:
 
 == inputs
 
-This wraps multiple inputs in a tag (it uses the inputs_wrapper transformer discussed below,
-so it uses a fieldset by default). You can give the inputs to add as an enumerable argument:
+This wraps multiple inputs in a tag (it uses the +:inputs_wrapper+ transformer discussed below,
+so it uses a +fieldset+ by default). You can give the inputs to add as an enumerable argument:
 
   f.inputs([:textarea, [:text, :value=>'a']])
   # <fieldset>
@@ -299,13 +247,13 @@ You can also provide a block:
     f.input(:text, :value=>'a')
   end
 
-Any options given are passed to the inputs_wrapper (so you can use options such as :legend
-to set a legend for the fieldset), and also to the the with_opts (so you can use options
-such as :wrapper to modify the default wrapper transformer for inputs inside the block).
+Any options given are passed to the +inputs_wrapper+ (so you can use options such as +:legend+
+to set a legend for the fieldset), and also to the +with_opts+ method (so you can use options
+such as +:wrapper+ to modify the default wrapper transformer for inputs inside the block).
 There is also one option specific to the inputs method:
 
 :nested_inputs_wrapper :: Sets the default inputs_wrapper to use for calls to inputs inside
-                          the block.  The reason for this option is that :inputs_wrapper
+                          the block.  The reason for this option is that +:inputs_wrapper+
                           option affects the current call to inputs, so if you want to
                           use a different inputs_wrapper for nested calls, you need this option.
 
@@ -323,30 +271,31 @@ It can be called with a string to provide a value for the button:
 
 It can be called with a hash to provide options for the submit input:
 
-  f.button(:value=>'Search', :class=>'btn')
+  f.button(value: 'Search', class: 'btn')
   # <input class="btn" type="submit" value="Search"/>
 
 == with_opts
 
-This requires a block, and modifies the Form's options inside the block,
+This requires a block, and modifies the Forme::Form's options inside the block,
 restoring the options when the block returns:
 
   f.input(:text)
   # <input type="text"/>
-  f.with_opts(:wrapper=>:li) do
+
+  f.with_opts(wrapper: :li) do
     f.input(:text)
   end
   # <li><input type="text"/></li>
 
-This supports most options you can provide to the Form, but not all.
+This supports most options you can provide to Forme::Form, but not all.
 
 == with_obj
 
-This uses with_opts to change the Form's object temporarily, but it
+This uses +with_opts+ to change the Forme::Form object temporarily. It
 yields the object to the block, and also supports appending to the
 existing namespaces:
 
-  Forme.form([:foo], :namespace=>'a') do |f|
+  Forme.form([:foo], {action: '/path'}, namespace: 'a') do |f|
     f.input(:first)
     # <input id="a_first" name="a[first]" type="text" value="foo"/>
     f.with_obj(['foobar'], 'b') do |o|
@@ -357,11 +306,11 @@ existing namespaces:
 
 == each_obj
 
-This allows you to provide an object-yielding enumerable. Forme will call with_obj with
-each object in the enumerable.  It yields each object as well as the index of the
-object in the enumerable, and includes the index in the namespace:
+This allows you to provide an object-yielding enumerable. +each_object+ will call
++with_obj+ with each object in the enumerable.  It yields each object as well as the
+index of the object in the enumerable, and includes the index in the namespace:
 
-  objectlist = ['foobar', ['good']]
+  objectlist = [['foobar'], ['good']]
   Forme.form([:foo], :namespace=>'a') do |f|
     f.each_obj(objectlist, 'b') do |o, i|
       f.input(:first, :size=>10+i)
@@ -376,7 +325,7 @@ Forme ships with a Sequel plugin (use <tt>Sequel::Model.plugin :forme</tt> to en
 Sequel::Model instances support the +forme_config+ and +forme_input+ methods and return customized inputs.
 An additional instance method, +forme_namespace+ can optionally be defined to customize how model classnames
 are transformed into form classes and input IDs and names. This can be useful if your Sequel::Model classes
-are nested under a parent namespace. It falls back to the behaviour of Sequel::Model#underscore.
+are nested under a parent namespace. The default namespace uses Sequel::Model#underscore.
 
   module Admin
     class Albums < Sequel::Model
@@ -386,27 +335,11 @@ are nested under a parent namespace. It falls back to the behaviour of Sequel::M
     end
   end
 
-== Basics
-
-The Sequel support handles inputs based on database columns, and automatically handles labels and errors.
-
-  Forme.form(Album[1], :action=>'/foo') do |f|
-    f.input :name
-    f.input :copies_sold
-  end
-
-This will create a form similar to:
-
-  <form action="/foo" method="post">
-    <label>Name: <input id="album_name" name="album[name]" type="text" value="Rising Force"/></label>
-    <label>Copies Sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="100000"/></label>
-  </form>
-
-The Forme Sequel plugin also integerates with Sequel's validation reflection support with the
-+validation_class_methods+ plugin that ships with Sequel.  It will add +pattern+ and +maxlength+ attributes
+The Sequel :forme plugin also integerates with Sequel's validation reflection support that comes with the
+Sequel validation_class_methods plugin.  It will add +pattern+ and +maxlength+ attributes
 based on the format, numericality, and length validations.
 
-== specialized input options
+== Specialized input options for specific column types
 
 In addition to the default Forme options, the Sequel support includes, for specific column types, 
 these additional options to the #input method:
@@ -568,7 +501,7 @@ One way to handle the form submission is to use Sequel::Model#set_fields.
 Note that you have to specify the parameter names again as the second argument to
 set_fields.
 
-Handling Submitted parameters becomes more complex as your forms become more complex.
+Handling submitted parameters becomes more complex as your forms become more complex.
 For example, if you are only displaying certain form fields in certain situations:
 
   album = Album[1]
@@ -588,9 +521,9 @@ As you can see, you basically need to recreate the conditionals used when creati
 the form, so that that the processing of the form submission handles only the
 inputs that were displayed on the form.
 
-=== forme_set Sequel plugin
+=== Sequel forme_set plugin
 
-The forme_set plugin is designed to make handling form submissions easier.  What it does
+The Sequel forme_set plugin is designed to make handling form submissions easier.  What it does
 is record the form fields that are used on the object, and then it uses those fields
 to handle input submitted for the object.  For example:
 
@@ -669,12 +602,12 @@ this is specific to the web framework you are using, but is it similar to:
 
 forme_set is not perfect, there are ways to use Forme that forme_set will not handle
 correctly.  First, forme_set only works with forms that use model objects, and doesn't
-handle inputs where the :obj option is provided to change the input.
+handle inputs where the +:obj+ option is provided to change the input.
 Additionally, forme_set does not currently handle subform/nested_attributes.
 
-In cases where forme_set does not handle things correctly, you can use forme_parse,
-which will return metadata that forme_set uses (forme_set calls forme_parse
-internally).  forme_parse returns a hash with the following keys:
+In cases where forme_set does not handle things correctly, you can use +forme_parse+,
+which will return metadata that +forme_set+ uses (+forme_set+ calls +forme_parse+
+internally).  +forme_parse+ returns a hash with the following keys:
 
 :values :: A hash of values that can be used to update the model, suitable for passing
            to Sequel::Model#set.
@@ -682,21 +615,21 @@ internally).  forme_parse returns a hash with the following keys:
                 check that the submitted values for associated objects match one of the
                 options for the input in the form.
 
-It is possible to use forme_set for the values it can handle, and set other fields manually
-using set_fields.
+It is possible to use +forme_set+ for the values it can handle, and set other fields manually
+using +set_fields+.
 
-=== forme_set Roda plugin
+=== Roda forme_set plugin
 
-The forme_set Roda plugin builds on the forme_set Sequel plugin and is designed to make
-handling form submissions even easier. This plugin uses a hidden form input to store which
-fields were used to build the form, as well as some other metadata.  It uses another hidden
+The Roda forme_set plugin builds on the Sequel forme_set plugin and is designed to make
+handling form submissions even easier. This plugin adds a hidden form input to store which
+fields were used to build the form, as well as some other metadata.  It adds another hidden
 form input with an HMAC, so that on submission, if the HMAC matches, you can be sure that an
 attacker didn't add extra fields.
 
 There are a couple advantages to this plugin over using just the Sequel forme_set plugin.
 One is that you do not need to record the form fields when processing the submission of a
 form, since the information you need is included in the form submission. Another is that
-calling the forme_set method is simpler, since it can determine the necessary parameters.
+calling the +forme_set+ method is simpler, since it can determine the necessary parameters.
 
 While you need code like this when using just the Sequel forme_set plugin:
 
@@ -823,20 +756,20 @@ plugin to handle form submissions involving multiple objects, or for the
 objects that were not passed when creating the form.
 
 Second, the Roda forme_set plugin does not handle cases where the field values
-are placed outside the forms default namespace.  The Sequel forme_set plugin
+are placed outside the form's default namespace.  The Sequel forme_set plugin
 can handle those issues, as long as all values are in the same namespace, since
 the Sequel forme_set plugin requires you pass in the specific hash to use (the
-Roda forme_set plugin use the form's namespace information and the submitted
+Roda forme_set plugin uses the form's namespace information and the submitted
 parameters to determine the hash to use).
 
 In cases where the Roda forme_set does not handle things correctly, you can use
 forme_parse, which will return metadata in the same format as the Sequel plugin
-forme_parse method, with the addition of a :form_version key in the hash for the
+forme_parse method, with the addition of a +:form_version+ key in the hash for the
 form version.
 
 It is possible to use the Roda forme_set plugin for the submissions it can handle, the
 Sequel forme_set plugin for the submissions it can handle, and set other fields manually
-using the Sequel set_fields methods.
+using the Sequel +set_fields+ methods.
 
 Note that when using the Roda forme_set plugin with an existing form, you should first
 enable the Roda plugin without actually using the Roda forme_set method.  Do not
@@ -889,11 +822,6 @@ The forme plugin does not require any csrf plugin, but will transparently use
 Rack::Csrf if it is available. If Rack::Csrf is available a CSRF tag if the form's
 method is +POST+, with no configuration ability.
 
-Both plugins also support the following option:
-
-:output :: The object that the form output should be injected into when
-           injecting output (+@_out_buf+ by default).
-
 == forme_erubi_capture plugin
 
 The forme_erubi_capture plugin builds on the forme_route_csrf plugin, but it supports
@@ -912,12 +840,12 @@ erubi/capture_end engine, which you can do via:
   require 'erubi/capture_end'
   app.plugin :render, :engine_opts=>{'erb'=>{:engine_class=>Erubi::CaptureEndEngine}}
 
-The forme_erubi_capture requires Roda 3.50.0+.
+The forme_erubi_capture plugin requires Roda 3.50.0+.
 
 = Sinatra Support
 
-Forme ships with a ERB extension that you can get by <tt>require "forme/erb"</tt> and using
-<tt>including Forme::ERB::Helper</tt>.  This is tested to support ERB templates in Sinatra.
+Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
+<tt>including Forme::Sinatra::ERB</tt>.  This is tested to support ERB templates in Sinatra.
 It allows you to use the following API in your erb templates:
 
   <% form(@obj, :action=>'/foo') do |f| %>
@@ -927,8 +855,8 @@ It allows you to use the following API in your erb templates:
     <% end %>
   <% end %>
 
-In order to this to work transparently, the ERB outvar needs to be <tt>@_out_buf</tt>.  If that
-is not the case, use the :output option to +form+ to specify the outvar.
+In order to this to work transparently, the ERB outvar needs to be <tt>@_out_buf</tt> (this is the
+default in Sinatra).
 
 = Rails Support
 
@@ -943,7 +871,7 @@ in your Rails forms:
     <% end %>
   <% end %>
 
-This has been tested on Rails 3.2-5.2.
+This has been tested on Rails 3.2-6.1.
 
 = Input Types and Options
 
@@ -954,8 +882,8 @@ created via Forme::Form#input:
 
 These options are supported by all of the input types:
 
-:attr :: The attributes hash to use for the given tag, takes precedence over
-         other options that set attributes.
+:attr :: The attributes hash to use for the given tag, attributes in this hash
+         take precedence over other options that set attributes.
 :autofocus :: Set the autofocus attribute if true
 :class :: A class to use.  Unlike other options, this is combined with the
           classes set in the :attr hash.
@@ -984,7 +912,7 @@ These options are supported by all of the input types:
           for textarea tags, or the selected option(s) for select tags.
 :wrapper :: Set a custom wrapper, overriding the form's default
 
-== Input Types
+== Input Type-Specific Options
 
 === :checkbox
 
@@ -1002,11 +930,11 @@ Creates an input tag with type radio. Options:
 
 === :date / :datetime
 
-By default, creates an input tag with type date or datetime.  With the :as=>:select option,
+By default, creates an input tag with type date or datetime.  With the <tt>as: :select</tt> option,
 creates multiple select options. Options:
 
 :as :: When value is :select, uses 3 or 6 select boxes by default.
-:order :: The order of select boxes when using :as=>:select.  Entries should be a symbol
+:order :: The order of select boxes when using <tt>as: :select</tt>.  Entries should be a symbol
           for the select field and string to use a string
           (:date default: <tt>[:year, '-', :month, '-', :day]</tt>)
           (:datetime default: <tt>[:year, '-', :month, '-', :day, ' ', :hour, ':', :minute, ':', :second]</tt>)
@@ -1051,7 +979,7 @@ Creates a select tag, containing option tags specified by the :options option.  
 === :checkboxset
 
 Creates a set of checkbox inputs all using the same name.  Supports the same options
-as the select type, except that the :multiple option is assumed to be true.  Also supports
+as the :select type, except that the :multiple option is assumed to be true.  Also supports
 the following options:
 
 :tag_wrapper :: The wrapper transformer for individual tags in the set
@@ -1121,7 +1049,7 @@ Hash :: Adds a hidden tag for each entry, with keys as the name of the hidden
 Proc :: Will be called with the form tag object, and should return an instance
         of one of the handled types (or nil to not add a tag).
 
-= Basic Design
+= Internal Architecture
 
 Internally, Forme builds an abstract syntax tree of objects that
 represent the form.  The abstract syntax tree goes through a
@@ -1131,14 +1059,87 @@ strings.  Here are the main classes used by the library:
 
 <tt>Forme::Form</tt> :: main object
 <tt>Forme::Input</tt> :: high level abstract tag (a single +Input+ could represent a select box with a bunch of options)
-<tt>Forme::Tag</tt> :: low level abstract tag representing an html tag (there would be a separate +Tag+ for each option in a select box)
+<tt>Forme::Tag</tt> :: low level abstract tag representing an HTML tag (there would be a separate +Tag+ for each option in a select box)
+
+The difference between <tt>Forme::Input</tt> and <tt>Forme::Tag</tt> 
+is that <tt>Forme::Tag</tt> directly represents the underlying HTML
+tag, containing a type, optional attributes, and children, while the
+<tt>Forme::Input</tt> is more abstract and attempts to be user friendly.
+For example, these both compile by default to the same select tag:
+
+  f.input(:select, :options=>[['foo', 1]])
+  # or
+  f.tag(:select, {}, [f.tag(:option, {:value=>1}, ['foo'])])
 
 The group of objects that perform the transformations to
 the abstract syntax trees are known as transformers.
 Transformers use a functional style, and all use a +call+-based
 API, so you can use a +Proc+ for any custom transformer.
+The processing of high level <tt>Forme::Input</tt>s into raw HTML
+fragments is performed through the following transformers:
+
++Formatter+ :: converts a <tt>Forme::Input</tt> instance into a
+               <tt>Forme::Tag</tt> instance (or array of them).
++ErrorHandler+ :: If the <tt>Forme::Input</tt> instance has a error,
+                  takes the formatted tag and marks it as having the error.
++Helper+ :: If the <tt>Forme::Input</tt> instance has any help text,
+            adds the help text in a separate tag.
++Labeler+ :: If the <tt>Forme::Input</tt> instance has a label,
+             takes the formatted output and labels it.
++Wrapper+ :: Takes the output of the formatter, labeler, and
+             error_handler transformers, and wraps it in another tag (or just
+             returns it unmodified).
++Serializer+ :: converts a <tt>Forme::Tag</tt> instance into an
+                HTML string.
+
+Technically, only the +Serializer+ is necessary.  The Forme::Form#input
+and Forme::Form#tag methods internally create +Input+ and
++Tag+ objects.  Before returning results, the input or tag is converted
+to a string using +to_s+, which calls the appropriate +Serializer+.
+The +Serializer+ calls the appropriate +Formatter+ if it encounters an
++Input+ instance, and attempts to serialize the output of that (which is
+usually a +Tag+ instance).  It is up to the +Formatter+ to call the +Labeler+,
++ErrorHandler+, +Helper+, and/or +Wrapper+.
+
+The Forme::Form object takes the transformers as options (:formatter,
+:labeler, :error_handler, :helper, :wrapper, and :serializer), all of which
+should be objects responding to +call+ (so you can use +Proc+s) or be symbols
+registered with the library using <tt>Forme.register_transformer</tt>:
+
+  Forme.register_transformer(:wrapper, :p) do |tag, input|
+    input.tag(:p, {}, tag)
+  end
+
+Most transformers are called with two arguments, +tag+ and +input+.  +tag+
+is a <tt>Forme::Tag</tt> instance, and +input+ is a <tt>Forme::Input</tt>
+instance.  The +Formatter+ and +Serializer+ transformers are the two
+exceptions, with +Formatter+ being called with just an +input+, and
++Serializer+ potentionally being called with any object.  The +Serializer+
+will in general recursively call itself with children of the argument
+given until a string is returned.
+
+There is also an +InputsWrapper+ transformer, that is called by
+Forme::Form#inputs.  It's used to wrap up a group of
+related options (in a +fieldset+ by default).  It takes +form+
+(Forme::Form instance) and +input_opts+ (+Hash+) arguments.
+
+Most of the transformers can be overridden on a per instance basis by
+passing the appropriate option to +input+ or +inputs+:
+
+  f.input(:name, :wrapper=>:p)
+
+Existing transformers can be easily extended (ie, to set the class attribute),
+by creating your own transformer and then calling the existing transformer.
+
+  Forme.register_transformer(:labeler, :explicit) do |tag, input|
+    input.opts[:label_attr] ||= { :class => 'label' }
+    Forme::Labeler::Explicit.new.call(tag, input)
+  end
 
 == Transformer Types
+
+You can override the type of transform for each form or input using the
+following options:
 
 +serializer+ :: tags input/tag, returns string
 +formatter+ :: takes input, returns tag
@@ -1272,7 +1273,7 @@ You can mark a configuration as the default using:
 
 === Bootstrap 3 Support
 
-Forme ships with support for Bootstrap 3 HTML formatting. This support is shipped in
+Forme ships with support for Bootstrap 3-4 HTML formatting. This support is shipped in
 it's own file, so if you don't use it, you don't pay the memory penalty for loading
 it.
 
@@ -1288,7 +1289,7 @@ All of these have external dependencies:
 3. simple_form
 4. padrino-helpers
 
-Forme's DSL draws a lot of inspiration from both Formtastic and simple_form.
+Forme's API draws a lot of inspiration from both Formtastic and simple_form.
 
 = License
 

@@ -1,6 +1,6 @@
 # frozen-string-literal: true
 
-require_relative '../forme'
+require_relative 'template'
 
 class ActiveSupport::SafeBuffer
   include Forme::Raw
@@ -20,98 +20,82 @@ module Forme
 
     # Add CSRF token tag by default for POST forms
     add_hidden_tag do |tag|
-      if (form = tag.form) && (template = form.template) && template.protect_against_forgery? && (tag.attr[:method] || tag.attr['method']).to_s.upcase == 'POST'
+      if (form = tag.form) && (template = form.opts[:template]) && template.protect_against_forgery? && (tag.attr[:method] || tag.attr['method']).to_s.upcase == 'POST'
         {template.request_forgery_protection_token=>template.form_authenticity_token}
       end
     end
 
-    # Subclass used when using Forme/Rails ERB integration,
-    # handling integration with the view template.
-    class Form < ::Forme::Form
-      # The Rails template that created this form.
-      attr_reader :template
-
-      # Set the template object when initializing.
-      def initialize(*)
-        super
-        @template = @opts[:template]
+    class TemplateForm < ::Forme::Template::Form
+      %w'inputs tag subform'.each do |meth|
+        class_eval(<<-END, __FILE__, __LINE__+1)
+          def #{meth}(*)
+            if block_given?
+              @scope.send(:with_output_buffer){super}
+            else
+              @form.raw_output(super)
+            end
+          end
+        END
       end
 
-      # Serialize and mark as already escaped the string version of
-      # the input.
+      %w'button input'.each do |meth|
+        class_eval(<<-END, __FILE__, __LINE__+1)
+          def #{meth}(*)
+            @form.raw_output(super)
+          end
+        END
+      end
+
       def emit(tag)
-        template.output_buffer << tag.to_s
+        @scope.output_buffer << @form.raw_output(tag)
       end
+    end
 
-      # Capture the inputs into a new output buffer, and return
-      # the buffer if not given a block
-      def inputs(*)
-        if block_given?
-          super
-        else
-          template.send(:with_output_buffer){super}
-        end
-      end
-      
-      # If a block is not given, emit the inputs into the current output
-      # buffer.
-      def _inputs(inputs=[], opts={}) # :nodoc:
-        if block_given? && !opts[:subform]
-          super
-        else
-          emit(super)
-        end
-      end
-
-      # Return a string version of the input that is already marked as safe.
-      def input(*)
-        super.to_s
-      end
-
-      # Return a string version of the button that is already marked as safe.
-      def button(*)
-        super.to_s
+    class Form < ::Forme::Form
+      def <<(string)
+        super(raw_output(string))
       end
 
       # Use the template's raw method to mark the given string as html safe.
       def raw_output(s)
-        template.raw(s)
+        opts[:template].raw(s.to_s)
       end
+    end
 
-      # If a block is given, create a new output buffer and make sure all the
-      # output of the tag goes into that buffer, and return the buffer.
-      # Otherwise, just return a string version of the tag that is already
-      # marked as safe.
-      def tag(type, attr={}, children=[], &block)
+    ERB = Template::Helper.clone
+    module ERB
+      alias _forme form
+      remove_method :form
+
+      def forme(*a, &block)
         if block_given?
-          template.send(:with_output_buffer){tag_(type, attr, children, &block)}
+          with_output_buffer{_forme(*a, &block)}
         else
-          _tag(type, attr, children).to_s
+          raw(_forme(*a, &block))
         end
-      end
-      
-      def tag_(type, attr={}, children=[]) # :nodoc:
-        tag = _tag(type, attr, children)
-        emit(serialize_open(tag))
-        Array(tag.children).each{|c| emit(c)}
-        yield self if block_given?
-        emit(serialize_close(tag))
       end
 
       private
 
-      def subform_return_nil?
-        true
+      def _forme_form_options(obj, attr, opts)
+        if hidden_tags = _forme_form_hidden_tags
+          opts[:hidden_tags] ||= []
+          opts[:hidden_tags] += hidden_tags
+        end
+        opts[:template] = self
       end
-    end
 
-    module ERB
-      # Create a +Form+ object tied to the current template, and using the standard
-      # Rails hidden tags.
-      def forme(obj=nil, attr={}, opts={}, &block)
-        h = {:template=>self, :hidden_tags=>Forme::Rails::HIDDEN_TAGS}
-        (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
-        Form.form(obj, attr, opts, &block)
+      def _forme_wrapped_form_class
+        Form
+      end
+
+      # The class to use for forms
+      def _forme_form_class
+        TemplateForm
+      end
+
+      def _forme_form_hidden_tags
+        Forme::Rails::HIDDEN_TAGS
       end
     end
   end

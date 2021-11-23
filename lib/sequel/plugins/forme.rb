@@ -58,62 +58,47 @@ module Sequel # :nodoc:
         # :skip_primary_key :: Skip adding a hidden primary key field for existing
         #                      objects.
         def subform(association, opts={}, &block)
-          nested_obj = opts.has_key?(:obj) ? opts[:obj] : obj.send(association)
-          ref = obj.class.association_reflection(association)
-          multiple = ref.returns_array?
-          grid = opts[:grid]
-          ns = "#{association}_attributes"
+          content_added do
+            nested_obj = opts.has_key?(:obj) ? opts[:obj] : obj.send(association)
+            ref = obj.class.association_reflection(association)
+            multiple = ref.returns_array?
+            grid = opts[:grid]
+            ns = "#{association}_attributes"
 
-          contents = proc do
-            send(multiple ? :each_obj : :with_obj, nested_obj, ns) do |no, i|
-              emit(input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil)) unless no.new? || opts[:skip_primary_key]
-              options = opts.dup
-              if grid
-                options.delete(:legend)
-              else
-                if options.has_key?(:legend)
-                  if options[:legend].respond_to?(:call)
-                    options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
-                  end
+            contents = proc do
+              send(multiple ? :each_obj : :with_obj, nested_obj, ns) do |no, i|
+                input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil) unless no.new? || opts[:skip_primary_key]
+                options = opts.dup
+                if grid
+                  options.delete(:legend)
                 else
-                  if multiple
-                    options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
+                  if options.has_key?(:legend)
+                    if options[:legend].respond_to?(:call)
+                      options[:legend] = multiple ? options[:legend].call(no, i) : options[:legend].call(no)
+                    end
                   else
-                    options[:legend] = humanize(association)
+                    if multiple
+                      options[:legend] = humanize("#{obj.model.send(:singularize, association)} ##{i+1}")
+                    else
+                      options[:legend] = humanize(association)
+                    end
                   end
                 end
+                options[:subform] = true
+
+                inputs(options[:inputs]||[], options, &block)
               end
-              options[:subform] = true
-              _inputs(options[:inputs]||[], options, &block)
+            end
+            
+            if grid
+              labels = opts.fetch(:labels){opts[:inputs].map{|l, *| humanize(l)} if opts[:inputs]}
+              legend = opts.fetch(:legend){humanize(association)}
+              inputs_opts = opts[:inputs_opts] || {}
+              inputs(inputs_opts.merge(:inputs_wrapper=>:table, :nested_inputs_wrapper=>:tr, :wrapper=>:td, :labeler=>nil, :labels=>labels, :legend=>legend), &contents)
+            else
+              contents.call
             end
           end
-          
-          if grid
-            labels = opts.fetch(:labels){opts[:inputs].map{|l, *| humanize(l)} if opts[:inputs]}
-            legend = opts.fetch(:legend){humanize(association)}
-            inputs_opts = opts[:inputs_opts] || {}
-            inputs(inputs_opts.merge(:inputs_wrapper=>:table, :nested_inputs_wrapper=>:tr, :wrapper=>:td, :labeler=>nil, :labels=>labels, :legend=>legend), &contents)
-          else
-            subform_contents = contents.call
-            if block && subform_emit_contents_for_block?
-              emit(subform_contents)
-            else
-              subform_contents
-            end
-          end.tap{return if subform_return_nil?}
-        end
-
-        private
-
-        # These are needed to handle the various ERB, erubi capture, and Rails integrations, all
-        # of which work slightly differently in terms of which content is emitted into templates.
-
-        def subform_emit_contents_for_block?
-          defined?(super) ? super : false
-        end
-
-        def subform_return_nil?
-          defined?(super) ? super : false
         end
       end
 
@@ -468,21 +453,6 @@ module Sequel # :nodoc:
         end
       end
 
-      # Helper module used for Sequel forms using ERB template integration.  Necessary for
-      # proper subform handling when using such forms with partials.
-      module ERBSequelForm
-        # Capture the inside of the inputs, injecting it into the template
-        # if a block is given, or returning it as a string if not.
-        def subform(*, &block)
-          if block
-            capture(block){super}
-          else
-            capture{super}
-          end
-        end
-      end
-      SinatraSequelForm = ERBSequelForm
-
       class Form < ::Forme::Form
         include SequelForm
       end
@@ -502,8 +472,6 @@ module Sequel # :nodoc:
           unless klass = MUTEX.synchronize{FORM_CLASSES[base]}
             klass = Class.new(base)
             klass.send(:include, SequelForm)
-            klass.send(:include, ERBSequelForm) if defined?(::Forme::ERB::Form) && base == ::Forme::ERB::Form
-            klass.send(:include, ERBSequelForm) if defined?(::Roda::RodaPlugins::FormeErubiCapture::Form) && base == ::Roda::RodaPlugins::FormeErubiCapture::Form
             MUTEX.synchronize{FORM_CLASSES[base] = klass}
           end
           klass

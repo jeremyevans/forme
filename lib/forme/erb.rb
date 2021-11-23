@@ -1,6 +1,6 @@
 # frozen-string-literal: true
 
-require_relative 'erb_form'
+require_relative 'template'
 
 module Forme
   module ERB 
@@ -24,13 +24,17 @@ module Forme
     # This is the module used to add the Forme integration
     # to ERB.
     module Helper 
-      # Create a +Form+ object tied to the current output buffer,
-      # using the standard ERB hidden tags.
-      def form(obj=nil, attr={}, opts={}, &block)
-        h = {:hidden_tags=>Forme::ERB::HIDDEN_TAGS, :env=>env}
-        h[:output] = @_out_buf if block
-        (obj.is_a?(Hash) ? attr = attr.merge(h) : opts = opts.merge(h))
-        Form.form(obj, attr, opts, &block)
+      include Template::Helper
+
+      private
+
+      def _forme_form_options(obj, attr, opts)
+        super
+        opts[:env] = env
+      end
+
+      def _forme_form_hidden_tags
+        HIDDEN_TAGS
       end
     end 
   end
