@@ -809,13 +809,13 @@ describe "Forme plain forms" do
     proc{@f.input(:textarea, :wrapper=>Object.new).to_s}.must_raise(Forme::Error)
     proc{@f.input(:textarea, :formatter=>nil).to_s}.must_raise(Forme::Error)
   end
+
+  it "should handle :before and :after hook options" do
+    Forme.form({}, :before=>lambda{|f| f.tag(:input, :type=>:hidden, :name=>:a, :value=>'b')}, :after=>lambda{|f| f.tag(:input, :type=>:hidden, :name=>:c, :value=>'d')}){|f| f.tag(:input)}.to_s.must_equal '<form><input name="a" type="hidden" value="b"/><input/><input name="c" type="hidden" value="d"/></form>'
+  end
 end
 
 describe "Forme::Form :hidden_tags option " do
-  before do
-    @f = Forme::Form.new
-  end
-
   it "should handle hash" do
     Forme.form({}, :hidden_tags=>[{:a=>'b'}]).to_s.must_equal '<form><input name="a" type="hidden" value="b"/></form>'
   end

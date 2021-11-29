@@ -34,63 +34,6 @@ class Roda
         :missing_namespace=>"no content in expected namespace"
       }.freeze
 
-      # Forme::Form subclass that adds hidden fields with metadata that can be used
-      # to automatically process form submissions.
-      class Form < ::Forme::Form
-        def initialize(obj, opts=nil)
-          super
-          @forme_namespaces = @opts[:namespace]
-        end
-
-        # Try adding hidden HMAC fields to all forms
-        def form(*)
-          super do |f|
-            yield f if block_given?
-            hmac_hidden_fields
-          end
-        end
-
-        private
-
-        # Add hidden fields with metadata, if the form has an object associated that
-        # supports the forme_inputs method, and it includes inputs.
-        def hmac_hidden_fields
-          if (obj = @opts[:obj]) && obj.respond_to?(:forme_inputs) && (forme_inputs = obj.forme_inputs)
-            columns = []
-            valid_values = {}
-
-            forme_inputs.each do |field, input|
-              next unless col = obj.send(:forme_column_for_input, input)
-              col = col.to_s
-              columns << col
-
-              next unless validation = obj.send(:forme_validation_for_input, field, input)
-              validation[0] = validation[0].to_s
-              has_nil = false
-              validation[1] = validation[1].map do |v|
-                has_nil ||= v.nil?
-                v.to_s
-              end
-              validation[1] << nil if has_nil
-              valid_values[col] = validation
-            end
-
-            return if columns.empty?
-
-            data = {}
-            data['columns'] = columns
-            data['namespaces'] = @forme_namespaces
-            data['csrf'] = @opts[:csrf]
-            data['valid_values'] = valid_values unless valid_values.empty?
-            data['form_version'] = @opts[:form_version] if @opts[:form_version]
-
-            data = data.to_json
-            tag(:input, :type=>:hidden, :name=>:_forme_set_data, :value=>data)
-            tag(:input, :type=>:hidden, :name=>:_forme_set_data_hmac, :value=>OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, @opts[:roda].class.opts[:forme_set_hmac_secret], data))
-          end
-        end
-      end
-
       module InstanceMethods
         # Return hash based on submitted parameters, with :values key
         # being submitted values for the object, and :validations key
@@ -140,16 +83,46 @@ class Roda
           raise Error, ERROR_MESSAGES[type]
         end
 
-        # Use form class that adds hidden fields for metadata.
-        def _forme_wrapped_form_class
-          Form
-        end
-
         # Include a reference to the current scope to the form.  This reference is needed
         # to correctly construct the HMAC.
         def _forme_form_options(obj, attr, opts)
           super
-          opts[:roda] = self
+
+          opts[:_after] = lambda do |form|
+            if (obj = form.opts[:obj]) && obj.respond_to?(:forme_inputs) && (forme_inputs = obj.forme_inputs)
+              columns = []
+              valid_values = {}
+
+              forme_inputs.each do |field, input|
+                next unless col = obj.send(:forme_column_for_input, input)
+                col = col.to_s
+                columns << col
+
+                next unless validation = obj.send(:forme_validation_for_input, field, input)
+                validation[0] = validation[0].to_s
+                has_nil = false
+                validation[1] = validation[1].map do |v|
+                  has_nil ||= v.nil?
+                  v.to_s
+                end
+                validation[1] << nil if has_nil
+                valid_values[col] = validation
+              end
+
+              return if columns.empty?
+
+              data = {}
+              data['columns'] = columns
+              data['namespaces'] = form.opts[:namespace]
+              data['csrf'] = form.opts[:csrf]
+              data['valid_values'] = valid_values unless valid_values.empty?
+              data['form_version'] = form.opts[:form_version] if form.opts[:form_version]
+
+              data = data.to_json
+              form.tag(:input, :type=>:hidden, :name=>:_forme_set_data, :value=>data)
+              form.tag(:input, :type=>:hidden, :name=>:_forme_set_data_hmac, :value=>OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, self.class.opts[:forme_set_hmac_secret], data))
+            end
+          end
         end
 
         # Internals of forme_parse_hmac and forme_set_hmac.

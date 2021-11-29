@@ -43,8 +43,9 @@ class Roda
             end
 
             opts[:csrf] = [csrf_field, token]
-            opts[:hidden_tags] ||= []
-            opts[:hidden_tags] += [{csrf_field=>token}]
+            opts[:_before] = lambda do |form|
+              form.tag(:input, :type=>:hidden, :name=>csrf_field, :value=>token)
+            end
           end
         end
       end

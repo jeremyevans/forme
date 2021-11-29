@@ -1011,6 +1011,10 @@ as text and password, as well as newer HTML5 inputs such as number or email. Opt
 These are the options supported by Forme::Form object, mostly used to set
 the defaults for Inputs created via the form:
 
+:after :: A callable object that is yielded the Form instance after yielding to
+          the block. Can be used to add hidden inputs to the end of the form.
+:before :: A callable object that is yielded the Form instance before yielding to
+          the block. Can be used to add hidden inputs to the start of the form.
 :config :: The configuration to use, which automatically sets defaults
            for the transformers to use.
 :errors :: A Hash of errors from a previous form submission, used to set

@@ -14,13 +14,6 @@ module Forme
       HIDDEN_TAGS << block
     end
 
-    # Add CSRF token tag by default for POST forms
-    add_hidden_tag do |tag|
-      if defined?(::Rack::Csrf) && (form = tag.form) && (env = form.opts[:env]) && env['rack.session'] && (tag.attr[:method] || tag.attr['method']).to_s.upcase == 'POST'
-        {::Rack::Csrf.field=>::Rack::Csrf.token(env)}
-      end
-    end
-
     # This is the module used to add the Forme integration
     # to ERB.
     module Helper 
@@ -30,7 +23,14 @@ module Forme
 
       def _forme_form_options(obj, attr, opts)
         super
-        opts[:env] = env
+
+        if defined?(::Rack::Csrf) && env['rack.session']
+          opts[:_before] = lambda do |form|
+            if (form.form_tag_attributes[:method] || form.form_tag_attributes['method']).to_s.upcase == 'POST'
+              form.tag(:input, :type=>:hidden, :name=>::Rack::Csrf.field, :value=>::Rack::Csrf.token(env))
+            end
+          end
+        end
       end
 
       def _forme_form_hidden_tags

@@ -16,6 +16,9 @@ module Forme
     # The hidden tags to automatically add to the form.
     attr_reader :hidden_tags
 
+    # The attributes used for the form tag for this form.
+    attr_reader :form_tag_attributes
+
     # The +serializer+ determines how +Tag+ objects are transformed into strings.
     # Must respond to +call+ or be a registered symbol.
     attr_reader :serializer
@@ -113,11 +116,18 @@ module Forme
     end
 
     # Create a form tag with the given attributes.
-    def form(attr={}, &block)
+    def form(attr={})
       if obj && !attr[:method] && !attr['method'] && obj.respond_to?(:forme_default_request_method)
-        attr = attr.merge('method'=>obj.forme_default_request_method)
+        attr = Hash[attr]
+        attr['method'] = obj.forme_default_request_method
       end
-      tag(:form, attr, method(:hidden_form_tags), &block)
+      @form_tag_attributes = attr
+
+      tag(:form, attr, method(:hidden_form_tags)) do
+        before_form_yield
+        yield self if block_given?
+        after_form_yield
+      end
     end
 
     # Creates an +Input+ with the given +field+ and +opts+ associated with
@@ -382,6 +392,24 @@ module Forme
     # Return a serialized closing tag for the given tag.
     def serialize_close(tag)
       serializer.serialize_close(tag) if serializer.respond_to?(:serialize_close)
+    end
+
+    # Call before hooks if defined.
+    def before_form_yield
+      # _before hook is only for internal use
+      opts[:_before].call(self) if opts[:_before]
+
+      # before hook is for external use
+      opts[:before].call(self) if opts[:before]
+    end
+
+    # Call after hooks if defined.
+    def after_form_yield
+      # after hook is for external use
+      opts[:after].call(self) if opts[:after]
+
+      # _after hook is only for internal use
+      opts[:_after].call(self) if opts[:_after]
     end
   end
 end

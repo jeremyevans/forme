@@ -18,13 +18,6 @@ module Forme
       HIDDEN_TAGS << block
     end
 
-    # Add CSRF token tag by default for POST forms
-    add_hidden_tag do |tag|
-      if (form = tag.form) && (template = form.opts[:template]) && template.protect_against_forgery? && (tag.attr[:method] || tag.attr['method']).to_s.upcase == 'POST'
-        {template.request_forgery_protection_token=>template.form_authenticity_token}
-      end
-    end
-
     class TemplateForm < ::Forme::Template::Form
       %w'inputs tag subform'.each do |meth|
         class_eval(<<-END, __FILE__, __LINE__+1)
@@ -32,7 +25,7 @@ module Forme
             if block_given?
               @scope.send(:with_output_buffer){super}
             else
-              @form.raw_output(super)
+              @scope.raw(super)
             end
           end
         END
@@ -41,24 +34,13 @@ module Forme
       %w'button input'.each do |meth|
         class_eval(<<-END, __FILE__, __LINE__+1)
           def #{meth}(*)
-            @form.raw_output(super)
+            @scope.raw(super)
           end
         END
       end
 
       def emit(tag)
-        @scope.output_buffer << @form.raw_output(tag)
-      end
-    end
-
-    class Form < ::Forme::Form
-      def <<(string)
-        super(raw_output(string))
-      end
-
-      # Use the template's raw method to mark the given string as html safe.
-      def raw_output(s)
-        opts[:template].raw(s.to_s)
+        @scope.output_buffer << @scope.raw(tag)
       end
     end
 
@@ -78,15 +60,11 @@ module Forme
       private
 
       def _forme_form_options(obj, attr, opts)
-        if hidden_tags = _forme_form_hidden_tags
-          opts[:hidden_tags] ||= []
-          opts[:hidden_tags] += hidden_tags
+        opts[:_before] = lambda do |form|
+          if protect_against_forgery? && (form.form_tag_attributes[:method] || form.form_tag_attributes['method']).to_s.upcase == 'POST'
+            form.tag(:input, :type=>:hidden, :name=>request_forgery_protection_token, :value=>form_authenticity_token)
+          end
         end
-        opts[:template] = self
-      end
-
-      def _forme_wrapped_form_class
-        Form
       end
 
       # The class to use for forms

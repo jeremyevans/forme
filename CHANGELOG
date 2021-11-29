@@ -1,5 +1,9 @@
 === master
 
+* Add Form#form_tag_attributes for getting the attributes used for the form tag (jeremyevans)
+
+* Add :before and :after Form options, as an alternative way to implement hooks (jeremyevans)
+
 * Passing a callable as the child of a tag should now not call methods that will modify the related form (such as Form#tag) (jeremyevans)
 
 * Change API for _forme_form_options private method used in template integrations (jeremyevans)
