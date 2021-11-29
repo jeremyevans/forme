@@ -65,6 +65,7 @@ module Forme
             form.tag(:input, :type=>:hidden, :name=>request_forgery_protection_token, :value=>form_authenticity_token)
           end
         end
+        opts[:hidden_tags_uplevel] = 2
       end
 
       # The class to use for forms

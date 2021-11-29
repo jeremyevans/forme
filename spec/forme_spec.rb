@@ -816,31 +816,31 @@ describe "Forme plain forms" do
 end
 
 describe "Forme::Form :hidden_tags option " do
-  it "should handle hash" do
+  silence_warnings "should handle hash" do
     Forme.form({}, :hidden_tags=>[{:a=>'b'}]).to_s.must_equal '<form><input name="a" type="hidden" value="b"/></form>'
   end
 
-  it "should handle array" do
+  silence_warnings "should handle array" do
     Forme.form({}, :hidden_tags=>[["a ", "b"]]).to_s.must_equal '<form>a b</form>'
   end
 
-  it "should handle string" do
+  silence_warnings "should handle string" do
     Forme.form({}, :hidden_tags=>["a "]).to_s.must_equal '<form>a </form>'
   end
 
-  it "should handle proc return hash" do
+  silence_warnings "should handle proc return hash" do
     Forme.form({}, :hidden_tags=>[lambda{|tag| {:a=>'b'}}]).to_s.must_equal '<form><input name="a" type="hidden" value="b"/></form>'
   end
 
-  it "should handle proc return hash when from takes a block" do
+  silence_warnings "should handle proc return hash when from takes a block" do
     Forme.form({}, :hidden_tags=>[lambda{|tag| {:a=>'b'}}]){}.to_s.must_equal '<form><input name="a" type="hidden" value="b"/></form>'
   end
 
-  it "should handle proc return tag" do
+  silence_warnings "should handle proc return tag" do
     Forme.form({:method=>'post'}, :hidden_tags=>[lambda{|tag| tag.tag(tag.attr[:method])}]).to_s.must_equal '<form method="post"><post></post></form>'
   end
 
-  it "should raise error for unhandled object" do
+  silence_warnings "should raise error for unhandled object" do
     proc{Forme.form({}, :hidden_tags=>[Object.new])}.must_raise Forme::Error
   end
 end

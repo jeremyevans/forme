@@ -112,6 +112,11 @@ module Forme
       @serializer = @opts[:serializer]
       @input_defaults = @opts[:input_defaults] || {}
       @hidden_tags = @opts[:hidden_tags]
+      if @hidden_tags && !@hidden_tags.empty?
+        uplevel = 6
+        uplevel += @opts[:hidden_tags_uplevel] if @opts[:hidden_tags_uplevel]
+        warn("The Forme::Form :hidden_tags option is deprecated, please switch to using the :before option", :uplevel=>uplevel)
+      end
       @to_s = String.new
     end
 

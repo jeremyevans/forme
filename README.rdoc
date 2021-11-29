@@ -1022,7 +1022,6 @@ the defaults for Inputs created via the form:
 :error_handler :: Sets the default error_handler for the form's inputs
 :helper :: Sets the default helper for the form's inputs
 :formatter :: Sets the default formatter for the form's inputs
-:hidden_tags :: Sets the hidden tags to automatically add to this form, see below.
 :input_defaults :: Sets the default options for each input type.  This should
                    be a hash with input type keys, where the values are the
                    hash of default options to use for the input type. 
@@ -1042,16 +1041,6 @@ For forms created by Forme.form, the following options are supported:
 :inputs :: An array of inputs to create inside the form, before yielding
            to the block.
 :button :: A button to add to the form, after yielding to the block.
-
-=== :hidden_tags
-
-This should be an array, where elements are one of the following types:
-
-String, Array, Forme::Tag :: Added directly as a child of the form tag.
-Hash :: Adds a hidden tag for each entry, with keys as the name of the hidden
-        tag and values as the value of the hidden tag.
-Proc :: Will be called with the form tag object, and should return an instance
-        of one of the handled types (or nil to not add a tag).
 
 = Internal Architecture
 

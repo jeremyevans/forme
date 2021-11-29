@@ -65,6 +65,10 @@ module FormeErbSpecs
     sin_get('/noblock_post').sub(%r{<input name=\"_csrf\" type=\"hidden\" value=\"([^\"]+)\"/>}, "<input name=\"_csrf\" type=\"hidden\" value=\"csrf\"/>").must_equal '<form method="post"><input name="_csrf" type="hidden" value="csrf"/><input type="submit" value="xyz"/></form>'
   end
 
+  silence_warnings "#form should support :hidden_tags option" do
+    sin_get('/hidden_tags').sub(%r{<input name="_csrf" type="hidden" value="([^"]+)"/>}, '').must_equal '<form action="/baz"><input name="a" type="hidden" value="b"/></form>'
+  end
+
   it "#form with an empty form should work" do
     sin_get('/noblock_empty').must_equal '<form action="/baz"></form>'
   end

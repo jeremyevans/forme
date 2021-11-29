@@ -1,5 +1,7 @@
 === master
 
+* Deprecate Form :hidden_tags option (jeremyevans)
+
 * Add Form#post? for whether the form will submit via POST (jeremyevans)
 
 * Add Form#form_tag_attributes for getting the attributes used for the form tag (jeremyevans)

@@ -107,6 +107,7 @@ module Forme
           opts[:hidden_tags] ||= []
           opts[:hidden_tags] += hidden_tags
         end
+        opts[:hidden_tags_uplevel] = 1
       end
 
       def _forme_form_hidden_tags

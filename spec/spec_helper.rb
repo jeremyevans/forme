@@ -15,3 +15,22 @@ require_relative '../lib/forme'
 ENV['MT_NO_PLUGINS'] = '1' # Work around stupid autoloading of plugins
 gem 'minitest'
 require 'minitest/global_expectations/autorun'
+
+module Minitest::Spec::DSL
+  def silence_warnings(name, &block)
+    it(name) do
+      silence_warnings do
+        instance_exec(&block)
+      end
+    end
+  end
+end
+
+class Minitest::Spec
+  def silence_warnings
+    verbose, $VERBOSE = $VERBOSE, nil
+    yield
+  ensure
+    $VERBOSE = verbose
+  end
+end
