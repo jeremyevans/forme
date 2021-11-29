@@ -3,10 +3,10 @@
 module Forme
   # The major version of Forme, updated only for major changes that are
   # likely to require modification to apps using Forme.
-  MAJOR = 1
+  MAJOR = 2
 
   # The minor version of Forme, updated for new feature releases of Forme.
-  MINOR = 12
+  MINOR = 0
 
   # The patch version of Forme, updated only for bug fixes from the last
   # feature release.
