@@ -221,32 +221,28 @@ module Forme
     #   f.inputs do
     #     # ...
     #   end
-    def inputs(inputs=[], opts={}, &block)
-      content_added{_inputs(inputs, opts, &block)}
-    end
-    
-    # Internals of #inputs, should be used internally by the library, where #inputs
-    # is designed for external use. 
-    def _inputs(inputs=[], opts={}) # :nodoc:
-      if inputs.is_a?(Hash)
-        opts = inputs.merge(opts)
-        inputs = []
-      end
-
-      form_opts = {}
-      form_opts[:inputs_wrapper] = opts[:nested_inputs_wrapper] if opts[:nested_inputs_wrapper]
-      TRANSFORMER_TYPES.each do |t|
-        if opts.has_key?(t) && t != :inputs_wrapper
-          form_opts[t] = opts[t]
+    def inputs(inputs=[], opts={})
+      content_added do
+        if inputs.is_a?(Hash)
+          opts = inputs.merge(opts)
+          inputs = []
         end
-      end
 
-      Forme.transform(:inputs_wrapper, opts, @opts, self, opts) do
-        with_opts(form_opts) do
-          inputs.each do |i|
-            input(*i)
+        form_opts = {}
+        form_opts[:inputs_wrapper] = opts[:nested_inputs_wrapper] if opts[:nested_inputs_wrapper]
+        TRANSFORMER_TYPES.each do |t|
+          if opts.has_key?(t) && t != :inputs_wrapper
+            form_opts[t] = opts[t]
           end
-          yield if block_given?
+        end
+
+        Forme.transform(:inputs_wrapper, opts, @opts, self, opts) do
+          with_opts(form_opts) do
+            inputs.each do |i|
+              input(*i)
+            end
+            yield if block_given?
+          end
         end
       end
     end

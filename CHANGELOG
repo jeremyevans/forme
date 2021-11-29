@@ -1,5 +1,7 @@
 === master
 
+* Remove Form#_inputs method (jeremyevans)
+
 * Deprecate forme/sinatra and Forme::Sinatra::ERB, switch to forme/erb and Forme::ERB::Helper (jeremyevans)
 
 * Deprecate Form :hidden_tags option (jeremyevans)
