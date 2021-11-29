@@ -23,7 +23,7 @@ begin
 
   class FormeRails < Rails::Application
     routes.append do
-      %w'index inputs_block inputs_block_wrapper nest nest_sep nest_inputs nest_seq hash legend combined hidden_tags noblock noblock_post safe_buffer'.each do |action|
+      %w'index inputs_block inputs_block_wrapper nest nest_sep nest_inputs nest_seq hash legend combined noblock noblock_post safe_buffer'.each do |action|
         get action, :controller=>'forme', :action=>action
       end
     end
@@ -192,10 +192,6 @@ END
 END
   end
 
-  def hidden_tags
-    render :inline => "<%= forme([:foo, :bar], {:action=>'/baz'}, :hidden_tags=>[{'a'=>'b'}]) %>"
-  end
-
   def noblock
     render :inline => "<%= forme([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') %>"
   end
@@ -265,10 +261,6 @@ describe "Forme Rails integration" do
 
   it "#form should work with :inputs, :button, and :legend options" do
     sin_get('/combined').must_equal '<form action="/baz"><fieldset class="inputs"><legend>123</legend><input id="first" name="first" type="text" value="foo"/></fieldset> <p>FBB</p> <input id="last" name="last" type="text" value="bar"/> <input type="submit" value="xyz"/></form>'
-  end
-
-  silence_warnings "#form should support :hidden_tags option" do
-    sin_get('/hidden_tags').must_equal '<form action="/baz"><input name="a" type="hidden" value="b"/></form>'
   end
 
   it "#form should work without a block" do

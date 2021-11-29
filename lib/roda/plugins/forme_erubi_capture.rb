@@ -49,11 +49,6 @@ class Roda
         def _forme_form_class
           Form
         end
-
-        def _forme_form_options(obj, attr, opts)
-          super
-          opts[:hidden_tags_uplevel] = 2
-        end
       end
     end
 

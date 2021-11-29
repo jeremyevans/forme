@@ -184,10 +184,6 @@ END
 END
   end
 
-  r.get 'hidden_tags' do
-    erb "<%= form([:foo, :bar], {:action=>'/baz'}, :hidden_tags=>[{'a'=>'b'}]) %>"
-  end
-
   r.get 'noblock' do
     erb "<%= form([:foo, :bar], {:action=>'/baz'}, :inputs=>[:first], :button=>'xyz', :legend=>'123') %>"
   end

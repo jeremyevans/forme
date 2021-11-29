@@ -44,9 +44,6 @@ def FormeRodaTest(block=ERB_BLOCK)
       r.get 'use_request_specific_token', :use do |use|
         render :inline=>"[#{Base64.strict_encode64(send(:csrf_secret))}]<%= form({:method=>:post}, {:use_request_specific_token=>#{use == '1'}}) %>"
       end
-      r.get 'hidden_tags2' do |use|
-        render :inline=>"<%= form({:method=>:post}, {:hidden_tags=>[{:foo=>'bar'}]}) %>"
-      end
       r.get 'csrf', :use do |use|
         render :inline=>"<%= form({:method=>:post}, {:csrf=>#{use == '1'}}) %>"
       end
@@ -103,10 +100,6 @@ module FormeRouteCsrfSpecs
     secret = $1
     token = $2
     app.new({'SCRIPT_NAME'=>'', 'PATH_INFO'=>'/use_request_specific_token/0', 'REQUEST_METHOD'=>'POST', 'rack.session'=>{'_roda_csrf_secret'=>secret}, 'rack.input'=>StringIO.new}).valid_csrf?(:token=>token).must_equal(plugin_opts.empty? ? false : true)
-  end
-
-  silence_warnings "should include :hidden_tags option" do
-    sin_get('/hidden_tags2').must_include 'name="foo" type="hidden" value="bar"'
   end
 
   it "should handle the :csrf option" do

@@ -16,6 +16,5 @@ module Forme
     ERB = Forme::ERB::Helper
     Erubis = ERB
     Form = Forme::Template::Form
-    HIDDEN_TAGS = Forme::ERB::HIDDEN_TAGS
   end
 end

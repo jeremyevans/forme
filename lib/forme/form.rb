@@ -12,9 +12,6 @@ module Forme
     # input type keys and values that are hashes of input options.
     attr_reader :input_defaults
 
-    # The hidden tags to automatically add to the form.
-    attr_reader :hidden_tags
-
     # The attributes used for the form tag for this form.
     attr_reader :form_tag_attributes
 
@@ -109,12 +106,6 @@ module Forme
 
       @serializer = @opts[:serializer]
       @input_defaults = @opts[:input_defaults] || {}
-      @hidden_tags = @opts[:hidden_tags]
-      if @hidden_tags && !@hidden_tags.empty? && RUBY_VERSION >= '2'
-        uplevel = 6
-        uplevel += @opts[:hidden_tags_uplevel] if @opts[:hidden_tags_uplevel]
-        warn("The Forme::Form :hidden_tags option is deprecated, please switch to using the :before option", :uplevel=>uplevel)
-      end
       @to_s = String.new
     end
 
@@ -127,7 +118,7 @@ module Forme
       end
       @form_tag_attributes = attr
 
-      tag(:form, attr, method(:hidden_form_tags)) do
+      tag(:form, attr) do
         before_form_yield
         yield self if block_given?
         after_form_yield
@@ -352,35 +343,6 @@ module Forme
     def copy_inputs_wrapper_from_wrapper(input_opts, output_opts=input_opts)
       if input_opts[:wrapper] && !input_opts[:inputs_wrapper] && SHARED_WRAPPERS.include?(input_opts[:wrapper])
         output_opts[:inputs_wrapper] = output_opts[:wrapper]
-      end
-    end
-
-    # Return array of hidden tags to use for this form,
-    # or nil if the form does not have hidden tags added automatically.
-    def hidden_form_tags(form_tag)
-      if hidden_tags
-        tags = []
-        hidden_tags.each do |hidden_tag|
-          hidden_tag = hidden_tag.call(form_tag) if hidden_tag.respond_to?(:call)
-          tags.concat(parse_hidden_tags(hidden_tag))
-        end
-        tags
-      end
-    end
-
-    # Handle various types of hidden tags for the form.
-    def parse_hidden_tags(hidden_tag)
-      case hidden_tag
-      when Array
-        hidden_tag
-      when Tag, String
-        [hidden_tag]
-      when Hash
-        hidden_tag.map{|k,v| _tag(:input, :type=>:hidden, :name=>k, :value=>v)}
-      when nil
-        []
-      else
-        raise Error, "unhandled hidden_tag response: #{hidden_tag.inspect}"
       end
     end
 

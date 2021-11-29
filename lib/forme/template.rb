@@ -102,16 +102,8 @@ module Forme
       end
 
       # The options to use for forms.  Any changes should mutate this hash to set options.
+      # Does nothing by default.
       def _forme_form_options(obj, attr, opts)
-        if hidden_tags = _forme_form_hidden_tags
-          opts[:hidden_tags] ||= []
-          opts[:hidden_tags] += hidden_tags
-        end
-        opts[:hidden_tags_uplevel] = 1
-      end
-
-      def _forme_form_hidden_tags
-        nil
       end
     end 
   end
