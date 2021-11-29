@@ -1,3 +1,9 @@
+=== master
+
+* Remove deprecated forme/sinatra and Forme::Sinatra::ERB (jeremyevans)
+
+* Remove deprecated Form :hidden_tags option (jeremyevans)
+
 === 2.0.0 (2021-11-30)
 
 * Remove Tag#<< method (jeremyevans)
