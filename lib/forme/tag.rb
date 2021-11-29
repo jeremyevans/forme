@@ -1,8 +1,8 @@
 # frozen-string-literal: true
 
 module Forme
-  # Low level abstract tag form, where each instance represents a
-  # html tag with attributes and children.
+  # Low level abstract tag form, where each instance represents an
+  # HTML tag with attributes and children.
   class Tag
     # The +Form+ object related to the receiver.
     attr_reader :form

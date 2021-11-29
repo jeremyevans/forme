@@ -14,8 +14,8 @@ module Forme
       HIDDEN_TAGS << block
     end
 
-    # This is the module used to add the Forme integration
-    # to ERB.
+    # This is the module used to add the Forme integration to ERB templates, with optional support for
+    # rack_csrf for CSRF handling.
     module Helper 
       include Template::Helper
 
