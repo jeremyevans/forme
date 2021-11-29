@@ -1,5 +1,7 @@
 === master
 
+* Deprecate forme/sinatra and Forme::Sinatra::ERB, switch to forme/erb and Forme::ERB::Helper (jeremyevans)
+
 * Deprecate Form :hidden_tags option (jeremyevans)
 
 * Add Form#post? for whether the form will submit via POST (jeremyevans)

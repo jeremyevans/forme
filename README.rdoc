@@ -844,8 +844,8 @@ The forme_erubi_capture plugin requires Roda 3.50.0+.
 
 = Sinatra Support
 
-Forme ships with a Sinatra extension that you can get by <tt>require "forme/sinatra"</tt> and using
-<tt>including Forme::Sinatra::ERB</tt>.  This is tested to support ERB templates in Sinatra.
+Forme ships with a Sinatra extension that you can get by <tt>require "forme/erb"</tt> and using
+<tt>including Forme::ERB::Helper</tt>.  This is tested to support ERB templates in Sinatra.
 It allows you to use the following API in your erb templates:
 
   <% form(@obj, :action=>'/foo') do |f| %>

@@ -1,5 +1,6 @@
 # frozen-string-literal: true
 
+warn 'forme/sinatra and Forme::Sinatra::ERB are deprecated and will be removed in a future version, switch to forme/erb and Forme::ERB::Helper', :uplevel=>1
 require_relative 'erb'
 
 module Forme

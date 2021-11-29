@@ -18,9 +18,9 @@ rescue LoadError
     require 'erb'
   end
 end
-require_relative '../lib/forme/sinatra'
+require_relative '../lib/forme/erb'
 class FormeSinatraTest < Sinatra::Base
-  helpers(Forme::Sinatra::ERB)
+  helpers(Forme::ERB::Helper)
   disable :show_exceptions
   enable :raise_errors
   enable :sessions
