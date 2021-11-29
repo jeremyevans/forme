@@ -60,8 +60,8 @@ module Forme
       private
 
       def _forme_form_options(obj, attr, opts)
-        opts[:_before] = lambda do |form|
-          if protect_against_forgery? && (form.form_tag_attributes[:method] || form.form_tag_attributes['method']).to_s.upcase == 'POST'
+        if protect_against_forgery?
+          opts[:_before_post] = lambda do |form|
             form.tag(:input, :type=>:hidden, :name=>request_forgery_protection_token, :value=>form_authenticity_token)
           end
         end

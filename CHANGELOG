@@ -1,5 +1,7 @@
 === master
 
+* Add Form#post? for whether the form will submit via POST (jeremyevans)
+
 * Add Form#form_tag_attributes for getting the attributes used for the form tag (jeremyevans)
 
 * Add :before and :after Form options, as an alternative way to implement hooks (jeremyevans)

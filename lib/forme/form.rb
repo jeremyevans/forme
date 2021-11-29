@@ -130,6 +130,11 @@ module Forme
       end
     end
 
+    # Whether the method for this form is POST.
+    def post?
+      (form_tag_attributes[:method] || form_tag_attributes['method']).to_s.upcase == 'POST'
+    end
+
     # Creates an +Input+ with the given +field+ and +opts+ associated with
     # the receiver, and add it to the list of children to the currently
     # open tag.
@@ -396,7 +401,8 @@ module Forme
 
     # Call before hooks if defined.
     def before_form_yield
-      # _before hook is only for internal use
+      # _before_post and _before hooks are only for internal use
+      opts[:_before_post].call(self) if opts[:_before_post] && post?
       opts[:_before].call(self) if opts[:_before]
 
       # before hook is for external use

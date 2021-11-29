@@ -25,10 +25,8 @@ module Forme
         super
 
         if defined?(::Rack::Csrf) && env['rack.session']
-          opts[:_before] = lambda do |form|
-            if (form.form_tag_attributes[:method] || form.form_tag_attributes['method']).to_s.upcase == 'POST'
-              form.tag(:input, :type=>:hidden, :name=>::Rack::Csrf.field, :value=>::Rack::Csrf.token(env))
-            end
+          opts[:_before_post] = lambda do |form|
+            form.tag(:input, :type=>:hidden, :name=>::Rack::Csrf.field, :value=>::Rack::Csrf.token(env))
           end
         end
       end
