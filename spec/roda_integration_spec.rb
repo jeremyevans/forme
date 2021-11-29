@@ -205,6 +205,25 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
       end
       meth == :forme_parse ? ret : h
     end
+    
+    it "should have subform work correctly" do
+      @app.route do |r|
+        @album = Album.load(:name=>'N', :copies_sold=>2, :id=>1)
+        @album.associations[:artist] = Artist.load(:name=>'A', :id=>2)
+        erb <<END
+0
+<% form(@album, {:action=>'/baz'}, :button=>'Sub') do |f| %>
+  1
+  <%= f.subform(:artist, :inputs=>[:name], :legend=>'Foo', :grid=>true, :labels=>%w'Name') %>
+  2
+<% end %>
+3
+END
+      end
+
+      body = @app.call('REQUEST_METHOD'=>'GET')[2].join.gsub("\n", ' ').gsub(/  +/, ' ').chomp(' ')
+      body.sub(%r{<input name="_csrf" type="hidden" value="([^"]+)"/>}, '<input name="_csrf" type="hidden" value="csrf"/>').must_equal '0 <form action="/baz" class="forme album" method="post"><input name="_csrf" type="hidden" value="csrf"/> 1 <table><caption>Foo</caption><thead><tr><th>Name</th></tr></thead><tbody><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="2"/><tr><td class="string"><input id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="A"/></td></tr></tbody></table> 2 <input type="submit" value="Sub"/></form>3'
+    end
 
     it "#forme_set should include HMAC values if form includes inputs for obj" do
       h = forme_set(@ab, :name=>'Foo')

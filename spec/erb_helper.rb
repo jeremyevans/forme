@@ -117,6 +117,50 @@ END
 END
   end
 
+  r.get 'grid-block' do
+    @album = Album.load(:name=>'N', :copies_sold=>2, :id=>1)
+    @album.associations[:artist] = Artist.load(:name=>'A', :id=>2)
+    erb <<END
+0
+<% form(@album, {:action=>'/baz'}, :button=>'Sub') do |f| %>
+  1
+  <% f.subform(:artist, :inputs=>[:name], :legend=>'Foo', :grid=>true, :labels=>%w'Name') do %>
+    2
+  <% end %>
+  3
+<% end %>
+4
+END
+  end
+
+  r.get 'grid-noblock' do
+    @album = Album.load(:name=>'N', :copies_sold=>2, :id=>1)
+    @album.associations[:artist] = Artist.load(:name=>'A', :id=>2)
+    erb <<END
+0
+<% form(@album, {:action=>'/baz'}, :button=>'Sub') do |f| %>
+  1
+  <%= f.subform(:artist, :inputs=>[:name], :legend=>'Foo', :grid=>true, :labels=>%w'Name') %>
+  2
+<% end %>
+3
+END
+  end
+
+  r.get 'grid-noblock-multiple' do
+    @artist = Artist.load(:name=>'A', :id=>2)
+    @artist.associations[:albums] = [Album.load(:name=>'N', :copies_sold=>2, :id=>1)]
+    erb <<END
+0
+<% form(@artist, {:action=>'/baz'}, :button=>'Sub') do |f| %>
+  1
+  <%= f.subform(:albums, :inputs=>[:name, :copies_sold], :legend=>'Foo', :grid=>true, :labels=>%w'Name Copies') %>
+  2
+<% end %>
+3
+END
+  end
+
   r.get 'hash' do
     erb "<% form({:action=>'/baz'}, :obj=>[:foo]) do |f| %> <%= f.input(:first) %> <% end %>"
   end
