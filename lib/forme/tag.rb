@@ -23,15 +23,6 @@ module Forme
       @children = parse_children(children)
     end
 
-    # Adds a child to the array of receiver's children.
-    def <<(child)
-      if children
-        children << child
-      else
-        @children = [child]
-      end
-    end
-
     # Create a new +Tag+ instance with the given arguments and block
     # related to the receiver's +form+.
     def tag(*a, &block)
