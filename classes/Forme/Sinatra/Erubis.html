@@ -35,39 +35,17 @@ Forme::Sinatra::Erubis
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>This is the module used to add the <a href="../../Forme.html"><code>Forme</code></a> integration to <a href="Helper.html"><code>ERB</code></a>.</p>
-</div>
-<div id='method-list'>
-<h2>Methods</h2>
-<h3>Public Instance</h3>
-<ol>
-<li><a href="#method-i-form">form</a></li>
-</ol>
+<p>This is the module used to add the <a href="../../Forme.html"><code>Forme</code></a> integration to <a href="Helper.html"><code>ERB</code></a> templates, with optional support for rack_csrf for CSRF handling.</p>
 </div>
 <div id='context'>
+<div id='includes'>
+<h2>Included modules</h2>
+<ol>
+<li><a href="../Template/Helper.html">Template::Helper</a></li>
+</ol>
+</div>
 </div>
 <div id='section'>
-<div id='methods'>
-<h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-form'>
-<a name='method-i-form'></a>
-<div class='synopsis'>
-<span class='name'>form</span><span class='arguments'>(obj=nil, attr={}, opts={}, &block)</span>
-
-</div>
-<div class='description'>
-
-<p>Create a <code>Form</code> object tied to the current output buffer, using the standard <a href="../ERB.html"><code>ERB</code></a> hidden tags.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-form-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-form-source'>   <span class="ruby-comment"># File lib/forme/erb.rb</span>&#x000A;<span class="line-num">29</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">form</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">30</span>   <span class="ruby-identifier">h</span> = {<span class="ruby-value">:hidden_tags</span><span class="ruby-operator">=&gt;</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">HIDDEN_TAGS</span>, <span class="ruby-value">:env</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">env</span>}&#x000A;<span class="line-num">31</span>   <span class="ruby-identifier">h</span>[<span class="ruby-value">:output</span>] = <span class="ruby-ivar">@_out_buf</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">32</span>   (<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>))&#x000A;<span class="line-num">33</span>   <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">34</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-</div>
 </div>
 
 </div>

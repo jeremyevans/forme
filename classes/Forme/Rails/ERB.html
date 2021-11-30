@@ -50,19 +50,17 @@ Forme::Rails::ERB
 <div class='method public-instance' id='method-method-i-forme'>
 <a name='method-i-forme'></a>
 <div class='synopsis'>
-<span class='name'>forme</span><span class='arguments'>(obj=nil, attr={}, opts={}, &block)</span>
+<span class='name'>forme</span><span class='arguments'>(*a, &block)</span>
 
 </div>
 <div class='description'>
-
-<p>Create a <code>Form</code> object tied to the current template, and using the standard <a href="../Rails.html"><code>Rails</code></a> hidden tags.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme-source'>    <span class="ruby-comment"># File lib/forme/rails.rb</span>&#x000A;<span class="line-num">105</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">106</span>   <span class="ruby-identifier">h</span> = {<span class="ruby-value">:template</span><span class="ruby-operator">=&gt;</span><span class="ruby-keyword">self</span>, <span class="ruby-value">:hidden_tags</span><span class="ruby-operator">=&gt;</span><span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Rails</span><span class="ruby-operator">::</span><span class="ruby-constant">HIDDEN_TAGS</span>}&#x000A;<span class="line-num">107</span>   (<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">h</span>))&#x000A;<span class="line-num">108</span>   <span class="ruby-constant">Form</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">109</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme-source'>   <span class="ruby-comment"># File lib/forme/rails.rb</span>&#x000A;<span class="line-num">52</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">53</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;<span class="line-num">54</span>     <span class="ruby-identifier">with_output_buffer</span>{<span class="ruby-identifier">_forme</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)}&#x000A;<span class="line-num">55</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">56</span>     <span class="ruby-identifier">raw</span>(<span class="ruby-identifier">_forme</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>))&#x000A;<span class="line-num">57</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">58</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

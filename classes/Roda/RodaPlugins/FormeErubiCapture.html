@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>Roda::RodaPlugins::Forme</title>
+<title>Roda::RodaPlugins::FormeErubiCapture</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -24,11 +24,11 @@
 <div class='class' id='wrapper'>
 <div class='header'>
 <h1 class='name'><span class='type'>module</span>
-Roda::RodaPlugins::Forme
+Roda::RodaPlugins::FormeErubiCapture
 </h1>
 <ol class='paths'>
 <li>
-<a href="../../../files/lib/roda/plugins/forme_rb.html">lib/roda/plugins/forme.rb</a>
+<a href="../../../files/lib/roda/plugins/forme_erubi_capture_rb.html">lib/roda/plugins/forme_erubi_capture.rb</a>
 </li>
 </ol>
 </div>
@@ -47,26 +47,11 @@ Roda::RodaPlugins::Forme
 <div id='class-list'>
 <h2>Classes and Modules</h2>
 <ol>
-<li><a href="../../Forme/ERB/Helper.html">Roda::RodaPlugins::Forme::InstanceMethods</a></li>
+<li><a href="FormeErubiCapture/InstanceMethods.html">Roda::RodaPlugins::FormeErubiCapture::InstanceMethods</a></li>
+<li><a href="FormeErubiCapture/Form.html">Roda::RodaPlugins::FormeErubiCapture::Form</a></li>
 </ol>
 </div>
 <div id='section'>
-<div id='constants-list'>
-<h2>Constants</h2>
-<div class='name-list'>
-<table summary='Constants'>
-<tr class='top-aligned-row context-row'>
-<td class='context-item-name'>InstanceMethods</td>
-<td>=</td>
-<td class='context-item-value'>::Forme::ERB::Helper</td>
-<td>&nbsp;</td>
-<td class='context-item-desc'>
-<p>This is the module used to add the <a href="Forme.html"><code>Forme</code></a> integration to ERB templates, with optional support for rack_csrf for CSRF handling.</p>
-</td>
-</tr>
-</table>
-</div>
-</div>
 <div id='methods'>
 <h2>Public Class methods</h2>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -77,14 +62,12 @@ Roda::RodaPlugins::Forme
 </div>
 <div class='description'>
 
-<p>Require the render plugin, since forme template integration only makes sense with it.</p>
-
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme.rb</span>&#x000A;<span class="line-num">10</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">11</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">12</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_erubi_capture.rb</span>&#x000A;<span class="line-num"> 8</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num"> 9</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:forme_route_csrf</span>&#x000A;<span class="line-num">10</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:capture_erb</span>&#x000A;<span class="line-num">11</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:inject_erb</span>&#x000A;<span class="line-num">12</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

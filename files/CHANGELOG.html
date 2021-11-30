@@ -30,12 +30,47 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2021-08-25 09:07:22 -0700</span>
+<span class='datetime'>2021-11-30 12:58:11 -0800</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h3 id="label-2.0.0+-282021-11-30-29">2.0.0 (2021-11-30)<span><a href="#label-2.0.0+-282021-11-30-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<ul><li>
+<p>Remove Tag#<< method (jeremyevans)</p>
+</li><li>
+<p>Remove Form#_inputs method (jeremyevans)</p>
+</li><li>
+<p>Deprecate forme/sinatra and <a href="../classes/Forme/ERB/Helper.html"><code>Forme::Sinatra::ERB</code></a>, switch to forme/erb and <a href="../classes/Forme/ERB/Helper.html"><code>Forme::ERB::Helper</code></a> (jeremyevans)</p>
+</li><li>
+<p>Deprecate Form :hidden_tags option (jeremyevans)</p>
+</li><li>
+<p>Add Form#post? for whether the form will submit via POST (jeremyevans)</p>
+</li><li>
+<p>Add Form#form_tag_attributes for getting the attributes used for the form tag (jeremyevans)</p>
+</li><li>
+<p>Add :before and :after Form options, as an alternative way to implement hooks (jeremyevans)</p>
+</li><li>
+<p>Passing a callable as the child of a tag should now not call methods that will modify the related form (such as Form#tag) (jeremyevans)</p>
+</li><li>
+<p>Change API for _forme_form_options private method used in template integrations (jeremyevans)</p>
+</li><li>
+<p>Remove Form#{nesting,tag_,raw_output,emit} (jeremyevans)</p>
+</li><li>
+<p>Make Form#{form,tag,input,inputs} return HTML string (jeremyevans)</p>
+</li><li>
+<p>Refactor internals, switch template integration to use delegation instead of inheritance (jeremyevans)</p>
+</li><li>
+<p>Add <a href="../classes/Roda.html"><code>Roda</code></a> forme_erubi_capture plugin to support erubi/capture_end &lt;%|= form do %&gt; &lt;%| end %&gt; tags (jeremyevans)</p>
+</li><li>
+<p>Make bs3 formatter automatically setup aria-invalid and aria-describedby attributes for errors (waiting-for-dev) (#96)</p>
+</li><li>
+<p>Make bs3 formatter handle form-level :errors key (waiting-for-dev) (#96)</p>
+</li><li>
+<p>Drop support for Ruby 1.8 (jeremyevans)</p>
+</li></ul>
+
 <h3 id="label-1.12.0+-282021-08-25-29">1.12.0 (2021-08-25)<span><a href="#label-1.12.0+-282021-08-25-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
 <p>Make forme_set <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin handle frozen Sequel::Model instances (jeremyevans)</p>

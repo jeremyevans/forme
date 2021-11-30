@@ -30,12 +30,6 @@ Forme::ERB
 <li>
 <a href="../../files/lib/forme/erb_rb.html">lib/forme/erb.rb</a>
 </li>
-<li class='other'>
-<a href="../../files/lib/forme/erb_form_rb.html">lib/forme/erb_form.rb</a>
-</li>
-<li>
-<a class='show' href='#' onclick='this.parentNode.parentNode.className += &quot; expanded&quot;; this.parentNode.removeChild(this); return false'>show all</a>
-</li>
 </ol>
 </div>
 <div id='content'>
@@ -54,7 +48,6 @@ Forme::ERB
 <h2>Classes and Modules</h2>
 <ol>
 <li><a href="ERB/Helper.html">Forme::ERB::Helper</a></li>
-<li><a href="ERB/Form.html">Forme::ERB::Form</a></li>
 </ol>
 </div>
 <div id='section'>
@@ -82,7 +75,7 @@ Forme::ERB
 </div>
 <div class='description'>
 
-<p>Add a hidden tag proc that will be used for all forms created via <a href="ERB/Helper.html#method-i-form"><code>Forme::ERB::Helper#form</code></a>. The block is yielded the <a href="Tag.html"><code>Forme::Tag</code></a> object for the form tag. The block should return either nil if hidden tag should be added, or a <a href="Tag.html"><code>Forme::Tag</code></a> object (or an array of them), or a hash with keys specifying the name of the tags and the values specifying the values of the tags .</p>
+<p>Add a hidden tag proc that will be used for all forms created via <a href="Template/Helper.html#method-i-form"><code>Forme::ERB::Helper#form</code></a>. The block is yielded the <a href="Tag.html"><code>Forme::Tag</code></a> object for the form tag. The block should return either nil if hidden tag should be added, or a <a href="Tag.html"><code>Forme::Tag</code></a> object (or an array of them), or a hash with keys specifying the name of the tags and the values specifying the values of the tags .</p>
 
 </div>
 <div class='source'>

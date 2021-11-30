@@ -35,37 +35,15 @@ Roda::RodaPlugins::FormeRouteCsrf::InstanceMethods
 <div id='content'>
 <div id='text'>
 <div id='description'></div>
-<div id='method-list'>
-<h2>Methods</h2>
-<h3>Public Instance</h3>
+<div id='context'>
+<div id='includes'>
+<h2>Included modules</h2>
 <ol>
-<li><a href="#method-i-form">form</a></li>
+<li><a href="../../../Forme/Template/Helper.html">::Forme::Template::Helper</a></li>
 </ol>
 </div>
-<div id='context'>
 </div>
 <div id='section'>
-<div id='methods'>
-<h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-form'>
-<a name='method-i-form'></a>
-<div class='synopsis'>
-<span class='name'>form</span><span class='arguments'>(obj=nil, attr={}, opts={}, &block)</span>
-
-</div>
-<div class='description'>
-
-<p>Create a <code>Form</code> object tied to the current output buffer, using the standard ERB hidden tags.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-form-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-form-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_route_csrf.rb</span>&#x000A;<span class="line-num">18</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">form</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">19</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;<span class="line-num">20</span>     <span class="ruby-identifier">attribs</span> = <span class="ruby-identifier">obj</span>&#x000A;<span class="line-num">21</span>     <span class="ruby-identifier">options</span> = <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">22</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">23</span>     <span class="ruby-identifier">attribs</span> = <span class="ruby-identifier">attr</span>&#x000A;<span class="line-num">24</span>     <span class="ruby-identifier">options</span> = <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">25</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">26</span> &#x000A;<span class="line-num">27</span>   <span class="ruby-identifier">apply_csrf</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:csrf</span>]&#x000A;<span class="line-num">28</span> &#x000A;<span class="line-num">29</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">apply_csrf</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">apply_csrf</span>.<span class="ruby-identifier">nil?</span>&#x000A;<span class="line-num">30</span>     <span class="ruby-keyword">unless</span> <span class="ruby-identifier">method</span> = <span class="ruby-identifier">attribs</span>[<span class="ruby-value">:method</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">attribs</span>[<span class="ruby-string">&#39;method&#39;</span>]&#x000A;<span class="line-num">31</span>       <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:forme_default_request_method</span>)&#x000A;<span class="line-num">32</span>         <span class="ruby-identifier">method</span> = <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_default_request_method</span>&#x000A;<span class="line-num">33</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">34</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">35</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">36</span> &#x000A;<span class="line-num">37</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">apply_csrf</span>.<span class="ruby-identifier">nil?</span>&#x000A;<span class="line-num">38</span>     <span class="ruby-identifier">apply_csrf</span> = <span class="ruby-identifier">csrf_options</span>[<span class="ruby-value">:check_request_methods</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">method</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">upcase</span>)&#x000A;<span class="line-num">39</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">40</span> &#x000A;<span class="line-num">41</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">apply_csrf</span>&#x000A;<span class="line-num">42</span>     <span class="ruby-identifier">token</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:use_request_specific_token</span>){<span class="ruby-identifier">use_request_specific_csrf_tokens?</span>}&#x000A;<span class="line-num">43</span>       <span class="ruby-identifier">csrf_token</span>(<span class="ruby-identifier">csrf_path</span>(<span class="ruby-identifier">attribs</span>[<span class="ruby-value">:action</span>]), <span class="ruby-identifier">method</span>)&#x000A;<span class="line-num">44</span>     <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">45</span>       <span class="ruby-identifier">csrf_token</span>&#x000A;<span class="line-num">46</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">47</span> &#x000A;<span class="line-num">48</span>     <span class="ruby-identifier">options</span>[<span class="ruby-value">:csrf</span>] = [<span class="ruby-identifier">csrf_field</span>, <span class="ruby-identifier">token</span>]&#x000A;<span class="line-num">49</span>     <span class="ruby-identifier">options</span>[<span class="ruby-value">:hidden_tags</span>] <span class="ruby-operator">||=</span> []&#x000A;<span class="line-num">50</span>     <span class="ruby-identifier">options</span>[<span class="ruby-value">:hidden_tags</span>] <span class="ruby-operator">+=</span> [{<span class="ruby-identifier">csrf_field</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">token</span>}]&#x000A;<span class="line-num">51</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">52</span> &#x000A;<span class="line-num">53</span>   <span class="ruby-identifier">options</span>[<span class="ruby-value">:output</span>] = <span class="ruby-ivar">@_out_buf</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">54</span>   <span class="ruby-identifier">_forme_form_options</span>(<span class="ruby-identifier">options</span>)&#x000A;<span class="line-num">55</span>   <span class="ruby-identifier">_forme_form_class</span>.<span class="ruby-identifier">form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">56</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-</div>
 </div>
 
 </div>
