@@ -9,6 +9,15 @@ describe "Forme Sequel::Model forms" do
     @c = Forme::Form.new(@ac)
   end
   
+  it "should handle Forme::Form subclasses" do
+    c = Class.new(Forme::Form) do
+      def form(*)
+        super{|f| f.tag(:input, :type=>:hidden, :name=>'a', :value=>'b')}
+      end
+    end
+    c.new(@ab).form.to_s.must_equal '<form class="forme album" method="post"><input name="a" type="hidden" value="b"/></form>'
+  end
+
   it "should add appropriate attributes by default" do
     @b.form.to_s.must_equal '<form class="forme album" method="post"></form>'
   end

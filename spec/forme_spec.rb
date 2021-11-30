@@ -631,6 +631,12 @@ describe "Forme plain forms" do
     @f.tag(:textarea, {:name=>:foo}, :bar).to_s.must_equal '<textarea name="foo">bar</textarea>'
   end
 
+  it "#tag should accept a block" do
+    @f.tag(:div){@f.tag(:textarea)}.to_s.must_equal '<div><textarea></textarea></div>'
+    @f.tag(:div, :name=>'a'){@f.tag(:textarea)}.to_s.must_equal '<div name="a"><textarea></textarea></div>'
+    @f.tag(:div, {:name=>'a'}, ["text"]){@f.tag(:textarea)}.to_s.must_equal '<div name="a">text<textarea></textarea></div>'
+  end
+
   it "#tag should accept children as procs" do
     @f.tag(:div, {:class=>"foo"}, lambda{|t| t.tag(:input, :class=>t.attr[:class])}).to_s.must_equal '<div class="foo"><input class="foo"/></div>'
   end
@@ -1064,6 +1070,7 @@ describe "Forme built-in custom" do
     Forme::Form.new(:serializer=>:text).button().to_s.must_equal ""
     Forme::Form.new(:serializer=>:text).inputs([[:textarea, {:label=>"Foo", :value=>"Bar"}]], :legend=>'Baz').to_s.must_equal "Baz\n---\nFoo: Bar\n\n"
     Forme::Form.new(:serializer=>:text).tag(:p){|f| f.input(:textarea, :label=>"Foo", :value=>"Bar")}.to_s.must_equal "Foo: Bar\n\n"
+    Forme::Form.new(:serializer=>:text).tag(:p, {}, ['a']).to_s.must_equal "a"
   end
 end
 
