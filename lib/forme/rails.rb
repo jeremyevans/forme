@@ -49,6 +49,7 @@ module Forme
 
       private
 
+      remove_method :_forme_form_options
       def _forme_form_options(obj, attr, opts)
         if protect_against_forgery?
           opts[:_before_post] = lambda do |form|
@@ -57,6 +58,7 @@ module Forme
         end
       end
 
+      remove_method :_forme_form_class
       # The class to use for forms
       def _forme_form_class
         TemplateForm

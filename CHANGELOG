@@ -1,5 +1,7 @@
 === master
 
+* Fix verbose warnings in forme/rails (jeremyevans)
+
 * Remove deprecated forme/sinatra and Forme::Sinatra::ERB (jeremyevans)
 
 * Remove deprecated Form :hidden_tags option (jeremyevans)

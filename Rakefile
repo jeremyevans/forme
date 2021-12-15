@@ -50,7 +50,7 @@ end
 
 desc "Run specs"
 task :spec do
-  sh "#{FileUtils::RUBY} spec/all.rb"
+  sh "#{FileUtils::RUBY} #{'-w' if RUBY_VERSION >= '3'} spec/all.rb"
 end
 task :default => :spec
 
@@ -58,12 +58,6 @@ desc "Run specs with coverage"
 task :spec_cov do
   ENV['COVERAGE'] = '1'
   sh "#{FileUtils::RUBY} spec/all.rb"
-end
-
-desc "Run specs with -w, some warnings filtered"
-task :spec_w do
-  ENV['WARNING'] = '1'
-  sh "#{FileUtils::RUBY} -w spec/all.rb"
 end
 
 ### Other

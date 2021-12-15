@@ -1,10 +1,5 @@
 $:.unshift(File.join(File.dirname(File.dirname(File.expand_path(__FILE__))), 'lib'))
 
-if ENV['WARNING']
-  require 'warning'
-  Warning.ignore([:missing_ivar, :not_reached, :method_redefined])
-end
-
 if ENV['COVERAGE']
   require_relative 'forme_coverage'
   SimpleCov.forme_coverage
