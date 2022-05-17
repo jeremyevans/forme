@@ -1,5 +1,7 @@
 === master
 
+* Avoid hidden inputs inside tbody tags in subform in the Sequel::Model support, since that results in invalid HTML (jeremyevans)
+
 * Fix verbose warnings in forme/rails (jeremyevans)
 
 * Remove deprecated forme/sinatra and Forme::Sinatra::ERB (jeremyevans)

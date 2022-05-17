@@ -66,9 +66,12 @@ module Sequel # :nodoc:
             grid = opts[:grid]
             ns = "#{association}_attributes"
 
+            send(multiple ? :each_obj : :with_obj, nested_obj, ns) do |no, i|
+              input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil) unless no.new? || opts[:skip_primary_key]
+            end
+
             contents = proc do
               send(multiple ? :each_obj : :with_obj, nested_obj, ns) do |no, i|
-                input(ref.associated_class.primary_key, :type=>:hidden, :label=>nil, :wrapper=>nil) unless no.new? || opts[:skip_primary_key]
                 options = opts.dup
                 if grid
                   options.delete(:legend)
