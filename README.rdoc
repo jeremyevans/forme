@@ -73,7 +73,7 @@ following HTML instead:
     </fieldset>
   </form>
 
-This allows you to reuse the same form code in multiple context,
+This allows you to reuse the same form code in multiple contexts,
 which can save considerable development time.
 
 = Installation
@@ -871,7 +871,7 @@ in your Rails forms:
     <% end %>
   <% end %>
 
-This has been tested on Rails 3.2-6.1.
+This has been tested on Rails 3.2-7.0.
 
 = Input Types and Options
 
@@ -1096,7 +1096,7 @@ usually a +Tag+ instance).  It is up to the +Formatter+ to call the +Labeler+,
 
 The Forme::Form object takes the transformers as options (:formatter,
 :labeler, :error_handler, :helper, :wrapper, and :serializer), all of which
-should be objects responding to +call+ (so you can use +Proc+s) or be symbols
+should be objects responding to +call+ (so you can use <tt>Proc</tt>s) or be symbols
 registered with the library using <tt>Forme.register_transformer</tt>:
 
   Forme.register_transformer(:wrapper, :p) do |tag, input|
