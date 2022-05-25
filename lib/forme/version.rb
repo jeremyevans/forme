@@ -6,7 +6,7 @@ module Forme
   MAJOR = 2
 
   # The minor version of Forme, updated for new feature releases of Forme.
-  MINOR = 0
+  MINOR = 1
 
   # The patch version of Forme, updated only for bug fixes from the last
   # feature release.

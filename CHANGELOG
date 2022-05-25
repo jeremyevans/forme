@@ -1,4 +1,4 @@
-=== master
+=== 2.1.0 (2022-05-25)
 
 * Avoid hidden inputs inside tbody tags in subform in the Sequel::Model support, since that results in invalid HTML (jeremyevans)
 
