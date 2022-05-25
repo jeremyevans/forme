@@ -30,19 +30,30 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2021-11-30 12:58:11 -0800</span>
+<span class='datetime'>2022-05-25 13:07:50 -0700</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h3 id="label-2.1.0+-282022-05-25-29">2.1.0 (2022-05-25)<span><a href="#label-2.1.0+-282022-05-25-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<ul><li>
+<p>Avoid hidden inputs inside tbody tags in subform in the Sequel::Model support, since that results in invalid HTML (jeremyevans)</p>
+</li><li>
+<p>Fix verbose warnings in forme/rails (jeremyevans)</p>
+</li><li>
+<p>Remove deprecated forme/sinatra and Forme::Sinatra::ERB (jeremyevans)</p>
+</li><li>
+<p>Remove deprecated Form :hidden_tags option (jeremyevans)</p>
+</li></ul>
+
 <h3 id="label-2.0.0+-282021-11-30-29">2.0.0 (2021-11-30)<span><a href="#label-2.0.0+-282021-11-30-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
 <p>Remove Tag#<< method (jeremyevans)</p>
 </li><li>
 <p>Remove Form#_inputs method (jeremyevans)</p>
 </li><li>
-<p>Deprecate forme/sinatra and <a href="../classes/Forme/ERB/Helper.html"><code>Forme::Sinatra::ERB</code></a>, switch to forme/erb and <a href="../classes/Forme/ERB/Helper.html"><code>Forme::ERB::Helper</code></a> (jeremyevans)</p>
+<p>Deprecate forme/sinatra and Forme::Sinatra::ERB, switch to forme/erb and <a href="../classes/Forme/ERB/Helper.html"><code>Forme::ERB::Helper</code></a> (jeremyevans)</p>
 </li><li>
 <p>Deprecate Form :hidden_tags option (jeremyevans)</p>
 </li><li>
@@ -137,7 +148,7 @@ Last Update:
 </li><li>
 <p>Omit labels for hidden inputs in <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (janko-m) (#27)</p>
 </li><li>
-<p>Allow use of :type option for specifying input type when using an associated object that doesn&#39;t respond to forme_input (janko-m) (#25)</p>
+<p>Allow use of :type option for specifying input type when using an associated object that doesn’t respond to forme_input (janko-m) (#25)</p>
 </li><li>
 <p>Ignore default values for <a href="../classes/Sequel.html"><code>Sequel</code></a> inputs when type: :file option is used (janko-m) (#24)</p>
 </li></ul>
@@ -148,7 +159,7 @@ Last Update:
 </li><li>
 <p>Add :tag_labeler option for checkboxsets and radiosets for the labeler to use for individual elements (jeremyevans)</p>
 </li><li>
-<p>Use milliseconds instead of microseconds for serializing Time and DateTime values, since that&#39;s what datetime-local inputs support (jeremyevans)</p>
+<p>Use milliseconds instead of microseconds for serializing Time and DateTime values, since that’s what datetime-local inputs support (jeremyevans)</p>
 </li></ul>
 
 <h3 id="label-1.6.0+-282017-05-03-29">1.6.0 (2017-05-03)<span><a href="#label-1.6.0+-282017-05-03-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
@@ -157,7 +168,7 @@ Last Update:
 </li><li>
 <p>Do not create a hidden input for checkboxes when using disabled/readonly formatters (jeremyevans)</p>
 </li><li>
-<p>Add support for overriding forme_namespace on the Sequel::Model instance to change forme&#39;s namespacing (mwpastore, jeremyevans) (#17)</p>
+<p>Add support for overriding forme_namespace on the Sequel::Model instance to change forme’s namespacing (mwpastore, jeremyevans) (#17)</p>
 </li><li>
 <p>Allow :label_attr for checkboxset and radioset to set attributes for individual labels in the set (jeremyevans)</p>
 </li></ul>
@@ -232,7 +243,7 @@ Last Update:
 <ul><li>
 <p>Make form without a block in the ERB integration still use hidden tags if method is post (jeremyevans)</p>
 </li><li>
-<p>Add <a href="../classes/Forme/RawString.html"><code>Forme::RawString</code></a> class, <a href="../classes/Forme.html#method-c-raw"><code>Forme.raw</code></a>, and Form#raw for creating raw strings, so you don&#39;t need to use extend(<a href="../classes/Forme/Raw.html"><code>Forme::Raw</code></a>) (jeremyevans)</p>
+<p>Add <a href="../classes/Forme/RawString.html"><code>Forme::RawString</code></a> class, <a href="../classes/Forme.html#method-c-raw"><code>Forme.raw</code></a>, and Form#raw for creating raw strings, so you don’t need to use extend(<a href="../classes/Forme/Raw.html"><code>Forme::Raw</code></a>) (jeremyevans)</p>
 </li><li>
 <p>Allow using nil as explicit transformer value when creating a Form, to disable default transformer (jeremyevans)</p>
 </li></ul>
@@ -252,9 +263,9 @@ Last Update:
 </li><li>
 <p>Add Form#each_obj, for iterating over an Enumerable of objects, using with_obj for each object (jeremyevans)</p>
 </li><li>
-<p>Add Form#with_obj, for changing a Form&#39;s object and namespace temporarily (jeremyevans)</p>
+<p>Add Form#with_obj, for changing a Form’s object and namespace temporarily (jeremyevans)</p>
 </li><li>
-<p>Support changing the namespace for a Form temporarily using with_opts(:namespace=&gt;[&#39;ns1&#39;, &#39;ns2&#39;]) (jeremyevans)</p>
+<p>Support changing the namespace for a Form temporarily using with_opts(:namespace=&gt;[‘ns1’, ‘ns2’]) (jeremyevans)</p>
 </li><li>
 <p>Use current namespace for form object inputs if :id/:name/:key is not specified (jeremyevans)</p>
 </li><li>
@@ -390,7 +401,7 @@ Last Update:
 </li><li>
 <p>Always add error class to formatted input tag, regardless of error_handler (jeremyevans)</p>
 </li><li>
-<p>Add labels to inputs for fields that the object doesn&#39;t respond to in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
+<p>Add labels to inputs for fields that the object doesn’t respond to in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
 <p>Allow customization for non-schema columns that the object responds to in the <a href="../classes/Sequel.html"><code>Sequel</code></a> plugin (jeremyevans)</p>
 </li><li>
@@ -423,7 +434,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -67,7 +67,10 @@ Sequel::Plugins::FormeSet::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_input-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme_input-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>&#x000A;<span class="line-num">34</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_input</span>(<span class="ruby-identifier">_form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">_opts</span>)&#x000A;<span class="line-num">35</span>   <span class="ruby-identifier">frozen?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">super</span> <span class="ruby-operator">:</span> (<span class="ruby-identifier">forme_inputs</span>[<span class="ruby-identifier">field</span>] = <span class="ruby-keyword">super</span>)&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme_input-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>
+<span class="line-num">34</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_input</span>(<span class="ruby-identifier">_form</span>, <span class="ruby-identifier">field</span>, <span class="ruby-identifier">_opts</span>)
+<span class="line-num">35</span>   <span class="ruby-identifier">frozen?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">super</span> <span class="ruby-operator">:</span> (<span class="ruby-identifier">forme_inputs</span>[<span class="ruby-identifier">field</span>] = <span class="ruby-keyword">super</span>)
+<span class="line-num">36</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-forme_inputs'>
@@ -85,7 +88,11 @@ Sequel::Plugins::FormeSet::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_inputs-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme_inputs-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>&#x000A;<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_inputs</span>&#x000A;<span class="line-num">21</span>   <span class="ruby-keyword">return</span> (<span class="ruby-ivar">@forme_inputs</span> <span class="ruby-operator">||</span> {}) <span class="ruby-keyword">if</span> <span class="ruby-identifier">frozen?</span>&#x000A;<span class="line-num">22</span>   <span class="ruby-ivar">@forme_inputs</span> <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">23</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme_inputs-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>
+<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_inputs</span>
+<span class="line-num">21</span>   <span class="ruby-keyword">return</span> (<span class="ruby-ivar">@forme_inputs</span> <span class="ruby-operator">||</span> {}) <span class="ruby-keyword">if</span> <span class="ruby-identifier">frozen?</span>
+<span class="line-num">22</span>   <span class="ruby-ivar">@forme_inputs</span> <span class="ruby-operator">||=</span> {}
+<span class="line-num">23</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-forme_parse'>
@@ -108,7 +115,22 @@ Sequel::Plugins::FormeSet::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_parse-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme_parse-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>&#x000A;<span class="line-num">46</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_parse</span>(<span class="ruby-identifier">params</span>)&#x000A;<span class="line-num">47</span>   <span class="ruby-identifier">hash</span> = {}&#x000A;<span class="line-num">48</span>   <span class="ruby-identifier">hash_values</span> = <span class="ruby-identifier">hash</span>[<span class="ruby-value">:values</span>] = {}&#x000A;<span class="line-num">49</span>   <span class="ruby-identifier">validations</span> = <span class="ruby-identifier">hash</span>[<span class="ruby-value">:validations</span>] = {}&#x000A;<span class="line-num">50</span> &#x000A;<span class="line-num">51</span>   <span class="ruby-identifier">forme_inputs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span>, <span class="ruby-identifier">input</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">52</span>     <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">column</span> = <span class="ruby-identifier">forme_column_for_input</span>(<span class="ruby-identifier">input</span>)&#x000A;<span class="line-num">53</span>     <span class="ruby-identifier">hash_values</span>[<span class="ruby-identifier">column</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">column</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">column</span>.<span class="ruby-identifier">to_s</span>]&#x000A;<span class="line-num">54</span> &#x000A;<span class="line-num">55</span>     <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">validation</span> = <span class="ruby-identifier">forme_validation_for_input</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">input</span>)&#x000A;<span class="line-num">56</span>     <span class="ruby-identifier">validations</span>[<span class="ruby-identifier">column</span>] = <span class="ruby-identifier">validation</span>&#x000A;<span class="line-num">57</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">58</span> &#x000A;<span class="line-num">59</span>   <span class="ruby-identifier">hash</span>&#x000A;<span class="line-num">60</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme_parse-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>
+<span class="line-num">46</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_parse</span>(<span class="ruby-identifier">params</span>)
+<span class="line-num">47</span>   <span class="ruby-identifier">hash</span> = {}
+<span class="line-num">48</span>   <span class="ruby-identifier">hash_values</span> = <span class="ruby-identifier">hash</span>[<span class="ruby-value">:values</span>] = {}
+<span class="line-num">49</span>   <span class="ruby-identifier">validations</span> = <span class="ruby-identifier">hash</span>[<span class="ruby-value">:validations</span>] = {}
+<span class="line-num">50</span> 
+<span class="line-num">51</span>   <span class="ruby-identifier">forme_inputs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">field</span>, <span class="ruby-identifier">input</span><span class="ruby-operator">|</span>
+<span class="line-num">52</span>     <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">column</span> = <span class="ruby-identifier">forme_column_for_input</span>(<span class="ruby-identifier">input</span>)
+<span class="line-num">53</span>     <span class="ruby-identifier">hash_values</span>[<span class="ruby-identifier">column</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">column</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">params</span>[<span class="ruby-identifier">column</span>.<span class="ruby-identifier">to_s</span>]
+<span class="line-num">54</span> 
+<span class="line-num">55</span>     <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">validation</span> = <span class="ruby-identifier">forme_validation_for_input</span>(<span class="ruby-identifier">field</span>, <span class="ruby-identifier">input</span>)
+<span class="line-num">56</span>     <span class="ruby-identifier">validations</span>[<span class="ruby-identifier">column</span>] = <span class="ruby-identifier">validation</span>
+<span class="line-num">57</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">58</span> 
+<span class="line-num">59</span>   <span class="ruby-identifier">hash</span>
+<span class="line-num">60</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-forme_set'>
@@ -126,7 +148,15 @@ Sequel::Plugins::FormeSet::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_set-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme_set-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>&#x000A;<span class="line-num">64</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_set</span>(<span class="ruby-identifier">params</span>)&#x000A;<span class="line-num">65</span>   <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">forme_parse</span>(<span class="ruby-identifier">params</span>)&#x000A;<span class="line-num">66</span>   <span class="ruby-identifier">set</span>(<span class="ruby-identifier">hash</span>[<span class="ruby-value">:values</span>])&#x000A;<span class="line-num">67</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">hash</span>[<span class="ruby-value">:validations</span>].<span class="ruby-identifier">empty?</span>&#x000A;<span class="line-num">68</span>     <span class="ruby-identifier">forme_validations</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">hash</span>[<span class="ruby-value">:validations</span>])&#x000A;<span class="line-num">69</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">70</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">71</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme_set-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>
+<span class="line-num">64</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_set</span>(<span class="ruby-identifier">params</span>)
+<span class="line-num">65</span>   <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">forme_parse</span>(<span class="ruby-identifier">params</span>)
+<span class="line-num">66</span>   <span class="ruby-identifier">set</span>(<span class="ruby-identifier">hash</span>[<span class="ruby-value">:values</span>])
+<span class="line-num">67</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">hash</span>[<span class="ruby-value">:validations</span>].<span class="ruby-identifier">empty?</span>
+<span class="line-num">68</span>     <span class="ruby-identifier">forme_validations</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">hash</span>[<span class="ruby-value">:validations</span>])
+<span class="line-num">69</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">70</span>   <span class="ruby-keyword">nil</span>
+<span class="line-num">71</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-forme_validations'>
@@ -144,7 +174,11 @@ Sequel::Plugins::FormeSet::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forme_validations-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forme_validations-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_validations</span>&#x000A;<span class="line-num">29</span>   <span class="ruby-keyword">return</span> (<span class="ruby-ivar">@forme_validations</span> <span class="ruby-operator">||</span> {}) <span class="ruby-keyword">if</span> <span class="ruby-identifier">frozen?</span>&#x000A;<span class="line-num">30</span>   <span class="ruby-ivar">@forme_validations</span> <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forme_validations-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>
+<span class="line-num">28</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_validations</span>
+<span class="line-num">29</span>   <span class="ruby-keyword">return</span> (<span class="ruby-ivar">@forme_validations</span> <span class="ruby-operator">||</span> {}) <span class="ruby-keyword">if</span> <span class="ruby-identifier">frozen?</span>
+<span class="line-num">30</span>   <span class="ruby-ivar">@forme_validations</span> <span class="ruby-operator">||=</span> {}
+<span class="line-num">31</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-validate'>
@@ -162,7 +196,33 @@ Sequel::Plugins::FormeSet::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-validate-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-validate-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>&#x000A;<span class="line-num">74</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">validate</span>&#x000A;<span class="line-num">75</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">76</span> &#x000A;<span class="line-num">77</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">validations</span> = <span class="ruby-ivar">@forme_validations</span>&#x000A;<span class="line-num">78</span>     <span class="ruby-identifier">validations</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">column</span>, (<span class="ruby-identifier">type</span>, <span class="ruby-identifier">values</span>)<span class="ruby-operator">|</span>&#x000A;<span class="line-num">79</span>       <span class="ruby-identifier">value</span> = <span class="ruby-identifier">send</span>(<span class="ruby-identifier">column</span>)&#x000A;<span class="line-num">80</span> &#x000A;<span class="line-num">81</span>       <span class="ruby-identifier">valid</span> = <span class="ruby-keyword">case</span> <span class="ruby-identifier">type</span>&#x000A;<span class="line-num">82</span>       <span class="ruby-keyword">when</span> <span class="ruby-value">:subset</span>&#x000A;<span class="line-num">83</span>         <span class="ruby-comment"># Handle missing value the same as the empty array,</span>&#x000A;<span class="line-num">84</span>         <span class="ruby-comment"># can happen with PostgreSQL array associations</span>&#x000A;<span class="line-num">85</span>         <span class="ruby-operator">!</span><span class="ruby-identifier">value</span> <span class="ruby-operator">||</span> (<span class="ruby-identifier">value</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">values</span>).<span class="ruby-identifier">empty?</span>&#x000A;<span class="line-num">86</span>       <span class="ruby-keyword">when</span> <span class="ruby-value">:include</span>&#x000A;<span class="line-num">87</span>         <span class="ruby-identifier">values</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>)&#x000A;<span class="line-num">88</span>       <span class="ruby-keyword">when</span> <span class="ruby-value">:valid</span>&#x000A;<span class="line-num">89</span>         <span class="ruby-identifier">values</span>&#x000A;<span class="line-num">90</span>       <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">91</span>         <span class="ruby-identifier">raise</span> <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>, <span class="ruby-string">&quot;invalid type used in forme_validations&quot;</span>&#x000A;<span class="line-num">92</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">93</span> &#x000A;<span class="line-num">94</span>       <span class="ruby-keyword">unless</span> <span class="ruby-identifier">valid</span>&#x000A;<span class="line-num">95</span>         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">column</span>, <span class="ruby-string">&#39;invalid value submitted&#39;</span>)&#x000A;<span class="line-num">96</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">97</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">98</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">99</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-validate-source'>   <span class="ruby-comment"># File lib/sequel/plugins/forme_set.rb</span>
+<span class="line-num">74</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">validate</span>
+<span class="line-num">75</span>   <span class="ruby-keyword">super</span>
+<span class="line-num">76</span> 
+<span class="line-num">77</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">validations</span> = <span class="ruby-ivar">@forme_validations</span>
+<span class="line-num">78</span>     <span class="ruby-identifier">validations</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">column</span>, (<span class="ruby-identifier">type</span>, <span class="ruby-identifier">values</span>)<span class="ruby-operator">|</span>
+<span class="line-num">79</span>       <span class="ruby-identifier">value</span> = <span class="ruby-identifier">send</span>(<span class="ruby-identifier">column</span>)
+<span class="line-num">80</span> 
+<span class="line-num">81</span>       <span class="ruby-identifier">valid</span> = <span class="ruby-keyword">case</span> <span class="ruby-identifier">type</span>
+<span class="line-num">82</span>       <span class="ruby-keyword">when</span> <span class="ruby-value">:subset</span>
+<span class="line-num">83</span>         <span class="ruby-comment"># Handle missing value the same as the empty array,</span>
+<span class="line-num">84</span>         <span class="ruby-comment"># can happen with PostgreSQL array associations</span>
+<span class="line-num">85</span>         <span class="ruby-operator">!</span><span class="ruby-identifier">value</span> <span class="ruby-operator">||</span> (<span class="ruby-identifier">value</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">values</span>).<span class="ruby-identifier">empty?</span>
+<span class="line-num">86</span>       <span class="ruby-keyword">when</span> <span class="ruby-value">:include</span>
+<span class="line-num">87</span>         <span class="ruby-identifier">values</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">value</span>)
+<span class="line-num">88</span>       <span class="ruby-keyword">when</span> <span class="ruby-value">:valid</span>
+<span class="line-num">89</span>         <span class="ruby-identifier">values</span>
+<span class="line-num">90</span>       <span class="ruby-keyword">else</span>
+<span class="line-num">91</span>         <span class="ruby-identifier">raise</span> <span class="ruby-constant">Forme</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span>, <span class="ruby-string">&quot;invalid type used in forme_validations&quot;</span>
+<span class="line-num">92</span>       <span class="ruby-keyword">end</span>
+<span class="line-num">93</span> 
+<span class="line-num">94</span>       <span class="ruby-keyword">unless</span> <span class="ruby-identifier">valid</span>
+<span class="line-num">95</span>         <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">column</span>, <span class="ruby-string">&#39;invalid value submitted&#39;</span>)
+<span class="line-num">96</span>       <span class="ruby-keyword">end</span>
+<span class="line-num">97</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">98</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">99</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -174,7 +234,7 @@ Sequel::Plugins::FormeSet::InstanceMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -35,13 +35,6 @@ Forme::Rails
 <div id='content'>
 <div id='text'>
 <div id='description'></div>
-<div id='method-list'>
-<h2>Methods</h2>
-<h3>Public Class</h3>
-<ol>
-<li><a href="#method-c-add_hidden_tag">add_hidden_tag</a></li>
-</ol>
-</div>
 <div id='context'>
 </div>
 <div id='class-list'>
@@ -63,35 +56,7 @@ Forme::Rails
 <td>&nbsp;</td>
 <td class='context-item-desc'></td>
 </tr>
-<tr class='top-aligned-row context-row'>
-<td class='context-item-name'>HIDDEN_TAGS</td>
-<td>=</td>
-<td class='context-item-value'>[]</td>
-<td>&nbsp;</td>
-<td class='context-item-desc'></td>
-</tr>
 </table>
-</div>
-</div>
-<div id='methods'>
-<h2>Public Class methods</h2>
-<div class='method public-class' id='method-method-c-add_hidden_tag'>
-<a name='method-c-add_hidden_tag'></a>
-<div class='synopsis'>
-<span class='name'>add_hidden_tag</span><span class='arguments'>(&block)</span>
-
-</div>
-<div class='description'>
-
-<p>Add a hidden tag proc that will be used for all forms created via Forme::Rails::ERB#form. The block is yielded the <a href="Tag.html"><code>Forme::Tag</code></a> object for the form tag. The block should return either nil if hidden tag should be added, or a <a href="Tag.html"><code>Forme::Tag</code></a> object (or an array of them), or a hash with keys specifying the name of the tags and the values specifying the values of the tags .</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-add_hidden_tag-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-c-add_hidden_tag-source'>   <span class="ruby-comment"># File lib/forme/rails.rb</span>&#x000A;<span class="line-num">17</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">add_hidden_tag</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">18</span>   <span class="ruby-constant">HIDDEN_TAGS</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">19</span> <span class="ruby-keyword">end</span></pre>
-</div>
 </div>
 </div>
 </div>
@@ -102,7 +67,7 @@ Forme::Rails
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

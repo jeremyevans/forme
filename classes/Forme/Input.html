@@ -80,7 +80,7 @@ Superclass:
 </td>
 <td class='context-item-value'>[R]</td>
 <td class='context-item-desc'>
-<p>The options hash in use by the form at the time of the Input&#39;s instantiation.</p>
+<p>The options hash in use by the form at the time of the Input’s instantiation.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -121,7 +121,13 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/forme/input.rb</span>&#x000A;<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num">21</span>   <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>&#x000A;<span class="line-num">22</span>   <span class="ruby-identifier">defaults</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">input_defaults</span>&#x000A;<span class="line-num">23</span>   <span class="ruby-ivar">@opts</span> = (<span class="ruby-identifier">defaults</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">type</span>){<span class="ruby-identifier">defaults</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>]} <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">24</span>   <span class="ruby-ivar">@form_opts</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/forme/input.rb</span>
+<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">opts</span>={})
+<span class="line-num">21</span>   <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>
+<span class="line-num">22</span>   <span class="ruby-identifier">defaults</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">input_defaults</span>
+<span class="line-num">23</span>   <span class="ruby-ivar">@opts</span> = (<span class="ruby-identifier">defaults</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">type</span>){<span class="ruby-identifier">defaults</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>]} <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)
+<span class="line-num">24</span>   <span class="ruby-ivar">@form_opts</span> = <span class="ruby-identifier">form</span>.<span class="ruby-identifier">opts</span>
+<span class="line-num">25</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -140,7 +146,10 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-format-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-format-source'>   <span class="ruby-comment"># File lib/forme/input.rb</span>&#x000A;<span class="line-num">40</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">format</span>&#x000A;<span class="line-num">41</span>   <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:formatter</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>)&#x000A;<span class="line-num">42</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-format-source'>   <span class="ruby-comment"># File lib/forme/input.rb</span>
+<span class="line-num">40</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">format</span>
+<span class="line-num">41</span>   <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:formatter</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>)
+<span class="line-num">42</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-tag'>
@@ -151,14 +160,17 @@ Superclass:
 </div>
 <div class='description'>
 
-<p>Create a new <code>Tag</code> instance with the given arguments and block related to the receiver&#39;s <code>form</code>.</p>
+<p>Create a new <code>Tag</code> instance with the given arguments and block related to the receiver’s <code>form</code>.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-tag-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-tag-source'>   <span class="ruby-comment"># File lib/forme/input.rb</span>&#x000A;<span class="line-num">29</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">30</span>   <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-tag-source'>   <span class="ruby-comment"># File lib/forme/input.rb</span>
+<span class="line-num">29</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">30</span>   <span class="ruby-identifier">form</span>.<span class="ruby-identifier">_tag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">31</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-to_s'>
@@ -176,7 +188,10 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-to_s-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-to_s-source'>   <span class="ruby-comment"># File lib/forme/input.rb</span>&#x000A;<span class="line-num">34</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>&#x000A;<span class="line-num">35</span>   <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:serializer</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>)&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-to_s-source'>   <span class="ruby-comment"># File lib/forme/input.rb</span>
+<span class="line-num">34</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
+<span class="line-num">35</span>   <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">transform</span>(<span class="ruby-value">:serializer</span>, <span class="ruby-ivar">@opts</span>, <span class="ruby-ivar">@form_opts</span>, <span class="ruby-keyword">self</span>)
+<span class="line-num">36</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -188,7 +203,7 @@ Superclass:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

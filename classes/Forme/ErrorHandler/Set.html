@@ -64,7 +64,16 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/forme/transformers/error_handler.rb</span>&#x000A;<span class="line-num">37</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)&#x000A;<span class="line-num">38</span>   <span class="ruby-keyword">return</span> <span class="ruby-keyword">super</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">last_input</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:last_input</span>]&#x000A;<span class="line-num">39</span> &#x000A;<span class="line-num">40</span>   <span class="ruby-identifier">last_input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error</span>]&#x000A;<span class="line-num">41</span>   <span class="ruby-identifier">last_input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_attr</span>] = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_attr</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_attr</span>]&#x000A;<span class="line-num">42</span>   <span class="ruby-identifier">last_input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler</span>] = <span class="ruby-value">:default</span>&#x000A;<span class="line-num">43</span> &#x000A;<span class="line-num">44</span>   <span class="ruby-identifier">tag</span>&#x000A;<span class="line-num">45</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/forme/transformers/error_handler.rb</span>
+<span class="line-num">37</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)
+<span class="line-num">38</span>   <span class="ruby-keyword">return</span> <span class="ruby-keyword">super</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">last_input</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:last_input</span>]
+<span class="line-num">39</span> 
+<span class="line-num">40</span>   <span class="ruby-identifier">last_input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error</span>] = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error</span>]
+<span class="line-num">41</span>   <span class="ruby-identifier">last_input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_attr</span>] = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_attr</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_attr</span>]
+<span class="line-num">42</span>   <span class="ruby-identifier">last_input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler</span>] = <span class="ruby-value">:default</span>
+<span class="line-num">43</span> 
+<span class="line-num">44</span>   <span class="ruby-identifier">tag</span>
+<span class="line-num">45</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -76,7 +85,7 @@ Superclass:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

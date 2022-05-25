@@ -88,7 +88,19 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/forme/transformers/inputs_wrapper.rb</span>&#x000A;<span class="line-num">13</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">14</span>   <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>].<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}&#x000A;<span class="line-num">15</span>   <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;inputs&#39;</span>)&#x000A;<span class="line-num">16</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">legend</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend</span>]&#x000A;<span class="line-num">17</span>     <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">attr</span>) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">18</span>       <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:legend</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend_attr</span>], <span class="ruby-identifier">legend</span>)&#x000A;<span class="line-num">19</span>       <span class="ruby-keyword">yield</span>&#x000A;<span class="line-num">20</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">21</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">22</span>     <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">23</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">24</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/forme/transformers/inputs_wrapper.rb</span>
+<span class="line-num">13</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">14</span>   <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>].<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}
+<span class="line-num">15</span>   <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;inputs&#39;</span>)
+<span class="line-num">16</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">legend</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend</span>]
+<span class="line-num">17</span>     <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">attr</span>) <span class="ruby-keyword">do</span>
+<span class="line-num">18</span>       <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:legend</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:legend_attr</span>], <span class="ruby-identifier">legend</span>)
+<span class="line-num">19</span>       <span class="ruby-keyword">yield</span>
+<span class="line-num">20</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">21</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">22</span>     <span class="ruby-identifier">form</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:fieldset</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">23</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">24</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -100,7 +112,7 @@ Superclass:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>
