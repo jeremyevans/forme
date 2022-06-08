@@ -426,7 +426,9 @@ module Sequel # :nodoc:
 
         # Use number inputs for integers.
         def input_integer(sch)
-          standard_input(:number)
+          opts[:attr][:inputmode] ||= 'numeric'
+          opts[:attr][:pattern] ||= '-?[0-9]*'
+          standard_input(:text)
         end
 
         # Use date inputs for dates.

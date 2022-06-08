@@ -46,7 +46,7 @@ describe "Forme Sequel::Model BS3 forms" do
   end
 
   it "should use number inputs for integers" do
-    @b.input(:copies_sold).must_equal '<div class="form-group integer"><label for="album_copies_sold">Copies sold</label> <input class="form-control" id="album_copies_sold" name="album[copies_sold]" type="number" value="10"/></div>'
+    @b.input(:copies_sold).must_equal '<div class="form-group integer"><label for="album_copies_sold">Copies sold</label> <input class="form-control" id="album_copies_sold" inputmode="numeric" name="album[copies_sold]" pattern="-?[0-9]*" type="text" value="10"/></div>'
   end
 
   it "should use date inputs for Dates" do

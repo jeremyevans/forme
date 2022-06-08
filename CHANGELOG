@@ -1,5 +1,7 @@
 === master
 
+* Use inputmode and pattern attributes instead of type=number for integer fields in the Sequel forme plugin (jeremyevans)
+
 * Respect explicit nil/false :value option for boolean inputs in the Sequel forme plugin (jeremyevans)
 
 * In bs3 support, make sure error spans have id referenced by aria-describedby (jeremyevans)

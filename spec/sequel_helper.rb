@@ -1,6 +1,6 @@
 require 'sequel'
 
-db_url = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' ? 'jdbc:sqlite::memory:' : 'sqlite:/'
+db_url = RUBY_ENGINE == 'jruby' ? 'jdbc:sqlite::memory:' : 'sqlite:/'
 DB = Sequel.connect(db_url, :identifier_mangling=>false)
 DB.extension(:freeze_datasets)
 Sequel.default_timezone = :utc
@@ -17,6 +17,8 @@ DB.create_table(:albums) do
   Date :release_date
   DateTime :created_at
   Integer :copies_sold
+  Float :fl
+  BigDecimal :bd
 end
 DB.create_table(:album_infos) do
   primary_key :id

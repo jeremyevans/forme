@@ -76,8 +76,16 @@ describe "Forme Sequel::Model forms" do
     @b.input(:name, :type=>:hidden).must_equal '<input id="album_name" name="album[name]" type="hidden" value="b"/>'
   end
   
-  it "should use number inputs for integers" do
-    @b.input(:copies_sold).must_equal '<label>Copies sold: <input id="album_copies_sold" name="album[copies_sold]" type="number" value="10"/></label>'
+  it "should use text input with inputmode and pattern for integer fields" do
+    @b.input(:copies_sold).must_equal '<label>Copies sold: <input id="album_copies_sold" inputmode="numeric" name="album[copies_sold]" pattern="-?[0-9]*" type="text" value="10"/></label>'
+  end
+
+  it "should use text input for numeric fields" do
+    @b.input(:bd).must_equal '<label>Bd: <input id="album_bd" name="album[bd]" type="text"/></label>'
+  end
+
+  it "should use text input float fields" do
+    @b.input(:fl).must_equal '<label>Fl: <input id="album_fl" name="album[fl]" type="text"/></label>'
   end
 
   it "should use date inputs for Dates" do
