@@ -18,6 +18,10 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:submit).to_s.must_equal '<input class="btn btn-default" type="submit"/>'
   end
 
+  it "should remove form-control class from attributes for checkbox tag" do
+    @f.tag(:input, :type=>:checkbox, :class=>'form-control').to_s.must_equal '<input type="checkbox"/>'
+  end
+  
   it "should use :name option as attribute" do
     @f.input(:text, :name=>"foo").to_s.must_equal '<div class="form-group"><input class="form-control" name="foo" type="text"/></div>'
   end
@@ -101,13 +105,13 @@ describe "Forme Bootstrap3 (BS3) forms" do
 
   it "should consider form's :errors hash based on the :key option" do
     @f.opts[:errors] = { 'foo' => 'must be present' }
-    @f.input(:text, :key=>"foo").to_s.must_equal "<div class=\"form-group has-error\"><input aria-describedby=\"foo_error_message\" aria-invalid=\"true\" class=\"form-control\" id=\"foo\" name=\"foo\" type=\"text\"/><span class=\"help-block with-errors\">must be present</span></div>"
+    @f.input(:text, :key=>"foo").to_s.must_equal '<div class="form-group has-error"><input aria-describedby="foo_error_message" aria-invalid="true" class="form-control" id="foo" name="foo" type="text"/><span class="help-block with-errors" id="foo_error_message">must be present</span></div>'
   end
 
   it "should consider form's :errors hash based on the :key option when using namespaces" do
     @f.opts[:errors] = { 'bar' => { 'foo' => 'must be present' } }
     @f.with_opts(:namespace=>['bar']) do
-      @f.input(:text, :key=>"foo").to_s.must_equal "<div class=\"form-group has-error\"><input aria-describedby=\"bar_foo_error_message\" aria-invalid=\"true\" class=\"form-control\" id=\"bar_foo\" name=\"bar[foo]\" type=\"text\"/><span class=\"help-block with-errors\">must be present</span></div>"
+      @f.input(:text, :key=>"foo").to_s.must_equal '<div class="form-group has-error"><input aria-describedby="bar_foo_error_message" aria-invalid="true" class="form-control" id="bar_foo" name="bar[foo]" type="text"/><span class="help-block with-errors" id="bar_foo_error_message">must be present</span></div>'
     end
   end
 
@@ -190,6 +194,10 @@ describe "Forme Bootstrap3 (BS3) forms" do
 
   it "should convert the :data option into attributes" do
     @f.input(:text, :data=>{:bar=>"foo"}).to_s.must_equal '<div class="form-group"><input class="form-control" data-bar="foo" type="text"/></div>'
+  end
+
+  it "should support the :dasherize_data option when using the :data option" do
+    @f.input(:text, :data=>{:bar_baz=>"foo"}, :dasherize_data=>true).to_s.must_equal '<div class="form-group"><input class="form-control" data-bar-baz="foo" type="text"/></div>'
   end
 
   it "should not have standard options override the :attr option" do
@@ -362,6 +370,14 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:radioset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<div class="radioset"><div class="radio"><label class="option"><input type="radio" value="1"/> 1</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> 2</label></div><div class="radio"><label class="option"><input type="radio" value="3"/> 3</label></div></div>'
   end
 
+  it "should create set of radio buttons" do
+    proc{@f.input(:radioset)}.must_raise Forme::Error
+  end
+
+  it "should support radio buttons with nil values" do
+    @f.input(:radioset, :options=>[1, 2, nil], :selected=>2).to_s.must_equal '<div class="radioset"><div class="radio"><label class="option"><input type="radio" value="1"/> 1</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> 2</label></div><div class="radio"><input type="radio"/></div></div>'
+  end
+
   it "should create set of radio buttons with options and values" do
     @f.input(:radioset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<div class="radioset"><div class="radio"><label class="option"><input type="radio" value="1"/> a</label></div><div class="radio"><label class="option"><input checked="checked" type="radio" value="2"/> b</label></div><div class="radio"><label class="option"><input type="radio" value="3"/> c</label></div></div>'
   end
@@ -480,6 +496,10 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:text, :label=>'Foo', :value=>'foo', :label_attr=>{:class=>'bar'}).to_s.must_equal '<div class="form-group"><label class="bar">Foo</label> <input class="form-control" type="text" value="foo"/></div>'
   end
 
+  it "should support label not referencing input via :for=>false option" do
+    @f.input(:text, :id=>'x', :label=>'Foo', :value=>'foo', :label_attr=>{:for=>false}).to_s.must_equal '<div class="form-group"><label>Foo</label> <input class="form-control" id="x" type="text" value="foo"/></div>'
+  end
+
   it "should handle implicit labels with checkboxes" do
     @f.input(:checkbox, :label=>'Foo', :value=>'foo', :name=>'a').to_s.must_equal '<div class="checkbox"><label><input name="a" type="hidden" value="0"/><input name="a" type="checkbox" value="foo"/> Foo</label></div>'
   end
@@ -506,6 +526,10 @@ describe "Forme Bootstrap3 (BS3) forms" do
 
   it "should respect :error_attr option for setting the attributes for the error message span" do
     @f.input(:text, :error=>'Bad Stuff!', :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<div class="form-group has-error"><input aria-invalid="true" class="form-control" type="text" value="foo"/><span class="foo help-block with-errors">Bad Stuff!</span></div>'
+  end
+
+  it "should support :skip_error_message option" do
+    @f.input(:text, :error=>'Bad Stuff!', :class=>'bar', :value=>'foo', :skip_error_message=>true).to_s.must_equal '<div class="form-group"><input aria-invalid="true" class="form-control bar" type="text" value="foo"/></div>'
   end
 
   it "#open should return an opening tag" do
@@ -676,10 +700,15 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:textarea, :error_handler=>proc{|t, i| [t, "!!! #{i.opts[:error]}"]}, :error=>'bar', :id=>:foo).to_s.must_equal '<div class="form-group"><textarea aria-describedby="foo_error_message" aria-invalid="true" class="form-control" id="foo"></textarea>!!! bar</div>'
   end
 
+  it "inputs should accept a :error_id option to specify id for error" do
+    @f.input(:textarea, :error_id=>:baz, :error=>'bar', :id=>:foo).to_s.must_equal '<div class="form-group has-error"><textarea aria-describedby="baz" aria-invalid="true" class="form-control" id="foo"></textarea><span class="help-block with-errors" id="baz">bar</span></div>'
+  end
+
   it "#inputs should accept a :inputs_wrapper option to use a custom inputs_wrapper" do
     @f.inputs([:textarea], :inputs_wrapper=>:ol).to_s.must_equal '<ol><div class="form-group"><textarea class="form-control"></textarea></div></ol>'
     @f.inputs([:textarea], :inputs_wrapper=>:bs3_table, :wrapper=>:trtd).to_s.must_equal '<table class="table table-bordered"><tr><td><textarea class="form-control"></textarea></td><td></td></tr></table>'
     @f.inputs([:textarea], :inputs_wrapper=>:bs3_table, :wrapper=>:trtd, :legend=>'Foo', :labels=>['bar']).to_s.must_equal '<table class="table table-bordered"><caption>Foo</caption><tr><th>bar</th></tr><tr><td><textarea class="form-control"></textarea></td><td></td></tr></table>'
+    @f.inputs([:textarea], :inputs_wrapper=>:bs3_table, :wrapper=>:trtd, :attr=>{:class=>'foo'}).to_s.must_equal '<table class="foo"><tr><td><textarea class="form-control"></textarea></td><td></td></tr></table>'
   end
 
   it "inputs should accept a :wrapper=>nil option to not use a wrapper" do

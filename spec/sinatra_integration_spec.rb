@@ -31,6 +31,24 @@ class FormeSinatraTest < Sinatra::Base
   end
 
   instance_exec(self, &ERB_BLOCK)
+
+  get 'no-session' do
+    session = env.delete('rack.session')
+    body = erb <<END
+<% form(:method=>'POST') do %>
+<% end %>
+END
+    env['rack.session'] = session
+    body
+  end
+
+  get 'no-out_buf' do
+    erb(<<END, :outvar=>'@_foo')
+<% form(:method=>'POST') do |f| %>
+  <%= f.input(:text) %>
+<% end %>
+END
+  end
 end
 
 describe "Forme Sinatra ERB integration" do
@@ -41,5 +59,13 @@ describe "Forme Sinatra ERB integration" do
   end
 
   include FormeErbSpecs
+
+  it "should handle missing rack.session when using Rack::Csrf" do
+    sin_get('/no-session').must_equal '<form method="POST"></form>'
+  end
+
+  it "should handle non-standard outvar, but without emitting into template" do
+    sin_get('/no-out_buf').must_equal '<input type="text"/>'
+  end
 end
 end

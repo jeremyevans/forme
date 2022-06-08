@@ -49,17 +49,17 @@ module Forme
     Forme.register_transformer(:error_handler, :after_legend, new)
 
     def call(tag, input)
-      return super unless tag.is_a?(Array)
-      return super unless tag.first.is_a?(Tag)
-      return super unless tag.first.type == :legend
+      if tag.is_a?(Array) && tag.first.is_a?(Tag) && tag.first.type == :legend
+        first_input = input.opts[:first_input]
+        attr = first_input.opts[:attr] ||= {}
+        Forme.attr_classes(attr, 'error')
+        attr['aria-invalid'] = 'true'
+        attr['aria-describedby'] = input.opts[:error_id] = "#{first_input.opts[:id]}_error_message"
 
-      first_input = input.opts[:first_input]
-      attr = first_input.opts[:attr] ||= {}
-      Forme.attr_classes(attr, 'error')
-      attr['aria-invalid'] = 'true'
-      attr['aria-describedby'] = input.opts[:error_id] = "#{first_input.opts[:id]}_error_message"
-
-      tag.insert(1, error_tag(input))
+        tag.insert(1, error_tag(input))
+      else
+        super 
+      end
     end
   end
 end

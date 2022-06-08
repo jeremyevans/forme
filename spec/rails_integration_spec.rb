@@ -23,7 +23,7 @@ begin
 
   class FormeRails < Rails::Application
     routes.append do
-      %w'index inputs_block inputs_block_wrapper nest nest_sep nest_inputs nest_seq hash legend combined noblock noblock_post safe_buffer'.each do |action|
+      %w'index inputs_block inputs_block_wrapper nest nest_sep nest_inputs nest_seq hash legend combined noblock noblock_post safe_buffer no_forgery_protection'.each do |action|
         get action, :controller=>'forme', :action=>action
       end
     end
@@ -53,6 +53,14 @@ class FormeController < ActionController::Base
   <%= f.input(:first) %>
   <%= f.input(:last) %>
   <%= f.button('Save') %>
+<% end %>
+END
+  end
+
+  def no_forgery_protection
+    def self.protect_against_forgery?; false end
+    render :inline => <<END
+<%= forme(:method=>'POST') do |f| %>
 <% end %>
 END
   end
@@ -269,6 +277,10 @@ describe "Forme Rails integration" do
 
   it "#form should handle Rails SafeBuffers" do
     sin_get('/safe_buffer').must_equal '<form action="/baz"><fieldset class="inputs"><legend><b>foo</b></legend><input id="first" name="first" type="text" value="foo"/></fieldset><input type="submit" value="xyz"/></form>'
+  end
+
+  it "#form should handle case where forgery protection is disabled" do
+    sin_get('/no_forgery_protection').must_equal '<form method="POST"> </form>'
   end
 end
 end

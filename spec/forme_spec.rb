@@ -126,6 +126,14 @@ describe "Forme plain forms" do
     end
   end
 
+  it "should handle case where form has errors not for the input" do
+    @f.opts[:errors] = { 'baz' => { 'foo' => 'must be present' } }
+    @f.input(:text, :key=>"foo").to_s.must_equal '<input id="foo" name="foo" type="text"/>'
+    @f.with_opts(:namespace=>['bar']) do
+      @f.input(:text, :key=>"foo").to_s.must_equal '<input id="bar_foo" name="bar[foo]" type="text"/>'
+    end
+  end
+
   it "should support a with_obj method that changes the object and namespace for the given block" do
     @f.with_obj([:a, :c], 'bar') do
       @f.input(:first).to_s.must_equal '<input id="bar_first" name="bar[first]" type="text" value="a"/>'
@@ -301,6 +309,14 @@ describe "Forme plain forms" do
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5)).to_s.must_equal %{<select id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
   end
 
+  it "should parse :value given as non-Date when using :as=>:select option for date inputs" do
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>"2011-06-05").to_s.must_equal %{<select id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
+  end
+
+  it "should support not using :value when using :as=>:select option for date inputs" do
+    @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select).to_s.must_equal %{<select id="bar" name="foo[year]">#{sel(1900..2050, nil)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, nil)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, nil)}</select>}
+  end
+
   it "should use labels for select boxes for dates if the :as=>:select and :select_labels options are given" do
     @f.input(:date, :name=>"foo", :id=>"bar", :as=>:select, :value=>Date.new(2011, 6, 5), :select_labels=>{:year=>'Y', :month=>'M', :day=>'D'}, :labeler=>:explicit).to_s.must_equal %{<label class="label-before" for="bar">Y</label><select id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<label class="label-before" for="bar_month">M</label><select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<label class="label-before" for="bar_day">D</label><select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select>}
   end
@@ -327,6 +343,14 @@ describe "Forme plain forms" do
 
   it "should use multiple select boxes for datetimes if the :as=>:select option is given" do
     @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>DateTime.new(2011, 6, 5, 4, 3, 2)).to_s.must_equal %{<select id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select> <select id="bar_hour" name="foo[hour]">#{sel(0..23, 4)}</select>:<select id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select>:<select id="bar_second" name="foo[second]">#{sel(0..59, 2)}</select>}
+  end
+
+  it "should parse :value given as non-DateTime when using :as=>:select option for datetime inputs" do
+    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select, :value=>'2011-06-05 04:03:02').to_s.must_equal %{<select id="bar" name="foo[year]">#{sel(1900..2050, 2011)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, 6)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, 5)}</select> <select id="bar_hour" name="foo[hour]">#{sel(0..23, 4)}</select>:<select id="bar_minute" name="foo[minute]">#{sel(0..59, 3)}</select>:<select id="bar_second" name="foo[second]">#{sel(0..59, 2)}</select>}
+  end
+
+  it "should support not using :value when using :as=>:select option for datetime inputs" do
+    @f.input(:datetime, :name=>"foo", :id=>"bar", :as=>:select).to_s.must_equal %{<select id="bar" name="foo[year]">#{sel(1900..2050, nil)}</select>-<select id="bar_month" name="foo[month]">#{sel(1..12, nil)}</select>-<select id="bar_day" name="foo[day]">#{sel(1..31, nil)}</select> <select id="bar_hour" name="foo[hour]">#{sel(0..23, nil)}</select>:<select id="bar_minute" name="foo[minute]">#{sel(0..59, nil)}</select>:<select id="bar_second" name="foo[second]">#{sel(0..59, nil)}</select>}
   end
 
   it "should allow ordering select boxes for datetimes via :order" do
@@ -403,6 +427,14 @@ describe "Forme plain forms" do
     @f.input(:radioset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><label class="option"><input type="radio" value="3"/> 3</label>'
   end
 
+  it "should handle nil option value" do
+    @f.input(:radioset, :options=>[1, 2, nil], :selected=>2).to_s.must_equal '<label class="option"><input type="radio" value="1"/> 1</label><label class="option"><input checked="checked" type="radio" value="2"/> 2</label><input type="radio"/>'
+  end
+
+  it "should raise error for an radioset without options" do
+    proc{@f.input(:radioset).to_s}.must_raise Forme::Error
+  end
+
   it "should have radioset work with false values" do
     @f.input(:radioset, :options=>[[1, true], [2, false]], :value=>false).to_s.must_equal '<label class="option"><input type="radio" value="true"/> 1</label><label class="option"><input checked="checked" type="radio" value="false"/> 2</label>'
   end
@@ -453,6 +485,11 @@ describe "Forme plain forms" do
     @f.input(:checkboxset, :options=>[1, 2, 3], :value=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
   end
 
+  it "should support :multiple option for checkboxset buttons" do
+    @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>[1,2], :multiple=>false).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> 1</label><label class="option"><input type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
+    @f.input(:checkboxset, :options=>[1, 2, 3], :selected=>[1,2], :multiple=>true).to_s.must_equal '<label class="option"><input checked="checked" type="checkbox" value="1"/> 1</label><label class="option"><input checked="checked" type="checkbox" value="2"/> 2</label><label class="option"><input type="checkbox" value="3"/> 3</label>'
+  end
+
   it "should create set of checkbox buttons with options and values" do
     @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).to_s.must_equal '<label class="option"><input type="checkbox" value="1"/> a</label><label class="option"><input checked="checked" type="checkbox" value="2"/> b</label><label class="option"><input type="checkbox" value="3"/> c</label>'
   end
@@ -479,6 +516,10 @@ describe "Forme plain forms" do
 
   it "should support legend with attributes for checkboxsets, handling errors with :error_handler=>:after_legend" do
     @f.input(:checkboxset, :options=>[[:a, 1], [:b, 2], [:c, 3]], :id=>:quux, :label=>'foo', :label_attr=>{:class=>"baz"}, :tag_label_attr=>{:class=>"bar"}, :labeler=>:legend, :wrapper=>:fieldset, :error=>'bar2', :error_handler=>:after_legend).to_s.must_equal '<fieldset><legend class="baz">foo</legend><span class="error_message" id="quux_1_error_message">bar2</span><label class="bar"><input aria-describedby="quux_1_error_message" aria-invalid="true" class="error" id="quux_1" type="checkbox" value="1"/> a</label><label class="bar"><input id="quux_2" type="checkbox" value="2"/> b</label><label class="bar"><input id="quux_3" type="checkbox" value="3"/> c</label></fieldset>'
+  end
+
+  it "should have :error_handler=>:after_legend funfction like regular error handler if first tag is not a legend" do
+    @f.input(:text, :error_handler=>:after_legend, :error=>'a', :id=>'b').to_s.must_equal '<input aria-describedby="b_error_message" aria-invalid="true" class="error" id="b" type="text"/><span class="error_message" id="b_error_message">a</span>'
   end
 
   it "should support :tag_labeler for checkboxsets" do
@@ -603,6 +644,14 @@ describe "Forme plain forms" do
 
   it "should use aria-describedby and aria-invalid tags for errors with where the id attribute can be determined" do
     @f.input(:text, :error=>'Bad Stuff!', :id=>:bar, :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<input aria-describedby="bar_error_message" aria-invalid="true" class="error" id="bar" type="text" value="foo"/><span class="foo error_message" id="bar_error_message">Bad Stuff!</span>'
+  end
+
+  it "should support :error_id option for errors to specify id of error" do
+    @f.input(:text, :error=>'Bad Stuff!', :error_id=>:baz, :id=>:bar, :value=>'foo', :error_attr=>{:class=>'foo'}).to_s.must_equal '<input aria-describedby="baz" aria-invalid="true" class="error" id="bar" type="text" value="foo"/><span class="foo error_message" id="baz">Bad Stuff!</span>'
+  end
+
+  it "should have :error_attr :id take precedence over :error_id option" do
+    @f.input(:text, :error=>'Bad Stuff!', :error_id=>:baz, :id=>:bar, :value=>'foo', :error_attr=>{:class=>'foo', :id=>'q'}).to_s.must_equal '<input aria-describedby="baz" aria-invalid="true" class="error" id="bar" type="text" value="foo"/><span class="foo error_message" id="q">Bad Stuff!</span>'
   end
 
   it "#open should return an opening tag" do
@@ -868,6 +917,7 @@ describe "Forme built-in custom" do
     Forme::Form.new(:formatter=>:readonly).input(:checkbox, :label=>"Foo", :value=>"Bar").to_s.must_equal "<label><input disabled=\"disabled\" type=\"checkbox\" value=\"Bar\"/> Foo</label>"
     Forme::Form.new(:formatter=>:readonly).input(:checkbox, :label=>"Foo", :value=>"Bar", :checked=>true).to_s.must_equal "<label><input checked=\"checked\" disabled=\"disabled\" type=\"checkbox\" value=\"Bar\"/> Foo</label>"
     Forme::Form.new(:formatter=>:readonly).input(:select, :label=>"Foo", :options=>[1, 2, 3], :value=>2).to_s.must_equal "<label>Foo: <span>2</span></label>"
+    Forme::Form.new(:formatter=>:readonly).input(:select, :label=>"Foo").to_s.must_equal "<label>Foo: <span></span></label>"
   end
 
   it "formatter: readonly removes hidden inputs" do
@@ -898,6 +948,14 @@ describe "Forme built-in custom" do
 
   it "labeler: explicit should handle tags with errors" do
     Forme::Form.new(:labeler=>:explicit).input(:text, :error=>'Bad Stuff!', :value=>'f', :id=>'foo', :label=>'bar').to_s.must_equal '<label class="label-before" for="foo">bar</label><input aria-describedby="foo_error_message" aria-invalid="true" class="error" id="foo" type="text" value="f"/><span class="error_message" id="foo_error_message">Bad Stuff!</span>'
+  end
+
+  it "labeler: span should add a span with label class before the tag" do
+    Forme::Form.new(:labeler=>:span).input(:text, :label=>'A').to_s.must_equal '<span class="label">A</span><input type="text"/>'
+  end
+
+  it "labeler: span should support :label_attr" do
+    Forme::Form.new(:labeler=>:span).input(:text, :label=>'A', :label_attr=>{:foo=>'bar', :class=>"baz"}).to_s.must_equal '<span class="baz label" foo="bar">A</span><input type="text"/>'
   end
 
   it "wrapper: li wraps tag in an li" do
@@ -1042,6 +1100,12 @@ describe "Forme built-in custom" do
     Forme::Form.new(:serializer=>:text).tag(:p){|f| f.input(:textarea, :label=>"Foo", :value=>"Bar")}.to_s.must_equal "Foo: Bar\n\n"
     Forme::Form.new(:serializer=>:text).tag(:p, {}, ['a']).to_s.must_equal "a"
   end
+
+  it "Form#open and #close return empty string when using serializer: text" do
+    f = Forme::Form.new(:serializer=>:text)
+    f.open({}).must_be_nil
+    f.close.must_be_nil
+  end
 end
 
 describe "Forme registering custom transformers" do
@@ -1058,6 +1122,12 @@ describe "Forme registering custom transformers" do
   it "should have #register_transformer raise an error if given a block and an object" do
     proc do
       Forme.register_transformer(:wrapper, :div1, proc{|t, i| t}){|t, i| i.tag(:div1, {}, [t])}
+    end.must_raise(Forme::Error)
+  end
+
+  it "should have #register_transformer raise an error for invalid transformer" do
+    proc do
+      Forme.register_transformer(:foo, :div1){}
     end.must_raise(Forme::Error)
   end
 end
@@ -1156,6 +1226,14 @@ describe "Forme object forms" do
   it "should be able to set value for file input" do
     Forme::Form.new([:foo]).input(:first, :type=>:file, :value=>"foo").to_s.must_equal  '<input id="first" name="first" type="file" value="foo"/>'
   end
+
+  it "should respect given :key option" do
+    Forme::Form.new([:foo]).input(:first, :key=>'a').to_s.must_equal  '<input id="a" name="a" type="text" value="foo"/>'
+  end
+
+  it "should not accept 3 hash arguments" do
+    proc{Forme.form({:a=>'1'}, {:b=>'2'}, {:c=>'3'})}.must_raise Forme::Error
+  end
 end
 
 describe "Forme.form DSL" do
@@ -1211,6 +1289,4 @@ describe "Forme.form DSL" do
   it "should have an :button and :inputs option work together" do
     Forme.form({}, :inputs=>[:text, :textarea], :button=>'Foo').to_s.must_equal  '<form><fieldset class="inputs"><input type="text"/><textarea></textarea></fieldset><input type="submit" value="Foo"/></form>'
   end
-
 end
-

@@ -1,3 +1,11 @@
+=== master
+
+* Respect explicit nil/false :value option for boolean inputs in the Sequel forme plugin (jeremyevans)
+
+* In bs3 support, make sure error spans have id referenced by aria-describedby (jeremyevans)
+
+* Set aria-describedby attribute automatically even if :error_id is given manually (jeremyevans)
+
 === 2.1.0 (2022-05-25)
 
 * Avoid hidden inputs inside tbody tags in subform in the Sequel::Model support, since that results in invalid HTML (jeremyevans)

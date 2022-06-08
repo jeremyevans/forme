@@ -220,7 +220,7 @@ module Forme
     end
 
     def _format_set(type, tag_attrs={})
-      raise Error, "can't have radioset with no options" unless @opts[:optgroups] || @opts[:options]
+      raise Error, "can't have radioset or checkboxset with no options" unless @opts[:optgroups] || @opts[:options]
       key = @opts[:key]
       name = @opts[:name]
       id = @opts[:id]
@@ -312,7 +312,9 @@ module Forme
         Forme.attr_classes(@attr, 'error')
         @attr["aria-invalid"] = "true"
         if @opts.fetch(:error_handler, true)
-          unless @opts[:error_id]
+          if @opts[:error_id]
+            @attr['aria-describedby'] ||= @opts[:error_id]
+          else
             if id = @attr[:id] || @attr['id']
               error_id = @attr['aria-describedby'] ||= "#{id}_error_message"
               @opts[:error_id] = error_id
@@ -397,9 +399,7 @@ module Forme
 
     def set_error_from_namespaced_errors(namespaces, errors, key)
       namespaces.each do |ns|
-        e = errors[ns] || errors[ns.to_s]
-        return unless e
-        errors = e
+        return unless errors = errors[ns] || errors[ns.to_s]
       end
 
       @opts[:error] = errors.fetch(key){errors.fetch(key.to_s){return}}
@@ -432,38 +432,36 @@ module Forme
     # Iterate over the given options, yielding the option text, value, whether it is selected, and any attributes.
     # The block should return an appropriate tag object.
     def process_select_options(os)
-      if os
-        vm = @opts[:value_method]
-        tm = @opts[:text_method]
-        sel = @opts[:selected] || @attr.delete(:value)
+      vm = @opts[:value_method]
+      tm = @opts[:text_method]
+      sel = @opts[:selected] || @attr.delete(:value)
 
-        if @opts[:multiple]
-          sel = Array(sel)
-          cmp = lambda{|v| sel.include?(v)}
-        else
-          cmp = lambda{|v| v == sel}
-        end
+      if @opts[:multiple]
+        sel = Array(sel)
+        cmp = lambda{|v| sel.include?(v)}
+      else
+        cmp = lambda{|v| v == sel}
+      end
 
-        os.map do |x|
-          attr = {}
-          if tm
-            text = x.send(tm)
-            val = x.send(vm) if vm
-          elsif x.is_a?(Array)
-            text = x.first
-            val = x.last
+      os.map do |x|
+        attr = {}
+        if tm
+          text = x.send(tm)
+          val = x.send(vm) if vm
+        elsif x.is_a?(Array)
+          text = x.first
+          val = x.last
 
-            if val.is_a?(Hash)
-              value = val[:value]
-              attr.merge!(val)
-              val = value
-            end
-          else
-            text = x
+          if val.is_a?(Hash)
+            value = val[:value]
+            attr.merge!(val)
+            val = value
           end
-
-          yield [text, val, !val.nil? ? cmp.call(val) : cmp.call(text), attr]
+        else
+          text = x
         end
+
+        yield [text, val, !val.nil? ? cmp.call(val) : cmp.call(text), attr]
       end
     end
 

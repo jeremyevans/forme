@@ -170,6 +170,12 @@ describe "Sequel forme_set plugin" do
     end
   end
 
+  it "#forme_set should not add validations for inputs with no options" do
+    @f.input(:artist, :options=>nil)
+    @ab.forme_set('artist_id'=>'1')
+    @ab.valid?.must_equal true
+  end
+
   it "#forme_set should not require associated values for many_to_one association with select boxes" do
     @f.input(:artist)
     @ab.forme_set({})

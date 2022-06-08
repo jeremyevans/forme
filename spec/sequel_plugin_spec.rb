@@ -18,6 +18,21 @@ describe "Forme Sequel::Model forms" do
     c.new(@ab).form.to_s.must_equal '<form class="forme album" method="post"><input name="a" type="hidden" value="b"/></form>'
   end
 
+  it "should have humanize handle objects that support #humanize" do
+    s = Object.new
+    def s.to_s; self end
+    def s.humanize; 'X' end
+    @b.humanize(s).must_equal 'X'
+  end
+
+  it "should have humanize handle objects that support #humanize" do
+    s = 'x_b_id'
+    class << s
+      undef :humanize if method_defined?(:humanize)
+    end
+    @b.humanize(s).must_equal 'X b'
+  end
+
   it "should add appropriate attributes by default" do
     @b.form.to_s.must_equal '<form class="forme album" method="post"></form>'
   end
@@ -53,6 +68,10 @@ describe "Forme Sequel::Model forms" do
     @c.input(:name, :type=>:textarea).to_s.must_equal '<label>Name: <textarea id="album_name" maxlength="255" name="album[name]">c</textarea></label>'
   end
 
+  it "should respect :value and :key options when using :type option" do
+    @b.input(:name, :type=>:textarea, :value=>'a', :key=>'f').to_s.must_equal '<label>Name: <textarea id="album_f" maxlength="255" name="album[f]">a</textarea></label>'
+  end
+
   it "should not include labels for hidden inputs" do
     @b.input(:name, :type=>:hidden).to_s.must_equal '<input id="album_name" name="album[name]" type="hidden" value="b"/>'
   end
@@ -86,6 +105,14 @@ describe "Forme Sequel::Model forms" do
     f.input(:created_at).to_s.must_equal '<li class="datetime"><label>Created at: <input id="album_created_at" name="album[created_at]" type="datetime-local" value="2011-06-05T00:00:00.000"/></label></li>'
   end
   
+  it "should handle :wrapper_attr to add attribues on the wrapper" do
+    @b.input(:name, :wrapper_attr=>{:foo=>'bar'}, :wrapper=>:div).to_s.must_equal '<div class="string" foo="bar"><label>Name: <input id="album_name" maxlength="255" name="album[name]" type="text" value="b"/></label></div>'
+  end
+  
+  it "should handle :key to override the key" do
+    @b.input(:name, :key=>:f).to_s.must_equal '<label>Name: <input id="album_f" maxlength="255" name="album[f]" type="text" value="b"/></label>'
+  end
+  
   it "should include required * in label if required" do
     @b.input(:name, :required=>true).to_s.must_equal '<label>Name<abbr title="required">*</abbr>: <input id="album_name" maxlength="255" name="album[name]" required="required" type="text" value="b"/></label>'
   end
@@ -106,6 +133,12 @@ describe "Forme Sequel::Model forms" do
   it "should use a select box for tri-valued boolean fields" do
     @b.input(:gold).to_s.must_equal '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
     @c.input(:gold).to_s.must_equal '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
+  end
+  
+  it "should handle :value option for boolean fields" do
+    @b.input(:gold, :value=>nil).to_s.must_equal '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option value="f">False</option></select></label>'
+    @b.input(:gold, :value=>true).to_s.must_equal '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option selected="selected" value="t">True</option><option value="f">False</option></select></label>'
+    @b.input(:gold, :value=>false).to_s.must_equal '<label>Gold: <select id="album_gold" name="album[gold]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
   end
   
   it "should respect :true_label and :false_label options for tri-valued boolean fields" do
@@ -130,9 +163,21 @@ describe "Forme Sequel::Model forms" do
     @c.input(:platinum).to_s.must_equal '<input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><label><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
   end
   
+  it "should respect :value option for checkbox for dual-valued boolean fields" do
+    @b.input(:platinum, :value=>nil).to_s.must_equal '<input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><label><input id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
+    @b.input(:platinum, :value=>false).to_s.must_equal '<input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><label><input id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
+    @b.input(:platinum, :value=>true).to_s.must_equal '<input id="album_platinum_hidden" name="album[platinum]" type="hidden" value="f"/><label><input checked="checked" id="album_platinum" name="album[platinum]" type="checkbox" value="t"/> Platinum</label>'
+  end
+  
   it "should use radio buttons for boolean fields if :as=>:radio is used" do
     @b.input(:platinum, :as=>:radio).to_s.must_equal '<span class="label">Platinum</span><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
     @c.input(:platinum, :as=>:radio).to_s.must_equal '<span class="label">Platinum</span><label class="option"><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+  end
+  
+  it "should handle :value given if :as=>:radio is used" do
+    @b.input(:platinum, :as=>:radio, :value=>nil).to_s.must_equal '<span class="label">Platinum</span><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+    @b.input(:platinum, :as=>:radio, :value=>true).to_s.must_equal '<span class="label">Platinum</span><label class="option"><input checked="checked" id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
+    @b.input(:platinum, :as=>:radio, :value=>false).to_s.must_equal '<span class="label">Platinum</span><label class="option"><input id="album_platinum_yes" name="album[platinum]" type="radio" value="t"/> Yes</label><label class="option"><input checked="checked" id="album_platinum_no" name="album[platinum]" type="radio" value="f"/> No</label>'
   end
   
   it "should wrap both inputs if :as=>:radio is used" do
@@ -166,6 +211,14 @@ describe "Forme Sequel::Model forms" do
   it "should use a select box for many_to_one associations" do
     @b.input(:artist).to_s.must_equal '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
     @c.input(:artist).to_s.must_equal '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
+  end
+
+  it "should respect given :key option for many_to_one associations" do
+    @b.input(:artist, :key=>'f').to_s.must_equal '<label>Artist: <select id="album_f" name="album[f]"><option value=""></option><option selected="selected" value="1">a</option><option value="2">d</option></select></label>'
+  end
+
+  it "should respect given :value option for many_to_one associations" do
+    @b.input(:artist, :value=>2).to_s.must_equal '<label>Artist: <select id="album_artist_id" name="album[artist_id]"><option value=""></option><option value="1">a</option><option selected="selected" value="2">d</option></select></label>'
   end
 
   it "should not add a blank option by default if there is a default value and it is required" do
@@ -266,6 +319,21 @@ describe "Forme Sequel::Model forms" do
   it "should use a multiple select box for one_to_many associations" do
     @b.input(:tracks).to_s.must_equal '<label>Tracks: <select id="album_track_pks" multiple="multiple" name="album[track_pks][]"><option selected="selected" value="1">m</option><option selected="selected" value="2">n</option><option value="3">o</option></select></label>'
     @c.input(:tracks).to_s.must_equal '<label>Tracks: <select id="album_track_pks" multiple="multiple" name="album[track_pks][]"><option value="1">m</option><option value="2">n</option><option selected="selected" value="3">o</option></select></label>'
+  end
+  
+  it "should :respect given :key option for one_to_many associations" do
+    @b.input(:tracks, :key=>:f).to_s.must_equal '<label>Tracks: <select id="album_f" multiple="multiple" name="album[f][]"><option selected="selected" value="1">m</option><option selected="selected" value="2">n</option><option value="3">o</option></select></label>'
+  end
+
+  it "should :respect given :array=>false, :multiple=>false options for one_to_many associations" do
+    @b.input(:tracks, :array=>false, :multiple=>false, :value=>1).to_s.must_equal '<label>Tracks: <select id="album_track_pks" name="album[track_pks]"><option selected="selected" value="1">m</option><option value="2">n</option><option value="3">o</option></select></label>'
+  end
+  
+  it "should handle case where object doesn't respond to *_pks for one_to_many associations" do
+    class << @ab
+      undef track_pks
+    end
+    @b.input(:tracks).to_s.must_equal '<label>Tracks: <select id="album_track_pks" multiple="multiple" name="album[track_pks][]"><option selected="selected" value="1">m</option><option selected="selected" value="2">n</option><option value="3">o</option></select></label>'
   end
   
   it "should use a multiple select box for many_to_many associations" do
@@ -467,6 +535,10 @@ describe "Forme Sequel::Model forms" do
     Forme.form(@ab){|f| f.subform(:artist, :inputs=>[:name], :grid=>true, :skip_primary_key=>true)}.to_s.must_equal '<form class="forme album" method="post"><table><caption>Artist</caption><thead><tr><th>Name</th></tr></thead><tbody><tr><td class="string"><input id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
   end
   
+  it "should have #subform :grid option handle no :inputs or :labels" do
+    Forme.form(@ab){|f| f.subform(:artist, :grid=>true){f.input(:name)}}.to_s.must_equal '<form class="forme album" method="post"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/><table><caption>Artist</caption><tbody><tr><td class="string"><input id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="a"/></td></tr></tbody></table></form>'
+  end
+  
   it "should handle non-Sequel forms with Sequel inputs" do
     Forme.form{|f| f.input(:name, :obj=>@ab).to_s.must_equal '<label>Name: <input id="name" maxlength="255" name="name" type="text" value="b"/></label>'}
   end
@@ -521,8 +593,16 @@ describe "Forme Sequel::Model validation parsing" do
     f(:validates_format_of, :name, :with=>/[A-z]+/).input(:name).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" pattern="[A-z]+" type="text"/></label>'
   end
 
+  it "should not override given :pattern for format validation" do
+    f(:validates_format_of, :name, :with=>/[A-z]+/).input(:name, :attr=>{:pattern=>'[A-Z]+'}).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" pattern="[A-Z]+" type="text"/></label>'
+  end
+
   it "should respect :title option for format" do
     f(:validates_format_of, :name, :with=>/[A-z]+/, :title=>'Foo').input(:name).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" pattern="[A-z]+" title="Foo" type="text"/></label>'
+  end
+
+  it "should not override given :title for format validation" do
+    f(:validates_format_of, :name, :with=>/[A-z]+/, :title=>'Foo').input(:name, :attr=>{:title=>'Bar'}).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" pattern="[A-z]+" title="Bar" type="text"/></label>'
   end
 
   it "should use maxlength for length :maximum, :is, and :within" do
@@ -530,6 +610,14 @@ describe "Forme Sequel::Model validation parsing" do
     f(:validates_length_of, :name, :is=>10).input(:name).to_s.must_equal '<label>Name: <input id="album_name" maxlength="10" name="album[name]" type="text"/></label>'
     f(:validates_length_of, :name, :within=>2..10).input(:name).to_s.must_equal '<label>Name: <input id="album_name" maxlength="10" name="album[name]" type="text"/></label>'
     f(:validates_length_of, :name, :within=>2...11).input(:name).to_s.must_equal '<label>Name: <input id="album_name" maxlength="10" name="album[name]" type="text"/></label>'
+  end
+
+  it "should not override given :maxlength" do
+    f(:validates_length_of, :name, :maximum=>10).input(:name, :attr=>{:maxlength=>20}).to_s.must_equal '<label>Name: <input id="album_name" maxlength="20" name="album[name]" type="text"/></label>'
+  end
+
+  it "should not use maxlength for :within that is not a range" do
+    f(:validates_length_of, :name, :within=>(2..10).to_a).input(:name).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" type="text"/></label>'
   end
 
   it "should turn numericality into a pattern" do
@@ -540,14 +628,21 @@ describe "Forme Sequel::Model validation parsing" do
     f(:validates_numericality_of, :name, :only_integer=>true).input(:name).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" pattern="^[+\-]?\d+$" title="must be a number" type="text"/></label>'
   end
 
+  it "should not override given :pattern for numericality validation" do
+    f(:validates_numericality_of, :name).input(:name, :attr=>{:pattern=>'[0-9]+'}).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" pattern="[0-9]+" title="must be a number" type="text"/></label>'
+  end
+
   it "should respect :title option for numericality" do
     f(:validates_numericality_of, :name, :title=>'Foo').input(:name).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" pattern="^[+\-]?\d+(\.\d+)?$" title="Foo" type="text"/></label>'
+  end
+
+  it "should not override given :title for numericality validation" do
+    f(:validates_numericality_of, :name, :title=>'Foo').input(:name, :attr=>{:title=>'Bar'}).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" pattern="^[+\-]?\d+(\.\d+)?$" title="Bar" type="text"/></label>'
   end
 
   it "should respect :placeholder option for any validation" do
     f(:validates_uniqueness_of, :name, :placeholder=>'must be unique').input(:name).to_s.must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" placeholder="must be unique" type="text"/></label>'
   end
-
 end
 
 describe "Forme Sequel::Model default namespacing" do

@@ -24,6 +24,7 @@ module Forme
       attr = attr ? attr.dup : {}
       Forme.attr_classes(attr, 'help-block with-errors')
       return [tag] if input.opts[:skip_error_message]
+      attr[:id] ||= input.opts[:error_id]
 
       case input.type
       when :submit, :reset
@@ -84,11 +85,13 @@ module Forme
 
       Forme.attr_classes(@attr, @opts[:class]) if @opts.has_key?(:class)
 
-      if @opts[:error]
+      if @opts[:error] && input.type != :submit && input.type != :reset
         # Forme.attr_classes(@attr, 'error')
         @attr["aria-invalid"] = "true"
         if @opts.fetch(:error_handler, true)
-          unless @opts[:error_id]
+          if @opts[:error_id]
+            @attr['aria-describedby'] ||= @opts[:error_id]
+          else
             if id = @attr[:id] || @attr['id']
               error_id = @attr['aria-describedby'] ||= "#{id}_error_message"
               @opts[:error_id] = error_id
@@ -127,7 +130,7 @@ module Forme
     end
     
     def _format_set(type, tag_attrs={})
-      raise Error, "can't have radioset with no options" unless @opts[:optgroups] || @opts[:options]
+      raise Error, "can't have radioset or checkboxset with no options" unless @opts[:optgroups] || @opts[:options]
       key = @opts[:key]
       name = @opts[:name]
       id = @opts[:id]
@@ -282,7 +285,7 @@ module Forme
       label_attr = input.opts[:label_attr]
       label_attr = label_attr ? label_attr.dup : {}
       
-      label_attr[:for] = label_attr[:for] === false ? nil : input.opts.fetch(:label_for, id)
+      label_attr[:for] = label_attr[:for] == false ? nil : input.opts.fetch(:label_for, id)
       label = input.opts[:label]
       lpos = input.opts[:label_position] || ([:radio, :checkbox].include?(input.type) ? :after : :before)
       
@@ -317,9 +320,6 @@ module Forme
       
       case input.type
       when :submit, :reset
-        klass.delete('form-group')
-        attr[:class] = klass.sort.uniq.join(' ').strip
-        attr.delete(:class) if attr[:class].empty?
         [tag]
       when :radio, :checkbox
         klass.delete('form-group')

@@ -105,10 +105,8 @@ module Sequel # :nodoc:
           opts = input.opts
           return if SKIP_FORMATTERS.include?(opts.fetch(:formatter){input.form_opts[:formatter]})
 
-          if attr = opts[:attr]
-            name = attr[:name] || attr['name']
-          end
-          return unless name ||= opts[:name] || opts[:key]
+          attr = opts[:attr] || {}
+          return unless name ||= attr[:name] || attr['name'] || opts[:name] || opts[:key]
 
           # Pull out last component of the name if there is one
           column = name.to_s.chomp('[]')

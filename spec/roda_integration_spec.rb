@@ -172,8 +172,9 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
     def _forme_set(meth, obj, orig_hash, *form_args, &block)
       hash = {}
       forme_set_block = orig_hash.delete(:forme_set_block)
+      handle_params = hash.delete(:handle_params)
       orig_hash.each{|k,v| hash[k.to_s] = v}
-      album = @ab
+      album = obj
       ret, _, data, hmac = nil
       
       @app.route do |r|
@@ -196,8 +197,9 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
       data = $2
       hmac = $3
       data.gsub!("&quot;", '"') if data
-      h = {"album"=>hash,  "_forme_set_data"=>data, "_forme_set_data_hmac"=>hmac, "_csrf"=>csrf}
+      h = {"album"=>hash,  "_forme_set_data"=>data, "_forme_set_data_hmac"=>hmac, "_csrf"=>csrf, "body"=>body}
       if data && hmac
+        h = handle_params.call(h) if handle_params
         forme_call(h)
       end
       meth == :forme_parse ? ret : h
@@ -241,6 +243,18 @@ END
 
       forme_set(@ab, :copies_sold=>100){|f| f.input(:name)}
       @ab.name.must_be_nil
+      @ab.copies_sold.must_be_nil
+    end
+
+    it "#forme_set handle missing csrf" do
+      h = forme_set(@ab, :name=>'Foo'){|f| f.input(:name)}
+      @ab.name = nil
+      data = JSON.parse(h["_forme_set_data"])
+      data.delete('csrf')
+      data = data.to_json
+      hmac = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, '1'*64, data)
+      forme_call(h.merge("_forme_set_data_hmac"=>hmac, "_forme_set_data"=>data))
+      @ab.name.must_equal 'Foo'
       @ab.copies_sold.must_be_nil
     end
 
@@ -516,6 +530,10 @@ END
 
       @ab.forme_validations.merge!(hash[:validations])
       @ab.valid?.must_equal true
+    end
+
+    it "should handle forms with objects that don't support forme_inputs" do
+      forme_set(String, {:name=>'Foo'}, {}, :inputs=>[:name])['body'].must_equal '<form><fieldset class="inputs"><input id="name" name="name" type="text" value="String"/></fieldset></form>'
     end
   end
 end

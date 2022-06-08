@@ -95,7 +95,7 @@ module Sequel # :nodoc:
             end
             
             if grid
-              labels = opts.fetch(:labels){opts[:inputs].map{|l, *| humanize(l)} if opts[:inputs]}
+              labels = opts.fetch(:labels){opts[:inputs].map{|l,| humanize(l)} if opts[:inputs]}
               legend = opts.fetch(:legend){humanize(association)}
               inputs_opts = opts[:inputs_opts] || {}
               inputs(inputs_opts.merge(:inputs_wrapper=>:table, :nested_inputs_wrapper=>:tr, :wrapper=>:td, :labeler=>nil, :labels=>labels, :legend=>legend), &contents)
@@ -363,9 +363,10 @@ module Sequel # :nodoc:
             opts[:as] = (sch[:allow_null] || opts[:required] == false) ? :select : :checkbox
           end
 
+          v = opts.has_key?(:value) ? opts[:value] : obj.send(field)
+
           case opts[:as]
           when :radio
-            v = opts.has_key?(:value) ? opts[:value] : obj.send(field)
             true_value = opts[:true_value]||'t'
             false_value = opts[:false_value]||'f'
             opts[:options] = [[opts[:true_label]||'Yes', {:value=>true_value, :key_id=>'yes'}], [opts[:false_label]||'No', {:value=>false_value, :key_id=>'no'}]]
@@ -374,13 +375,12 @@ module Sequel # :nodoc:
             end
             _input(:radioset, opts)
           when :select
-            v = opts[:value] || obj.send(field)
             opts[:value] = (v ? 't' : 'f') unless v.nil?
             opts[:add_blank] = true unless opts.has_key?(:add_blank)
             opts[:options] = [[opts[:true_label]||'True', opts[:true_value]||'t'], [opts[:false_label]||'False', opts[:false_value]||'f']]
             _input(:select, opts)
           else
-            opts[:checked] = obj.send(field)
+            opts[:checked] = v
             opts[:value] = 't'
             _input(:checkbox, opts)
           end
