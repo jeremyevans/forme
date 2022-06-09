@@ -424,7 +424,7 @@ module Sequel # :nodoc:
           end
         end
 
-        # Use number inputs for integers.
+        # Use inputmode and pattern attributes for integers.
         def input_integer(sch)
           opts[:attr][:inputmode] ||= 'numeric'
           opts[:attr][:pattern] ||= '-?[0-9]*'
