@@ -1,4 +1,4 @@
-=== master
+=== 2.2.0 (2022-06-28)
 
 * Use inputmode and pattern attributes instead of type=number for integer fields in the Sequel forme plugin (jeremyevans)
 
