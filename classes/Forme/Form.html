@@ -751,8 +751,10 @@ Superclass:
 <span class="line-num">333</span>   <span class="ruby-identifier">copy_inputs_wrapper_from_wrapper</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-ivar">@opts</span>)
 <span class="line-num">334</span>   <span class="ruby-keyword">yield</span>
 <span class="line-num">335</span> <span class="ruby-keyword">ensure</span>
-<span class="line-num">336</span>   <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">orig_opts</span>
-<span class="line-num">337</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">336</span>   <span class="ruby-comment"># :nocov:</span>
+<span class="line-num">337</span>   <span class="ruby-ivar">@opts</span> = <span class="ruby-identifier">orig_opts</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">orig_opts</span>
+<span class="line-num">338</span>   <span class="ruby-comment"># :nocov:</span>
+<span class="line-num">339</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

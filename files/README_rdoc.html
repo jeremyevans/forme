@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2022-05-24 14:04:59 -0700</span>
+<span class='datetime'>2022-06-09 12:07:50 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -89,7 +89,7 @@ Last Update:
     &lt;input id=&quot;album_name&quot; name=&quot;album[name]&quot; type=&quot;text&quot; value=&quot;Rising Force&quot;/&gt;
   &lt;/label&gt;
   &lt;label&gt;Copies Sold:
-    &lt;input id=&quot;album_copies_sold&quot; name=&quot;album[copies_sold]&quot; type=&quot;number&quot; value=&quot;100000&quot;/&gt;
+    &lt;input id=&quot;album_copies_sold&quot; inputmode=&quot;numeric&quot; name=&quot;album[copies_sold]&quot; pattern=&quot;-?[0-9]*&quot; type=&quot;text&quot; value=&quot;100000&quot;/&gt;
   &lt;/label&gt;
 &lt;/form&gt;</pre>
 
@@ -117,11 +117,11 @@ Last Update:
 </td></tr><tr><td class='label'>RDoc </td><td>
 <p><a target="_top" href="http://forme.jeremyevans.net">forme.jeremyevans.net</a></p>
 </td></tr><tr><td class='label'>Source </td><td>
-<p><a href="https://github.com/jeremyevans/forme">github.com/jeremyevans/forme</a></p>
+<p><a target="_top" href="https://github.com/jeremyevans/forme">github.com/jeremyevans/forme</a></p>
 </td></tr><tr><td class='label'>Discussion Forum </td><td>
-<p><a href="https://github.com/jeremyevans/forme/discussions">github.com/jeremyevans/forme/discussions</a></p>
+<p><a target="_top" href="https://github.com/jeremyevans/forme/discussions">github.com/jeremyevans/forme/discussions</a></p>
 </td></tr><tr><td class='label'>Bug Tracker </td><td>
-<p><a href="https://github.com/jeremyevans/forme/issues">github.com/jeremyevans/forme/issues</a></p>
+<p><a target="_top" href="https://github.com/jeremyevans/forme/issues">github.com/jeremyevans/forme/issues</a></p>
 </td></tr></tbody></table>
 
 <h1 id="label-Direct+Instantiation">Direct Instantiation<span><a href="#label-Direct+Instantiation">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -448,6 +448,7 @@ Last Update:
 <p>This adds an input for editing the artist’s name after the album’s inputs, as well as inputs for editing the number and name for all of the tracks in the album, creating a form similar to:</p>
 
 <pre>&lt;form action=&quot;/foo&quot; method=&quot;post&quot;&gt;
+
   &lt;label&gt;Name: &lt;input id=&quot;album_name&quot; name=&quot;album[name]&quot; type=&quot;text&quot; value=&quot;Blue Hawaii&quot;/&gt;&lt;/label&gt;
 
   &lt;input id=&quot;album_artist_attributes_id&quot; name=&quot;album[artist_attributes][id]&quot; type=&quot;hidden&quot; value=&quot;1&quot;/&gt;
@@ -457,12 +458,12 @@ Last Update:
 
   &lt;input id=&quot;album_tracks_attributes_0_id&quot; name=&quot;album[tracks_attributes][0][id]&quot; type=&quot;hidden&quot; value=&quot;1&quot;/&gt;
   &lt;fieldset class=&quot;inputs&quot;&gt;&lt;legend&gt;Track #1&lt;/legend&gt;
-    &lt;label&gt;Number: &lt;input id=&quot;album_tracks_attributes_0_number&quot; name=&quot;album[tracks_attributes][0][number]&quot; type=&quot;number&quot; value=&quot;1&quot;/&gt;&lt;/label&gt;
+    &lt;label&gt;Number: &lt;input id=&quot;album_tracks_attributes_0_number&quot; inputmode=&quot;numeric&quot; name=&quot;album[tracks_attributes][0][number]&quot; pattern=&quot;-?[0-9]*&quot; type=&quot;text&quot; value=&quot;1&quot;/&gt;&lt;/label&gt;
     &lt;label&gt;Name: &lt;input id=&quot;album_tracks_attributes_0_name&quot; name=&quot;album[tracks_attributes][0][name]&quot; type=&quot;text&quot; value=&quot;Blue Hawaii&quot;/&gt;&lt;/label&gt;
   &lt;/fieldset&gt;
   &lt;input id=&quot;album_tracks_attributes_1_id&quot; name=&quot;album[tracks_attributes][1][id]&quot; type=&quot;hidden&quot; value=&quot;2&quot;/&gt;
   &lt;fieldset class=&quot;inputs&quot;&gt;&lt;legend&gt;Track #2&lt;/legend&gt;
-    &lt;label&gt;Number: &lt;input id=&quot;album_tracks_attributes_1_number&quot; name=&quot;album[tracks_attributes][1][number]&quot; type=&quot;number&quot; value=&quot;2&quot;/&gt;&lt;/label&gt;
+    &lt;label&gt;Number: &lt;input id=&quot;album_tracks_attributes_1_number&quot; inputmode=&quot;numeric&quot; name=&quot;album[tracks_attributes][1][number]&quot; pattern=&quot;-?[0-9]*&quot; type=&quot;text&quot; value=&quot;2&quot;/&gt;&lt;/label&gt;
     &lt;label&gt;Name: &lt;input id=&quot;album_tracks_attributes_1_name&quot; name=&quot;album[tracks_attributes][1][name]&quot; type=&quot;text&quot; value=&quot;Almost Always True&quot;/&gt;&lt;/label&gt;
   &lt;/fieldset&gt;
 

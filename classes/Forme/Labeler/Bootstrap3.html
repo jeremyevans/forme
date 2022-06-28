@@ -71,43 +71,43 @@ Superclass:
 [show source]
 </a>
 <pre id='method-i-call-source'>    <span class="ruby-comment"># File lib/forme/bs3.rb</span>
-<span class="line-num">271</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)
-<span class="line-num">272</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">id</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:id</span>]
-<span class="line-num">273</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">key</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:key</span>]
-<span class="line-num">274</span>       <span class="ruby-identifier">namespaces</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">form_opts</span>[<span class="ruby-value">:namespace</span>]
-<span class="line-num">275</span>       <span class="ruby-identifier">id</span> = <span class="ruby-node">&quot;#{namespaces.join(&#39;_&#39;)}#{&#39;_&#39; unless namespaces.empty?}#{key}&quot;</span>
-<span class="line-num">276</span>       <span class="ruby-keyword">if</span> <span class="ruby-identifier">key_id</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:key_id</span>]
-<span class="line-num">277</span>         <span class="ruby-identifier">id</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;_#{key_id.to_s}&quot;</span>
-<span class="line-num">278</span>       <span class="ruby-keyword">end</span>
-<span class="line-num">279</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">280</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">281</span> 
-<span class="line-num">282</span>   <span class="ruby-identifier">label_attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label_attr</span>]
-<span class="line-num">283</span>   <span class="ruby-identifier">label_attr</span> = <span class="ruby-identifier">label_attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">label_attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}
-<span class="line-num">284</span>   
-<span class="line-num">285</span>   <span class="ruby-identifier">label_attr</span>[<span class="ruby-value">:for</span>] = <span class="ruby-identifier">label_attr</span>[<span class="ruby-value">:for</span>] <span class="ruby-operator">===</span> <span class="ruby-keyword">false</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:label_for</span>, <span class="ruby-identifier">id</span>)
-<span class="line-num">286</span>   <span class="ruby-identifier">label</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>]
-<span class="line-num">287</span>   <span class="ruby-identifier">lpos</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label_position</span>] <span class="ruby-operator">||</span> ([<span class="ruby-value">:radio</span>, <span class="ruby-value">:checkbox</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>) <span class="ruby-operator">?</span> <span class="ruby-value">:after</span> <span class="ruby-operator">:</span> <span class="ruby-value">:before</span>)
-<span class="line-num">288</span>   
-<span class="line-num">289</span>   <span class="ruby-keyword">case</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>
-<span class="line-num">290</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:checkbox</span>, <span class="ruby-value">:radio</span>
-<span class="line-num">291</span>     <span class="ruby-identifier">label</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">lpos</span> <span class="ruby-operator">==</span> <span class="ruby-value">:before</span>
-<span class="line-num">292</span>       [<span class="ruby-identifier">label</span>, <span class="ruby-string">&#39; &#39;</span>, <span class="ruby-identifier">tag</span>]
-<span class="line-num">293</span>     <span class="ruby-keyword">else</span>
-<span class="line-num">294</span>       [<span class="ruby-identifier">tag</span>, <span class="ruby-string">&#39; &#39;</span>, <span class="ruby-identifier">label</span>]
-<span class="line-num">295</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">296</span>     <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:label</span>, <span class="ruby-identifier">label_attr</span>, <span class="ruby-identifier">label</span>)
-<span class="line-num">297</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:submit</span>
-<span class="line-num">298</span>     [<span class="ruby-identifier">tag</span>]
-<span class="line-num">299</span>   <span class="ruby-keyword">else</span>
-<span class="line-num">300</span>     <span class="ruby-identifier">label</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:label</span>, <span class="ruby-identifier">label_attr</span>, [<span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>]])
-<span class="line-num">301</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">lpos</span> <span class="ruby-operator">==</span> <span class="ruby-value">:after</span>
-<span class="line-num">302</span>       [<span class="ruby-identifier">tag</span>, <span class="ruby-string">&#39; &#39;</span>, <span class="ruby-identifier">label</span>]
-<span class="line-num">303</span>     <span class="ruby-keyword">else</span>
-<span class="line-num">304</span>       [<span class="ruby-identifier">label</span>, <span class="ruby-string">&#39; &#39;</span>, <span class="ruby-identifier">tag</span>]
-<span class="line-num">305</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">306</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">307</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">274</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)
+<span class="line-num">275</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">id</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:id</span>]
+<span class="line-num">276</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">key</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:key</span>]
+<span class="line-num">277</span>       <span class="ruby-identifier">namespaces</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">form_opts</span>[<span class="ruby-value">:namespace</span>]
+<span class="line-num">278</span>       <span class="ruby-identifier">id</span> = <span class="ruby-node">&quot;#{namespaces.join(&#39;_&#39;)}#{&#39;_&#39; unless namespaces.empty?}#{key}&quot;</span>
+<span class="line-num">279</span>       <span class="ruby-keyword">if</span> <span class="ruby-identifier">key_id</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:key_id</span>]
+<span class="line-num">280</span>         <span class="ruby-identifier">id</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;_#{key_id.to_s}&quot;</span>
+<span class="line-num">281</span>       <span class="ruby-keyword">end</span>
+<span class="line-num">282</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">283</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">284</span> 
+<span class="line-num">285</span>   <span class="ruby-identifier">label_attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label_attr</span>]
+<span class="line-num">286</span>   <span class="ruby-identifier">label_attr</span> = <span class="ruby-identifier">label_attr</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">label_attr</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}
+<span class="line-num">287</span>   
+<span class="line-num">288</span>   <span class="ruby-identifier">label_attr</span>[<span class="ruby-value">:for</span>] = <span class="ruby-identifier">label_attr</span>[<span class="ruby-value">:for</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:label_for</span>, <span class="ruby-identifier">id</span>)
+<span class="line-num">289</span>   <span class="ruby-identifier">label</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>]
+<span class="line-num">290</span>   <span class="ruby-identifier">lpos</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label_position</span>] <span class="ruby-operator">||</span> ([<span class="ruby-value">:radio</span>, <span class="ruby-value">:checkbox</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>) <span class="ruby-operator">?</span> <span class="ruby-value">:after</span> <span class="ruby-operator">:</span> <span class="ruby-value">:before</span>)
+<span class="line-num">291</span>   
+<span class="line-num">292</span>   <span class="ruby-keyword">case</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>
+<span class="line-num">293</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:checkbox</span>, <span class="ruby-value">:radio</span>
+<span class="line-num">294</span>     <span class="ruby-identifier">label</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">lpos</span> <span class="ruby-operator">==</span> <span class="ruby-value">:before</span>
+<span class="line-num">295</span>       [<span class="ruby-identifier">label</span>, <span class="ruby-string">&#39; &#39;</span>, <span class="ruby-identifier">tag</span>]
+<span class="line-num">296</span>     <span class="ruby-keyword">else</span>
+<span class="line-num">297</span>       [<span class="ruby-identifier">tag</span>, <span class="ruby-string">&#39; &#39;</span>, <span class="ruby-identifier">label</span>]
+<span class="line-num">298</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">299</span>     <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:label</span>, <span class="ruby-identifier">label_attr</span>, <span class="ruby-identifier">label</span>)
+<span class="line-num">300</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:submit</span>
+<span class="line-num">301</span>     [<span class="ruby-identifier">tag</span>]
+<span class="line-num">302</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">303</span>     <span class="ruby-identifier">label</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:label</span>, <span class="ruby-identifier">label_attr</span>, [<span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:label</span>]])
+<span class="line-num">304</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">lpos</span> <span class="ruby-operator">==</span> <span class="ruby-value">:after</span>
+<span class="line-num">305</span>       [<span class="ruby-identifier">tag</span>, <span class="ruby-string">&#39; &#39;</span>, <span class="ruby-identifier">label</span>]
+<span class="line-num">306</span>     <span class="ruby-keyword">else</span>
+<span class="line-num">307</span>       [<span class="ruby-identifier">label</span>, <span class="ruby-string">&#39; &#39;</span>, <span class="ruby-identifier">tag</span>]
+<span class="line-num">308</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">309</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">310</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

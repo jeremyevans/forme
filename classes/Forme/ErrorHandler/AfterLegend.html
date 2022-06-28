@@ -66,17 +66,17 @@ Superclass:
 </a>
 <pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/forme/transformers/error_handler.rb</span>
 <span class="line-num">51</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)
-<span class="line-num">52</span>   <span class="ruby-keyword">return</span> <span class="ruby-keyword">super</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
-<span class="line-num">53</span>   <span class="ruby-keyword">return</span> <span class="ruby-keyword">super</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
-<span class="line-num">54</span>   <span class="ruby-keyword">return</span> <span class="ruby-keyword">super</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:legend</span>
-<span class="line-num">55</span> 
-<span class="line-num">56</span>   <span class="ruby-identifier">first_input</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:first_input</span>]
-<span class="line-num">57</span>   <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">first_input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>] <span class="ruby-operator">||=</span> {}
-<span class="line-num">58</span>   <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;error&#39;</span>)
-<span class="line-num">59</span>   <span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;aria-invalid&#39;</span>] = <span class="ruby-string">&#39;true&#39;</span>
-<span class="line-num">60</span>   <span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;aria-describedby&#39;</span>] = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_id</span>] = <span class="ruby-node">&quot;#{first_input.opts[:id]}_error_message&quot;</span>
-<span class="line-num">61</span> 
-<span class="line-num">62</span>   <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-value">1</span>, <span class="ruby-identifier">error_tag</span>(<span class="ruby-identifier">input</span>))
+<span class="line-num">52</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:legend</span>
+<span class="line-num">53</span>     <span class="ruby-identifier">first_input</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:first_input</span>]
+<span class="line-num">54</span>     <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">first_input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:attr</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">55</span>     <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&#39;error&#39;</span>)
+<span class="line-num">56</span>     <span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;aria-invalid&#39;</span>] = <span class="ruby-string">&#39;true&#39;</span>
+<span class="line-num">57</span>     <span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;aria-describedby&#39;</span>] = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_id</span>] = <span class="ruby-node">&quot;#{first_input.opts[:id]}_error_message&quot;</span>
+<span class="line-num">58</span> 
+<span class="line-num">59</span>     <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-value">1</span>, <span class="ruby-identifier">error_tag</span>(<span class="ruby-identifier">input</span>))
+<span class="line-num">60</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">61</span>     <span class="ruby-keyword">super</span> 
+<span class="line-num">62</span>   <span class="ruby-keyword">end</span>
 <span class="line-num">63</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
