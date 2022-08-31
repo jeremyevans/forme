@@ -9,6 +9,7 @@ class FormeDemo::App < Roda
 
   plugin :public
   plugin :common_logger
+  plugin :disallow_file_uploads
 
   plugin :forme
   plugin :h
