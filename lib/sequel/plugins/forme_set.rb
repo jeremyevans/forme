@@ -1,5 +1,7 @@
 # frozen-string-literal: true
 
+require_relative '../../forme'
+
 module Sequel # :nodoc:
   module Plugins # :nodoc:
     # The forme_set plugin makes the model instance keep track of which form
