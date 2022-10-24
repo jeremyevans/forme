@@ -27,8 +27,8 @@ class Roda
 
       # Map of error types to error messages
       ERROR_MESSAGES = {
-        :missing_data=>"_forme_set_data parameter not submitted",
-        :missing_hmac=>"_forme_set_data_hmac parameter not submitted",
+        :missing_data=>"_forme_set_data parameter not submitted, make sure the forme_set Sequel plugin is loaded",
+        :missing_hmac=>"_forme_set_data_hmac parameter not submitted, make sure the forme_set Sequel plugin is loaded",
         :hmac_mismatch=>"_forme_set_data_hmac does not match _forme_set_data",
         :csrf_mismatch=>"_forme_set_data CSRF token does not match submitted CSRF token",
         :missing_namespace=>"no content in expected namespace"
