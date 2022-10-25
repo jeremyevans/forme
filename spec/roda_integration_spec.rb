@@ -535,6 +535,12 @@ END
     it "should handle forms with objects that don't support forme_inputs" do
       forme_set(String, {:name=>'Foo'}, {}, :inputs=>[:name])['body'].must_equal '<form><fieldset class="inputs"><input id="name" name="name" type="text" value="String"/></fieldset></form>'
     end
+
+    it "should require :secret plugin option" do
+      app = FormeRodaTest()
+      error = proc{app.plugin(:forme_set)}.must_raise Roda::RodaError
+      error.message.must_equal "must provide :secret option to forme_set plugin"
+    end
   end
 end
 end
