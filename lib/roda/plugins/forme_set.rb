@@ -13,9 +13,9 @@ class Roda
 
       # Set the HMAC secret.
       def self.configure(app, opts = OPTS, &block)
-        app.opts[:forme_set_hmac_secret] = opts[:secret] || app.opts[:forme_set_hmac_secret]
-
-        raise RodaError, "must provide :secret option to forme_set plugin" unless app.opts[:forme_set_hmac_secret]
+        unless app.opts[:forme_set_hmac_secret] = opts[:secret] || app.opts[:forme_set_hmac_secret]
+          raise RodaError, "must provide :secret option to forme_set plugin"
+        end
 
         if block
           app.send(:define_method, :_forme_set_handle_error, &block)
