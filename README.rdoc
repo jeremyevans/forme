@@ -1264,11 +1264,16 @@ You can mark a configuration as the default using:
 
   Forme.default_config = :mine
 
-=== Bootstrap 3 Support
+=== Bootstrap Support
 
-Forme ships with support for Bootstrap 3-4 HTML formatting. This support is shipped in
+Forme ships with support for Bootstrap 5 HTML formatting. This support is shipped in
 it's own file, so if you don't use it, you don't pay the memory penalty for loading
 it.
+
+  require 'forme/bs5'
+  Forme.default_config = :bs5
+
+There is also support for Bootstrap versions 3-4:
 
   require 'forme/bs3'
   Forme.default_config = :bs3
