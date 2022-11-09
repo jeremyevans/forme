@@ -56,3 +56,7 @@ table caption {font-size: 20px; margin-bottom: 10px;}
 
 div.readonly-textarea { display: inline-block;}
 div.readonly-textarea p:last-child { margin-bottom: 0;}
+
+.inputs > div {
+  margin-bottom: 1rem;
+}

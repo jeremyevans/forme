@@ -1,7 +1,7 @@
 require 'tilt/erubi'
 require 'roda'
 require_relative 'models'
-require 'forme/bs3'
+require 'forme/bs5'
 
 class FormeDemo::App < Roda
   include FormeDemo
@@ -132,43 +132,43 @@ class FormeDemo::App < Roda
 
       end
 
-      r.on 'bs3' do
+      r.on 'bs5' do
         r.on 'album' do
           r.on 'basic' do
             r.is 'default' do
-              @page_title = 'BS3: Album Basic - Default'
-              @form_opts_base = { :config=>:bs3 }
+              @page_title = 'BS5: Album Basic - Default'
+              @form_opts_base = { :config=>:bs5 }
               demo :album_basic
             end
 
             r.is 'table' do
-              @page_title = 'BS3: Album Basic - Table'
-              @form_opts_base = { :config=>:bs3, :wrapper=>:trtd, :inputs_wrapper=>:bs3_table }
+              @page_title = 'BS5: Album Basic - Table'
+              @form_opts_base = { :config=>:bs5, :wrapper=>:trtd, :inputs_wrapper=>:bs5_table }
               demo :album_basic
             end
 
             r.is 'list' do
-              @page_title = 'BS3: Album Basic - List'
-              @form_opts_base = {:config=>:bs3, :wrapper=>:li, :inputs_wrapper=>:ol}
+              @page_title = 'BS5: Album Basic - List'
+              @form_opts_base = {:config=>:bs5, :wrapper=>:li, :inputs_wrapper=>:ol}
               @css = "ol, li {list-style-type: none;}"
               demo :album_basic
             end
 
             r.is 'date' do
-              @page_title = 'BS3: Album Basic - Date Multiple Select Boxes'
-              @form_opts_base = {:config=>:bs3, :date=>{:as=>:select}, :wrapper=>:trtd, :inputs_wrapper=>:bs3_table}
+              @page_title = 'BS5: Album Basic - Date Multiple Select Boxes'
+              @form_opts_base = {:config=>:bs5, :date=>{:as=>:select}, :wrapper=>:trtd, :inputs_wrapper=>:bs5_table}
               demo :album_basic
             end
 
             r.is 'alt_assoc' do
               @page_title = 'Album Basic - Association Radios/Checkboxes'
-              @form_opts_base = {:config=>:bs3, :many=>{:as=>:checkbox}, :one=>{:as=>:radio} }
+              @form_opts_base = {:config=>:bs5, :many=>{:as=>:checkbox}, :one=>{:as=>:radio} }
               demo :album_basic
             end
 
             r.is 'readonly' do
-              @page_title = 'BS3: Album Basic - Read Only'
-              @form_opts_base = {:config=>:bs3, :formatter=>:bs3_readonly}
+              @page_title = 'BS5: Album Basic - Read Only'
+              @form_opts_base = {:config=>:bs5, :formatter=>:bs5_readonly}
               @css = "ol, li {list-style-type: none;}"
               demo :album_basic
             end
@@ -176,9 +176,9 @@ class FormeDemo::App < Roda
           end
           
           r.is 'nested' do
-            @page_title = 'BS3: Single Level Nesting'
-            @form_opts_base = { :config=>:bs3 }
-            @subform_opts = { :config=>:bs3 }
+            @page_title = 'BS5: Single Level Nesting'
+            @form_opts_base = { :config=>:bs5 }
+            @subform_opts = { :config=>:bs5 }
             demo :album_nested
           end
           
@@ -186,9 +186,9 @@ class FormeDemo::App < Roda
         
         r.on 'artist' do
           r.is 'nested' do
-            @page_title = 'BS3: - Multiple Level Nesting'
-            @form_opts_base = { :config=>:bs3 }
-            @subform_opts = { :config=>:bs3 }
+            @page_title = 'BS5: - Multiple Level Nesting'
+            @form_opts_base = { :config=>:bs5 }
+            @subform_opts = { :config=>:bs5 }
             demo :artist_nested
           end
         end
