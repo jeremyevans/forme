@@ -1,5 +1,7 @@
 === master
 
+* Add forme/bs5 for Bootstrap 5 support (janko) (#106)
+
 * Raise exception if attempting to load Roda forme_set plugin without setting :secret option (janko) (#104) 
 
 === 2.2.0 (2022-06-28)

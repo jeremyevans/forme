@@ -96,7 +96,8 @@ module Forme
     Form.form(*a, &block)
   end
 
-  # Update the <tt>:class</tt> entry in the +attr+ hash with the given +classes+.
+  # Update the <tt>:class</tt> entry in the +attr+ hash with the given +classes+,
+  # adding the classes after any existing classes.
   def self.attr_classes(attr, *classes)
     attr[:class] = merge_classes(attr[:class], *classes)
   end

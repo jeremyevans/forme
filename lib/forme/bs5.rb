@@ -3,6 +3,12 @@
 module Forme
   register_config(:bs5, formatter: :bs5, wrapper: :bs5, error_handler: :bs5, serializer: :bs5, labeler: :bs5, helper: :bs5, tag_wrapper: :bs5, set_wrapper: :div)
 
+  # Update the <tt>:class</tt> entry in the +attr+ hash with the given +classes+,
+  # adding the classes before any existing classes.
+  def self.attr_classes_after(attr, *classes)
+    attr[:class] = merge_classes(*classes, attr[:class])
+  end
+
   class ErrorHandler::Bootstrap5
     Forme.register_transformer(:error_handler, :bs5, new)
 
@@ -119,12 +125,13 @@ module Forme
 
       attr = tags.find { |tag| tag.is_a?(Tag) && tag.type == :label }.attr
 
-      case input.type
+      label_class = case input.type
       when :radio, :checkbox
-        attr[:class] = Forme.merge_classes("form-check-label", attr[:class])
+        "form-check-label"
       else
-        attr[:class] = Forme.merge_classes("form-label", attr[:class])
+        "form-label"
       end
+      Forme.attr_classes_after(attr, label_class)
 
       tags
     end
@@ -151,7 +158,7 @@ module Forme
       when :submit, :reset, :hidden
         super
       when :radio, :checkbox
-        attr[:class] = Forme.merge_classes("form-check", attr[:class])
+        Forme.attr_classes_after(attr, "form-check")
         input.tag(:div, attr, super)
       else
         input.tag(:div, attr, super)
@@ -165,39 +172,40 @@ module Forme
     BUTTON_STYLES = %w[
       btn-primary btn-secondary btn-success btn-danger btn-warning btn-info btn-light btn-dark btn-link
       btn-outline-primary btn-outline-secondary btn-outline-success btn-outline-danger btn-outline-warning btn-outline-info btn-outline-light btn-outline-dark
-    ]
+    ].freeze
 
     def call(tag)
       return super unless tag.is_a?(Tag)
 
-      case tag.type
+      attr_class = case tag.type
       when :input
         # default to <input type="text"...> if not set
         tag.attr[:type] = :text if tag.attr[:type].nil?
 
         case tag.attr[:type].to_sym
         when :checkbox, :radio
-          tag.attr[:class] = Forme.merge_classes("form-check-input", tag.attr[:class])
+          "form-check-input"
         when :range
-          tag.attr[:class] = Forme.merge_classes("form-range", tag.attr[:class])
+          "form-range"
         when :color
-          tag.attr[:class] = Forme.merge_classes("form-control form-control-color", tag.attr[:class])
+          %w"form-control form-control-color"
         when :submit, :reset
           classes = ["btn"]
           classes << "btn-primary" if (tag.attr[:class].to_s.split(" ") & BUTTON_STYLES).empty?
-          tag.attr[:class] = Forme.merge_classes(*classes, tag.attr[:class])
+          classes
         when :hidden
           # nothing
         else
           unless tag.attr[:class] && tag.attr[:class].include?("form-control-plaintext")
-            tag.attr[:class] = Forme.merge_classes("form-control", tag.attr[:class])
+            "form-control"
           end
         end
       when :textarea
-        tag.attr[:class] = Forme.merge_classes("form-control", tag.attr[:class])
+        "form-control"
       when :select
-        tag.attr[:class] = Forme.merge_classes("form-select", tag.attr[:class])
+        "form-select"
       end
+      Forme.attr_classes_after(tag.attr, *attr_class) if attr_class
 
       super
     end
