@@ -53,6 +53,10 @@ if RUBY_VERSION < '2.2'
   gem 'nokogiri', '< 1.7'
 elsif RUBY_VERSION < '2.3'
   gem 'rails', '< 5.2'
+elsif RUBY_VERSION < '2.5'
+  gem 'rails', '< 6'
+elsif RUBY_VERSION < '2.7'
+  gem 'rails', '< 7'
 else
   gem 'rails'
 end
