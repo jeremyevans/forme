@@ -25,6 +25,7 @@ Forme is a forms library with the following goals:
 2) Have a simple API
 3) Support forms both with and without related objects
 4) Allow compiling down to different types of output
+5) Integrate easily into web frameworks
 END
 
   s.required_ruby_version = ">= 1.9.2"
