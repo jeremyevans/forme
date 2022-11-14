@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 gem 'sequel'
 gem "minitest-global_expectations"
 gem "roda"
-gem "rack", '>= 1.5'
 gem "rack_csrf"
 gem "erubi"
 gem "tilt"
@@ -44,8 +43,13 @@ platforms :jruby do
 end
 
 if RUBY_VERSION < '2.2'
+  gem 'rack', '~> 1.5'
+else
+  gem 'rack', '> 1.5'
+end
+
+if RUBY_VERSION < '2.2'
   gem 'rails', '< 5'
-  gem 'rack', '< 2'
   gem 'nokogiri', '< 1.7'
 elsif RUBY_VERSION < '2.3'
   gem 'rails', '< 5.2'
