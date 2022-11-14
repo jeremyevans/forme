@@ -5,6 +5,12 @@ $:.unshift(::File.expand_path('../../lib',  __FILE__))
 module FormeDemo
 DEMO_MODE = !!(ENV['FORME_DATABASE_URL'] || ENV['DATABASE_URL'])
 DB = Sequel.connect(ENV.delete('FORME_DATABASE_URL') || ENV.delete('DATABASE_URL') || 'sqlite:/')
+if DB.adapter_scheme == :postgres && Sequel::Postgres::USES_PG
+  begin
+    DB.extension :pg_auto_parameterize
+  rescue LoadError
+  end
+end
 CREATE_TABLES_FILE = File.join(File.dirname(__FILE__), 'create_tables.rb')
 
 require_relative 'create_tables'
