@@ -10,10 +10,12 @@ gem "tilt"
 if RUBY_VERSION < '2.0'
   gem 'mime-types', '< 2'
   gem 'concurrent-ruby', '<1.1.10'
+  gem 'thor', '<1'
 end
 
 if RUBY_VERSION < '2.3'
   gem 'i18n', '< 1.5'
+  gem 'mini_portile2', '< 2.5'
 end
 
 if RUBY_VERSION < '2.0'
@@ -40,6 +42,10 @@ end
 
 platforms :jruby do
   gem 'jdbc-sqlite3'
+
+  if RUBY_VERSION < '2.5'
+    gem 'racc', '< 1.6'
+  end
 end
 
 if RUBY_VERSION < '2.2'
