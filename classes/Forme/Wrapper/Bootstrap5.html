@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Forme::Wrapper::Bootstrap5</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>class</span>
+Forme::Wrapper::Bootstrap5
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/forme/bs5_rb.html">lib/forme/bs5.rb</a>
+</li>
+</ol>
+<div class='parent'>
+Superclass:
+<strong><a href="../Wrapper.html">Wrapper</a></strong>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-call">call</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-call'>
+<a name='method-i-call'></a>
+<div class='synopsis'>
+<span class='name'>call</span><span class='arguments'>(tag, input)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-call-source'>    <span class="ruby-comment"># File lib/forme/bs5.rb</span>
+<span class="line-num">154</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>, <span class="ruby-identifier">input</span>)
+<span class="line-num">155</span>   <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:wrapper_attr</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:wrapper_attr</span>].<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> { }
+<span class="line-num">156</span> 
+<span class="line-num">157</span>   <span class="ruby-keyword">case</span> <span class="ruby-identifier">input</span>.<span class="ruby-identifier">type</span>
+<span class="line-num">158</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:submit</span>, <span class="ruby-value">:reset</span>, <span class="ruby-value">:hidden</span>
+<span class="line-num">159</span>     <span class="ruby-keyword">super</span>
+<span class="line-num">160</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:radio</span>, <span class="ruby-value">:checkbox</span>
+<span class="line-num">161</span>     <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes_after</span>(<span class="ruby-identifier">attr</span>, <span class="ruby-string">&quot;form-check&quot;</span>)
+<span class="line-num">162</span>     <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:div</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-keyword">super</span>)
+<span class="line-num">163</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">164</span>     <span class="ruby-identifier">input</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-value">:div</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-keyword">super</span>)
+<span class="line-num">165</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">166</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

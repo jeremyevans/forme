@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Forme::Serializer::Bootstrap5</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>class</span>
+Forme::Serializer::Bootstrap5
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/forme/bs5_rb.html">lib/forme/bs5.rb</a>
+</li>
+</ol>
+<div class='parent'>
+Superclass:
+<strong><a href="../Serializer.html">Serializer</a></strong>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-call">call</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='constants-list'>
+<h2>Constants</h2>
+<div class='name-list'>
+<table summary='Constants'>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>BUTTON_STYLES</td>
+<td>=</td>
+<td class='context-item-value'>%w[
+btn-primary btn-secondary btn-success btn-danger btn-warning btn-info btn-light btn-dark btn-link
+btn-outline-primary btn-outline-secondary btn-outline-success btn-outline-danger btn-outline-warning btn-outline-info btn-outline-light btn-outline-dark
+].freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+</table>
+</div>
+</div>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-call'>
+<a name='method-i-call'></a>
+<div class='synopsis'>
+<span class='name'>call</span><span class='arguments'>(tag)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-call-source'>    <span class="ruby-comment"># File lib/forme/bs5.rb</span>
+<span class="line-num">177</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>)
+<span class="line-num">178</span>   <span class="ruby-keyword">return</span> <span class="ruby-keyword">super</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Tag</span>)
+<span class="line-num">179</span> 
+<span class="line-num">180</span>   <span class="ruby-identifier">attr_class</span> = <span class="ruby-keyword">case</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">type</span>
+<span class="line-num">181</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:input</span>
+<span class="line-num">182</span>     <span class="ruby-comment"># default to &lt;input type=&quot;text&quot;...&gt; if not set</span>
+<span class="line-num">183</span>     <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:type</span>] = <span class="ruby-value">:text</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:type</span>].<span class="ruby-identifier">nil?</span>
+<span class="line-num">184</span> 
+<span class="line-num">185</span>     <span class="ruby-keyword">case</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:type</span>].<span class="ruby-identifier">to_sym</span>
+<span class="line-num">186</span>     <span class="ruby-keyword">when</span> <span class="ruby-value">:checkbox</span>, <span class="ruby-value">:radio</span>
+<span class="line-num">187</span>       <span class="ruby-string">&quot;form-check-input&quot;</span>
+<span class="line-num">188</span>     <span class="ruby-keyword">when</span> <span class="ruby-value">:range</span>
+<span class="line-num">189</span>       <span class="ruby-string">&quot;form-range&quot;</span>
+<span class="line-num">190</span>     <span class="ruby-keyword">when</span> <span class="ruby-value">:color</span>
+<span class="line-num">191</span>       <span class="ruby-node">%w&quot;form-control form-control-color&quot;</span>
+<span class="line-num">192</span>     <span class="ruby-keyword">when</span> <span class="ruby-value">:submit</span>, <span class="ruby-value">:reset</span>
+<span class="line-num">193</span>       <span class="ruby-identifier">classes</span> = [<span class="ruby-string">&quot;btn&quot;</span>]
+<span class="line-num">194</span>       <span class="ruby-identifier">classes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;btn-primary&quot;</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:class</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&quot; &quot;</span>) <span class="ruby-operator">&amp;</span> <span class="ruby-constant">BUTTON_STYLES</span>).<span class="ruby-identifier">empty?</span>
+<span class="line-num">195</span>       <span class="ruby-identifier">classes</span>
+<span class="line-num">196</span>     <span class="ruby-keyword">when</span> <span class="ruby-value">:hidden</span>
+<span class="line-num">197</span>       <span class="ruby-comment"># nothing</span>
+<span class="line-num">198</span>     <span class="ruby-keyword">else</span>
+<span class="line-num">199</span>       <span class="ruby-keyword">unless</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:class</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:class</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;form-control-plaintext&quot;</span>)
+<span class="line-num">200</span>         <span class="ruby-string">&quot;form-control&quot;</span>
+<span class="line-num">201</span>       <span class="ruby-keyword">end</span>
+<span class="line-num">202</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">203</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:textarea</span>
+<span class="line-num">204</span>     <span class="ruby-string">&quot;form-control&quot;</span>
+<span class="line-num">205</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:select</span>
+<span class="line-num">206</span>     <span class="ruby-string">&quot;form-select&quot;</span>
+<span class="line-num">207</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">208</span>   <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">attr_classes_after</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">attr_class</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">attr_class</span>
+<span class="line-num">209</span> 
+<span class="line-num">210</span>   <span class="ruby-keyword">super</span>
+<span class="line-num">211</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

@@ -1,9 +1,10 @@
-Tue, 28 Jun 2022 08:57:54 -0700
-README.rdoc	Thu, 09 Jun 2022 12:07:50 -0700
-CHANGELOG	Tue, 28 Jun 2022 08:51:30 -0700
+Tue, 15 Nov 2022 08:09:56 -0800
+README.rdoc	Thu, 10 Nov 2022 07:54:29 -0800
+CHANGELOG	Tue, 15 Nov 2022 08:02:42 -0800
 MIT-LICENSE	Tue, 24 May 2022 14:04:59 -0700
-lib/forme.rb	Fri, 27 Aug 2021 11:13:34 -0700
+lib/forme.rb	Thu, 10 Nov 2022 07:54:29 -0800
 lib/forme/bs3.rb	Wed, 08 Jun 2022 11:27:34 -0700
+lib/forme/bs5.rb	Thu, 10 Nov 2022 07:54:29 -0800
 lib/forme/erb.rb	Tue, 30 Nov 2021 14:33:28 -0800
 lib/forme/form.rb	Wed, 08 Jun 2022 11:27:34 -0700
 lib/forme/input.rb	Tue, 30 Nov 2021 12:58:11 -0800
@@ -18,11 +19,11 @@ lib/forme/transformers/inputs_wrapper.rb	Tue, 30 Nov 2021 12:58:11 -0800
 lib/forme/transformers/labeler.rb	Mon, 04 Mar 2019 16:00:39 -0800
 lib/forme/transformers/serializer.rb	Tue, 02 Oct 2018 08:12:53 -0700
 lib/forme/transformers/wrapper.rb	Mon, 04 Mar 2019 16:00:39 -0800
-lib/forme/version.rb	Tue, 28 Jun 2022 08:51:30 -0700
+lib/forme/version.rb	Tue, 15 Nov 2022 08:02:42 -0800
 lib/roda/plugins/forme.rb	Fri, 27 Aug 2021 11:13:34 -0700
 lib/roda/plugins/forme_erubi_capture.rb	Tue, 30 Nov 2021 14:33:28 -0800
 lib/roda/plugins/forme_route_csrf.rb	Tue, 30 Nov 2021 12:58:11 -0800
-lib/roda/plugins/forme_set.rb	Tue, 30 Nov 2021 12:58:11 -0800
+lib/roda/plugins/forme_set.rb	Tue, 25 Oct 2022 10:08:47 -0700
 lib/sequel/plugins/forme.rb	Thu, 09 Jun 2022 12:07:50 -0700
 lib/sequel/plugins/forme_i18n.rb	Fri, 27 Aug 2021 11:13:34 -0700
-lib/sequel/plugins/forme_set.rb	Wed, 08 Jun 2022 11:27:34 -0700
+lib/sequel/plugins/forme_set.rb	Thu, 20 Oct 2022 07:53:41 -0700

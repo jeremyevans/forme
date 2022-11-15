@@ -61,8 +61,8 @@ Roda::RodaPlugins::FormeSet
 <td class='context-item-name'>ERROR_MESSAGES</td>
 <td>=</td>
 <td class='context-item-value'>{
-:missing_data=>"_forme_set_data parameter not submitted",
-:missing_hmac=>"_forme_set_data_hmac parameter not submitted",
+:missing_data=>"_forme_set_data parameter not submitted, make sure the forme_set Sequel plugin is loaded",
+:missing_hmac=>"_forme_set_data_hmac parameter not submitted, make sure the forme_set Sequel plugin is loaded",
 :hmac_mismatch=>"_forme_set_data_hmac does not match _forme_set_data",
 :csrf_mismatch=>"_forme_set_data CSRF token does not match submitted CSRF token",
 :missing_namespace=>"no content in expected namespace"
@@ -94,13 +94,15 @@ Roda::RodaPlugins::FormeSet
 </a>
 <pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_set.rb</span>
 <span class="line-num">15</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">16</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:forme_set_hmac_secret</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:secret</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:forme_set_hmac_secret</span>]
-<span class="line-num">17</span> 
-<span class="line-num">18</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
-<span class="line-num">19</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-value">:_forme_set_handle_error</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="line-num">20</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-value">:_forme_set_handle_error</span>)
-<span class="line-num">21</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">22</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">16</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:forme_set_hmac_secret</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:secret</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:forme_set_hmac_secret</span>]
+<span class="line-num">17</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;must provide :secret option to forme_set plugin&quot;</span>
+<span class="line-num">18</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">19</span> 
+<span class="line-num">20</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
+<span class="line-num">21</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-value">:_forme_set_handle_error</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">22</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-value">:_forme_set_handle_error</span>)
+<span class="line-num">23</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">24</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>

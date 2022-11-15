@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2022-06-09 12:07:50 -0700</span>
+<span class='datetime'>2022-11-10 07:54:29 -0800</span>
 </div>
 </div>
 <div id='content'>
@@ -1236,9 +1236,15 @@ Last Update:
 <pre class="ruby"><span class="ruby-constant">Forme</span>.<span class="ruby-identifier">default_config</span> = <span class="ruby-value">:mine</span>
 </pre>
 
-<h3 id="label-Bootstrap+3+Support">Bootstrap 3 Support<span><a href="#label-Bootstrap+3+Support">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<h3 id="label-Bootstrap+Support">Bootstrap Support<span><a href="#label-Bootstrap+Support">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with support for Bootstrap 3-4 HTML formatting. This support is shipped in it’s own file, so if you don’t use it, you don’t pay the memory penalty for loading it.</p>
+<p><a href="../classes/Forme.html"><code>Forme</code></a> ships with support for Bootstrap 5 HTML formatting. This support is shipped in it’s own file, so if you don’t use it, you don’t pay the memory penalty for loading it.</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;forme/bs5&#39;</span>
+<span class="ruby-constant">Forme</span>.<span class="ruby-identifier">default_config</span> = <span class="ruby-value">:bs5</span>
+</pre>
+
+<p>There is also support for Bootstrap versions 3-4:</p>
 
 <pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;forme/bs3&#39;</span>
 <span class="ruby-constant">Forme</span>.<span class="ruby-identifier">default_config</span> = <span class="ruby-value">:bs3</span>
