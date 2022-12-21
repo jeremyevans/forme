@@ -9,31 +9,36 @@ module Forme
   end
 
   begin
-    require 'cgi/escape'
-  # :nocov:
-    unless CGI.respond_to?(:escapeHTML) # work around for JRuby 9.1
-      CGI = Object.new
-      CGI.extend(defined?(::CGI::Escape) ? ::CGI::Escape : ::CGI::Util)
-    end
-    def self.h(value)
-      CGI.escapeHTML(value.to_s)
-    end
+    require 'erb/escape'
+    define_singleton_method(:h, ERB::Escape.instance_method(:html_escape))
   rescue LoadError
-    ESCAPE_TABLE = {'&' => '&amp;', '<' => '&lt;', '>' => '&gt;', '"' => '&quot;', "'" => '&#39;'}.freeze
-    ESCAPE_TABLE.each_value(&:freeze)
-    if RUBY_VERSION >= '1.9'
-      # Escape the following characters with their HTML/XML
-      # equivalents.
-      def self.h(value)
-        value.to_s.gsub(/[&<>"']/, ESCAPE_TABLE)
+    begin
+      require 'cgi/escape'
+    # :nocov:
+      unless CGI.respond_to?(:escapeHTML) # work around for JRuby 9.1
+        CGI = Object.new
+        CGI.extend(defined?(::CGI::Escape) ? ::CGI::Escape : ::CGI::Util)
       end
-    else
       def self.h(value)
-        value.to_s.gsub(/[&<>"']/){|s| ESCAPE_TABLE[s]}
+        CGI.escapeHTML(value.to_s)
+      end
+    rescue LoadError
+      ESCAPE_TABLE = {'&' => '&amp;', '<' => '&lt;', '>' => '&gt;', '"' => '&quot;', "'" => '&#39;'}.freeze
+      ESCAPE_TABLE.each_value(&:freeze)
+      if RUBY_VERSION >= '1.9'
+        # Escape the following characters with their HTML/XML
+        # equivalents.
+        def self.h(value)
+          value.to_s.gsub(/[&<>"']/, ESCAPE_TABLE)
+        end
+      else
+        def self.h(value)
+          value.to_s.gsub(/[&<>"']/){|s| ESCAPE_TABLE[s]}
+        end
       end
     end
+    # :nocov:
   end
-  # :nocov:
 
   @default_add_blank_prompt = nil
   @default_config = :default
