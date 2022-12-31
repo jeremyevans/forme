@@ -53,7 +53,7 @@ This results in the following HTML:
     </label>
   </form>
 
-In addition to integrating with Sequel, Form also integrates into
+In addition to integrating with Sequel, Forme also integrates into
 three separate web frameworks, Roda, Rails, and Sinatra, allowing
 use of forms inside templates.  This is the most common usage of Forme.
 
