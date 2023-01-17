@@ -11,10 +11,10 @@ module Forme
   begin
     require 'erb/escape'
     define_singleton_method(:h, ERB::Escape.instance_method(:html_escape))
+  # :nocov:
   rescue LoadError
     begin
       require 'cgi/escape'
-    # :nocov:
       unless CGI.respond_to?(:escapeHTML) # work around for JRuby 9.1
         CGI = Object.new
         CGI.extend(defined?(::CGI::Escape) ? ::CGI::Escape : ::CGI::Util)
@@ -37,8 +37,8 @@ module Forme
         end
       end
     end
-    # :nocov:
   end
+  # :nocov:
 
   @default_add_blank_prompt = nil
   @default_config = :default
