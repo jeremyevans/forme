@@ -37,6 +37,18 @@ class Roda
       }.freeze
 
       module InstanceMethods
+        # If a Sequel::Model object that supports forme_set is passed,
+        # isolate the inputs so that each form only includes metadata
+        # for inputs on the form, and not inputs for earlier forms on
+        # the same page.
+        def form(obj=nil, attr={}, opts={}, &block)
+          if obj.is_a?(Sequel::Plugins::FormeSet::InstanceMethods)
+            obj.isolate_forme_inputs{super}
+          else
+            super
+          end
+        end
+
         # Return hash based on submitted parameters, with :values key
         # being submitted values for the object, and :validations key
         # being a hash of validation metadata for the object.

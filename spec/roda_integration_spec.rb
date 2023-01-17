@@ -172,7 +172,8 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
     def _forme_set(meth, obj, orig_hash, *form_args, &block)
       hash = {}
       forme_set_block = orig_hash.delete(:forme_set_block)
-      handle_params = hash.delete(:handle_params)
+      inline = orig_hash.delete(:inline)
+      match = orig_hash.delete(:match)
       orig_hash.each{|k,v| hash[k.to_s] = v}
       album = obj
       ret, _, data, hmac = nil
@@ -181,6 +182,8 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
         r.get do
           if @block = env[:block]
             render(:inline=>'<% form(*env[:args]) do |f| %><%= @block.call(f) %><% end %>')
+          elsif inline
+            render(:inline=>inline)
           else
             form(*env[:args])
           end
@@ -191,15 +194,19 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
           nil
         end
       end
-      body = @app.call('REQUEST_METHOD'=>'GET', :args=>[album, *form_args], :block=>block)[2].join
-      body =~ %r|<input name="_csrf" type="hidden" value="([^"]+)"/>.*<input name="_forme_set_data" type="hidden" value="([^"]+)"/><input name="_forme_set_data_hmac" type="hidden" value="([^"]+)"/>|n
-      csrf = $1
-      data = $2
-      hmac = $3
+      search = body = @app.call('REQUEST_METHOD'=>'GET', :args=>[album, *form_args], :block=>block)[2].join
+      regexp = %r|<input name="_csrf" type="hidden" value="([^"]+)"/>.*?<input name="_forme_set_data" type="hidden" value="([^"]+)"/><input name="_forme_set_data_hmac" type="hidden" value="([^"]+)"/>|n
+      if match
+        csrf, data, hmac = search.scan(regexp)[match]
+      else
+        search =~ regexp
+        csrf = $1
+        data = $2
+        hmac = $3
+      end
       data.gsub!("&quot;", '"') if data
       h = {"album"=>hash,  "_forme_set_data"=>data, "_forme_set_data_hmac"=>hmac, "_csrf"=>csrf, "body"=>body}
       if data && hmac
-        h = handle_params.call(h) if handle_params
         forme_call(h)
       end
       meth == :forme_parse ? ret : h
@@ -267,6 +274,9 @@ END
     end
 
     it "#forme_set should call plugin block if there is an error with the form submission hmac not matching data" do
+      # Disable isolation to allow missing_namespace check to be hit
+      def @ab.isolate_forme_inputs; yield end
+
       @app.plugin :forme_set do |error_type, _|
         request.on{error_type.to_s}
       end
@@ -312,6 +322,17 @@ END
 
       forme_set(@ab, 'name'=>'Bar', 'copies_sold'=>'1'){|f| f.input(:name); f.input(:copies_sold)}
       @ab.name.must_equal 'Bar'
+      @ab.copies_sold.must_equal 1
+    end
+
+    it "#forme_set should only set values in submitted form if the page contains multiple forms for same object" do
+      forme_set(@ab, :name=>'Foo', :copies_sold=>'1', :inline=>'<% form(*env[:args]) do |f| %><%= f.input(:name) %><% end %><% form(*env[:args]) do |f| %><%= f.input(:copies_sold) %><% end %>')
+      @ab.name.must_equal 'Foo'
+      @ab.copies_sold.must_be_nil
+
+      @ab.values.clear
+      forme_set(@ab, :name=>'Foo', :copies_sold=>'1', :match=>1, :inline=>'<% form(*env[:args]) do |f| %><%= f.input(:name) %><% end %><% form(*env[:args]) do |f| %><%= f.input(:copies_sold) %><% end %>')
+      @ab.name.must_be_nil
       @ab.copies_sold.must_equal 1
     end
 

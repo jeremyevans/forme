@@ -1,5 +1,7 @@
 === master
 
+* Make Roda forme_set plugin only include metadata for inputs in the same form, and not inputs on other forms on the same page (#109) (jeremyevans)
+
 * Use erb/escape for faster HTML escaping if available (jeremyevans)
 
 === 2.3.0 (2022-11-15)

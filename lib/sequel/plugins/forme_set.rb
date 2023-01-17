@@ -24,6 +24,19 @@ module Sequel # :nodoc:
           @forme_inputs ||= {}
         end
 
+        # Temporarily reset forme_inputs to the empty hash before yielding to the block.  
+        # Used by the Roda forme_set plugin to make sure each form only includes metadata
+        # for inputs in that form, and not metadata for inputs for earlier forms on the same page.
+        def isolate_forme_inputs
+          forme_inputs = self.forme_inputs
+          begin
+            @forme_inputs = {}
+            yield
+          ensure
+            @forme_inputs = forme_inputs.merge(@forme_inputs)
+          end
+        end
+
         # Hash with column name symbol keys and <tt>[subset, allowed_values]</tt> values.  +subset+
         # is a boolean flag, if true, the uploaded values should be a subset of the allowed values,
         # otherwise, there should be a single uploaded value that is a member of the allowed values.
