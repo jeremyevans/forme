@@ -378,6 +378,10 @@ describe "Forme plain forms" do
     @f.input(:select, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :selected=>2).must_equal '<select><optgroup label="d"><option value="1">a</option><option selected="selected" value="2">b</option></optgroup><optgroup label="e"><option value="3">c</option></optgroup></select>'
   end
 
+  it "should create select tag with option groups and specified value" do
+    @f.input(:select, :optgroups=>[['d', [[:a, 1], [:b, 2]]], ['e', [[:c, 3]]]], :value=>3).must_equal '<select><optgroup label="d"><option value="1">a</option><option value="2">b</option></optgroup><optgroup label="e"><option selected="selected" value="3">c</option></optgroup></select>'
+  end
+
   it "should create select tag with option groups with attributes" do
     @f.input(:select, :optgroups=>[[{:label=>'d', :class=>'f'}, [[:a, 1], [:b, 2]]], [{:label=>'e', :class=>'g'}, [[:c, 3]]]], :selected=>2).must_equal '<select><optgroup class="f" label="d"><option value="1">a</option><option selected="selected" value="2">b</option></optgroup><optgroup class="g" label="e"><option value="3">c</option></optgroup></select>'
   end

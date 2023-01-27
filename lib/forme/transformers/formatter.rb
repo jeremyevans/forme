@@ -417,6 +417,7 @@ module Forme
         return unless @opts[:options]
         process_select_options(@opts[:options], &block)
       end
+      @attr.delete(:value)
 
       if prompt = @opts[:add_blank]
         unless prompt.is_a?(String)
@@ -434,7 +435,7 @@ module Forme
     def process_select_options(os)
       vm = @opts[:value_method]
       tm = @opts[:text_method]
-      sel = @opts[:selected] || @attr.delete(:value)
+      sel = @opts[:selected] || @attr[:value]
 
       if @opts[:multiple]
         sel = Array(sel)
