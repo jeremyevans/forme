@@ -11,6 +11,7 @@ if RUBY_VERSION < '2.0'
   gem 'mime-types', '< 2'
   gem 'concurrent-ruby', '<1.1.10'
   gem 'thor', '<1'
+  gem 'rails-html-sanitizer', '<1.5'
 end
 
 if RUBY_VERSION < '2.3'
