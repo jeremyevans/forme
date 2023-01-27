@@ -1,6 +1,8 @@
 === master
 
-* Make Roda forme_set plugin only include metadata for inputs in the same form, and not inputs on other forms on the same page (#109) (jeremyevans)
+* Make select input with option groups and a :value option correctly set selected attribute on options in all optgroups (v-kolesnikov) (#111, #110)
+
+* Make Roda forme_set plugin only include metadata for inputs in the same form, and not inputs on other forms on the same page (jeremyevans) (#109)
 
 * Use erb/escape for faster HTML escaping if available (jeremyevans)
 
