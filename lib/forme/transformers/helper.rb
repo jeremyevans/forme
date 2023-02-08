@@ -7,7 +7,7 @@ module Forme
   class Helper
     Forme.register_transformer(:helper, :default, new)
 
-    # Return tag with error message span tag after it.
+    # Return tag with help message span tag after it.
     def call(tag, input)
       attr = input.opts[:helper_attr]
       attr = attr ? attr.dup : {}
