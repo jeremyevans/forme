@@ -207,7 +207,7 @@ module Sequel # :nodoc:
         # is required.
         def handle_label(f)
           opts[:label] = humanize(field) unless opts.has_key?(:label)
-          opts[:label] = [opts[:label], form._tag(:abbr, {:title=>'required'}, '*')] if opts[:label] && opts[:required]
+          opts[:label] = [opts[:label], form._tag(:abbr, {:title=>'required'}, '*')] if opts[:label] && opts[:required] && obj.forme_use_required_abbr?
         end
 
         # Update the attributes and options for any recognized validations
@@ -490,6 +490,11 @@ module Sequel # :nodoc:
 
         def forme_default_request_method
           'post'
+        end
+
+        # Whether to set an abbr tag in labels for required inputs.
+        def forme_use_required_abbr?
+          true
         end
 
         # Use the underscored model name as the default namespace.
