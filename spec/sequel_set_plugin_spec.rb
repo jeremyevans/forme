@@ -46,6 +46,10 @@ describe "Sequel forme_set plugin" do
     @ab.name.must_be_nil
   end
   
+  it "#isolate_forme_inputs should not break with frozen objects" do
+    @ab.freeze.isolate_forme_inputs{}
+  end
+  
   it "#forme_set should skip inputs with disabled/readonly formatter set on input" do
     [:disabled, :readonly, ::Forme::Formatter::Disabled, ::Forme::Formatter::ReadOnly].each do |formatter|
       @f.input(:name, :formatter=>formatter)

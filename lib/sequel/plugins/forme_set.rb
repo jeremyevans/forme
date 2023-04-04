@@ -28,6 +28,8 @@ module Sequel # :nodoc:
         # Used by the Roda forme_set plugin to make sure each form only includes metadata
         # for inputs in that form, and not metadata for inputs for earlier forms on the same page.
         def isolate_forme_inputs
+          return yield if frozen?
+
           forme_inputs = self.forme_inputs
           begin
             @forme_inputs = {}
