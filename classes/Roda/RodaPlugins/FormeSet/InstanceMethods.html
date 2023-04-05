@@ -2,6 +2,7 @@
 <html lang='en'>
 <head>
 <title>Roda::RodaPlugins::FormeSet::InstanceMethods</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -39,6 +40,7 @@ Roda::RodaPlugins::FormeSet::InstanceMethods
 <h2>Methods</h2>
 <h3>Public Instance</h3>
 <ol>
+<li><a href="#method-i-form">form</a></li>
 <li><a href="#method-i-forme_parse">forme_parse</a></li>
 <li><a href="#method-i-forme_set">forme_set</a></li>
 </ol>
@@ -48,6 +50,31 @@ Roda::RodaPlugins::FormeSet::InstanceMethods
 <div id='section'>
 <div id='methods'>
 <h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-form'>
+<a name='method-i-form'></a>
+<div class='synopsis'>
+<span class='name'>form</span><span class='arguments'>(obj=nil, attr={}, opts={}, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>If a Sequel::Model object that supports <a href="InstanceMethods.html#method-i-forme_set"><code>forme_set</code></a> is passed, isolate the inputs so that each form only includes metadata for inputs on the form, and not inputs for earlier forms on the same page.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-form-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-form-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_set.rb</span>
+<span class="line-num">44</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">form</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">45</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Plugins</span><span class="ruby-operator">::</span><span class="ruby-constant">FormeSet</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceMethods</span>)
+<span class="line-num">46</span>     <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">isolate_forme_inputs</span>{<span class="ruby-keyword">super</span>}
+<span class="line-num">47</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">48</span>     <span class="ruby-keyword">super</span>
+<span class="line-num">49</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">50</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
 <div class='method public-instance' id='method-method-i-forme_parse'>
 <a name='method-i-forme_parse'></a>
 <div class='synopsis'>
@@ -64,20 +91,20 @@ Roda::RodaPlugins::FormeSet::InstanceMethods
 [show source]
 </a>
 <pre id='method-i-forme_parse-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_set.rb</span>
-<span class="line-num">43</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_parse</span>(<span class="ruby-identifier">obj</span>)
-<span class="line-num">44</span>   <span class="ruby-identifier">h</span> = <span class="ruby-identifier">_forme_parse</span>(<span class="ruby-identifier">obj</span>)
-<span class="line-num">45</span>   
-<span class="line-num">46</span>   <span class="ruby-identifier">params</span> = <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:params</span>)
-<span class="line-num">47</span>   <span class="ruby-identifier">columns</span> = <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:columns</span>)
-<span class="line-num">48</span>   <span class="ruby-identifier">h</span>[<span class="ruby-value">:validations</span>] <span class="ruby-operator">||=</span> {}
-<span class="line-num">49</span> 
-<span class="line-num">50</span>   <span class="ruby-identifier">values</span> = <span class="ruby-identifier">h</span>[<span class="ruby-value">:values</span>] = {}
-<span class="line-num">51</span>   <span class="ruby-identifier">columns</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">col</span><span class="ruby-operator">|</span>
-<span class="line-num">52</span>     <span class="ruby-identifier">values</span>[<span class="ruby-identifier">col</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">col</span>]
-<span class="line-num">53</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">54</span> 
-<span class="line-num">55</span>   <span class="ruby-identifier">h</span>
-<span class="line-num">56</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">55</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_parse</span>(<span class="ruby-identifier">obj</span>)
+<span class="line-num">56</span>   <span class="ruby-identifier">h</span> = <span class="ruby-identifier">_forme_parse</span>(<span class="ruby-identifier">obj</span>)
+<span class="line-num">57</span>   
+<span class="line-num">58</span>   <span class="ruby-identifier">params</span> = <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:params</span>)
+<span class="line-num">59</span>   <span class="ruby-identifier">columns</span> = <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:columns</span>)
+<span class="line-num">60</span>   <span class="ruby-identifier">h</span>[<span class="ruby-value">:validations</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">61</span> 
+<span class="line-num">62</span>   <span class="ruby-identifier">values</span> = <span class="ruby-identifier">h</span>[<span class="ruby-value">:values</span>] = {}
+<span class="line-num">63</span>   <span class="ruby-identifier">columns</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">col</span><span class="ruby-operator">|</span>
+<span class="line-num">64</span>     <span class="ruby-identifier">values</span>[<span class="ruby-identifier">col</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-identifier">col</span>]
+<span class="line-num">65</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">66</span> 
+<span class="line-num">67</span>   <span class="ruby-identifier">h</span>
+<span class="line-num">68</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-forme_set'>
@@ -96,21 +123,21 @@ Roda::RodaPlugins::FormeSet::InstanceMethods
 [show source]
 </a>
 <pre id='method-i-forme_set-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_set.rb</span>
-<span class="line-num">60</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_set</span>(<span class="ruby-identifier">obj</span>)
-<span class="line-num">61</span>   <span class="ruby-identifier">h</span> = <span class="ruby-identifier">_forme_parse</span>(<span class="ruby-identifier">obj</span>)
-<span class="line-num">62</span> 
-<span class="line-num">63</span>   <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">h</span>[<span class="ruby-value">:params</span>], <span class="ruby-identifier">h</span>[<span class="ruby-value">:columns</span>])
-<span class="line-num">64</span> 
-<span class="line-num">65</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">:validations</span>]
-<span class="line-num">66</span>     <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_validations</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">h</span>[<span class="ruby-value">:validations</span>])
-<span class="line-num">67</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">68</span> 
-<span class="line-num">69</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>
-<span class="line-num">70</span>     <span class="ruby-keyword">yield</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">:form_version</span>], <span class="ruby-identifier">obj</span>
-<span class="line-num">71</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">72</span> 
-<span class="line-num">73</span>   <span class="ruby-identifier">obj</span>
-<span class="line-num">74</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num">72</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forme_set</span>(<span class="ruby-identifier">obj</span>)
+<span class="line-num">73</span>   <span class="ruby-identifier">h</span> = <span class="ruby-identifier">_forme_parse</span>(<span class="ruby-identifier">obj</span>)
+<span class="line-num">74</span> 
+<span class="line-num">75</span>   <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">set_fields</span>(<span class="ruby-identifier">h</span>[<span class="ruby-value">:params</span>], <span class="ruby-identifier">h</span>[<span class="ruby-value">:columns</span>])
+<span class="line-num">76</span> 
+<span class="line-num">77</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">:validations</span>]
+<span class="line-num">78</span>     <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">forme_validations</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">h</span>[<span class="ruby-value">:validations</span>])
+<span class="line-num">79</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">80</span> 
+<span class="line-num">81</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>
+<span class="line-num">82</span>     <span class="ruby-keyword">yield</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">:form_version</span>], <span class="ruby-identifier">obj</span>
+<span class="line-num">83</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">84</span> 
+<span class="line-num">85</span>   <span class="ruby-identifier">obj</span>
+<span class="line-num">86</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -1,8 +1,8 @@
-Tue, 15 Nov 2022 08:09:56 -0800
-README.rdoc	Thu, 10 Nov 2022 07:54:29 -0800
-CHANGELOG	Tue, 15 Nov 2022 08:02:42 -0800
-MIT-LICENSE	Tue, 24 May 2022 14:04:59 -0700
-lib/forme.rb	Thu, 10 Nov 2022 07:54:29 -0800
+Wed, 05 Apr 2023 08:16:49 -0700
+README.rdoc	Sat, 31 Dec 2022 12:44:40 -0800
+CHANGELOG	Wed, 05 Apr 2023 08:09:31 -0700
+MIT-LICENSE	Tue, 17 Jan 2023 09:27:45 -0800
+lib/forme.rb	Tue, 17 Jan 2023 09:27:45 -0800
 lib/forme/bs3.rb	Wed, 08 Jun 2022 11:27:34 -0700
 lib/forme/bs5.rb	Thu, 10 Nov 2022 07:54:29 -0800
 lib/forme/erb.rb	Tue, 30 Nov 2021 14:33:28 -0800
@@ -13,17 +13,17 @@ lib/forme/raw.rb	Tue, 30 Nov 2021 12:58:11 -0800
 lib/forme/tag.rb	Tue, 30 Nov 2021 12:58:11 -0800
 lib/forme/template.rb	Tue, 30 Nov 2021 14:33:28 -0800
 lib/forme/transformers/error_handler.rb	Wed, 08 Jun 2022 11:27:34 -0700
-lib/forme/transformers/formatter.rb	Wed, 08 Jun 2022 11:27:34 -0700
-lib/forme/transformers/helper.rb	Tue, 30 Nov 2021 12:58:11 -0800
+lib/forme/transformers/formatter.rb	Fri, 27 Jan 2023 11:33:37 -0800
+lib/forme/transformers/helper.rb	Wed, 08 Feb 2023 09:00:04 -0800
 lib/forme/transformers/inputs_wrapper.rb	Tue, 30 Nov 2021 12:58:11 -0800
 lib/forme/transformers/labeler.rb	Mon, 04 Mar 2019 16:00:39 -0800
 lib/forme/transformers/serializer.rb	Tue, 02 Oct 2018 08:12:53 -0700
 lib/forme/transformers/wrapper.rb	Mon, 04 Mar 2019 16:00:39 -0800
-lib/forme/version.rb	Tue, 15 Nov 2022 08:02:42 -0800
+lib/forme/version.rb	Wed, 05 Apr 2023 08:09:31 -0700
 lib/roda/plugins/forme.rb	Fri, 27 Aug 2021 11:13:34 -0700
 lib/roda/plugins/forme_erubi_capture.rb	Tue, 30 Nov 2021 14:33:28 -0800
 lib/roda/plugins/forme_route_csrf.rb	Tue, 30 Nov 2021 12:58:11 -0800
-lib/roda/plugins/forme_set.rb	Tue, 25 Oct 2022 10:08:47 -0700
-lib/sequel/plugins/forme.rb	Thu, 09 Jun 2022 12:07:50 -0700
+lib/roda/plugins/forme_set.rb	Tue, 17 Jan 2023 09:27:45 -0800
+lib/sequel/plugins/forme.rb	Fri, 24 Mar 2023 10:56:38 -0700
 lib/sequel/plugins/forme_i18n.rb	Fri, 27 Aug 2021 11:13:34 -0700
-lib/sequel/plugins/forme_set.rb	Thu, 20 Oct 2022 07:53:41 -0700
+lib/sequel/plugins/forme_set.rb	Tue, 04 Apr 2023 12:07:36 -0700

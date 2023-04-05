@@ -2,6 +2,7 @@
 <html lang='en'>
 <head>
 <title>README.rdoc</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -30,7 +31,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2022-11-10 07:54:29 -0800</span>
+<span class='datetime'>2022-12-31 12:44:40 -0800</span>
 </div>
 </div>
 <div id='content'>
@@ -93,7 +94,7 @@ Last Update:
   &lt;/label&gt;
 &lt;/form&gt;</pre>
 
-<p>In addition to integrating with <a href="../classes/Sequel.html"><code>Sequel</code></a>, Form also integrates into three separate web frameworks, <a href="../classes/Roda.html"><code>Roda</code></a>, Rails, and Sinatra, allowing use of forms inside templates.  This is the most common usage of <a href="../classes/Forme.html"><code>Forme</code></a>.</p>
+<p>In addition to integrating with <a href="../classes/Sequel.html"><code>Sequel</code></a>, <a href="../classes/Forme.html"><code>Forme</code></a> also integrates into three separate web frameworks, <a href="../classes/Roda.html"><code>Roda</code></a>, Rails, and Sinatra, allowing use of forms inside templates.  This is the most common usage of <a href="../classes/Forme.html"><code>Forme</code></a>.</p>
 
 <p>One distinct advantage of <a href="../classes/Forme.html"><code>Forme</code></a> over other form libraries is the use of an abstract syntax tree internally, allowing the same form code to compile to different HTML with different options.  For example, it allows using the exactly same form code to display a form you can modify as well as a read-only view, just by passing a single option when creating the form.  For example, with the first example in this section, if you pass the <code>formatter: :readonly</code> option, you get the following HTML instead:</p>
 
