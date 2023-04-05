@@ -1,6 +1,6 @@
-=== master
+=== 2.4.0 (2023-04-05)
 
-* Support Sequel::Model#forme_use_required_abbr? to control where to add abbr * tag for required inputs (jeremyevans) (#105)
+* Support Sequel::Model#forme_use_required_abbr? to control whether to add abbr * tag for required inputs (jeremyevans) (#105)
 
 * Make select input with option groups and a :value option correctly set selected attribute on options in all optgroups (v-kolesnikov) (#111, #110)
 
