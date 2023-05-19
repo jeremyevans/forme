@@ -55,12 +55,15 @@ else
   gem 'rack', '> 1.5'
 end
 
+if RUBY_VERSION < '2.5'
+  gem 'loofah', '< 2.20'
+end
+
 if RUBY_VERSION < '2.2'
   gem 'rails', '< 5'
   gem 'nokogiri', '< 1.7'
-elsif RUBY_VERSION < '2.3'
-  gem 'rails', '< 5.2'
 elsif RUBY_VERSION < '2.5'
+  gem 'nokogiri', '< 1.15'
   gem 'rails', '< 6'
 elsif RUBY_VERSION < '2.7'
   gem 'rails', '< 7'
