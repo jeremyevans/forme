@@ -42,7 +42,7 @@ platforms :ruby do
 end
 
 platforms :jruby do
-  gem 'jdbc-sqlite3'
+  gem 'jdbc-sqlite3', '<3.42'
 
   if RUBY_VERSION < '2.5'
     gem 'racc', '< 1.6'
