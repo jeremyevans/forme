@@ -10,7 +10,7 @@ module Forme
 
   # The patch version of Forme, updated only for bug fixes from the last
   # feature release.
-  TINY = 0
+  TINY = 1
 
   # Version constant, use <tt>Forme.version</tt> instead.
   VERSION = "#{MAJOR}.#{MINOR}.#{TINY}".freeze

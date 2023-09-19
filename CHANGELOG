@@ -1,3 +1,7 @@
+=== 2.4.1 (2023-09-19)
+
+* Add dependency on bigdecimal, as bigdecimal is moving from standard library to bundled gem in Ruby 3.4 (jeremyevans)
+
 === 2.4.0 (2023-04-05)
 
 * Support Sequel::Model#forme_use_required_abbr? to control whether to add abbr * tag for required inputs (jeremyevans) (#105)
