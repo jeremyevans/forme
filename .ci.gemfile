@@ -32,9 +32,13 @@ else
   gem 'json'
 end
 
-platforms :ruby do
+if RUBY_VERSION < '2.4' && RUBY_ENGINE == 'jruby'
+  gem 'sequel', '<5.72'
+else
   gem 'sequel'
+end
 
+platforms :ruby do
   if RUBY_VERSION < '1.9'
     gem 'sqlite3', '< 1.4'
   else
@@ -51,12 +55,6 @@ platforms :jruby do
 
   if RUBY_VERSION < '2.5'
     gem 'racc', '< 1.6'
-  end
-
-  if RUBY_VERSION < '2.4'
-    gem 'sequel', '<5.72'
-  else
-    gem 'sequel'
   end
 end
 
