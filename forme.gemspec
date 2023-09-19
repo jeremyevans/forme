@@ -29,6 +29,7 @@ Forme is a forms library with the following goals:
 END
 
   s.required_ruby_version = ">= 1.9.2"
+  s.add_dependency "bigdecimal"
   s.add_development_dependency "minitest", '>= 5.7.0'
   s.add_development_dependency "minitest-global_expectations"
   s.add_development_dependency "sequel", '>= 4'
