@@ -678,6 +678,10 @@ describe "Forme plain forms" do
     @f.button('foo').must_equal '<input type="submit" value="foo"/>'
   end
 
+  it "#button should support a :formaction option" do
+    @f.button(:formaction=>'foo').must_equal '<input formaction="foo" type="submit"/>'
+  end
+
   it "#tag should return a serialized_tag" do
     @f.tag(:textarea).must_equal '<textarea></textarea>'
     @f.tag(:textarea, :name=>:foo).must_equal '<textarea name="foo"></textarea>'

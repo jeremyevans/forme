@@ -268,6 +268,12 @@ module Forme
       ret
     end
 
+    # Formats a submit input.  Respects :formaction option.
+    def format_submit
+      copy_options_to_attributes([:formaction])
+      _format_input(:submit)
+    end
+
     # Formats a textarea.  Respects the following options:
     # :value :: Sets value as the child of the textarea.
     def format_textarea

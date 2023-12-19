@@ -1,5 +1,7 @@
 === master
 
+* Support :formaction option on buttons (jeremyevans)
+
 * Support emit: false option for non-rails template forms allowing block based form use without appending to template (jeremyevans)
 
 === 2.4.1 (2023-09-19)
