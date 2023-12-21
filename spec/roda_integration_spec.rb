@@ -165,8 +165,19 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
       _forme_set(:forme_set, *args, &block)
     end
 
+    def req(env)
+      env['HTTP_COOKIE'] = @cookie.to_s if @cookie
+      res = @app.call(env)
+
+      if cookie = res[1]['set-cookie'] || res[1]['Set-Cookie']
+        @cookie = cookie.split(';', 2)[0]
+      end
+
+      res
+    end
+
     def forme_call(params)
-      @app.call('REQUEST_METHOD'=>'POST', 'rack.input'=>StringIO.new, :params=>params)
+      req('PATH_INFO'=>@path_info||'/', 'SCRIPT_NAME'=>'', 'REQUEST_METHOD'=>'POST', 'rack.input'=>StringIO.new, :params=>params)
     end
 
     def _forme_set(meth, obj, orig_hash, *form_args, &block)
@@ -176,7 +187,9 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
       match = orig_hash.delete(:match)
       orig_hash.each{|k,v| hash[k.to_s] = v}
       album = obj
-      ret, _, data, hmac = nil
+      skip_csrf = @skip_csrf
+      test = self
+      ret, data, hmac = nil
       
       @app.route do |r|
         r.get do
@@ -190,19 +203,22 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
         end
         r.post do
           r.params.replace(env[:params])
+          check_csrf! unless skip_csrf
           ret = send(meth, album, &forme_set_block)
           nil
         end
       end
-      search = body = @app.call('REQUEST_METHOD'=>'GET', :args=>[album, *form_args], :block=>block)[2].join
-      regexp = %r|<input name="_csrf" type="hidden" value="([^"]+)"/>.*?<input name="_forme_set_data" type="hidden" value="([^"]+)"/><input name="_forme_set_data_hmac" type="hidden" value="([^"]+)"/>|n
+      _, headers, body = test.req('PATH_INFO'=>'/', 'SCRIPT_NAME'=>'', 'REQUEST_METHOD'=>'GET', :args=>[album, *form_args], :block=>block)
+      search = body = body.join
+      regexp = %r|<form(?: action="([a-z/]+)")?.*?<input name="_csrf" type="hidden" value="([^"]+)"/>.*?<input name="_forme_set_data" type="hidden" value="([^"]+)"/><input name="_forme_set_data_hmac" type="hidden" value="([^"]+)"/>|n
       if match
-        csrf, data, hmac = search.scan(regexp)[match]
+        @path_info, csrf, data, hmac = search.scan(regexp)[match]
       else
         search =~ regexp
-        csrf = $1
-        data = $2
-        hmac = $3
+        @path_info = $1
+        csrf = $2
+        data = $3
+        hmac = $4
       end
       data.gsub!("&quot;", '"') if data
       h = {"album"=>hash,  "_forme_set_data"=>data, "_forme_set_data_hmac"=>hmac, "_csrf"=>csrf, "body"=>body}
@@ -249,6 +265,7 @@ END
     end
 
     it "#forme_set should include HMAC values if form includes inputs for obj" do
+      @skip_csrf = true
       h = forme_set(@ab, :name=>'Foo')
       proc{forme_call(h)}.must_raise Roda::RodaPlugins::FormeSet::Error
       @ab.name.must_be_nil
@@ -293,6 +310,7 @@ END
     it "#forme_set should call plugin block if there is an error with the form submission hmac not matching data" do
       # Disable isolation to allow missing_namespace check to be hit
       def @ab.isolate_forme_inputs; yield end
+      @skip_csrf = true
 
       @app.plugin :forme_set do |error_type, _|
         request.on{error_type.to_s}
