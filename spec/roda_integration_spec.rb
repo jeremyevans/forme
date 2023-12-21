@@ -42,7 +42,7 @@ def FormeRodaTest(block=ERB_BLOCK)
 
     route do |r|
       r.get 'use_request_specific_token', :use do |use|
-        render :inline=>"[#{Base64.strict_encode64(send(:csrf_secret))}]<%= form({:method=>:post}, {:use_request_specific_token=>#{use == '1'}}) %>"
+        render :inline=>"[#{[csrf_secret].pack('m0')}]<%= form({:method=>:post}, {:use_request_specific_token=>#{use == '1'}}) %>"
       end
       r.get 'csrf', :use do |use|
         render :inline=>"<%= form({:method=>:post}, {:csrf=>#{use == '1'}}) %>"
