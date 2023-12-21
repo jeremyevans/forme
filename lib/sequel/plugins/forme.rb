@@ -17,6 +17,22 @@ module Sequel # :nodoc:
       # that use a <tt>Sequel::Model</tt> instance as the form's
       # +obj+.
       module SequelForm
+        # If the form has the :formactions option and the button has the
+        # formaction option or attribute, append the action and method
+        # for this button to the formactions. This is used by the
+        # Roda forme_route_csrf and forme_set plugins so that formaction
+        # can work as expected.
+        def button(opts={})
+          if opts.is_a?(Hash) && (formactions = self.opts[:formactions]) &&
+              (formaction = opts[:formaction] || ((attr = opts[:attr]) && (attr[:formaction] || attr['formaction'])))
+            formmethod = opts[:formmethod] ||
+              ((attr = opts[:attr]) && (attr[:formmethod] || attr['formmethod'])) ||
+              ((attr = form_tag_attributes) && (attr[:method] || attr['method']))
+            formactions << [formaction, formmethod]
+          end
+          super
+        end
+
         # Use the post method by default for Sequel forms, unless
         # overridden with the :method attribute.
         def form(attr={}, &block)

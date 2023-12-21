@@ -102,7 +102,9 @@ class Roda
         def _forme_form_options(obj, attr, opts)
           super
 
+          _after = opts[:_after]
           opts[:_after] = lambda do |form|
+            _after.call(form) if _after
             if (obj = form.opts[:obj]) && obj.respond_to?(:forme_inputs) && (forme_inputs = obj.forme_inputs)
               columns = []
               valid_values = {}
@@ -129,6 +131,9 @@ class Roda
               data['columns'] = columns
               data['namespaces'] = form.opts[:namespace]
               data['csrf'] = form.opts[:csrf]
+              if (formactions = form.opts[:formaction_csrfs]) && !formactions[1].empty?
+                data['formaction_csrfs'] = formactions
+              end
               data['valid_values'] = valid_values unless valid_values.empty?
               data['form_version'] = form.opts[:form_version] if form.opts[:form_version]
 
@@ -154,8 +159,16 @@ class Roda
 
           data = JSON.parse(data)
           csrf_field, hmac_csrf_value = data['csrf']
+          formaction_csrf_field, formaction_values = data['formaction_csrfs']
+
           if csrf_field
-            csrf_value = params[csrf_field].to_s
+            formaction_params = params[formaction_csrf_field]
+            if formaction_csrf_field && (formaction_params = params[formaction_csrf_field]).is_a?(Hash) && (csrf_value = formaction_params[request.path])
+              hmac_csrf_value = formaction_values[request.path]
+            else
+              csrf_value = params[csrf_field].to_s
+            end
+
             hmac_csrf_value = hmac_csrf_value.to_s
             unless Rack::Utils.secure_compare(csrf_value.ljust(hmac_csrf_value.length), hmac_csrf_value) && csrf_value.length == hmac_csrf_value.length
               return _forme_parse_error(:csrf_mismatch, obj)

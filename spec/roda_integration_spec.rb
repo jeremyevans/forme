@@ -208,7 +208,7 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
           nil
         end
       end
-      _, headers, body = test.req('PATH_INFO'=>'/', 'SCRIPT_NAME'=>'', 'REQUEST_METHOD'=>'GET', :args=>[album, *form_args], :block=>block)
+      _, _, body = test.req('PATH_INFO'=>'/', 'SCRIPT_NAME'=>'', 'REQUEST_METHOD'=>'GET', :args=>[album, *form_args], :block=>block)
       search = body = body.join
       regexp = %r|<form(?: action="([a-z/]+)")?.*?<input name="_csrf" type="hidden" value="([^"]+)"/>.*?<input name="_forme_set_data" type="hidden" value="([^"]+)"/><input name="_forme_set_data_hmac" type="hidden" value="([^"]+)"/>|n
       if match
@@ -222,12 +222,44 @@ end if defined?(ERUBI_CAPTURE_BLOCK)
       end
       data.gsub!("&quot;", '"') if data
       h = {"album"=>hash,  "_forme_set_data"=>data, "_forme_set_data_hmac"=>hmac, "_csrf"=>csrf, "body"=>body}
+      if @app.opts[:route_csrf][:require_request_specific_tokens] != false && body =~ /formaction="([a-z\/]+)"/
+        @path_info = $1
+        body =~ %r|<input name="_csrfs\[([a-z\/]+)\]" type="hidden" value="([^"]+)"/>|
+        csrf = $2
+        raise "#{@path_info} != #{$1}" unless @path_info == $1
+        h['_csrfs'] = {@path_info=>csrf}
+      end
       if data && hmac
         forme_call(h)
       end
       meth == :forme_parse ? ret : h
     end
     
+    it "#forme_set should handle :action attribute in form" do
+      forme_set(@ab, {:name=>'Foo'}, :action=>"/baz", :method=>:post){|f| f.input(:name); f.button('Submit')}
+      @ab.name.must_equal 'Foo'
+    end
+
+    if Roda::RodaVersionNumber >= 30770
+      it "#forme_set should handle :formaction attribute in button" do
+        forme_set(@ab, {:name=>'Foo'}, :method=>:post){|f| f.input(:name); f.button(:value=>'Submit', :formaction=>'/baz')}
+        @ab.name.must_equal 'Foo'
+        if plugin_opts[:require_request_specific_tokens] != false
+          @path_info.must_equal '/baz'
+        end
+      end
+
+      it "#forme_set should handle :formaction attribute in button with custom :_after option" do
+        called = false
+        forme_set(@ab, {:name=>'Foo'}, {:method=>:post}, :_after=>proc{|f| called = f}){|f| f.input(:name); f.button(:value=>'Submit', :formaction=>'/baz')}
+        @ab.name.must_equal 'Foo'
+        if plugin_opts[:require_request_specific_tokens] != false
+          @path_info.must_equal '/baz'
+        end
+        called.must_be_kind_of(Sequel::Plugins::Forme::Form)
+      end
+    end
+
     it "should have subform work correctly" do
       @app.route do |r|
         @album = Album.load(:name=>'N', :copies_sold=>2, :id=>1)

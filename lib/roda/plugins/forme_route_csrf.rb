@@ -36,7 +36,7 @@ class Roda
           end
 
           if apply_csrf
-            token = if opts.fetch(:use_request_specific_token){use_request_specific_csrf_tokens?}
+            token = if use_request_specific_token = opts.fetch(:use_request_specific_token){use_request_specific_csrf_tokens?}
               csrf_token(csrf_path(attr[:action]), method)
             else
               csrf_token
@@ -45,6 +45,23 @@ class Roda
             opts[:csrf] = [csrf_field, token]
             opts[:_before] = lambda do |form|
               form.tag(:input, :type=>:hidden, :name=>csrf_field, :value=>token)
+            end
+
+            if use_request_specific_token && (formaction_field = csrf_options[:formaction_field])
+              formactions = opts[:formactions] = []
+              formaction_tokens = opts[:formaction_tokens] = {}
+              _after = opts[:_after]
+              opts[:formaction_csrfs] = [formaction_field, formaction_tokens]
+              formaction_field = csrf_options[:formaction_field]
+              opts[:_after] = lambda do |form|
+                formactions.each do |action, method|
+                  path = csrf_path(action)
+                  fa_token = csrf_token(path, method)
+                  formaction_tokens[path] = fa_token
+                  form.tag(:input, :type=>:hidden, :name=>"#{formaction_field}[#{path}]", :value=>fa_token)
+                end
+                _after.call(form) if _after
+              end
             end
           end
         end
