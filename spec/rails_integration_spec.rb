@@ -217,7 +217,11 @@ describe "Forme Rails integration" do
   def sin_get(path)
     res = FormeRails.call(@rack.merge('PATH_INFO'=>path))
     p res unless res[0] == 200
-    res[2].join.gsub(/\s+/, ' ').strip
+    body = String.new
+    res[2].each{|s| body << s}
+    body.gsub!(/\s+/, ' ')
+    body.strip!
+    body
   end
   before do
     o = Object.new
