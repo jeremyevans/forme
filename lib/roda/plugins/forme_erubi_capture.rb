@@ -15,7 +15,7 @@ class Roda
         %w'inputs tag subform'.each do |meth|
           class_eval(<<-END, __FILE__, __LINE__+1)
             def #{meth}(*)
-              if block_given?
+              if block_given? && @form.opts[:emit] != false
                 @scope.capture_erb do
                   super
                   @scope.instance_variable_get(@scope.render_opts[:template_opts][:outvar])
@@ -33,8 +33,8 @@ class Roda
       end
 
       module InstanceMethods
-        def form(*)
-          if block_given?
+        def form(obj=nil, attr={}, opts={}, &block)
+          if block && (obj.is_a?(Hash) ? attr : opts)[:emit] != false
             capture_erb do
               super
               instance_variable_get(render_opts[:template_opts][:outvar])

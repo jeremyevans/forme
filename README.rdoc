@@ -800,7 +800,7 @@ For new code, it is recommended to use forme_route_csrf, as that uses Roda's rou
 plugin, which supports more secure request-specific CSRF tokens.  In both cases, usage in ERB
 templates is the same:
 
-  <% form(@obj, :action=>'/foo') do |f| %>
+  <% form(@obj, action: '/foo') do |f| %>
     <%= f.input(:field) %>
     <% f.tag(:fieldset) do %>
       <%= f.input(:field_two) %>
@@ -810,6 +810,8 @@ templates is the same:
 The forme_route_csrf plugin's +form+ method supports the following options
 in addition to the default +Forme.form+ options:
 
+:emit :: Set to false to not emit implicit tags into template.  This should only be
+         used if you are not modifying the template inside the block.
 :csrf :: Set to force whether a CSRF tag should be included.  By default, a CSRF
          tag is included if the form's method is one of the request methods checked
          by the Roda route_csrf plugin.
@@ -817,6 +819,19 @@ in addition to the default +Forme.form+ options:
                                CSRF token.  By default, uses a request specific
                                CSRF token unless the Roda route_csrf plugin has been
                                configured to support non-request specific tokens.
+
+The <tt>emit: false</tt> option allows you to do:
+
+  <%= form(@obj, {action: '/foo'}, emit: false) do |f|
+    f.input(:field)
+    f.tag(:fieldset) do
+      f.input(:field_two)
+    end
+  end %>
+
+This is useful if you are calling some method that calls +form+ with a block,
+where the resulting entire Forme::Forme object will be literalized into the
+template. The form will include the CSRF token and forme_set metadata as appropriate.
 
 The forme plugin does not require any csrf plugin, but will transparently use
 Rack::Csrf if it is available. If Rack::Csrf is available a CSRF tag if the form's
@@ -856,7 +871,8 @@ It allows you to use the following API in your erb templates:
   <% end %>
 
 In order to this to work transparently, the ERB outvar needs to be <tt>@_out_buf</tt> (this is the
-default in Sinatra).
+default in Sinatra).  The Sinatra extension also supports the <tt>emit: false</tt> option to not
+directly modify the related template (see example in the Roda section for usage).
 
 = Rails Support
 

@@ -19,6 +19,10 @@ module FormeErbSpecs
     sin_get('/inputs_block_wrapper').must_equal '<form action="/baz"><fieldset class="inputs"><legend>FBB</legend><ol> <input id="last" name="last" type="text" value="bar"/> </ol></fieldset></form>'
   end
 
+  it "#form should handle emit: false option with self-contained blocks to be usable" do
+    sin_get('/no_emit').must_equal '<form action="/baz"><p>FBB</p><div><input id="first" name="first" type="text" value="foo"/><input id="last" name="last" type="text" value="bar"/></div></form>'
+  end
+
   it "#form should add start and end tags and yield Forme::Form instance" do
     sin_get('/nest').must_equal '<form action="/baz"> <p>FBB</p> <div> <input id="first" name="first" type="text" value="foo"/> <input id="last" name="last" type="text" value="bar"/> </div> </form>'
   end

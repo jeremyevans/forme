@@ -1,3 +1,7 @@
+=== master
+
+* Support emit: false option for non-rails template forms allowing block based form use without appending to template (jeremyevans)
+
 === 2.4.1 (2023-09-19)
 
 * Add dependency on bigdecimal, as bigdecimal is moving from standard library to bundled gem in Ruby 3.4 (jeremyevans)
