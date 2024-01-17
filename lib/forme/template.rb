@@ -22,7 +22,7 @@ module Forme
       %w'inputs tag subform'.each do |meth|
         class_eval(<<-END, __FILE__, __LINE__+1)
           def #{meth}(*a, &block)
-            return @form.#{meth}(*a) if !block || @form.opts[:emit] == false
+            return @form.#{meth}(*a) unless block
 
             buffer = @form.to_s
             offset = buffer.length
@@ -40,7 +40,6 @@ module Forme
 
       # Serialize the tag and inject it into the output.
       def emit(tag)
-        return if @form.opts[:emit] == false
         return unless output = output()
         output << tag
       end
@@ -73,9 +72,9 @@ module Forme
       private
 
       def _forme_form(obj, attr, opts, &block)
-        if block_given? && opts[:emit] != false
+        if block && opts[:emit] != false
           erb_form = buffer = offset = nil
-          block = proc do
+          form_block = proc do
             wrapped_form = erb_form.instance_variable_get(:@form)
             buffer = wrapped_form.to_s
             offset = buffer.length
@@ -84,9 +83,9 @@ module Forme
             offset = buffer.length
           end
 
-          f, attr, block = _forme_wrapped_form_class.form_args(obj, attr, opts, &block)
+          f, attr, form_block = _forme_wrapped_form_class.form_args(obj, attr, opts, &form_block)
           erb_form = _forme_form_class.new(f, self)
-          erb_form.form(attr, &block)
+          erb_form.form(attr, &form_block)
           erb_form.emit(buffer[offset, buffer.length])
         else
           _forme_wrapped_form_class.form(obj, attr, opts, &block)
