@@ -2,6 +2,7 @@ require_relative 'spec_helper'
 require_relative 'sequel_helper'
 
 begin
+  gem 'rack-test' if RUBY_VERSION < '2' # Work around Rails 4.1 bug
   require 'action_controller/railtie'
 
   begin
