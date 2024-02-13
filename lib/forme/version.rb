@@ -6,11 +6,11 @@ module Forme
   MAJOR = 2
 
   # The minor version of Forme, updated for new feature releases of Forme.
-  MINOR = 4
+  MINOR = 5
 
   # The patch version of Forme, updated only for bug fixes from the last
   # feature release.
-  TINY = 1
+  TINY = 0
 
   # Version constant, use <tt>Forme.version</tt> instead.
   VERSION = "#{MAJOR}.#{MINOR}.#{TINY}".freeze
