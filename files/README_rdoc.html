@@ -31,7 +31,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2022-12-31 12:44:40 -0800</span>
+<span class='datetime'>2023-12-29 11:01:17 -0800</span>
 </div>
 </div>
 <div id='content'>
@@ -364,7 +364,7 @@ Last Update:
 
 <h2 id="label-Specialized+input+options+for+specific+column+types">Specialized input options for specific column types<span><a href="#label-Specialized+input+options+for+specific+column+types">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>In addition to the default <a href="../classes/Forme.html"><code>Forme</code></a> options, the <a href="../classes/Sequel.html"><code>Sequel</code></a> support includes, for specific column types,  these additional options to the input method:</p>
+<p>In addition to the default <a href="../classes/Forme.html"><code>Forme</code></a> options, the <a href="../classes/Sequel.html"><code>Sequel</code></a> support includes, for specific column types, these additional options to the input method:</p>
 
 <h3 id="label-boolean">boolean<span><a href="#label-boolean">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:as </td><td>
@@ -381,7 +381,7 @@ Last Update:
 
 <h3 id="label-string">string<span><a href="#label-string">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:as </td><td>
-<p>Can be set to :textarea to use a textarea input. You can use the usual attributes hash or a stylesheet to  control the size of the textarea.</p>
+<p>Can be set to :textarea to use a textarea input. You can use the usual attributes hash or a stylesheet to control the size of the textarea.</p>
 </td></tr></tbody></table>
 
 <h2 id="label-associations">associations<span><a href="#label-associations">&para;</a> <a href="#top">&uarr;</a></span></h2>
@@ -645,7 +645,7 @@ Last Update:
 <span class="ruby-identifier">forme_set</span>(<span class="ruby-identifier">album</span>)
 </pre>
 
-<p>And the method will update the <code>album</code> object using the appropriate form values. </p>
+<p>And the method will update the <code>album</code> object using the appropriate form values.</p>
 
 <p>Note that using the <a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin requires you set a secret for the HMAC.  It is important that you keep this value secret, because if an attacker has access to this, they would be able to set arbitrary attributes for model objects.  In your <a href="../classes/Roda.html"><code>Roda</code></a> class, you can load the plugin via:</p>
 
@@ -750,7 +750,7 @@ Last Update:
 
 <p>For new code, it is recommended to use forme_route_csrf, as that uses Roda’s route_csrf plugin, which supports more secure request-specific CSRF tokens.  In both cases, usage in ERB templates is the same:</p>
 
-<pre>&lt;% form(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;
+<pre>&lt;% form(@obj, action: &#39;/foo&#39;) do |f| %&gt;
   &lt;%= f.input(:field) %&gt;
   &lt;% f.tag(:fieldset) do %&gt;
     &lt;%= f.input(:field_two) %&gt;
@@ -758,11 +758,24 @@ Last Update:
 &lt;% end %&gt;</pre>
 
 <p>The forme_route_csrf plugin’s <code>form</code> method supports the following options in addition to the default <code>Forme.form</code> options:</p>
-<table class="rdoc-list note-list"><tbody><tr><td class='label'>:csrf </td><td>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:emit </td><td>
+<p>Set to false to not emit implicit tags into template.  This should only be used if you are not modifying the template inside the block.</p>
+</td></tr><tr><td class='label'>:csrf </td><td>
 <p>Set to force whether a CSRF tag should be included.  By default, a CSRF tag is included if the form’s method is one of the request methods checked by the <a href="../classes/Roda.html"><code>Roda</code></a> route_csrf plugin.</p>
 </td></tr><tr><td class='label'>:use_request_specific_token </td><td>
 <p>Set whether to force the use of a request specific CSRF token.  By default, uses a request specific CSRF token unless the <a href="../classes/Roda.html"><code>Roda</code></a> route_csrf plugin has been configured to support non-request specific tokens.</p>
 </td></tr></tbody></table>
+
+<p>The <code>emit: false</code> option allows you to do:</p>
+
+<pre>&lt;%= form(@obj, {action: &#39;/foo&#39;}, emit: false) do |f|
+  f.input(:field)
+  f.tag(:fieldset) do
+    f.input(:field_two)
+  end
+end %&gt;</pre>
+
+<p>This is useful if you are calling some method that calls <code>form</code> with a block, where the resulting entire <a href="../classes/Forme.html"><code>Forme::Forme</code></a> object will be literalized into the template. The form will include the CSRF token and forme_set metadata as appropriate.</p>
 
 <p>The forme plugin does not require any csrf plugin, but will transparently use Rack::Csrf if it is available. If Rack::Csrf is available a CSRF tag if the form’s method is <code>POST</code>, with no configuration ability.</p>
 
@@ -796,7 +809,7 @@ Last Update:
   &lt;% end %&gt;
 &lt;% end %&gt;</pre>
 
-<p>In order to this to work transparently, the ERB outvar needs to be <code>@_out_buf</code> (this is the default in Sinatra).</p>
+<p>In order to this to work transparently, the ERB outvar needs to be <code>@_out_buf</code> (this is the default in Sinatra).  The Sinatra extension also supports the <code>emit: false</code> option to not directly modify the related template (see example in the <a href="../classes/Roda.html"><code>Roda</code></a> section for usage).</p>
 
 <h1 id="label-Rails+Support">Rails Support<span><a href="#label-Rails+Support">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
@@ -909,7 +922,7 @@ Last Update:
 </td></tr><tr><td class='label'>:optgroups </td><td>
 <p>An enumerable of pairs with the first element being option group labels or a hash of option group attributes, and values being enumerables of options (as described by :options below).  Creates optgroup tags around the appropriate options. This overrides any options specified via :options.</p>
 </td></tr><tr><td class='label'>:options </td><td>
-<p>An enumerable of options used for creating option tags. If the :text_method and :value_method are not given and the entry is an  array, uses the first entry of the array as the text of the option, and the last entry of the array as the value of the option. If the last entry of the array is a hash, uses the hash as the attributes for the option.</p>
+<p>An enumerable of options used for creating option tags. If the :text_method and :value_method are not given and the entry is an array, uses the first entry of the array as the text of the option, and the last entry of the array as the value of the option. If the last entry of the array is a hash, uses the hash as the attributes for the option.</p>
 </td></tr><tr><td class='label'>:selected </td><td>
 <p>The value that should be selected.  Any options that are equal to this value (or included in this value if a multiple select box), are set to selected.</p>
 </td></tr><tr><td class='label'>:size </td><td>
@@ -976,7 +989,7 @@ Last Update:
 </td></tr><tr><td class='label'>:formatter </td><td>
 <p>Sets the default formatter for the form’s inputs</p>
 </td></tr><tr><td class='label'>:input_defaults </td><td>
-<p>Sets the default options for each input type.  This should be a hash with input type keys, where the values are the hash of default options to use for the input type. </p>
+<p>Sets the default options for each input type.  This should be a hash with input type keys, where the values are the hash of default options to use for the input type.</p>
 </td></tr><tr><td class='label'>:inputs_wrapper </td><td>
 <p>Sets the default inputs_wrapper for the form</p>
 </td></tr><tr><td class='label'>:labeler </td><td>
@@ -1011,7 +1024,7 @@ Last Update:
 <p>low level abstract tag representing an HTML tag (there would be a separate <code>Tag</code> for each option in a select box)</p>
 </td></tr></tbody></table>
 
-<p>The difference between <code>Forme::Input</code> and <code>Forme::Tag</code>  is that <code>Forme::Tag</code> directly represents the underlying HTML tag, containing a type, optional attributes, and children, while the <code>Forme::Input</code> is more abstract and attempts to be user friendly. For example, these both compile by default to the same select tag:</p>
+<p>The difference between <code>Forme::Input</code> and <code>Forme::Tag</code> is that <code>Forme::Tag</code> directly represents the underlying HTML tag, containing a type, optional attributes, and children, while the <code>Forme::Input</code> is more abstract and attempts to be user friendly. For example, these both compile by default to the same select tag:</p>
 
 <pre class="ruby"><span class="ruby-identifier">f</span>.<span class="ruby-identifier">input</span>(<span class="ruby-value">:select</span>, <span class="ruby-value">:options</span><span class="ruby-operator">=&gt;</span>[[<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-value">1</span>]])
 <span class="ruby-comment"># or</span>

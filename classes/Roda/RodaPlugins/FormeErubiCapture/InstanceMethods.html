@@ -40,7 +40,7 @@ Roda::RodaPlugins::FormeErubiCapture::InstanceMethods
 <h2>Methods</h2>
 <h3>Public Instance</h3>
 <ol>
-<li><a href="#method-i-form">form</a></li>
+<li><a href="#method-i-_forme_form">_forme_form</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -48,22 +48,22 @@ Roda::RodaPlugins::FormeErubiCapture::InstanceMethods
 <div id='section'>
 <div id='methods'>
 <h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-form'>
-<a name='method-i-form'></a>
+<div class='method public-instance' id='method-method-i-_forme_form'>
+<a name='method-i-_forme_form'></a>
 <div class='synopsis'>
-<span class='name'>form</span><span class='arguments'>(*)</span>
+<span class='name'>_forme_form</span><span class='arguments'>(obj, attr, opts, &block)</span>
 
 </div>
 <div class='description'>
 
 </div>
 <div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-form-source&#39;); return false'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-_forme_form-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-form-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_erubi_capture.rb</span>
-<span class="line-num">36</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">form</span>(<span class="ruby-operator">*</span>)
-<span class="line-num">37</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>
+<pre id='method-i-_forme_form-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_erubi_capture.rb</span>
+<span class="line-num">36</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_forme_form</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-identifier">attr</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">37</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:emit</span>] <span class="ruby-operator">!=</span> <span class="ruby-keyword">false</span>
 <span class="line-num">38</span>     <span class="ruby-identifier">capture_erb</span> <span class="ruby-keyword">do</span>
 <span class="line-num">39</span>       <span class="ruby-keyword">super</span>
 <span class="line-num">40</span>       <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">render_opts</span>[<span class="ruby-value">:template_opts</span>][<span class="ruby-value">:outvar</span>])
