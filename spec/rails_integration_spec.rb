@@ -35,6 +35,9 @@ begin
     config.secret_key_base = 'foo'*15
     config.secret_token = 'secret token'*15 if Rails.respond_to?(:version) && Rails.version < '5.2' 
     config.eager_load = true
+    if Rails.respond_to?(:version) && Rails.version >= '7.1' && Rails.version < '7.2'
+      config.active_support.cache_format_version = 7.1
+    end
     begin
       initialize!
     rescue NoMethodError
