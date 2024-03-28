@@ -68,10 +68,6 @@ if RUBY_VERSION < '2.5'
   gem 'loofah', '< 2.20'
 end
 
-if RUBY_VERSION >= '2.3' && RUBY_VERSION < '2.4'
-  gem 'base64', '0.1.0'
-end
-
 if RUBY_VERSION < '2.2'
   gem 'rails', '< 5'
   gem 'nokogiri', '< 1.7'
@@ -86,6 +82,8 @@ end
 
 if RUBY_VERSION < '2.2'
   gem 'sinatra', '< 2'
+elsif RUBY_VERSION < '2.4'
+  gem 'sinatra', '< 3.2'
 else
   gem 'sinatra'
 end
