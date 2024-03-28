@@ -83,7 +83,7 @@ end
 if RUBY_VERSION < '2.2'
   gem 'sinatra', '< 2'
 elsif RUBY_VERSION < '2.4'
-  gem 'sinatra', '< 3.2'
+  gem 'sinatra', '< 2.2.4'
 else
   gem 'sinatra'
 end
