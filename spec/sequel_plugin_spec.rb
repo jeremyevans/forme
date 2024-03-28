@@ -411,7 +411,7 @@ describe "Forme Sequel::Model forms" do
     @b.input(:artist_name).must_equal '<label>Artist name: <input aria-describedby="album_artist_name_error_message" aria-invalid="true" class="error" id="album_artist_name" name="album[artist_name]" type="text" value="a"/></label><span class="error_message" id="album_artist_name_error_message">foo</span>'
   end
 
-  it "should respect a :type option with a schema type as the input type for methods not backed by columns" do
+  it "should respect a :type option with a schema type and :as option for html type for methods not backed by columns" do
     def @ab.foo; false end
     @b.input(:foo, :type=>:boolean, :as=>:select).must_equal '<label>Foo: <select id="album_foo" name="album[foo]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
   end
@@ -419,6 +419,10 @@ describe "Forme Sequel::Model forms" do
   it "should respect a :type option with an input type as the input type for methods not backed by columns" do
     def @ab.foo; "bar" end
     @b.input(:foo, :type=>:phone).must_equal '<label>Foo: <input id="album_foo" name="album[foo]" type="phone" value="bar"/></label>'
+  end
+
+  it "should respect a :type option with a schema type and :as option for html type when no method exists" do
+    @b.input(:foo, :type=>:boolean, :as=>:select, :value=>false).must_equal '<label>Foo: <select id="album_foo" name="album[foo]"><option value=""></option><option value="t">True</option><option selected="selected" value="f">False</option></select></label>'
   end
 
   it "should not override an explicit :error setting" do
