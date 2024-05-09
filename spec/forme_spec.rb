@@ -235,9 +235,8 @@ describe "Forme plain forms" do
     @f.input(:text, :data=>{:bar=>"baz"}, :attr=>{:"data-bar"=>"foo"}).must_equal '<input data-bar="foo" type="text"/>'
   end
 
-  it "should use :size and :maxlength options as attributes for text inputs" do
-    @f.input(:text, :size=>5, :maxlength=>10).must_equal '<input maxlength="10" size="5" type="text"/>'
-    @f.input(:textarea, :size=>5, :maxlength=>10).must_equal '<textarea></textarea>'
+  it "should use :size, :minlength, and :maxlength options as attributes for text inputs" do
+    @f.input(:text, :size=>5, :minlength=>6, :maxlength=>10, :foo=>8).must_equal '<input maxlength="10" minlength="6" size="5" type="text"/>'
   end
 
   it "should create hidden input with value 0 for each checkbox with a name" do
@@ -280,9 +279,8 @@ describe "Forme plain forms" do
     @f.input(:textarea, :value=>'a').must_equal '<textarea>a</textarea>'
   end
 
-  it "should use :cols and :rows options as attributes for textarea inputs" do
-    @f.input(:text, :cols=>5, :rows=>10).must_equal '<input type="text"/>'
-    @f.input(:textarea, :cols=>5, :rows=>10).must_equal '<textarea cols="5" rows="10"></textarea>'
+  it "should use :cols, :rows, :maxlength, and :minlength options as attributes for textarea inputs" do
+    @f.input(:textarea, :cols=>5, :rows=>10, :maxlength=>11, :minlength=>9, :foo=>8).must_equal '<textarea cols="5" maxlength="11" minlength="9" rows="10"></textarea>'
   end
 
   it "should create select tag" do

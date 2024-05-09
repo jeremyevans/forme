@@ -1013,6 +1013,8 @@ Creates a textarea tag.  Options:
 
 :cols :: The number of columns in the text area.
 :rows :: The number of rows in the text area.
+:maxlength :: Use the maxlength attribute on the tag
+:minlength :: Use the minlength attribute on the tag
 
 == all others
 
@@ -1021,6 +1023,7 @@ as text and password, as well as newer HTML5 inputs such as number or email. Opt
 
 :size :: Uses the size attribute on the tag
 :maxlength :: Use the maxlength attribute on the tag
+:minlength :: Use the minlength attribute on the tag
 
 == Form options
 

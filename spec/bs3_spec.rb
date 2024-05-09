@@ -212,9 +212,8 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:text, :data=>{:bar=>"baz"}, :attr=>{:"data-bar"=>"foo"}).must_equal '<div class="form-group"><input class="form-control" data-bar="foo" type="text"/></div>'
   end
 
-  it "should use :size and :maxlength options as attributes for text inputs" do
-    @f.input(:text, :size=>5, :maxlength=>10).must_equal '<div class="form-group"><input class="form-control" maxlength="10" size="5" type="text"/></div>'
-    @f.input(:textarea, :size=>5, :maxlength=>10).must_equal '<div class="form-group"><textarea class="form-control"></textarea></div>'
+  it "should use :size, :maxlength, and :minlength options as attributes for text inputs" do
+    @f.input(:text, :size=>5, :maxlength=>10, :minlength=>9, :foo=>8).must_equal '<div class="form-group"><input class="form-control" maxlength="10" minlength="9" size="5" type="text"/></div>'
   end
 
   it "should create hidden input with value 0 for each checkbox with a name" do
@@ -251,9 +250,8 @@ describe "Forme Bootstrap3 (BS3) forms" do
     @f.input(:textarea, :value=>'a').must_equal '<div class="form-group"><textarea class="form-control">a</textarea></div>'
   end
 
-  it "should use :cols and :rows options as attributes for textarea inputs" do
-    @f.input(:text, :cols=>5, :rows=>10).must_equal '<div class="form-group"><input class="form-control" type="text"/></div>'
-    @f.input(:textarea, :cols=>5, :rows=>10).must_equal '<div class="form-group"><textarea class="form-control" cols="5" rows="10"></textarea></div>'
+  it "should use :cols, :rows, :minlength, and :maxlength options as attributes for textarea inputs" do
+    @f.input(:textarea, :cols=>5, :rows=>10, :maxlength=>11, :minlength=>9, :foo=>8).must_equal '<div class="form-group"><textarea class="form-control" cols="5" maxlength="11" minlength="9" rows="10"></textarea></div>'
   end
 
   it "should create select tag" do

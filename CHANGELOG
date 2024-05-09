@@ -1,3 +1,9 @@
+=== master
+
+* Support maxlength and minlength options as attributes for textareas (jeremyevans)
+
+* Support minlength option as attribute for text inputs (jeremyevans)
+
 === 2.5.0 (2024-02-13)
 
 * Add hidden inputs to work with formaction/formmethod support in Roda 3.77+ route_csrf plugin (jeremyevans)

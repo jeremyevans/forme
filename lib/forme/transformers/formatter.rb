@@ -178,7 +178,7 @@ module Forme
     # with the type attribute set to input.
     def _format_input(type)
       @attr[:type] = type
-      copy_options_to_attributes([:size, :maxlength])
+      copy_options_to_attributes([:size, :maxlength, :minlength])
       tag(:input)
     end
 
@@ -277,7 +277,7 @@ module Forme
     # Formats a textarea.  Respects the following options:
     # :value :: Sets value as the child of the textarea.
     def format_textarea
-      copy_options_to_attributes([:cols, :rows])
+      copy_options_to_attributes([:cols, :rows, :maxlength, :minlength])
       if val = @attr.delete(:value)
         tag(:textarea, @attr, [val])
       else
