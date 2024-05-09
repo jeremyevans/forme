@@ -452,7 +452,9 @@ module Forme
 
       os.map do |x|
         attr = {}
-        if tm
+        if x == :hr
+          next form._tag(:hr, {})
+        elsif tm
           text = x.send(tm)
           val = x.send(vm) if vm
         elsif x.is_a?(Array)

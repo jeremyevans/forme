@@ -9,7 +9,7 @@ module Forme
     Forme.register_transformer(:serializer, :default, new)
 
     # Which tags are self closing (such tags ignore children).
-    SELF_CLOSING = [:img, :input]
+    SELF_CLOSING = [:img, :input, :hr]
 
     # Serialize the tag object to an html string.  Supports +Tag+ instances,
     # +Input+ instances (recursing into +call+ with the result of formatting the input),

@@ -982,6 +982,8 @@ Creates a select tag, containing option tags specified by the :options option.  
             array, uses the first entry of the array as the text of the option, and
             the last entry of the array as the value of the option. If the last entry
             of the array is a hash, uses the hash as the attributes for the option.
+            If the option value is +:hr+, uses an hr tag (allowed in recent versions of
+            the HTML standard).
 :selected :: The value that should be selected.  Any options that are equal to
              this value (or included in this value if a multiple select box),
              are set to selected.

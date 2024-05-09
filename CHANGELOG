@@ -1,5 +1,7 @@
 === master
 
+* Support :hr as select option value to use a hr tag instead of an option tag (jeremyevans)
+
 * Support maxlength and minlength options as attributes for textareas (jeremyevans)
 
 * Support minlength option as attribute for text inputs (jeremyevans)

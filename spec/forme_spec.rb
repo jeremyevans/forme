@@ -368,6 +368,10 @@ describe "Forme plain forms" do
     @f.input(:select, :options=>[[:a, 1], [:b, 2], [:c, 3]], :selected=>2).must_equal '<select><option value="1">a</option><option selected="selected" value="2">b</option><option value="3">c</option></select>'
   end
 
+  it "should support :hr as hr attribute in select options" do
+    @f.input(:select, :options=>[[:a, 1], :hr, [:c, 3]], :selected=>2).must_equal '<select><option value="1">a</option><hr/><option value="3">c</option></select>'
+  end
+
   it "should have select work with false values" do
     @f.input(:select, :options=>[[1, true], [2, false]], :value=>false).must_equal '<select><option value="true">1</option><option selected="selected" value="false">2</option></select>'
   end
