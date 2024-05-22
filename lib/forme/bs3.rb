@@ -356,7 +356,7 @@ module Forme
           case tag.attr[:type].to_sym
           when :checkbox, :radio, :hidden
             # .form-control class causes rendering problems, so remove if found
-            tag.attr[:class].gsub!(/\s*form-control\s*/,'') if tag.attr[:class]
+            tag.attr[:class] = tag.attr[:class].gsub(/\s*form-control\s*/,'') if tag.attr[:class]
             tag.attr[:class] = nil if tag.attr[:class] && tag.attr[:class].empty?
             
           when :file
