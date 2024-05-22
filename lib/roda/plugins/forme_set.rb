@@ -7,7 +7,7 @@ class Roda
   module RodaPlugins
     module FormeSet
       # Require the forme_route_csrf plugin.
-      def self.load_dependencies(app, _ = nil)
+      def self.load_dependencies(app, opts = nil, &_)
         app.plugin :forme_route_csrf 
       end
 
