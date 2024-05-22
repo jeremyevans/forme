@@ -26,7 +26,7 @@ describe "Forme Sequel::Model forms" do
   end
 
   it "should have humanize handle objects that support #humanize" do
-    s = 'x_b_id'
+    s = 'x_b_id'.dup
     class << s
       undef :humanize if method_defined?(:humanize)
     end
