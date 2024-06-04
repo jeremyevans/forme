@@ -615,8 +615,8 @@ internally).  +forme_parse+ returns a hash with the following keys:
                 check that the submitted values for associated objects match one of the
                 options for the input in the form.
 
-It is possible to use +forme_set+ for the values it can handle, and set other fields manually
-using +set_fields+.
+It is possible to use +forme_set+ for the forms it can handle, and use +forme_parse+ and
++set_fields+ for other forms.
 
 === Roda forme_set plugin
 
