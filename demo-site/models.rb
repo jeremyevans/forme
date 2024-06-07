@@ -1,5 +1,4 @@
 require 'sequel'
-require 'logger'
 $:.unshift(::File.expand_path('../../lib',  __FILE__))
 
 module FormeDemo
@@ -55,7 +54,11 @@ end
 
 DB.reset
 
-DB.loggers << Logger.new($stdout) unless DEMO_MODE
+unless DEMO_MODE
+  require 'logger'
+  DB.loggers << Logger.new($stdout)
+end
+
 Model.freeze_descendents
 DB.freeze
 end
