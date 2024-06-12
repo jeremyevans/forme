@@ -25,16 +25,10 @@ module Forme
     rescue LoadError
       ESCAPE_TABLE = {'&' => '&amp;', '<' => '&lt;', '>' => '&gt;', '"' => '&quot;', "'" => '&#39;'}.freeze
       ESCAPE_TABLE.each_value(&:freeze)
-      if RUBY_VERSION >= '1.9'
-        # Escape the following characters with their HTML/XML
-        # equivalents.
-        def self.h(value)
-          value.to_s.gsub(/[&<>"']/, ESCAPE_TABLE)
-        end
-      else
-        def self.h(value)
-          value.to_s.gsub(/[&<>"']/){|s| ESCAPE_TABLE[s]}
-        end
+      # Escape the following characters with their HTML/XML
+      # equivalents.
+      def self.h(value)
+        value.to_s.gsub(/[&<>"']/, ESCAPE_TABLE)
       end
     end
   end
