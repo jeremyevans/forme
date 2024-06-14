@@ -792,6 +792,7 @@ Forme ships with multiple Roda plugins
 * forme_set (discussed above)
 * forme
 * forme_route_csrf
+* forme_erubi_capture_block
 * forme_erubi_capture
 
 == forme_route_csrf and forme plugins
@@ -836,6 +837,26 @@ template. The form will include the CSRF token and forme_set metadata as appropr
 The forme plugin does not require any csrf plugin, but will transparently use
 Rack::Csrf if it is available. If Rack::Csrf is available a CSRF tag if the form's
 method is +POST+, with no configuration ability.
+
+== forme_erubi_capture_block plugin
+
+The forme_erubi_capture_block plugin builds on the forme_route_csrf plugin, but it supports
+the erubi/capture_block engine, which allows this syntax:
+
+  <%= form(@obj, :action=>'/foo') do |f| %>
+    <%= f.input(:field) %>
+    <%= f.tag(:fieldset) do %>
+      <%= f.input(:field_two) %>
+    <% end %>
+  <% end %>
+
+If you use the forme_erubi_capture)block plugin, you need to manually set Roda to use the
+erubi/capture_block engine, which you can do via:
+
+  require 'erubi/capture_block'
+  app.plugin :render, :engine_opts=>{'erb'=>{:engine_class=>Erubi::CaptureBlockEngine}}
+
+The forme_erubi_capture plugin requires Erubi 1.13.0+.
 
 == forme_erubi_capture plugin
 

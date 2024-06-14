@@ -16,12 +16,6 @@ rescue LoadError
   rescue LoadError
     require 'tilt/erb'
   end
-else
-  begin
-    require 'erubi/capture_end'
-    require_relative 'erubi_capture_helper'
-  rescue LoadError
-  end
 end
 
 def FormeRodaTest(block=ERB_BLOCK)
@@ -110,26 +104,56 @@ end
 
 begin
   require 'roda/plugins/route_csrf'
-  require 'roda/plugins/capture_erb'
-  require 'roda/plugins/inject_erb'
 rescue LoadError
-  warn "unable to load necessary Roda plugins, skipping forme_erubi_capture plugin spec"
+  warn "unable to load route_csrf Roda plugin, skipping related specs"
 else
-describe "Forme Roda Erubi::CaptureEnd integration with roda forme_route_csrf" do
-  app = FormeRodaTest(ERUBI_CAPTURE_BLOCK)
-  app.plugin :forme_erubi_capture
-  app.plugin :render, :engine_opts=>{'erb'=>{:engine_class=>Erubi::CaptureEndEngine}}
+  begin
+    require 'roda/plugins/capture_erb'
+    require 'roda/plugins/inject_erb'
+    require 'erubi/capture_end'
+    require_relative 'erubi_capture_helper'
+  rescue LoadError
+    warn "unable to load necessary Roda plugins, skipping forme_erubi_capture plugin spec"
+  else
+    describe "Forme Roda Erubi::CaptureEndEngine integration with roda forme_route_csrf" do
+      app = FormeRodaTest(ERUBI_CAPTURE_BLOCK)
+      app.plugin :forme_erubi_capture
+      app.plugin :render, :engine_opts=>{'erb'=>{:engine_class=>Erubi::CaptureEndEngine}}
 
-  define_method(:app){app}
-  define_method(:plugin_opts){{}}
-  define_method(:sin_get) do |path|
-    s = String.new
-    app.call(@rack.merge('PATH_INFO'=>path))[2].each{|str| s << str}
-    s.gsub(/\s+/, ' ').strip
+      define_method(:app){app}
+      define_method(:plugin_opts){{}}
+      define_method(:sin_get) do |path|
+        s = String.new
+        app.call(@rack.merge('PATH_INFO'=>path))[2].each{|str| s << str}
+        s.gsub(/\s+/, ' ').strip
+      end
+
+      include FormeRouteCsrfSpecs
+    end
   end
 
-  include FormeRouteCsrfSpecs
-end if defined?(ERUBI_CAPTURE_BLOCK)
+  begin
+    require 'erubi/capture_block'
+    require_relative 'erubi_capture_block_helper'
+  rescue LoadError
+    warn "unable to load erubi/capture_block, skipping forme_erubi_capture_block Roda plugin specs"
+  else
+    describe "Forme Roda Erubi::CaptureBlockEngine integration with roda forme_route_csrf" do
+      app = FormeRodaTest(ERUBI_CAPTURE_BLOCK_BLOCK)
+      app.plugin :forme_erubi_capture_block
+      app.plugin :render, :engine_opts=>{'erb'=>{:engine_class=>Erubi::CaptureBlockEngine}}
+
+      define_method(:app){app}
+      define_method(:plugin_opts){{}}
+      define_method(:sin_get) do |path|
+        s = String.new
+        app.call(@rack.merge('PATH_INFO'=>path))[2].each{|str| s << str}
+        s.gsub(/\s+/, ' ').strip
+      end
+
+      include FormeRouteCsrfSpecs
+    end
+  end
 
 [{}, {:require_request_specific_tokens=>false}].each do |plugin_opts|
   describe "Forme Roda ERB integration with roda forme_route_csrf and route_csrf plugin with #{plugin_opts}" do

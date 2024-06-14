@@ -1,5 +1,7 @@
 === master
 
+* Add Roda forme_erubi_capture_block plugin to support erubi/capture_block <%= form do %> <% end %> tags (jeremyevans)
+
 * Support :hr as select option value to use a hr tag instead of an option tag (jeremyevans)
 
 * Support maxlength and minlength options as attributes for textareas (jeremyevans)

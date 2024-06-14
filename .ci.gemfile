@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem "minitest-global_expectations"
 gem "roda"
 gem "rack_csrf"
-gem "erubi"
+gem "erubi", '>= 1.13'
 gem "tilt"
 
 if RUBY_VERSION < '2.0'
