@@ -109,7 +109,7 @@ Roda::RodaPlugins::FormeSet
 <div class='method public-class' id='method-method-c-load_dependencies'>
 <a name='method-c-load_dependencies'></a>
 <div class='synopsis'>
-<span class='name'>load_dependencies</span><span class='arguments'>(app, _ = nil)</span>
+<span class='name'>load_dependencies</span><span class='arguments'>(app, opts = nil, &_)</span>
 
 </div>
 <div class='description'>
@@ -122,7 +122,7 @@ Roda::RodaPlugins::FormeSet
 [show source]
 </a>
 <pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/forme_set.rb</span>
-<span class="line-num">10</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_</span> = <span class="ruby-keyword">nil</span>)
+<span class="line-num">10</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">_</span>)
 <span class="line-num">11</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:forme_route_csrf</span> 
 <span class="line-num">12</span> <span class="ruby-keyword">end</span></pre>
 </div>

@@ -31,7 +31,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2023-12-29 11:01:17 -0800</span>
+<span class='datetime'>2024-06-03 18:24:19 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -609,7 +609,7 @@ Last Update:
 <p>A hash of values suitable for merging into forme_validations. Used to check that the submitted values for associated objects match one of the options for the input in the form.</p>
 </td></tr></tbody></table>
 
-<p>It is possible to use <code>forme_set</code> for the values it can handle, and set other fields manually using <code>set_fields</code>.</p>
+<p>It is possible to use <code>forme_set</code> for the forms it can handle, and use <code>forme_parse</code> and <code>set_fields</code> for other forms.</p>
 
 <h3 id="label-Roda+forme_set+plugin"><a href="../classes/Roda.html"><code>Roda</code></a> forme_set plugin<span><a href="#label-Roda+forme_set+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
@@ -743,6 +743,8 @@ Last Update:
 </li><li>
 <p>forme_route_csrf</p>
 </li><li>
+<p>forme_erubi_capture_block</p>
+</li><li>
 <p>forme_erubi_capture</p>
 </li></ul>
 
@@ -778,6 +780,25 @@ end %&gt;</pre>
 <p>This is useful if you are calling some method that calls <code>form</code> with a block, where the resulting entire <a href="../classes/Forme.html"><code>Forme::Forme</code></a> object will be literalized into the template. The form will include the CSRF token and forme_set metadata as appropriate.</p>
 
 <p>The forme plugin does not require any csrf plugin, but will transparently use Rack::Csrf if it is available. If Rack::Csrf is available a CSRF tag if the form’s method is <code>POST</code>, with no configuration ability.</p>
+
+<h2 id="label-forme_erubi_capture_block+plugin">forme_erubi_capture_block plugin<span><a href="#label-forme_erubi_capture_block+plugin">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>The forme_erubi_capture_block plugin builds on the forme_route_csrf plugin, but it supports the erubi/capture_block engine, which allows this syntax:</p>
+
+<pre>&lt;%= form(@obj, :action=&gt;&#39;/foo&#39;) do |f| %&gt;
+  &lt;%= f.input(:field) %&gt;
+  &lt;%= f.tag(:fieldset) do %&gt;
+    &lt;%= f.input(:field_two) %&gt;
+  &lt;% end %&gt;
+&lt;% end %&gt;</pre>
+
+<p>If you use the forme_erubi_capture)block plugin, you need to manually set <a href="../classes/Roda.html"><code>Roda</code></a> to use the erubi/capture_block engine, which you can do via:</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;erubi/capture_block&#39;</span>
+<span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-value">:engine_opts</span><span class="ruby-operator">=&gt;</span>{<span class="ruby-string">&#39;erb&#39;</span><span class="ruby-operator">=&gt;</span>{<span class="ruby-value">:engine_class</span><span class="ruby-operator">=&gt;</span><span class="ruby-constant">Erubi</span><span class="ruby-operator">::</span><span class="ruby-constant">CaptureBlockEngine</span>}}
+</pre>
+
+<p>The forme_erubi_capture plugin requires Erubi 1.13.0+.</p>
 
 <h2 id="label-forme_erubi_capture+plugin">forme_erubi_capture plugin<span><a href="#label-forme_erubi_capture+plugin">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
@@ -922,7 +943,7 @@ end %&gt;</pre>
 </td></tr><tr><td class='label'>:optgroups </td><td>
 <p>An enumerable of pairs with the first element being option group labels or a hash of option group attributes, and values being enumerables of options (as described by :options below).  Creates optgroup tags around the appropriate options. This overrides any options specified via :options.</p>
 </td></tr><tr><td class='label'>:options </td><td>
-<p>An enumerable of options used for creating option tags. If the :text_method and :value_method are not given and the entry is an array, uses the first entry of the array as the text of the option, and the last entry of the array as the value of the option. If the last entry of the array is a hash, uses the hash as the attributes for the option.</p>
+<p>An enumerable of options used for creating option tags. If the :text_method and :value_method are not given and the entry is an array, uses the first entry of the array as the text of the option, and the last entry of the array as the value of the option. If the last entry of the array is a hash, uses the hash as the attributes for the option. If the option value is <code>:hr</code>, uses an hr tag (allowed in recent versions of the HTML standard).</p>
 </td></tr><tr><td class='label'>:selected </td><td>
 <p>The value that should be selected.  Any options that are equal to this value (or included in this value if a multiple select box), are set to selected.</p>
 </td></tr><tr><td class='label'>:size </td><td>
@@ -957,6 +978,10 @@ end %&gt;</pre>
 <p>The number of columns in the text area.</p>
 </td></tr><tr><td class='label'>:rows </td><td>
 <p>The number of rows in the text area.</p>
+</td></tr><tr><td class='label'>:maxlength </td><td>
+<p>Use the maxlength attribute on the tag</p>
+</td></tr><tr><td class='label'>:minlength </td><td>
+<p>Use the minlength attribute on the tag</p>
 </td></tr></tbody></table>
 
 <h2 id="label-all+others">all others<span><a href="#label-all+others">&para;</a> <a href="#top">&uarr;</a></span></h2>
@@ -966,6 +991,8 @@ end %&gt;</pre>
 <p>Uses the size attribute on the tag</p>
 </td></tr><tr><td class='label'>:maxlength </td><td>
 <p>Use the maxlength attribute on the tag</p>
+</td></tr><tr><td class='label'>:minlength </td><td>
+<p>Use the minlength attribute on the tag</p>
 </td></tr></tbody></table>
 
 <h2 id="label-Form+options">Form options<span><a href="#label-Form+options">&para;</a> <a href="#top">&uarr;</a></span></h2>
