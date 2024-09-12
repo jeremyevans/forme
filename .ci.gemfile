@@ -1,10 +1,15 @@
 source 'https://rubygems.org'
 
 gem "minitest-global_expectations"
-gem "roda"
 gem "rack_csrf"
 gem "erubi", '>= 1.13'
 gem "tilt"
+
+if RUBY_VERSION < '2.3'
+  gem "roda", '< 3.82'
+else
+  gem "roda"
+end
 
 if RUBY_VERSION < '2.0'
   gem 'mime-types', '< 2'
