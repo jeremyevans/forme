@@ -19,7 +19,7 @@ module Forme
     def call(tag)
       case tag
       when Tag
-        if SELF_CLOSING.include?(tag.type)
+        if self_closing_tag?(tag.type)
           "<#{tag.type}#{attr_html(tag.attr)}/>"
         else
           "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
@@ -78,6 +78,12 @@ module Forme
     def attr_html(attr)
       attr = attr.to_a.reject{|k,v| v.nil?}
       " #{attr.map{|k, v| "#{k}=\"#{attr_value(v)}\""}.sort.join(' ')}" unless attr.empty?
+    end
+
+    # Return whether the tag is self closing. this can be overridden in subclasses
+    # to make additional types self closing.
+    def self_closing_tag?(type)
+      SELF_CLOSING.include?(type)
     end
   end
 

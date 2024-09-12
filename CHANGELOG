@@ -1,3 +1,7 @@
+=== master
+
+* Add Serializer#self_closing_tag? private method for easier overriding in subclasses (jeremyevans)
+
 === 2.6.0 (2024-06-18)
 
 * Add Roda forme_erubi_capture_block plugin to support erubi/capture_block <%= form do %> <% end %> tags (jeremyevans)
