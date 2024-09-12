@@ -11,11 +11,7 @@ else
 begin
   require 'tilt/erubi'
 rescue LoadError
-  begin
-    require 'tilt/erubis'
-  rescue LoadError
-    require 'tilt/erb'
-  end
+  require 'tilt/erb'
 end
 
 def FormeRodaTest(block=ERB_BLOCK)

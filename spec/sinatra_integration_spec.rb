@@ -9,14 +9,9 @@ rescue LoadError
   warn "unable to load sinatra or rack/csrf, skipping sinatra spec"
 else
 begin
-  require 'tilt/erubis'
+  require 'tilt/erubi'
 rescue LoadError
   require 'tilt/erb'
-  begin
-    require 'erubis'
-  rescue LoadError
-    require 'erb'
-  end
 end
 require_relative '../lib/forme/erb'
 class FormeSinatraTest < Sinatra::Base
