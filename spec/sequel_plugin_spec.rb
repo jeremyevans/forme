@@ -138,6 +138,11 @@ describe "Forme Sequel::Model forms" do
     @b.input(:name, :required=>true).must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" required="required" type="text" value="b"/></label>'
   end
   
+  it "should use obj.forme_required_abbr_title to set title attribute of abbr tag" do
+    def @ab.forme_required_abbr_title; "foo" end
+    @b.input(:name, :required=>true).must_equal '<label>Name<abbr title="foo">*</abbr>: <input id="album_name" maxlength="255" name="album[name]" required="required" type="text" value="b"/></label>'
+  end
+
   it "should include required wrapper class if required" do
     f = Forme::Form.new(@ab, :wrapper=>:li)
     f.input(:name, :required=>true).must_equal '<li class="string required"><label>Name<abbr title="required">*</abbr>: <input id="album_name" maxlength="255" name="album[name]" required="required" type="text" value="b"/></label></li>'

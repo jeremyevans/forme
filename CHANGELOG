@@ -1,5 +1,7 @@
 === master
 
+* Support Sequel::Model#forme_required_abbr_title to control the content of the title attribute for abbr tags (jeremyevans)
+
 * Add Serializer#self_closing_tag? private method for easier overriding in subclasses (jeremyevans)
 
 === 2.6.0 (2024-06-18)
