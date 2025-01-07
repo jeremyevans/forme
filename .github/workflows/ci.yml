@@ -26,6 +26,7 @@ jobs:
       BUNDLE_GEMFILE: .ci.gemfile
     steps:
     - uses: actions/checkout@v4
+    - run: sudo apt-get -yqq install libsqlite3-dev
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
