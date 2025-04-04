@@ -18,9 +18,9 @@ module Forme
     attr_reader :children
 
     # Set the +form+, +type+, +attr+, and +children+.
-    def initialize(form, type, attr={}, children=nil)
+    def initialize(form, type, attr={}, children=nil, &block)
       @form, @type, @attr = form, type, (attr||{})
-      @children = parse_children(children)
+      @children = parse_children(children||block)
     end
 
     # Create a new +Tag+ instance with the given arguments and block

@@ -1,5 +1,7 @@
 === master
 
+* Allow Tag#initialize to accept a block, and treat it the same as the children argument (jeremyevans)
+
 * Add Labeler::Explicit#id_for_input private method to allow subclasses to easily get the id (jeremyevans)
 
 * Support Sequel::Model#forme_required_abbr_title to control the content of the title attribute for abbr tags (jeremyevans)

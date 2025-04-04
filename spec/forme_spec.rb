@@ -905,6 +905,10 @@ describe "Forme custom" do
     Forme::Form.new(:inputs_wrapper=>proc{|f, opts, &block| f.tag(:div, &block)}).inputs([:textarea]).must_equal '<div><textarea></textarea></div>'
   end
 
+  it "wrappers can support input.tag calls using blocks for nesting" do
+    Forme::Form.new(:wrapper=>proc{|t, i| i.tag("div"){i.tag("span"){t}}}).input(:textarea, :name=>'foo').must_equal '<div><span><textarea name="foo"></textarea></span></div>'
+  end
+
   it "can use nil as value to disable default transformer" do
     Forme::Form.new(:labeler=>nil).input(:textarea, :label=>'foo').must_equal '<textarea></textarea>'
   end
