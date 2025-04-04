@@ -50,16 +50,7 @@ module Forme
     # :label_for option is used, the label created will not be
     # associated with an input.
     def call(tag, input)
-      unless id = input.opts[:id]
-        if key = input.opts[:key]
-          namespaces = input.form_opts[:namespace]
-          id = "#{namespaces.join('_')}#{'_' unless namespaces.empty?}#{key}"
-          if key_id = input.opts[:key_id]
-            id += "_#{key_id.to_s}"
-          end
-        end
-      end
-
+      id = id_for_input(input)
       label_attr = input.opts[:label_attr]
       label_attr = label_attr ? label_attr.dup : {}
       label_attr[:for] ||= input.opts.fetch(:label_for, id)
@@ -75,6 +66,23 @@ module Forme
       end
 
       t
+    end
+
+    private
+
+    # Determine the appropriate id for the input, to use in the for attribute
+    def id_for_input(input)
+      unless id = input.opts[:id]
+        if key = input.opts[:key]
+          namespaces = input.form_opts[:namespace]
+          id = "#{namespaces.join('_')}#{'_' unless namespaces.empty?}#{key}"
+          if key_id = input.opts[:key_id]
+            id += "_#{key_id.to_s}"
+          end
+        end
+      end
+
+      id
     end
   end
 

@@ -1,5 +1,7 @@
 === master
 
+* Add Labeler::Explicit#id_for_input private method to allow subclasses to easily get the id (jeremyevans)
+
 * Support Sequel::Model#forme_required_abbr_title to control the content of the title attribute for abbr tags (jeremyevans)
 
 * Add Serializer#self_closing_tag? private method for easier overriding in subclasses (jeremyevans)
