@@ -1,5 +1,7 @@
 === master
 
+* Support :label_attr as an option-specific option for radioset/checkboxset options (jeremyevans)
+
 * Allow Tag#initialize to accept a block, and treat it the same as the children argument (jeremyevans)
 
 * Add Labeler::Explicit#id_for_input private method to allow subclasses to easily get the id (jeremyevans)

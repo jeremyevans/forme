@@ -237,9 +237,9 @@ module Forme
       last_input = nil
       ret = process_select_optgroups(:_format_set_optgroup) do |label, value, sel, attrs|
         value = label if value.nil?
-        label_attr = {:class=>:option}
-        label_attr.merge!(tag_label_attr) if tag_label_attr
-        r_opts = attrs.merge(tag_attrs).merge(:label=>label||value, :label_attr=>label_attr, :wrapper=>tag_wrapper, :labeler=>tag_labeler, :error=>nil, :error_attr=>nil)
+        label_attr = attrs[:label_attr] || {:class=>:option}
+        label_attr = label_attr.merge(tag_label_attr) if tag_label_attr
+        r_opts = attrs.merge(tag_attrs).merge!(:label=>label||value, :label_attr=>label_attr, :wrapper=>tag_wrapper, :labeler=>tag_labeler, :error=>nil, :error_attr=>nil, :parent=>self)
         if r_opts[:value].nil?
           r_opts[:value] = value unless value.nil?
         end
