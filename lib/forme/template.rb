@@ -58,14 +58,14 @@ module Forme
       # using the standard ERB hidden tags.
       def form(obj=nil, attr={}, opts={}, &block)
         if obj.is_a?(Hash)
-          attribs = obj
-          options = attr = attr.dup
+          opts = attr.dup
+          attr = obj
+          obj = opts.delete(:obj)
         else
-          attribs = attr
-          options = opts = opts.dup
+          opts = opts.dup
         end
 
-        _forme_form_options(obj, attribs, options)
+        _forme_form_options(obj, attr, opts)
         _forme_form(obj, attr, opts, &block)
       end
 

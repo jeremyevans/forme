@@ -40,6 +40,17 @@ end %>
 END
   end
 
+  r.get 'no_emit_no_obj' do
+    erb <<END
+<%= form({:action=>'/baz'}, :emit=>false) do |f|
+  f.tag(:p, {}, 'FBB')
+  f.tag(:div) do
+    f.input(:text)
+  end
+end %>
+END
+  end
+
   r.get 'nest' do
     erb <<END
 <%|= form([:foo, :bar], :action=>'/baz') do |f| %>
