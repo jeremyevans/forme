@@ -579,7 +579,7 @@ module Forme
       when String
         text = text.gsub(/\A[\r\n]+|[\r\n]+\z/, '').split(/(?:\r?\n)(?:\r?\n)+/).map do |t|
           t = Forme.h(t)
-          t.gsub!(/\r?\n/, "<br />")
+          t.gsub!(/\r?\n/, "<br>")
           tag(:p, {}, Forme.raw(t))
         end
       end

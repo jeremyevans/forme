@@ -60,7 +60,7 @@ describe "Forme Sinatra ERB integration" do
   end
 
   it "should handle non-standard outvar, but without emitting into template" do
-    sin_get('/no-out_buf').must_equal '<input type="text"/>'
+    sin_get('/no-out_buf').must_equal '<input type="text">'
   end
 end
 end

@@ -237,6 +237,6 @@ describe "Sequel forme_set plugin" do
     @ab.freeze
     @ab.forme_inputs.must_equal({})
     @ab.forme_validations.must_equal({})
-    @f.input(:name).must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" type="text"/></label>'
+    @f.input(:name).must_equal '<label>Name: <input id="album_name" maxlength="255" name="album[name]" type="text"></label>'
   end
 end

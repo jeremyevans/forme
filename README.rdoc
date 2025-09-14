@@ -25,11 +25,11 @@ showing usage without a related object:
 This results in the following HTML:
 
   <form action="/foo">
-    <input name="bar" type="text"/>
+    <input name="bar" type="text">
     <fieldset>
       <textarea name="baz"></textarea>
     </fieldset>
-    <input type="submit" value="Update"/>
+    <input type="submit" value="Update">
   </form>
 
 Forme also supports forms that are associated with objects, and
@@ -46,10 +46,10 @@ This results in the following HTML:
 
   <form action="/foo" method="post">
     <label>Name:
-      <input id="album_name" name="album[name]" type="text" value="Rising Force"/>
+      <input id="album_name" name="album[name]" type="text" value="Rising Force">
     </label>
     <label>Copies Sold:
-      <input id="album_copies_sold" inputmode="numeric" name="album[copies_sold]" pattern="-?[0-9]*" type="text" value="100000"/>
+      <input id="album_copies_sold" inputmode="numeric" name="album[copies_sold]" pattern="-?[0-9]*" type="text" value="100000">
     </label>
   </form>
 
@@ -95,7 +95,7 @@ While not typically done, you can instantiate Forme::Form objects directly and u
   f = Forme::Form.new
   f.open(:action=>'/foo', :method=>:post) # '<form action="/foo" method="post">'
   f.input(:textarea, :value=>'foo', :name=>'bar') # '<textarea name="bar">foo</textarea>'
-  f.input(:text, :value=>'foo', :name=>'bar') # '<input name="bar" type="text" value="foo"/>'
+  f.input(:text, :value=>'foo', :name=>'bar') # '<input name="bar" type="text" value="foo">'
   f.close # '</form>'
 
 With an object, <tt>Form#input</tt> calls +forme_input+ on the obj with the form, field, and options, which
@@ -104,14 +104,14 @@ should return a <tt>Forme::Input</tt> or <tt>Forme::Tag</tt> instance.  Also, in
 the entire form based on the object.
 
   f = Forme::Form.new(obj)
-  f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo"/>'
+  f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo">'
 
 If the object doesn't respond to +forme_input+, it falls back to creating text fields
 with the name and id set to the field name and the value set by calling the given method
 on the object (or using #[] if the object is a hash).
 
   f = Forme::Form.new([:foo])
-  f.input(:first) # '<input id="first" name="first" type="text" value="foo"/>'
+  f.input(:first) # '<input id="first" name="first" type="text" value="foo">'
 
 = Forme::Form Creation
 
@@ -187,25 +187,25 @@ This adds an input to the form.  If the form has an associated object, and that
 object responds to +forme_input+, calls forme_input with the argument and options:
 
   f = Forme::Form.new(obj)
-  f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo"/>'
+  f.input(:field) # '<input id="obj_field" name="obj[field]" type="text" value="foo">'
 
 If the form has an associated object, and that object does not respond to +forme_input+,
 calls the method on the object (or uses [] if the object is a hash), and uses the result
 as the value for a text input:
 
   f = Forme::Form.new([:foo])
-  f.input(:first) # '<input id="first" name="first" type="text" value="foo"/>'
+  f.input(:first) # '<input id="first" name="first" type="text" value="foo">'
 
 If the object does not respond to +forme_input+, you can change the type of the input
 via the +:type+ option:
 
   f = Forme::Form.new(obj)
-  f.input(:field, :type=>:email) # '<input id="obj_field" name="obj[field]" type="email" value="foo"/>'
+  f.input(:field, :type=>:email) # '<input id="obj_field" name="obj[field]" type="email" value="foo">'
 
 If the form does not have an associated object, the first argument is used as the input type:
 
   f = Forme::Form.new
-  f.input(:text) # '<input type="text" />'
+  f.input(:text) # '<input type="text" >'
   
 The second argument is an options hash.  See below for the supported input types and options.
 
@@ -226,7 +226,7 @@ Which results in a form similar to the following:
 
   <form>
     <span class="foo">
-      <input type="text"/>
+      <input type="text">
     </span>
   </form>
 
@@ -238,7 +238,7 @@ so it uses a +fieldset+ by default). You can give the inputs to add as an enumer
   f.inputs([:textarea, [:text, :value=>'a']])
   # <fieldset>
   #   <textarea></textarea>
-  #   <input type="text" value="a"/>
+  #   <input type="text" value="a">
   # </fieldset>
 
 You can also provide a block:
@@ -262,17 +262,17 @@ There is also one option specific to the inputs method:
 This adds a submit input to the form:
 
   f.button
-  # <input type="submit"/>
+  # <input type="submit">
 
 It can be called with a string to provide a value for the button:
 
   f.button('Search')
-  # <input type="submit" value="Search"/>
+  # <input type="submit" value="Search">
 
 It can be called with a hash to provide options for the submit input:
 
   f.button(value: 'Search', class: 'btn')
-  # <input class="btn" type="submit" value="Search"/>
+  # <input class="btn" type="submit" value="Search">
 
 == with_opts
 
@@ -280,12 +280,12 @@ This requires a block, and modifies the Forme::Form's options inside the block,
 restoring the options when the block returns:
 
   f.input(:text)
-  # <input type="text"/>
+  # <input type="text">
 
   f.with_opts(wrapper: :li) do
     f.input(:text)
   end
-  # <li><input type="text"/></li>
+  # <li><input type="text"></li>
 
 This supports most options you can provide to Forme::Form, but not all.
 
@@ -297,10 +297,10 @@ existing namespaces:
 
   Forme.form([:foo], {action: '/path'}, namespace: 'a') do |f|
     f.input(:first)
-    # <input id="a_first" name="a[first]" type="text" value="foo"/>
+    # <input id="a_first" name="a[first]" type="text" value="foo">
     f.with_obj(['foobar'], 'b') do |o|
       f.input(:first, :size=>o.first.size)
-      # <input id="a_b_first" name="a[b][first]" size="6" type="text" value="foobar"/>
+      # <input id="a_b_first" name="a[b][first]" size="6" type="text" value="foobar">
     end
   end
 
@@ -315,8 +315,8 @@ index of the object in the enumerable, and includes the index in the namespace:
     f.each_obj(objectlist, 'b') do |o, i|
       f.input(:first, :size=>10+i)
     end
-    # <input id="a_b_0_first" name="a[b][0][first]" size="10" type="text" value="foobar"/>
-    # <input id="a_b_1_first" name="a[b][1][first]" size="11" type="text" value="good"/>
+    # <input id="a_b_0_first" name="a[b][0][first]" size="10" type="text" value="foobar">
+    # <input id="a_b_1_first" name="a[b][1][first]" size="11" type="text" value="good">
   end
 
 = Sequel Support
@@ -375,16 +375,16 @@ to the current object.
 This will create a form similar to:
 
   <form action="/foo" method="post">
-    <label>Name: <input id="album_name" name="album[name]" type="text" value="Blue Hawaii"/></label>
+    <label>Name: <input id="album_name" name="album[name]" type="text" value="Blue Hawaii"></label>
     <label>Artist: <select id="album_artist_id" name="album[artist_id]">
       <option selected="selected" value="1">Elvis Presley</option>
       <option value="2">The Beatles</option>
       <option value="3">The Monkeys</option>
     </select></label>
     <span class="label">Tags:
-      <label><input checked="checked" id="album_tag_pks_1" name="album[tag_pks][]" type="checkbox" value="1"/> Rock and Roll</label>
-      <label><input id="album_tag_pks_2" name="album[tag_pks][]" type="checkbox" value="2"/> Blues</label>
-      <label><input id="album_tag_pks_3" name="album[tag_pks][]" type="checkbox" value="3"/> Country</label>
+      <label><input checked="checked" id="album_tag_pks_1" name="album[tag_pks][]" type="checkbox" value="1"> Rock and Roll</label>
+      <label><input id="album_tag_pks_2" name="album[tag_pks][]" type="checkbox" value="2"> Blues</label>
+      <label><input id="album_tag_pks_3" name="album[tag_pks][]" type="checkbox" value="3"> Country</label>
     </span>
   </form>
 
@@ -434,22 +434,22 @@ form similar to:
 
   <form action="/foo" method="post">
   
-    <label>Name: <input id="album_name" name="album[name]" type="text" value="Blue Hawaii"/></label>
+    <label>Name: <input id="album_name" name="album[name]" type="text" value="Blue Hawaii"></label>
   
-    <input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1"/>
+    <input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="1">
     <fieldset class="inputs"><legend>Artist</legend>
-      <label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="Elvis Presley"/></label>
+      <label>Name: <input id="album_artist_attributes_name" name="album[artist_attributes][name]" type="text" value="Elvis Presley"></label>
     </fieldset>
   
-    <input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1"/>
+    <input id="album_tracks_attributes_0_id" name="album[tracks_attributes][0][id]" type="hidden" value="1">
     <fieldset class="inputs"><legend>Track #1</legend>
-      <label>Number: <input id="album_tracks_attributes_0_number" inputmode="numeric" name="album[tracks_attributes][0][number]" pattern="-?[0-9]*" type="text" value="1"/></label>
-      <label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="Blue Hawaii"/></label>
+      <label>Number: <input id="album_tracks_attributes_0_number" inputmode="numeric" name="album[tracks_attributes][0][number]" pattern="-?[0-9]*" type="text" value="1"></label>
+      <label>Name: <input id="album_tracks_attributes_0_name" name="album[tracks_attributes][0][name]" type="text" value="Blue Hawaii"></label>
     </fieldset>
-    <input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2"/>
+    <input id="album_tracks_attributes_1_id" name="album[tracks_attributes][1][id]" type="hidden" value="2">
     <fieldset class="inputs"><legend>Track #2</legend>
-      <label>Number: <input id="album_tracks_attributes_1_number" inputmode="numeric" name="album[tracks_attributes][1][number]" pattern="-?[0-9]*" type="text" value="2"/></label>
-      <label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="Almost Always True"/></label>
+      <label>Number: <input id="album_tracks_attributes_1_number" inputmode="numeric" name="album[tracks_attributes][1][number]" pattern="-?[0-9]*" type="text" value="2"></label>
+      <label>Name: <input id="album_tracks_attributes_1_name" name="album[tracks_attributes][1][name]" type="text" value="Almost Always True"></label>
     </fieldset>
   
   </form>

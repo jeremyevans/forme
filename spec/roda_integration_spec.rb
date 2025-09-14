@@ -230,7 +230,7 @@ else
       end
       _, _, body = test.req('PATH_INFO'=>'/', 'SCRIPT_NAME'=>'', 'REQUEST_METHOD'=>'GET', :args=>[album, *form_args], :block=>block)
       search = body = body.join
-      regexp = %r|<form(?: action="([a-z/]+)")?.*?<input name="_csrf" type="hidden" value="([^"]+)"/>.*?<input name="_forme_set_data" type="hidden" value="([^"]+)"/><input name="_forme_set_data_hmac" type="hidden" value="([^"]+)"/>|n
+      regexp = %r|<form(?: action="([a-z/]+)")?.*?<input name="_csrf" type="hidden" value="([^"]+)">.*?<input name="_forme_set_data" type="hidden" value="([^"]+)"><input name="_forme_set_data_hmac" type="hidden" value="([^"]+)">|n
       if match
         @path_info, csrf, data, hmac = search.scan(regexp)[match]
       else
@@ -244,7 +244,7 @@ else
       h = {"album"=>hash,  "_forme_set_data"=>data, "_forme_set_data_hmac"=>hmac, "_csrf"=>csrf, "body"=>body}
       if @app.opts[:route_csrf][:require_request_specific_tokens] != false && body =~ /formaction="([a-z\/]+)"/
         @path_info = $1
-        body =~ %r|<input name="_csrfs\[([a-z\/]+)\]" type="hidden" value="([^"]+)"/>|
+        body =~ %r|<input name="_csrfs\[([a-z\/]+)\]" type="hidden" value="([^"]+)">|
         csrf = $2
         raise "#{@path_info} != #{$1}" unless @path_info == $1
         h['_csrfs'] = {@path_info=>csrf}
@@ -296,7 +296,7 @@ END
       end
 
       body = @app.call('REQUEST_METHOD'=>'GET')[2].join.gsub("\n", ' ').gsub(/  +/, ' ').chomp(' ')
-      body.sub(%r{<input name="_csrf" type="hidden" value="([^"]+)"/>}, '<input name="_csrf" type="hidden" value="csrf"/>').must_equal '0 <form action="/baz" class="forme album" method="post"><input name="_csrf" type="hidden" value="csrf"/> 1 <input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="2"/><table><caption>Foo</caption><thead><tr><th>Name</th></tr></thead><tbody><tr><td class="string"><input id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="A"/></td></tr></tbody></table> 2 <input type="submit" value="Sub"/></form>3'
+      body.sub(%r{<input name="_csrf" type="hidden" value="([^"]+)">}, '<input name="_csrf" type="hidden" value="csrf">').must_equal '0 <form action="/baz" class="forme album" method="post"><input name="_csrf" type="hidden" value="csrf"> 1 <input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="2"><table><caption>Foo</caption><thead><tr><th>Name</th></tr></thead><tbody><tr><td class="string"><input id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="A"></td></tr></tbody></table> 2 <input type="submit" value="Sub"></form>3'
     end
 
     it "should have subform work correctly when using emit: false form option" do
@@ -313,7 +313,7 @@ END
       end
 
       body = @app.call('REQUEST_METHOD'=>'GET')[2].join.gsub("\n", ' ').gsub(/  +/, ' ').chomp(' ')
-      body.sub(%r{<input name="_csrf" type="hidden" value="([^"]+)"/>}, '<input name="_csrf" type="hidden" value="csrf"/>').must_equal '0 <form action="/baz" class="forme album" method="post"><input name="_csrf" type="hidden" value="csrf"/><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="2"/><table><caption>Foo</caption><thead><tr><th>Name</th></tr></thead><tbody><tr><td class="string"><input id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="A"/></td></tr></tbody></table><input type="submit" value="Sub"/></form> 3'
+      body.sub(%r{<input name="_csrf" type="hidden" value="([^"]+)">}, '<input name="_csrf" type="hidden" value="csrf">').must_equal '0 <form action="/baz" class="forme album" method="post"><input name="_csrf" type="hidden" value="csrf"><input id="album_artist_attributes_id" name="album[artist_attributes][id]" type="hidden" value="2"><table><caption>Foo</caption><thead><tr><th>Name</th></tr></thead><tbody><tr><td class="string"><input id="album_artist_attributes_name" maxlength="255" name="album[artist_attributes][name]" type="text" value="A"></td></tr></tbody></table><input type="submit" value="Sub"></form> 3'
     end
 
     it "#forme_set should include HMAC values if form includes inputs for obj" do
@@ -641,7 +641,7 @@ END
     end
 
     it "should handle forms with objects that don't support forme_inputs" do
-      forme_set(String, {:name=>'Foo'}, {}, :inputs=>[:name])['body'].must_equal '<form><fieldset class="inputs"><input id="name" name="name" type="text" value="String"/></fieldset></form>'
+      forme_set(String, {:name=>'Foo'}, {}, :inputs=>[:name])['body'].must_equal '<form><fieldset class="inputs"><input id="name" name="name" type="text" value="String"></fieldset></form>'
     end
 
     it "should require :secret plugin option" do

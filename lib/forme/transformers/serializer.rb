@@ -20,7 +20,7 @@ module Forme
       case tag
       when Tag
         if self_closing_tag?(tag.type)
-          "<#{tag.type}#{attr_html(tag.attr)}/>"
+          "<#{tag.type}#{attr_html(tag.attr)}>"
         else
           "#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}"
         end
@@ -100,7 +100,7 @@ module Forme
           attr.delete(:type)
           attr.delete('type')
           attr['type'] = 'text'
-          "<#{tag.type}#{attr_html(attr)}/>"
+          "<#{tag.type}#{attr_html(attr)}>"
         else
           super
         end

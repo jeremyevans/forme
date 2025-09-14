@@ -380,7 +380,7 @@ module Forme
             tag.attr[:class] = "form-control #{klass.gsub(/\s*form-control\s*/,'')}".strip
           end
           
-          return "<#{tag.type}#{attr_html(tag.attr)}/>"
+          return "<#{tag.type}#{attr_html(tag.attr)}>"
           
         when :textarea, :select
           klass = tag.attr[:class] ? "form-control #{tag.attr[:class].to_s}" : ''
