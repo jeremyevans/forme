@@ -1,4 +1,4 @@
-=== master
+=== 2.7.0 (2025-09-16)
 
 * Omit closing / for void element tags (only used previously for xhtml compliance) (jeremyevans)
 
