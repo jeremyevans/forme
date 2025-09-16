@@ -68,22 +68,22 @@ Superclass:
 [show source]
 </a>
 <pre id='method-i-call-source'>    <span class="ruby-comment"># File lib/forme/transformers/serializer.rb</span>
-<span class="line-num"> 89</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>)
-<span class="line-num"> 90</span>   <span class="ruby-keyword">case</span> <span class="ruby-identifier">tag</span>
-<span class="line-num"> 91</span>   <span class="ruby-keyword">when</span> <span class="ruby-constant">Tag</span>
-<span class="line-num"> 92</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;input&#39;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-node">%w&#39;date datetime datetime-local&#39;</span>.<span class="ruby-identifier">include?</span>((<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:type</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;type&#39;</span>]).<span class="ruby-identifier">to_s</span>)
-<span class="line-num"> 93</span>       <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span>
-<span class="line-num"> 94</span>       <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:type</span>)
-<span class="line-num"> 95</span>       <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&#39;type&#39;</span>)
-<span class="line-num"> 96</span>       <span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;type&#39;</span>] = <span class="ruby-string">&#39;text&#39;</span>
-<span class="line-num"> 97</span>       <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(attr)}/&gt;&quot;</span>
-<span class="line-num"> 98</span>     <span class="ruby-keyword">else</span>
-<span class="line-num"> 99</span>       <span class="ruby-keyword">super</span>
-<span class="line-num">100</span>     <span class="ruby-keyword">end</span>
-<span class="line-num">101</span>   <span class="ruby-keyword">else</span>
-<span class="line-num">102</span>     <span class="ruby-keyword">super</span>
-<span class="line-num">103</span>   <span class="ruby-keyword">end</span>
-<span class="line-num">104</span> <span class="ruby-keyword">end</span></pre>
+<span class="line-num"> 95</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>)
+<span class="line-num"> 96</span>   <span class="ruby-keyword">case</span> <span class="ruby-identifier">tag</span>
+<span class="line-num"> 97</span>   <span class="ruby-keyword">when</span> <span class="ruby-constant">Tag</span>
+<span class="line-num"> 98</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;input&#39;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-node">%w&#39;date datetime datetime-local&#39;</span>.<span class="ruby-identifier">include?</span>((<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:type</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;type&#39;</span>]).<span class="ruby-identifier">to_s</span>)
+<span class="line-num"> 99</span>       <span class="ruby-identifier">attr</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>.<span class="ruby-identifier">dup</span>
+<span class="line-num">100</span>       <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:type</span>)
+<span class="line-num">101</span>       <span class="ruby-identifier">attr</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&#39;type&#39;</span>)
+<span class="line-num">102</span>       <span class="ruby-identifier">attr</span>[<span class="ruby-string">&#39;type&#39;</span>] = <span class="ruby-string">&#39;text&#39;</span>
+<span class="line-num">103</span>       <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(attr)}&gt;&quot;</span>
+<span class="line-num">104</span>     <span class="ruby-keyword">else</span>
+<span class="line-num">105</span>       <span class="ruby-keyword">super</span>
+<span class="line-num">106</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">107</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">108</span>     <span class="ruby-keyword">super</span>
+<span class="line-num">109</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">110</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

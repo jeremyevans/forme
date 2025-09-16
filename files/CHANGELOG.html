@@ -29,14 +29,27 @@
 <div class='paths'>
 CHANGELOG
 </div>
-<div class='last-update'>
-Last Update:
-<span class='datetime'>2024-06-18 08:52:45 -0700</span>
-</div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h3 id="label-2.7.0+-282025-09-16-29">2.7.0 (2025-09-16)<span><a href="#label-2.7.0+-282025-09-16-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<ul><li>
+<p>Omit closing / for void element tags (only used previously for xhtml compliance) (jeremyevans)</p>
+</li><li>
+<p>Allow emit: false option to work correctly for non-model template forms (jeremyevans)</p>
+</li><li>
+<p>Support :label_attr as an option-specific option for radioset/checkboxset options (jeremyevans)</p>
+</li><li>
+<p>Allow Tag#initialize to accept a block, and treat it the same as the children argument (jeremyevans)</p>
+</li><li>
+<p>Add Labeler::Explicit#id_for_input private method to allow subclasses to easily get the id (jeremyevans)</p>
+</li><li>
+<p>Support Sequel::Model#forme_required_abbr_title to control the content of the title attribute for abbr tags (jeremyevans)</p>
+</li><li>
+<p>Add Serializer#self_closing_tag? private method for easier overriding in subclasses (jeremyevans)</p>
+</li></ul>
+
 <h3 id="label-2.6.0+-282024-06-18-29">2.6.0 (2024-06-18)<span><a href="#label-2.6.0+-282024-06-18-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 <ul><li>
 <p>Add <a href="../classes/Roda.html"><code>Roda</code></a> forme_erubi_capture_block plugin to support erubi/capture_block &lt;%= form do %&gt; &lt;% end %&gt; tags (jeremyevans)</p>

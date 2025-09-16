@@ -106,7 +106,7 @@ Superclass:
 <span class="line-num">380</span>         <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:class</span>] = <span class="ruby-node">&quot;form-control #{klass.gsub(/\s*form-control\s*/,&#39;&#39;)}&quot;</span>.<span class="ruby-identifier">strip</span>
 <span class="line-num">381</span>       <span class="ruby-keyword">end</span>
 <span class="line-num">382</span>       
-<span class="line-num">383</span>       <span class="ruby-keyword">return</span> <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(tag.attr)}/&gt;&quot;</span>
+<span class="line-num">383</span>       <span class="ruby-keyword">return</span> <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(tag.attr)}&gt;&quot;</span>
 <span class="line-num">384</span>       
 <span class="line-num">385</span>     <span class="ruby-keyword">when</span> <span class="ruby-value">:textarea</span>, <span class="ruby-value">:select</span>
 <span class="line-num">386</span>       <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">attr</span>[<span class="ruby-value">:class</span>] <span class="ruby-operator">?</span> <span class="ruby-node">&quot;form-control #{tag.attr[:class].to_s}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>

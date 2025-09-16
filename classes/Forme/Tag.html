@@ -89,7 +89,7 @@ Superclass:
 </td>
 <td class='context-item-value'>[R]</td>
 <td class='context-item-desc'>
-<p>The <code>Form</code> object related to the receiver.</p>
+<p>The <a href="Form.html"><code>Form</code></a> object related to the receiver.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -109,7 +109,7 @@ Superclass:
 <div class='method public-class' id='method-method-c-new'>
 <a name='method-c-new'></a>
 <div class='synopsis'>
-<span class='name'>new</span><span class='arguments'>(form, type, attr={}, children=nil)</span>
+<span class='name'>new</span><span class='arguments'>(form, type, attr={}, children=nil, &block)</span>
 
 </div>
 <div class='description'>
@@ -122,9 +122,9 @@ Superclass:
 [show source]
 </a>
 <pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/forme/tag.rb</span>
-<span class="line-num">21</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=<span class="ruby-keyword">nil</span>)
+<span class="line-num">21</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">attr</span>={}, <span class="ruby-identifier">children</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
 <span class="line-num">22</span>   <span class="ruby-ivar">@form</span>, <span class="ruby-ivar">@type</span>, <span class="ruby-ivar">@attr</span> = <span class="ruby-identifier">form</span>, <span class="ruby-identifier">type</span>, (<span class="ruby-identifier">attr</span><span class="ruby-operator">||</span>{})
-<span class="line-num">23</span>   <span class="ruby-ivar">@children</span> = <span class="ruby-identifier">parse_children</span>(<span class="ruby-identifier">children</span>)
+<span class="line-num">23</span>   <span class="ruby-ivar">@children</span> = <span class="ruby-identifier">parse_children</span>(<span class="ruby-identifier">children</span><span class="ruby-operator">||</span><span class="ruby-identifier">block</span>)
 <span class="line-num">24</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
@@ -137,7 +137,7 @@ Superclass:
 </div>
 <div class='description'>
 
-<p>Create a new <code>Tag</code> instance with the given arguments and block related to the receiver’s <code>form</code>.</p>
+<p>Create a new <a href="Tag.html"><code>Tag</code></a> instance with the given arguments and block related to the receiver’s <code>form</code>.</p>
 
 </div>
 <div class='source'>

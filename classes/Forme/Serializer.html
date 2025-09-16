@@ -99,7 +99,7 @@ Superclass:
 </div>
 <div class='description'>
 
-<p>Serialize the tag object to an html string.  Supports <code>Tag</code> instances, <code>Input</code> instances (recursing into <code>call</code> with the result of formatting the input), arrays (recurses into <code>call</code> for each entry and joins the result), and (html escapes the string version of them, unless they include the <code>Raw</code> module, in which case no escaping is done).</p>
+<p>Serialize the tag object to an html string.  Supports <a href="Tag.html"><code>Tag</code></a> instances, <a href="Input.html"><code>Input</code></a> instances (recursing into <code>call</code> with the result of formatting the input), arrays (recurses into <code>call</code> for each entry and joins the result), and (html escapes the string version of them, unless they include the <a href="Raw.html"><code>Raw</code></a> module, in which case no escaping is done).</p>
 
 </div>
 <div class='source'>
@@ -110,8 +110,8 @@ Superclass:
 <span class="line-num">19</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">tag</span>)
 <span class="line-num">20</span>   <span class="ruby-keyword">case</span> <span class="ruby-identifier">tag</span>
 <span class="line-num">21</span>   <span class="ruby-keyword">when</span> <span class="ruby-constant">Tag</span>
-<span class="line-num">22</span>     <span class="ruby-keyword">if</span> <span class="ruby-constant">SELF_CLOSING</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">type</span>)
-<span class="line-num">23</span>       <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(tag.attr)}/&gt;&quot;</span>
+<span class="line-num">22</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">self_closing_tag?</span>(<span class="ruby-identifier">tag</span>.<span class="ruby-identifier">type</span>)
+<span class="line-num">23</span>       <span class="ruby-node">&quot;&lt;#{tag.type}#{attr_html(tag.attr)}&gt;&quot;</span>
 <span class="line-num">24</span>     <span class="ruby-keyword">else</span>
 <span class="line-num">25</span>       <span class="ruby-node">&quot;#{serialize_open(tag)}#{call(tag.children)}#{serialize_close(tag)}&quot;</span>
 <span class="line-num">26</span>     <span class="ruby-keyword">end</span>
