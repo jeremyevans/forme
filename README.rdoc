@@ -1236,7 +1236,7 @@ This supports the following options:
 
 The :default and :explicit labelers respect the following options:
 
-:label_position :: Can be set to :before or :after to place the label before or after the the input.
+:label_position :: Can be set to :before or :after to place the label before or after the input.
 :label_attr :: A hash of attributes to use for the label tag
 
 === +wrapper+
