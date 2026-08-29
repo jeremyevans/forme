@@ -333,9 +333,9 @@ module Forme
       copy_inputs_wrapper_from_wrapper(opts, @opts)
       yield
     ensure
-      # :nocov:
+      # simplecov:disable
       @opts = orig_opts if orig_opts
-      # :nocov:
+      # simplecov:enable
     end
 
     private

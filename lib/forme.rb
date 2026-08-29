@@ -11,7 +11,7 @@ module Forme
   begin
     require 'erb/escape'
     define_singleton_method(:h, ERB::Escape.instance_method(:html_escape))
-  # :nocov:
+  # simplecov:disable
   rescue LoadError
     begin
       require 'cgi/escape'
@@ -32,7 +32,7 @@ module Forme
       end
     end
   end
-  # :nocov:
+  # simplecov:enable
 
   @default_add_blank_prompt = nil
   @default_config = :default
