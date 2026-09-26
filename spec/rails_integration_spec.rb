@@ -38,7 +38,7 @@ begin
     if Rails.respond_to?(:version) && Rails.version >= '7.1' && Rails.version < '7.2'
       config.active_support.cache_format_version = 7.1
     end
-    if Rails.respond_to?(:version) && Rails.version >= '8'
+    if Rails.respond_to?(:version) && Rails.version >= '8' && Rails.version < '8.1'
       config.active_support.to_time_preserves_timezone = :zone
     end
     begin
