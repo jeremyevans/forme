@@ -13,7 +13,7 @@ class Roda
 
       # Set the HMAC secret.
       def self.configure(app, opts = OPTS, &block)
-        unless app.opts[:forme_set_hmac_secret] = opts[:secret] || app.opts[:forme_set_hmac_secret]
+        unless app.opts[:forme_set_hmac_secret] = opts[:secret] || app.forme_set_hmac_secret
           raise RodaError, "must provide :secret option to forme_set plugin"
         end
 
@@ -35,6 +35,18 @@ class Roda
         :csrf_mismatch=>"_forme_set_data CSRF token does not match submitted CSRF token",
         :missing_namespace=>"no content in expected namespace"
       }.freeze
+
+      module ClassMethods
+        if Roda::RodaPlugins.respond_to?(:opt_attr_reader)
+          Roda::RodaPlugins.opt_attr_reader(self, :forme_set_hmac_secret)
+        # simplecov:disable
+        else
+          def forme_set_hmac_secret
+            opts[:forme_set_hmac_secret]
+          end
+        # simplecov:enable
+        end
+      end
 
       module InstanceMethods
         # If a Sequel::Model object that supports forme_set is passed,
@@ -139,7 +151,7 @@ class Roda
 
               data = data.to_json
               form.tag(:input, :type=>:hidden, :name=>:_forme_set_data, :value=>data)
-              form.tag(:input, :type=>:hidden, :name=>:_forme_set_data_hmac, :value=>OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, self.class.opts[:forme_set_hmac_secret], data))
+              form.tag(:input, :type=>:hidden, :name=>:_forme_set_data_hmac, :value=>OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, self.class.forme_set_hmac_secret, data))
             end
           end
         end
@@ -152,7 +164,7 @@ class Roda
 
           data = data.to_s
           hmac = hmac.to_s
-          actual = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, self.class.opts[:forme_set_hmac_secret], data)
+          actual = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA512.new, self.class.forme_set_hmac_secret, data)
           unless Rack::Utils.secure_compare(hmac.ljust(64), actual) && hmac.length == actual.length
             return _forme_parse_error(:hmac_mismatch, obj)
           end
